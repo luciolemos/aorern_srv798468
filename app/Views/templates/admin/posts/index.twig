@@ -30,37 +30,37 @@
             </div>
         </div>
         <div class="card-body">
-            <form method="GET" class="row g-3">
+            <form method="GET" class="row g-2 align-items-end">
                 <!-- Busca por Título -->
-                <div class="col-12 col-md-6 col-lg-3">
-                    <label class="form-label" for="search"><i class="bi bi-search me-1"></i> <strong>Busca</strong></label>
+                <div class="col">
+                    <label class="form-label small mb-1" for="search"><i class="bi bi-search me-1"></i> <strong>Busca</strong></label>
                     <input
                         type="text"
                         id="search"
                         name="q"
-                        class="form-control"
+                        class="form-control form-control-sm"
                         placeholder="Título ou conteúdo..."
                         value="{{ q|default('')|e('html_attr') }}"
                     >
                 </div>
 
                 <!-- Filtro por Status -->
-                <div class="col-12 col-md-6 col-lg-3">
-                    <label class="form-label" for="status"><i class="bi bi-bookmark me-1"></i> <strong>Status</strong></label>
-                    <select id="status" name="status" class="form-select">
-                        <option value="">Todos os Status</option>
+                <div class="col">
+                    <label class="form-label small mb-1" for="status"><i class="bi bi-bookmark me-1"></i> <strong>Status</strong></label>
+                    <select id="status" name="status" class="form-select form-select-sm">
+                        <option value="">Todos</option>
                         <option value="draft" {% if status == 'draft' %}selected{% endif %}>Rascunho</option>
-                        <option value="pending" {% if status == 'pending' %}selected{% endif %}>Pendente de Revisão</option>
+                        <option value="pending" {% if status == 'pending' %}selected{% endif %}>Pendente</option>
                         <option value="published" {% if status == 'published' %}selected{% endif %}>Publicado</option>
                         <option value="rejected" {% if status == 'rejected' %}selected{% endif %}>Rejeitado</option>
                     </select>
                 </div>
 
                 <!-- Filtro por Categoria -->
-                <div class="col-12 col-md-6 col-lg-3">
-                    <label class="form-label" for="category"><i class="bi bi-tags me-1"></i> <strong>Categoria</strong></label>
-                    <select id="category" name="category" class="form-select">
-                        <option value="">Todas as Categorias</option>
+                <div class="col">
+                    <label class="form-label small mb-1" for="category"><i class="bi bi-tags me-1"></i> <strong>Categoria</strong></label>
+                    <select id="category" name="category" class="form-select form-select-sm">
+                        <option value="">Todas</option>
                         {% for cat in categories %}
                             <option value="{{ cat.id }}" {% if category == cat.id %}selected{% endif %}>
                                 {{ cat.nome|e }}
@@ -71,10 +71,10 @@
 
                 <!-- Filtro por Autor (apenas para admin/gerente) -->
                 {% if userRole != 'usuario' %}
-                <div class="col-12 col-md-6 col-lg-3">
-                    <label class="form-label" for="author"><i class="bi bi-person me-1"></i> <strong>Autor</strong></label>
-                    <select id="author" name="author" class="form-select">
-                        <option value="">Todos os Autores</option>
+                <div class="col">
+                    <label class="form-label small mb-1" for="author"><i class="bi bi-person me-1"></i> <strong>Autor</strong></label>
+                    <select id="author" name="author" class="form-select form-select-sm">
+                        <option value="">Todos</option>
                         {% for auth in allAuthors %}
                             <option value="{{ auth.user_id }}" {% if author == auth.user_id %}selected{% endif %}>
                                 {{ auth.name|e|default('(sem nome)') }}
@@ -84,10 +84,10 @@
                 </div>
                 {% endif %}
 
-                <!-- Filtro por Visibilidade (apenas para posts publicados) -->
-                <div class="col-12 col-md-6 col-lg-3">
-                    <label class="form-label" for="visibility"><i class="bi bi-eye me-1"></i> <strong>Visibilidade</strong></label>
-                    <select id="visibility" name="visibility" class="form-select">
+                <!-- Filtro por Visibilidade -->
+                <div class="col">
+                    <label class="form-label small mb-1" for="visibility"><i class="bi bi-eye me-1"></i> <strong>Visibilidade</strong></label>
+                    <select id="visibility" name="visibility" class="form-select form-select-sm">
                         <option value="">Todos</option>
                         <option value="visible" {% if visibility == 'visible' %}selected{% endif %}>👁️ Visível</option>
                         <option value="hidden" {% if visibility == 'hidden' %}selected{% endif %}>👁️‍🗨️ Oculto</option>
@@ -95,9 +95,9 @@
                 </div>
 
                 <!-- Botão de Busca -->
-                <div class="col-12 d-flex gap-2 align-items-end">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-search me-1"></i> Aplicar Filtros
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="bi bi-search me-1"></i> Buscar
                     </button>
                 </div>
             </form>
