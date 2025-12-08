@@ -92,6 +92,7 @@ body.bg-light {
 .admin-layout {
     display: flex;                     /* Sidebar + Main */
     flex: 1;
+    position: relative;
 }
 
 /* 🔝 NAVBAR FIXA */
@@ -220,12 +221,15 @@ body.bg-light {
     margin-left: 320px;
     width: calc(100% - 320px);
     margin-top: 80px;
+    margin-bottom: 80px;
+    padding-bottom: 80px;
     min-height: calc(100vh - 80px);
     background: #f8f9fa;
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .admin-content-area main {
@@ -731,6 +735,31 @@ body.bg-light {
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Footer ajustável com sidebar */
+.admin-layout footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 320px;
+    width: calc(100% - 320px);
+    z-index: 1050;
+    margin: 0;
+    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-sidebar.collapsed ~ .admin-content-area ~ footer,
+.admin-layout.collapsed footer {
+    left: 0;
+    width: 100%;
+}
+
+@media (max-width: 991.98px) {
+    .admin-layout footer {
+        left: 0;
+        width: 100%;
+    }
+}
+
 /* Garantir que table-responsive respeite limites do container */
 .admin-content-area .table-responsive {
     max-width: 100%;
@@ -739,22 +768,4 @@ body.bg-light {
 
 .admin-content-area table {
     max-width: 100%;
-}
-
-/* Footer ajustável com sidebar */
-.admin-content-area footer {
-    width: 100%;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media (min-width: 992px) {
-    .admin-content-area footer {
-        margin-left: 0;
-        width: 100%;
-    }
-    
-    .admin-content-area.collapsed footer {
-        margin-left: 0;
-        width: 100%;
-    }
 }
