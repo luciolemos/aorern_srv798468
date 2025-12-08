@@ -85,7 +85,7 @@ class Post extends Database {
         );
     }
 
-    public function paginarPorAutor(?int $userId, int $page = 1, int $perPage = 10, ?string $busca = null): array
+    public function paginarPorAutor(?int $userId, int $page = 1, int $perPage = 10, ?string $busca = null, ?string $status = null, ?string $category = null, ?string $visibility = null): array
     {
         $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";
         $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id";
@@ -100,6 +100,24 @@ class Post extends Database {
         if ($busca) {
             $conditions[] = "(p.titulo LIKE :busca OR p.conteudo LIKE :busca)";
             $params[':busca'] = '%' . $busca . '%';
+        }
+
+        if ($status) {
+            $conditions[] = "p.status = :status";
+            $params[':status'] = $status;
+        }
+
+        if ($category) {
+            $conditions[] = "p.categoria_id = :categoria_id";
+            $params[':categoria_id'] = $category;
+        }
+
+        if ($visibility) {
+            if ($visibility === 'hidden') {
+                $conditions[] = "COALESCE(p.is_hidden, 0) = 1";
+            } elseif ($visibility === 'visible') {
+                $conditions[] = "COALESCE(p.is_hidden, 0) = 0";
+            }
         }
 
         $where = implode(' AND ', $conditions);
@@ -188,5 +206,88 @@ class Post extends Database {
             $page,
             $perPage
         );
+    }
+
+    /**
+     * Pagina posts com filtros avançados (para admin/gerente)
+     */
+    public function paginarComFiltros(
+        int $page = 1,
+        int $perPage = 10,
+        ?string $busca = null,
+        ?string $status = null,
+        ?string $category = null,
+        ?string $author = null,
+        ?string $visibility = null
+    ): array {
+        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor, u.name AS autor";
+        $from = "FROM {$this->table} p 
+                 LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id
+                 LEFT JOIN users u ON u.id = p.user_id";
+        $conditions = [];
+        $params = [];
+
+        // Filtro: Status
+        if ($status) {
+            $conditions[] = "p.status = :status";
+            $params[':status'] = $status;
+        } else {
+            // Se não especificar status, mostrar apenas pending e published (não rascunhos privados)
+            $conditions[] = "p.status IN (:status0, :status1)";
+            $params[':status0'] = 'pending';
+            $params[':status1'] = 'published';
+        }
+
+        // Filtro: Busca em título e conteúdo
+        if ($busca) {
+            $conditions[] = "(p.titulo LIKE :busca OR p.conteudo LIKE :busca)";
+            $params[':busca'] = '%' . $busca . '%';
+        }
+
+        // Filtro: Categoria
+        if ($category) {
+            $conditions[] = "p.categoria_id = :categoria_id";
+            $params[':categoria_id'] = $category;
+        }
+
+        // Filtro: Autor
+        if ($author) {
+            $conditions[] = "p.user_id = :user_id";
+            $params[':user_id'] = $author;
+        }
+
+        // Filtro: Visibilidade (apenas para posts publicados)
+        if ($visibility) {
+            if ($visibility === 'hidden') {
+                $conditions[] = "p.status = 'published' AND COALESCE(p.is_hidden, 0) = 1";
+            } elseif ($visibility === 'visible') {
+                $conditions[] = "p.status = 'published' AND COALESCE(p.is_hidden, 0) = 0";
+            }
+        }
+
+        $where = implode(' AND ', $conditions);
+
+        return Paginator::paginate(
+            $this->connect(),
+            $select,
+            $from,
+            $where,
+            'p.criado_em DESC',
+            $params,
+            $page,
+            $perPage
+        );
+    }
+
+    /**
+     * Lista autores únicos que têm posts
+     */
+    public function listarAutoresUnicos(): array {
+        $sql = "SELECT DISTINCT p.user_id, u.name 
+                FROM {$this->table} p
+                LEFT JOIN users u ON u.id = p.user_id
+                WHERE p.user_id IS NOT NULL
+                ORDER BY u.name ASC";
+        return $this->connect()->query($sql)->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 }

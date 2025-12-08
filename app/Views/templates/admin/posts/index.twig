@@ -16,27 +16,92 @@
         </div>
     </div>
 
-    <div data-aos="fade-up">
-        <form method="GET" class="mb-4">
-            <div class="input-group">
-                <input
-                    type="text"
-                    name="q"
-                    class="form-control"
-                    placeholder="Buscar por título..."
-                    value="{{ q|default('')|e('html_attr') }}"
-                    autofocus
-                >
-                {% if q is not empty %}
-                    <a href="{{ BASE_URL }}admin/posts" class="btn btn-outline-secondary">
-                        <i class="bi bi-x-lg"></i>
+    <!-- Painel de Filtros Avançado -->
+    <div data-aos="fade-up" class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light border-bottom">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Filtros Avançados</strong></h5>
+                {% set hasActiveFilters = q or status or category or author or visibility %}
+                {% if hasActiveFilters %}
+                    <a href="{{ BASE_URL }}admin/posts" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar Filtros
                     </a>
                 {% endif %}
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search me-1"></i> Buscar
-                </button>
             </div>
-        </form>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <!-- Busca por Título -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <label class="form-label" for="search"><i class="bi bi-search me-1"></i> <strong>Busca</strong></label>
+                    <input
+                        type="text"
+                        id="search"
+                        name="q"
+                        class="form-control"
+                        placeholder="Título ou conteúdo..."
+                        value="{{ q|default('')|e('html_attr') }}"
+                    >
+                </div>
+
+                <!-- Filtro por Status -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <label class="form-label" for="status"><i class="bi bi-bookmark me-1"></i> <strong>Status</strong></label>
+                    <select id="status" name="status" class="form-select">
+                        <option value="">Todos os Status</option>
+                        <option value="draft" {% if status == 'draft' %}selected{% endif %}>Rascunho</option>
+                        <option value="pending" {% if status == 'pending' %}selected{% endif %}>Pendente de Revisão</option>
+                        <option value="published" {% if status == 'published' %}selected{% endif %}>Publicado</option>
+                        <option value="rejected" {% if status == 'rejected' %}selected{% endif %}>Rejeitado</option>
+                    </select>
+                </div>
+
+                <!-- Filtro por Categoria -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <label class="form-label" for="category"><i class="bi bi-tags me-1"></i> <strong>Categoria</strong></label>
+                    <select id="category" name="category" class="form-select">
+                        <option value="">Todas as Categorias</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if category == cat.id|string %}selected{% endif %}>
+                                {{ cat.nome|e }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Filtro por Autor (apenas para admin/gerente) -->
+                {% if userRole != 'usuario' %}
+                <div class="col-12 col-md-6 col-lg-3">
+                    <label class="form-label" for="author"><i class="bi bi-person me-1"></i> <strong>Autor</strong></label>
+                    <select id="author" name="author" class="form-select">
+                        <option value="">Todos os Autores</option>
+                        {% for auth in allAuthors %}
+                            <option value="{{ auth.user_id }}" {% if author == auth.user_id|string %}selected{% endif %}>
+                                {{ auth.name|e|default('(sem nome)') }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+
+                <!-- Filtro por Visibilidade (apenas para posts publicados) -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <label class="form-label" for="visibility"><i class="bi bi-eye me-1"></i> <strong>Visibilidade</strong></label>
+                    <select id="visibility" name="visibility" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="visible" {% if visibility == 'visible' %}selected{% endif %}>👁️ Visível</option>
+                        <option value="hidden" {% if visibility == 'hidden' %}selected{% endif %}>👁️‍🗨️ Oculto</option>
+                    </select>
+                </div>
+
+                <!-- Botão de Busca -->
+                <div class="col-12 d-flex gap-2 align-items-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search me-1"></i> Aplicar Filtros
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     {% if posts is empty %}

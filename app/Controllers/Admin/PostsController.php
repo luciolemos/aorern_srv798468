@@ -26,6 +26,10 @@ class PostsController extends Controller {
     public function index(): void {
         $request = Request::capture();
         $q = $request->query('q', '');
+        $status = $request->query('status', '');
+        $category = $request->query('category', '');
+        $author = $request->query('author', '');
+        $visibility = $request->query('visibility', ''); // 'visible' ou 'hidden'
         $page = max(1, (int) $request->query('page', 1));
         $perPage = 10;
 
@@ -33,26 +37,64 @@ class PostsController extends Controller {
         $userId = $_SESSION['user_id'] ?? null;
         $userRole = $_SESSION['user_role'] ?? 'usuario';
 
+        // Construir query base
+        $allowedStatuses = ($userRole === 'usuario') 
+            ? [] 
+            : ['pending', 'published'];
+
+        // Para usuários, só mostram seus próprios posts
         if ($userRole === 'usuario') {
-            $result = $this->post->paginarPorAutor($userId, $page, $perPage, $q ?: null);
+            $result = $this->post->paginarPorAutor(
+                $userId, 
+                $page, 
+                $perPage, 
+                $q ?: null,
+                $status ?: null,
+                $category ?: null,
+                $visibility ?: null
+            );
         } else {
-            // Admin e gerente veem APENAS posts pendentes e publicados (não rascunhos privados)
-            $result = $this->post->paginarPorStatus(['pending', 'published'], $page, $perPage, $q ?: null);
+            // Admin/Gerente com filtros avançados
+            $result = $this->post->paginarComFiltros(
+                $page,
+                $perPage,
+                $q ?: null,
+                $status ?: null,
+                $category ?: null,
+                $author ?: null,
+                $visibility ?: null
+            );
         }
 
         $posts = $result['data'];
         $pagination = array_merge($result['meta'], [
             'path' => BASE_URL . 'admin/posts',
-            'query' => array_filter(['q' => $q], fn($value) => $value !== null && $value !== ''),
+            'query' => array_filter([
+                'q' => $q,
+                'status' => $status,
+                'category' => $category,
+                'author' => $author,
+                'visibility' => $visibility
+            ], fn($value) => $value !== null && $value !== ''),
         ]);
+
+        // Buscar todos os autores (usuários que têm posts)
+        $allAuthors = $this->post->listarAutoresUnicos();
+        $categories = $this->categories->listar();
 
         $this->renderTwig('admin/posts/index', array_merge([
             'posts' => $posts,
             'q' => $q,
+            'status' => $status,
+            'category' => $category,
+            'author' => $author,
+            'visibility' => $visibility,
             'pagination' => $pagination,
             'userRole' => $userRole,
             'user_id' => $userId,
             'csrf_token' => CsrfHelper::generateToken(),
+            'allAuthors' => $allAuthors,
+            'categories' => $categories,
             'statusLabels' => [
                 'draft' => 'Rascunho',
                 'pending' => 'Pendente de Revisão',
