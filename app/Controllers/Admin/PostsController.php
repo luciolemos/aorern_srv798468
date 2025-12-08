@@ -20,8 +20,6 @@ class PostsController extends Controller {
     public function __construct() {
         $this->post = new Post();
         $this->categories = new PostCategoryModel();
-        
-        // Protege todas as rotas do controller
         AuthMiddleware::requireAuth();
     }
 
@@ -31,24 +29,38 @@ class PostsController extends Controller {
         $page = max(1, (int) $request->query('page', 1));
         $perPage = 10;
 
-        $result = $this->post->paginar($page, $perPage, $q ?: null);
+        $userData = AdminHelper::getUserData('posts');
+        $userId = $_SESSION['user_id'] ?? null;
+        $userRole = $_SESSION['user_role'] ?? 'usuario';
+
+        if ($userRole === 'usuario') {
+            $result = $this->post->paginarPorAutor($userId, $page, $perPage, $q ?: null);
+        } else {
+            $result = $this->post->paginar($page, $perPage, $q ?: null);
+        }
+
         $posts = $result['data'];
         $pagination = array_merge($result['meta'], [
             'path' => BASE_URL . 'admin/posts',
-            'query' => array_filter([
-                'q' => $q,
-            ], fn($value) => $value !== null && $value !== ''),
+            'query' => array_filter(['q' => $q], fn($value) => $value !== null && $value !== ''),
         ]);
 
         $this->renderTwig('admin/posts/index', array_merge([
             'posts' => $posts,
             'q' => $q,
-            'pagination' => $pagination
-        ], AdminHelper::getUserData('posts')));
+            'pagination' => $pagination,
+            'userRole' => $userRole,
+            'statusLabels' => [
+                'draft' => 'Rascunho',
+                'pending' => 'Pendente de Revisão',
+                'in_review' => 'Em Revisão',
+                'published' => 'Publicado',
+                'rejected' => 'Rejeitado'
+            ]
+        ], $userData));
     }
 
     public function create(): void {
-        // Valida permissão
         PermissionMiddleware::authorize('posts:create');
 
         $categorias = $this->categories->listar();
@@ -63,18 +75,16 @@ class PostsController extends Controller {
     }
 
     public function store(): void {
-        // Valida permissão
         PermissionMiddleware::authorize('posts:create');
 
         $request = Request::capture();
         
         if (!$request->isPost()) {
-            $_SESSION['toast'] = ['type' => 'danger', 'message' => '⚠️ Método inválido para criar post!'];
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => '⚠️ Método inválido!'];
             header('Location: ' . BASE_URL . 'admin/posts/create');
             exit;
         }
         
-        // Valida CSRF
         CsrfHelper::verifyOrDie();
         
         $payload = $request->post();
@@ -82,7 +92,6 @@ class PostsController extends Controller {
             unset($payload['capa_url']);
         }
 
-        // Valida dados
         $validator = Validator::make($payload, [
             'titulo' => 'required|min:5|max:200',
             'slug' => 'required|min:3|max:200',
@@ -92,7 +101,7 @@ class PostsController extends Controller {
         ]);
         
         if ($validator->fails()) {
-            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Erro de validação: ' . implode(', ', array_map(fn($e) => $e[0], $validator->errors()))];
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => '❌ Erro de validação: ' . implode(', ', array_map(fn($e) => $e[0], $validator->errors()))];
             $_SESSION['old_input'] = $request->post();
             header('Location: ' . BASE_URL . 'admin/posts/create');
             exit;
@@ -100,22 +109,39 @@ class PostsController extends Controller {
         
         $validated = $validator->validated();
         $rawConteudo = $request->post('conteudo', '');
+        $action = $request->post('action', 'save_exit');
+
+        $userRole = $_SESSION['user_role'] ?? 'usuario';
+        if ($action === 'save_draft') {
+            $status = 'draft';
+        } elseif ($action === 'save_submit') {
+            $status = 'pending';
+        } else {
+            $status = $userRole === 'admin' ? 'pending' : 'draft';
+        }
 
         $data = [
             'titulo' => $validated['titulo'] ?? '',
             'slug' => $validated['slug'] ?? '',
             'conteudo' => $rawConteudo,
-            'categoria_id' => isset($validated['categoria_id']) ? (int)$validated['categoria_id'] : (int)$request->post('categoria_id', 0),
+            'categoria_id' => (int)$validated['categoria_id'],
+            'capa_url' => $validated['capa_url'] ?? null,
+            'user_id' => $_SESSION['user_id'] ?? null,
+            'status' => $status,
+            'autor' => $_SESSION['user_name'] ?? 'admin',
         ];
-        $data['capa_url'] = $validated['capa_url'] ?? null;
-        $data['autor'] = AuthMiddleware::getUserData('name') ?? $_SESSION['user_name'] ?? 'admin';
 
         $this->post->criar($data);
 
-        $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post criado com sucesso!'];
+        $message = match($status) {
+            'draft' => '✅ Post salvo como rascunho!',
+            'pending' => '✅ Post submetido para revisão!',
+            default => '✅ Post criado com sucesso!',
+        };
+
+        $_SESSION['toast'] = ['type' => 'success', 'message' => $message];
         unset($_SESSION['old_input']);
 
-        $action = $request->post('action', 'save_exit');
         $redirect = $action === 'save_continue'
             ? BASE_URL . 'admin/posts/create'
             : BASE_URL . 'admin/posts';
@@ -125,10 +151,22 @@ class PostsController extends Controller {
     }
 
     public function edit(int $id): void {
-        // Valida permissão
         PermissionMiddleware::authorize('posts:edit');
 
         $post = $this->post->encontrarPorId($id);
+        
+        if (!$post) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => '❌ Post não encontrado!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
+        if (!$this->canEditPost($post)) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => '❌ Você não pode editar este post!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
         $categorias = $this->categories->listar();
         $csrf = CsrfHelper::generateToken();
         $old = $_SESSION['old_input'] ?? [];
@@ -148,15 +186,20 @@ class PostsController extends Controller {
             return;
         }
         
-        // Valida CSRF
         CsrfHelper::verifyOrDie();
         
+        $post = $this->post->encontrarPorId($id);
+        if (!$post || !$this->canEditPost($post)) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => '❌ Permissão negada!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
         $payload = $request->post();
         if (isset($payload['capa_url']) && trim($payload['capa_url']) === '') {
             unset($payload['capa_url']);
         }
 
-        // Valida dados
         $validator = Validator::make($payload, [
             'titulo' => 'required|min:5|max:200',
             'slug' => 'required|min:3|max:200',
@@ -166,7 +209,7 @@ class PostsController extends Controller {
         ]);
         
         if ($validator->fails()) {
-            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Erro de validação: ' . implode(', ', array_map(fn($e) => $e[0], $validator->errors()))];
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => '❌ Erro de validação!'];
             $_SESSION['old_input'] = $request->post();
             header('Location: ' . BASE_URL . 'admin/posts/edit/' . $id);
             exit;
@@ -179,25 +222,123 @@ class PostsController extends Controller {
             'titulo' => $validated['titulo'] ?? '',
             'slug' => $validated['slug'] ?? '',
             'conteudo' => $rawConteudo,
-            'categoria_id' => isset($validated['categoria_id']) ? (int)$validated['categoria_id'] : (int)$request->post('categoria_id', 0),
+            'categoria_id' => (int)$validated['categoria_id'],
+            'capa_url' => $validated['capa_url'] ?? null,
         ];
-        $data['capa_url'] = $validated['capa_url'] ?? null;
 
         $this->post->atualizar($id, $data);
 
-        $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post atualizado com sucesso!'];
+        $_SESSION['toast'] = ['type' => 'success', 'message' => '✅ Post atualizado com sucesso!'];
         unset($_SESSION['old_input']);
         header('Location: ' . BASE_URL . 'admin/posts');
         exit;
     }
 
+    public function submit(int $id): void {
+        PermissionMiddleware::authorize('posts:submit');
+
+        $post = $this->post->encontrarPorId($id);
+        
+        if (!$post || $post['user_id'] != $_SESSION['user_id'] && $_SESSION['user_role'] !== 'admin') {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => '❌ Permissão negada!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
+        if ($post['status'] !== 'draft') {
+            $_SESSION['toast'] = ['type' => 'warning', 'message' => '⚠️ Apenas rascunhos podem ser submetidos!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
+        $this->post->atualizar($id, ['status' => 'pending']);
+        $_SESSION['toast'] = ['type' => 'success', 'message' => '✅ Post submetido para revisão!'];
+        header('Location: ' . BASE_URL . 'admin/posts');
+        exit;
+    }
+
+    public function approve(int $id): void {
+        PermissionMiddleware::authorize('posts:approve');
+
+        $post = $this->post->encontrarPorId($id);
+        if (!$post || $post['status'] !== 'pending') {
+            $_SESSION['toast'] = ['type' => 'warning', 'message' => '⚠️ Post inválido para aprovação!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
+        $this->post->atualizar($id, [
+            'status' => 'published',
+            'published_at' => date('Y-m-d H:i:s')
+        ]);
+
+        $_SESSION['toast'] = ['type' => 'success', 'message' => '✅ Post publicado com sucesso!'];
+        header('Location: ' . BASE_URL . 'admin/posts');
+        exit;
+    }
+
+    public function reject(int $id): void {
+        PermissionMiddleware::authorize('posts:reject');
+
+        $request = Request::capture();
+        
+        if (!$request->isPost()) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => '❌ Método inválido!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
+        CsrfHelper::verifyOrDie();
+
+        $post = $this->post->encontrarPorId($id);
+        if (!$post) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => '❌ Post não encontrado!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
+        $reason = trim($request->post('reject_reason', ''));
+        if (empty($reason)) {
+            $_SESSION['toast'] = ['type' => 'warning', 'message' => '⚠️ Informe um motivo para rejeição!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
+        $this->post->atualizar($id, [
+            'status' => 'rejected',
+            'reject_reason' => $reason
+        ]);
+
+        $_SESSION['toast'] = ['type' => 'success', 'message' => '✅ Post rejeitado!'];
+        header('Location: ' . BASE_URL . 'admin/posts');
+        exit;
+    }
+
     public function delete(int $id): void {
-        // Valida permissão
         PermissionMiddleware::authorize('posts:delete');
 
         $this->post->excluir($id);
-        $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post excluído com sucesso!'];
+        $_SESSION['toast'] = ['type' => 'success', 'message' => '✅ Post excluído!'];
         header('Location: ' . BASE_URL . 'admin/posts');
         exit;
+    }
+
+    private function canEditPost(array $post): bool {
+        $userRole = $_SESSION['user_role'] ?? 'usuario';
+        $userId = $_SESSION['user_id'] ?? null;
+
+        if ($userRole === 'admin') {
+            return true;
+        }
+
+        if ($userRole === 'gerente' && in_array($post['status'], ['draft', 'pending'])) {
+            return true;
+        }
+
+        if ($post['user_id'] == $userId && $post['status'] === 'draft') {
+            return true;
+        }
+
+        return false;
     }
 }

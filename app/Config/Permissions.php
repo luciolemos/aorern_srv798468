@@ -13,11 +13,16 @@ class Permissions
     public const PERMISSIONS = [
         // ====== POSTS ======
         'posts:list' => ['admin', 'gerente', 'operador', 'usuario'],
-        'posts:create' => ['admin', 'gerente'],
-        'posts:edit' => ['admin', 'gerente'], // pode editar próprios posts ou qualquer um se admin
+        'posts:create' => ['admin', 'gerente', 'usuario'], // autor pode criar (draft)
+        'posts:edit' => ['admin', 'gerente', 'usuario'], // pode editar próprios posts ou qualquer um se admin
         'posts:delete' => ['admin'],
-        'posts:publish' => ['admin', 'gerente'],
-        'posts:unpublish' => ['admin', 'gerente'],
+        'posts:draft' => ['admin', 'gerente', 'usuario'], // salvar como rascunho
+        'posts:submit' => ['admin', 'gerente', 'usuario'], // submeter para revisão
+        'posts:review' => ['admin', 'gerente'], // revisar posts pendentes
+        'posts:approve' => ['admin'], // aprovar/publicar posts
+        'posts:reject' => ['admin', 'gerente'], // rejeitar posts
+        'posts:publish' => ['admin'], // publicar posts aprovados
+        'posts:unpublish' => ['admin'],
 
         // ====== CATEGORIAS DE POSTS ======
         'post_categories:list' => ['admin', 'gerente', 'operador', 'usuario'],
