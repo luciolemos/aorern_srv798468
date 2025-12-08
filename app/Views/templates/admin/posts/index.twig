@@ -152,8 +152,8 @@
                                 <div class="modal-body">
                                     <h6 class="fw-bold">{{ post.titulo|e }}</h6>
                                     <p class="small text-muted mb-3">Autor: <strong>{{ post.autor|e }}</strong> | Criado em: {{ post.criado_em|date('d/m/Y H:i') }}</p>
-                                    <div class="alert alert-light border">
-                                        {{ post.conteudo|striptags|truncate(300) }}
+                                    <div class="alert alert-light border" style="max-height: 300px; overflow-y: auto;">
+                                        {{ post.conteudo|striptags|slice(0, 300) }}{% if post.conteudo|length > 300 %}...{% endif %}
                                     </div>
                                 </div>
                                 <div class="modal-footer border-top">
