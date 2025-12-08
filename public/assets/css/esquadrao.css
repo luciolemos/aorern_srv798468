@@ -1,0 +1,145 @@
+/* esquadrao.css */
+.section-kicker {
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+}
+
+.section-title {
+    font-family: var(--font-headings);
+    font-size: clamp(2rem, 3vw, 2.7rem);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.section-lead {
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.section-spacing {
+    padding: clamp(3rem, 6vw, 5rem) 0;
+}
+
+.esquadrao-hero {
+    padding: clamp(3rem, 6vw, 6rem) 0;
+    background: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
+    position: relative;
+}
+
+.esquadrao-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, rgba(10,15,25,0.85), rgba(223,99,1,0.6));
+    z-index: 0;
+}
+
+.esquadrao-hero .container,
+.esquadrao-hero .row,
+.esquadrao-hero .col-lg-6 {
+    position: relative;
+    z-index: 1;
+}
+
+.esquadrao-hero-card {
+    border-radius: 1.5rem;
+    background: rgba(6,16,30,0.6);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 2.5rem;
+}
+
+.esquadrao-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+.esquadrao-overview {
+    background: linear-gradient(135deg, #ffffff 0%, #fff4ea 100%);
+}
+
+.esquadrao-image {
+    min-height: 440px;
+    background: url('../images/malinois_1600_1600.jpg') center/cover no-repeat;
+    border: 1px solid rgba(0,0,0,0.08);
+}
+
+.esquadrao-checklist {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.esquadrao-checklist i {
+    color: var(--bombeiros-orange, #df6301);
+    margin-right: 0.65rem;
+}
+
+.esquadrao-capabilities {
+    background: #fff;
+}
+
+.esquadrao-card {
+    border: 1px solid rgba(223,99,1,0.18);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    background: #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    height: 100%;
+}
+
+.esquadrao-card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: rgba(223,99,1,0.13);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    color: var(--bombeiros-orange, #df6301);
+    margin-bottom: 1rem;
+}
+
+.esquadrao-protocols {
+    background: linear-gradient(135deg, #010b16 0%, #0c1f33 100%);
+    color: #fff;
+}
+
+.esquadrao-gallery .gallery-tile {
+    border-radius: 1rem;
+    background-size: cover;
+    background-position: center;
+    min-height: 160px;
+}
+
+.esquadrao-gallery .gallery-tile.large {
+    min-height: 220px;
+}
+
+.esquadrao-cta {
+    background: #fff;
+}
+
+@media (max-width: 768px) {
+    .esquadrao-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .esquadrao-gallery .gallery-tile.large {
+        min-height: 180px;
+    }
+
+    .esquadrao-gallery .gallery-tile {
+        min-height: 140px;
+    }
+
+    .section-title {
+        font-size: clamp(1.8rem, 6vw, 2.4rem);
+    }
+}

@@ -1,0 +1,11 @@
+[2025-12-05 02:53:02] PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'csrf_token' in 'field list' in /var/www/mvc/app/Core/Database.php:155
+Stack trace:
+#0 /var/www/mvc/app/Core/Database.php(155): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(36): App\Core\Database->update()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(122): App\Models\Post->atualizar()
+#3 [internal function]: App\Controllers\Admin\PostsController->update()
+#4 /var/www/mvc/app/Core/App.php(80): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+

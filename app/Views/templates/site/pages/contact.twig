@@ -1,0 +1,175 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Contato - CBMRN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+        <link rel="stylesheet" href="{{ BASE_URL }}assets/css/contact.css">
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
+
+{% block content %}
+    <section class="contact-hero text-white position-relative overflow-hidden">
+        <div class="contact-hero-pattern"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                    <p class="text-uppercase small fw-semibold text-white-50 mb-2">Fale conosco</p>
+                    <h1 class="display-5 fw-bold mb-3">2º SGB/2º GBM - CBMRN</h1>
+                    <p class="lead mb-4">Atuamos 24/7 com protocolos claros, integração com outras forças e tecnologia para reduzir o tempo de resposta e ampliar a segurança. Estamos à disposição para apoiar operações, atender solicitações de imprensa, visitas institucionais e orientar a população sobre prevenção.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="tel:193" class="btn btn-light btn-lg text-dark fw-bold"><i class="bi bi-telephone me-2"></i>Ligue 193</a>
+                        <a href="#contato-direto" class="btn btn-outline-light btn-lg">Ver contatos diretos</a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="contact-hero-card shadow-lg">
+                        <p class="text-uppercase small fw-semibold text-white-50 mb-1">Atendimento</p>
+                        <h2 class="h4 fw-bold text-white mb-4">Canais principais</h2>
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex align-items-start gap-3 py-2">
+                                <i class="bi bi-geo-alt-fill fs-5"></i>
+                                <div>
+                                    <p class="mb-0 fw-semibold">Rua Presidente Kenedy nº 168, Centro – Goianinha/RN</p>
+                                    <small class="text-white-50">CEP 59173-000</small>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-start gap-3 py-2">
+                                <i class="bi bi-whatsapp fs-5"></i>
+                                <div>
+                                    <p class="mb-0 fw-semibold">(84) 98838-9889</p>
+                                    <small class="text-white-50">WhatsApp institucional</small>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-start gap-3 py-2">
+                                <i class="bi bi-envelope-fill fs-5"></i>
+                                <div>
+                                    <p class="mb-0 fw-semibold">suporte@2sgb2gbm.org</p>
+                                    <small class="text-white-50">2gbm_2sgb@cbm.rn.gov.br</small>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-body py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-4">
+                            <article class="contact-summary-card h-100">
+                                <i class="bi bi-fire fs-3 text-primary mb-3"></i>
+                                <h3 class="h6 fw-bold mb-1">Emergências</h3>
+                                <p class="mb-0 text-muted">Apenas pelo 193 – disponibilidade 24/7.</p>
+                            </article>
+                        </div>
+                        <div class="col-sm-4">
+                            <article class="contact-summary-card h-100">
+                                <i class="bi bi-people fs-3 text-primary mb-3"></i>
+                                <h3 class="h6 fw-bold mb-1">Visitas e imprensa</h3>
+                                <p class="mb-0 text-muted">Agendamentos via formulário ou email.</p>
+                            </article>
+                        </div>
+                        <div class="col-sm-4">
+                            <article class="contact-summary-card h-100">
+                                <i class="bi bi-chat-dots fs-3 text-primary mb-3"></i>
+                                <h3 class="h6 fw-bold mb-1">Dúvidas gerais</h3>
+                                <p class="mb-0 text-muted">Respondemos em até 2 dias úteis.</p>
+                            </article>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm contact-form-card">
+                        <div class="card-body p-4">
+                            <h2 class="h4 fw-bold mb-3">Envie sua mensagem</h2>
+                            <form method="POST" class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="nome" class="form-label fw-semibold">Nome</label>
+                                    <input type="text" class="form-control" id="nome" name="nome" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label fw-semibold">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="mensagem" class="form-label fw-semibold">Mensagem</label>
+                                    <textarea class="form-control" id="mensagem" name="mensagem" rows="5" required></textarea>
+                                </div>
+                                   <div class="col-12">
+                                       <!-- Google reCAPTCHA widget -->
+                                       <div class="g-recaptcha" data-sitekey="6Lf07DwrAAAAAFgUI7kHx81lmTMzKNcggy_S7sgL"></div>
+                                   </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Enviar mensagem</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4" id="contato-direto">
+                    <aside class="contact-direct card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-4">Contato direto</h2>
+                            <div class="d-flex align-items-start gap-3 mb-4">
+                                <i class="bi bi-geo-alt-fill contact-direct-icon text-primary"></i>
+                                <div>
+                                    <h3 class="h6 fw-semibold mb-1">Endereço</h3>
+                                    <p class="mb-0 small text-muted">Rua Presidente Kenedy nº 168, Centro<br>Goianinha/RN – CEP 59173-000</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-start gap-3 mb-4">
+                                <i class="bi bi-telephone-fill contact-direct-icon text-success"></i>
+                                <div>
+                                    <h3 class="h6 fw-semibold mb-1">Telefone</h3>
+                                    <p class="mb-0 small">(84) 98838-9889</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-start gap-3 mb-4">
+                                <i class="bi bi-whatsapp contact-direct-icon text-success"></i>
+                                <div>
+                                    <h3 class="h6 fw-semibold mb-1">WhatsApp</h3>
+                                    <p class="mb-0 small">(84) 98838-9889</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-start gap-3 mb-4">
+                                <i class="bi bi-envelope-fill contact-direct-icon text-danger"></i>
+                                <div>
+                                    <h3 class="h6 fw-semibold mb-1">E-mail</h3>
+                                    <p class="mb-0 small">suporte@2sgb2gbm.org<br>2gbm_2sgb@cbm.rn.gov.br</p>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                            <div>
+                                <h3 class="h6 fw-semibold mb-3">Redes sociais</h3>
+                                <div class="d-flex gap-2">
+                                    <a href="https://github.com/luciolemos/system" class="btn btn-outline-primary btn-sm" target="_blank" title="GitHub">
+                                        <i class="bi bi-github"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/lucciolemos/" class="btn btn-outline-primary btn-sm" target="_blank" title="LinkedIn">
+                                        <i class="bi bi-linkedin"></i>
+                                    </a>
+                                    <a href="https://x.com/lucciolemos" class="btn btn-outline-primary btn-sm" target="_blank" title="Twitter">
+                                        <i class="bi bi-twitter"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-map py-5">
+        <div class="container">
+            <h2 class="h4 fw-bold mb-3 text-center">Nossa localização</h2>
+            <div class="ratio ratio-21x9 rounded overflow-hidden shadow-sm">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d935.4089977755553!2d-35.21094443955298!3d-6.270164616892321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b287007fdbe0f7%3A0xc0a709485b5e7305!2scorpo%20de%20bombeiros%20militar%202%2F2%20GBM!5e1!3m2!1spt-BR!2sbr!4v1764530435730!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+{% endblock %}

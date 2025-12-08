@@ -1,0 +1,85 @@
+/* about.css */
+.about-hero {
+    background: linear-gradient(125deg, #0e1c2e 0%, #df6301 60%, #ff8833 100%);
+    padding: clamp(3rem, 6vw, 6rem) 0;
+}
+
+.about-hero-pattern {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.2), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(255,255,255,0.08), transparent 35%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 2px, transparent 2px, transparent 8px);
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.about-hero-actions .btn {
+    min-width: 210px;
+}
+
+.about-hero-panel {
+    background: rgba(6, 16, 30, 0.55);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+}
+
+.about-hero-panel ul li + li {
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.about-hero-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.7);
+    margin-top: 0.35rem;
+}
+
+.about-pillars {
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.about-pillars-header {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+.pillar-card {
+    border-radius: 1.25rem;
+    border: 1px solid rgba(223, 99, 1, 0.15);
+    padding: 2rem;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pillar-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 35px rgba(0,0,0,0.08);
+}
+
+.pillar-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: rgba(223, 99, 1, 0.12);
+    color: var(--bombeiros-orange);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .about-hero-actions .btn {
+        width: 100%;
+    }
+
+    .about-hero-panel {
+        padding: 2rem;
+    }
+}

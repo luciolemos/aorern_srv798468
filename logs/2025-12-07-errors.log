@@ -1,0 +1,213 @@
+[2025-12-07 12:41:17] ErrorException: move_uploaded_file(/var/www/mvc/public/uploads/avatars/avatar_693575ed523b67.93840466.jpg): Failed to open stream: No such file or directory in /var/www/mvc/app/Controllers/Site/RegisterController.php:112
+Stack trace:
+#0 [internal function]: App\Core\ExceptionHandler::handleError()
+#1 /var/www/mvc/app/Controllers/Site/RegisterController.php(112): move_uploaded_file()
+#2 /var/www/mvc/app/Controllers/Site/RegisterController.php(77): App\Controllers\Site\RegisterController->processAvatar()
+#3 [internal function]: App\Controllers\Site\RegisterController->store()
+#4 /var/www/mvc/app/Core/App.php(107): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-07 12:43:52] ErrorException: move_uploaded_file(/var/www/mvc/public/uploads/avatars/avatar_69357688d13ff3.63050569.jpg): Failed to open stream: No such file or directory in /var/www/mvc/app/Controllers/Site/RegisterController.php:112
+Stack trace:
+#0 [internal function]: App\Core\ExceptionHandler::handleError()
+#1 /var/www/mvc/app/Controllers/Site/RegisterController.php(112): move_uploaded_file()
+#2 /var/www/mvc/app/Controllers/Site/RegisterController.php(77): App\Controllers\Site\RegisterController->processAvatar()
+#3 [internal function]: App\Controllers\Site\RegisterController->store()
+#4 /var/www/mvc/app/Core/App.php(107): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-07 12:45:10] ErrorException: move_uploaded_file(/var/www/mvc/public/uploads/avatars/avatar_693576d6ca6d61.78278726.png): Failed to open stream: No such file or directory in /var/www/mvc/app/Controllers/Site/RegisterController.php:112
+Stack trace:
+#0 [internal function]: App\Core\ExceptionHandler::handleError()
+#1 /var/www/mvc/app/Controllers/Site/RegisterController.php(112): move_uploaded_file()
+#2 /var/www/mvc/app/Controllers/Site/RegisterController.php(77): App\Controllers\Site\RegisterController->processAvatar()
+#3 [internal function]: App\Controllers\Site\RegisterController->store()
+#4 /var/www/mvc/app/Core/App.php(107): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-07 12:48:18] ErrorException: move_uploaded_file(/var/www/mvc/app/public/uploads/avatars/avatar_69357792619f95.15520292.png): Failed to open stream: No such file or directory in /var/www/mvc/app/Controllers/Site/RegisterController.php:113
+Stack trace:
+#0 [internal function]: App\Core\ExceptionHandler::handleError()
+#1 /var/www/mvc/app/Controllers/Site/RegisterController.php(113): move_uploaded_file()
+#2 /var/www/mvc/app/Controllers/Site/RegisterController.php(77): App\Controllers\Site\RegisterController->processAvatar()
+#3 [internal function]: App\Controllers\Site\RegisterController->store()
+#4 /var/www/mvc/app/Core/App.php(107): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-07 12:49:57] ErrorException: move_uploaded_file(/var/www/mvc/app/public/uploads/avatars/avatar_693577f59210b5.18472480.png): Failed to open stream: No such file or directory in /var/www/mvc/app/Controllers/Site/RegisterController.php:113
+Stack trace:
+#0 [internal function]: App\Core\ExceptionHandler::handleError()
+#1 /var/www/mvc/app/Controllers/Site/RegisterController.php(113): move_uploaded_file()
+#2 /var/www/mvc/app/Controllers/Site/RegisterController.php(77): App\Controllers\Site\RegisterController->processAvatar()
+#3 [internal function]: App\Controllers\Site\RegisterController->store()
+#4 /var/www/mvc/app/Core/App.php(107): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-07 12:54:06] ErrorException: move_uploaded_file(/var/www/mvc/app/public/uploads/avatars/avatar_693578ee57e754.04477223.png): Failed to open stream: No such file or directory in /var/www/mvc/app/Controllers/Site/RegisterController.php:113
+Stack trace:
+#0 [internal function]: App\Core\ExceptionHandler::handleError()
+#1 /var/www/mvc/app/Controllers/Site/RegisterController.php(113): move_uploaded_file()
+#2 /var/www/mvc/app/Controllers/Site/RegisterController.php(77): App\Controllers\Site\RegisterController->processAvatar()
+#3 [internal function]: App\Controllers\Site\RegisterController->store()
+#4 /var/www/mvc/app/Core/App.php(107): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-07 12:57:25] ErrorException: move_uploaded_file(/var/www/mvc/public/uploads/avatars/avatar_693579b579f720.71928765.png): Failed to open stream: Permission denied in /var/www/mvc/app/Controllers/Site/RegisterController.php:113
+Stack trace:
+#0 [internal function]: App\Core\ExceptionHandler::handleError()
+#1 /var/www/mvc/app/Controllers/Site/RegisterController.php(113): move_uploaded_file()
+#2 /var/www/mvc/app/Controllers/Site/RegisterController.php(77): App\Controllers\Site\RegisterController->processAvatar()
+#3 [internal function]: App\Controllers\Site\RegisterController->store()
+#4 /var/www/mvc/app/Core/App.php(107): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-07 17:51:50] ErrorException: trim(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/mvc/app/Core/TwigEngine.php:39
+Stack trace:
+#0 [internal function]: App\Core\ExceptionHandler::handleError()
+#1 /var/www/mvc/app/Core/TwigEngine.php(39): trim()
+#2 /var/www/mvc/app/Core/TwigEngine.php(49): App\Core\TwigEngine->__construct()
+#3 /var/www/mvc/app/Core/Controller.php(27): App\Core\TwigEngine::getInstance()
+#4 /var/www/mvc/app/Controllers/Site/BlogController.php(13): App\Core\Controller->renderTwig()
+#5 [internal function]: App\Controllers\Site\BlogController->index()
+#6 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#7 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#8 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#9 {main}
+
+[2025-12-07 17:51:59] ErrorException: trim(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/mvc/app/Core/TwigEngine.php:39
+Stack trace:
+#0 [internal function]: App\Core\ExceptionHandler::handleError()
+#1 /var/www/mvc/app/Core/TwigEngine.php(39): trim()
+#2 /var/www/mvc/app/Core/TwigEngine.php(49): App\Core\TwigEngine->__construct()
+#3 /var/www/mvc/app/Core/Controller.php(27): App\Core\TwigEngine::getInstance()
+#4 /var/www/mvc/app/Controllers/Site/BlogController.php(13): App\Core\Controller->renderTwig()
+#5 [internal function]: App\Controllers\Site\BlogController->index()
+#6 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#7 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#8 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#9 {main}
+
+[2025-12-07 18:07:44] Twig\Error\SyntaxError: Unclosed "[" in "site/pages/home.twig" at line 217. in /var/www/mvc/app/Views/templates/site/pages/home.twig:217
+Stack trace:
+#0 /var/www/mvc/vendor/twig/twig/src/Lexer.php(358): Twig\Lexer->checkBrackets()
+#1 /var/www/mvc/vendor/twig/twig/src/Lexer.php(311): Twig\Lexer->lexExpression()
+#2 /var/www/mvc/vendor/twig/twig/src/Lexer.php(212): Twig\Lexer->lexBlock()
+#3 /var/www/mvc/vendor/twig/twig/src/Environment.php(536): Twig\Lexer->tokenize()
+#4 /var/www/mvc/vendor/twig/twig/src/Environment.php(589): Twig\Environment->tokenize()
+#5 /var/www/mvc/vendor/twig/twig/src/Environment.php(408): Twig\Environment->compileSource()
+#6 /var/www/mvc/vendor/twig/twig/src/Environment.php(370): Twig\Environment->loadTemplate()
+#7 /var/www/mvc/vendor/twig/twig/src/Environment.php(333): Twig\Environment->load()
+#8 /var/www/mvc/app/Core/TwigEngine.php(57): Twig\Environment->render()
+#9 /var/www/mvc/app/Core/Controller.php(28): App\Core\TwigEngine->render()
+#10 /var/www/mvc/app/Controllers/Site/HomeController.php(13): App\Core\Controller->renderTwig()
+#11 [internal function]: App\Controllers\Site\HomeController->index()
+#12 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#13 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#14 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#15 {main}
+
+[2025-12-07 18:08:15] Twig\Error\SyntaxError: Unclosed "[" in "site/pages/home.twig" at line 217. in /var/www/mvc/app/Views/templates/site/pages/home.twig:217
+Stack trace:
+#0 /var/www/mvc/vendor/twig/twig/src/Lexer.php(358): Twig\Lexer->checkBrackets()
+#1 /var/www/mvc/vendor/twig/twig/src/Lexer.php(311): Twig\Lexer->lexExpression()
+#2 /var/www/mvc/vendor/twig/twig/src/Lexer.php(212): Twig\Lexer->lexBlock()
+#3 /var/www/mvc/vendor/twig/twig/src/Environment.php(536): Twig\Lexer->tokenize()
+#4 /var/www/mvc/vendor/twig/twig/src/Environment.php(589): Twig\Environment->tokenize()
+#5 /var/www/mvc/vendor/twig/twig/src/Environment.php(408): Twig\Environment->compileSource()
+#6 /var/www/mvc/vendor/twig/twig/src/Environment.php(370): Twig\Environment->loadTemplate()
+#7 /var/www/mvc/vendor/twig/twig/src/Environment.php(333): Twig\Environment->load()
+#8 /var/www/mvc/app/Core/TwigEngine.php(57): Twig\Environment->render()
+#9 /var/www/mvc/app/Core/Controller.php(28): App\Core\TwigEngine->render()
+#10 /var/www/mvc/app/Controllers/Site/HomeController.php(13): App\Core\Controller->renderTwig()
+#11 [internal function]: App\Controllers\Site\HomeController->index()
+#12 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#13 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#14 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#15 {main}
+
+[2025-12-07 18:08:17] Twig\Error\SyntaxError: Unclosed "[" in "site/pages/home.twig" at line 217. in /var/www/mvc/app/Views/templates/site/pages/home.twig:217
+Stack trace:
+#0 /var/www/mvc/vendor/twig/twig/src/Lexer.php(358): Twig\Lexer->checkBrackets()
+#1 /var/www/mvc/vendor/twig/twig/src/Lexer.php(311): Twig\Lexer->lexExpression()
+#2 /var/www/mvc/vendor/twig/twig/src/Lexer.php(212): Twig\Lexer->lexBlock()
+#3 /var/www/mvc/vendor/twig/twig/src/Environment.php(536): Twig\Lexer->tokenize()
+#4 /var/www/mvc/vendor/twig/twig/src/Environment.php(589): Twig\Environment->tokenize()
+#5 /var/www/mvc/vendor/twig/twig/src/Environment.php(408): Twig\Environment->compileSource()
+#6 /var/www/mvc/vendor/twig/twig/src/Environment.php(370): Twig\Environment->loadTemplate()
+#7 /var/www/mvc/vendor/twig/twig/src/Environment.php(333): Twig\Environment->load()
+#8 /var/www/mvc/app/Core/TwigEngine.php(57): Twig\Environment->render()
+#9 /var/www/mvc/app/Core/Controller.php(28): App\Core\TwigEngine->render()
+#10 /var/www/mvc/app/Controllers/Site/HomeController.php(13): App\Core\Controller->renderTwig()
+#11 [internal function]: App\Controllers\Site\HomeController->index()
+#12 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#13 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#14 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#15 {main}
+
+[2025-12-07 18:08:17] Twig\Error\SyntaxError: Unclosed "[" in "site/pages/home.twig" at line 217. in /var/www/mvc/app/Views/templates/site/pages/home.twig:217
+Stack trace:
+#0 /var/www/mvc/vendor/twig/twig/src/Lexer.php(358): Twig\Lexer->checkBrackets()
+#1 /var/www/mvc/vendor/twig/twig/src/Lexer.php(311): Twig\Lexer->lexExpression()
+#2 /var/www/mvc/vendor/twig/twig/src/Lexer.php(212): Twig\Lexer->lexBlock()
+#3 /var/www/mvc/vendor/twig/twig/src/Environment.php(536): Twig\Lexer->tokenize()
+#4 /var/www/mvc/vendor/twig/twig/src/Environment.php(589): Twig\Environment->tokenize()
+#5 /var/www/mvc/vendor/twig/twig/src/Environment.php(408): Twig\Environment->compileSource()
+#6 /var/www/mvc/vendor/twig/twig/src/Environment.php(370): Twig\Environment->loadTemplate()
+#7 /var/www/mvc/vendor/twig/twig/src/Environment.php(333): Twig\Environment->load()
+#8 /var/www/mvc/app/Core/TwigEngine.php(57): Twig\Environment->render()
+#9 /var/www/mvc/app/Core/Controller.php(28): App\Core\TwigEngine->render()
+#10 /var/www/mvc/app/Controllers/Site/HomeController.php(13): App\Core\Controller->renderTwig()
+#11 [internal function]: App\Controllers\Site\HomeController->index()
+#12 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#13 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#14 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#15 {main}
+
+[2025-12-07 21:09:05] PDOException: SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'capa_url' at row 1 in /var/www/mvc/app/Core/Database.php:155
+Stack trace:
+#0 /var/www/mvc/app/Core/Database.php(155): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(37): App\Core\Database->update()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(203): App\Models\Post->atualizar()
+#3 [internal function]: App\Controllers\Admin\PostsController->update()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-07 22:10:33] Twig\Error\LoaderError: Unable to find template "admin/system/versions.twig" (looked into: /var/www/mvc/app/Core/../Views/templates). in /var/www/mvc/vendor/twig/twig/src/Loader/FilesystemLoader.php:234
+Stack trace:
+#0 /var/www/mvc/vendor/twig/twig/src/Loader/FilesystemLoader.php(138): Twig\Loader\FilesystemLoader->findTemplate()
+#1 /var/www/mvc/vendor/twig/twig/src/Environment.php(317): Twig\Loader\FilesystemLoader->getCacheKey()
+#2 /var/www/mvc/vendor/twig/twig/src/Environment.php(370): Twig\Environment->getTemplateClass()
+#3 /var/www/mvc/vendor/twig/twig/src/Environment.php(333): Twig\Environment->load()
+#4 /var/www/mvc/app/Core/TwigEngine.php(57): Twig\Environment->render()
+#5 /var/www/mvc/app/Core/Controller.php(28): App\Core\TwigEngine->render()
+#6 /var/www/mvc/app/Controllers/Admin/SystemController.php(19): App\Core\Controller->renderTwig()
+#7 [internal function]: App\Controllers\Admin\SystemController->versions()
+#8 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#9 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#10 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#11 {main}
+
+[2025-12-07 22:14:59] Error: Class "App\Controllers\Admin\AdminHelper" not found in /var/www/mvc/app/Controllers/Admin/PostsController.php:46
+Stack trace:
+#0 [internal function]: App\Controllers\Admin\PostsController->index()
+#1 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#2 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#3 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#4 {main}
+

@@ -1,0 +1,78 @@
+<div class="d-flex flex-column h-100">
+    <div class="p-4 text-center border-bottom border-white border-opacity-25">
+        <div class="mb-2">
+            <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="navbar-logo" style="height: 70px; width: auto;">
+        </div>
+        <div class="fw-bold" style="color: rgba(255,255,255,0.95); font-size: 0.9rem; line-height: 1.3;">
+            Painel Admin
+        </div>
+        <div class="small" style="color: rgba(255,255,255,0.75); font-size: 0.75rem; margin-top: 0.25rem;">
+            Corpo de Bombeiros Militar<br>2ºSGB/2ºGBM
+        </div>
+    </div>
+    <ul class="nav flex-column px-2 py-2">
+            <li class="nav-item">
+                <a href="{{ BASE_URL }}admin/dashboard" class="nav-link py-2 px-3 rounded {{ subRoute == 'dashboard' ? 'active-cbmrn' : '' }}">
+                    <i class="bi bi-house-door-fill me-2"></i> Início
+                </a>
+            </li>
+            <li class="nav-item mt-1">
+                <a class="nav-link py-2 px-3 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#gestaoCollapse">
+                    <span><i class="bi bi-folder me-2"></i> Gestão de Conteúdo</span>
+                    <i class="bi bi-chevron-down small"></i>
+                </a>
+                <div class="collapse {{ subRoute in ['posts','post-categories'] ? 'show' : '' }}" id="gestaoCollapse">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/posts" class="nav-link py-1 px-3 small {{ subRoute == 'posts' ? 'active-cbmrn' : '' }}"><i class="bi bi-journal-text me-1"></i> Posts</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/post-categories" class="nav-link py-1 px-3 small {{ subRoute == 'post-categories' ? 'active-cbmrn' : '' }}"><i class="bi bi-tags me-1"></i> Categorias</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item mt-1">
+                <a class="nav-link py-2 px-3 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#pessoalCollapse">
+                    <span><i class="bi bi-people-fill me-2"></i> Gestão de Pessoal</span>
+                    <i class="bi bi-chevron-down small"></i>
+                </a>
+                <div class="collapse {{ subRoute in ['pessoal','funcoes'] ? 'show' : '' }}" id="pessoalCollapse">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/pessoal" class="nav-link py-1 px-3 small {{ subRoute == 'pessoal' ? 'active-cbmrn' : '' }}"><i class="bi bi-person-lines-fill me-1"></i> Bombeiros</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/funcoes" class="nav-link py-1 px-3 small {{ subRoute == 'funcoes' ? 'active-cbmrn' : '' }}"><i class="bi bi-tags me-1"></i> Funções</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item mt-1">
+                <a class="nav-link py-2 px-3 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#equipCollapse">
+                    <span><i class="bi bi-wrench-adjustable-circle me-2"></i> Gestão de Equipamentos</span>
+                    <i class="bi bi-chevron-down small"></i>
+                </a>
+                <div class="collapse {{ subRoute in ['equipamentos','categorias'] ? 'show' : '' }}" id="equipCollapse">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/equipamentos" class="nav-link py-1 px-3 small {{ subRoute == 'equipamentos' ? 'active-cbmrn' : '' }}"><i class="bi bi-hammer me-1"></i> Equipamentos</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/categorias" class="nav-link py-1 px-3 small {{ subRoute == 'categorias' ? 'active-cbmrn' : '' }}"><i class="bi bi-tags me-1"></i> Categorias</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item mt-1">
+                <a class="nav-link py-2 px-3 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#configCollapse">
+                    <span><i class="bi bi-gear me-2"></i> Configurações</span>
+                    <i class="bi bi-chevron-down small"></i>
+                </a>
+                <div class="collapse {{ subRoute in ['status','versions','info','usuarios'] ? 'show' : '' }}" id="configCollapse">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/usuarios" class="nav-link py-1 px-3 small {{ subRoute == 'usuarios' ? 'active-cbmrn' : '' }}"><i class="bi bi-people me-1"></i> Usuários</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/status" class="nav-link py-1 px-3 small {{ subRoute == 'status' ? 'active-cbmrn' : '' }}"><i class="bi bi-check-circle me-1"></i> Status</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/system/versions" class="nav-link py-1 px-3 small {{ subRoute == 'versions' ? 'active-cbmrn' : '' }}"><i class="bi bi-code-slash me-1"></i> Versões</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/system/info" class="nav-link py-1 px-3 small {{ subRoute == 'info' ? 'active-cbmrn' : '' }}"><i class="bi bi-info-circle me-1"></i> Info</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        <div class="mt-auto p-3 small text-center">
+            <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                <i class="bi bi-shield-fill-check"></i>
+                <span class="fw-semibold">CBMRN</span>
+            </div>
+            <span>© {{ 'now'|date('Y') }} Portal Administrativo</span>
+        </div>
+    </div>
+</div>

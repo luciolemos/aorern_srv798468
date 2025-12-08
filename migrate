@@ -1,0 +1,96 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use App\Database\MigrationRunner;
+
+$runner = new MigrationRunner();
+
+$command = $argv[1] ?? 'help';
+
+switch ($command) {
+    case 'migrate':
+        echo "\n🚀 Executando migrations...\n\n";
+        $executed = $runner->migrate();
+        echo "\n✅ Migrations concluídas! Total: " . count($executed) . "\n\n";
+        break;
+
+    case 'rollback':
+        echo "\n🔄 Revertendo último batch...\n\n";
+        $reverted = $runner->rollback();
+        echo "\n✅ Rollback concluído! Total: " . count($reverted) . "\n\n";
+        break;
+
+    case 'status':
+        $runner->status();
+        break;
+
+    case 'make':
+        $name = $argv[2] ?? null;
+        if (!$name) {
+            echo "❌ Erro: Informe o nome da migration.\n";
+            echo "Uso: php migrate make nome_da_migration\n\n";
+            exit(1);
+        }
+        makeMigration($name);
+        break;
+
+    default:
+        echo "\n📘 Comandos disponíveis:\n\n";
+        echo "  php migrate migrate          Executa migrations pendentes\n";
+        echo "  php migrate rollback         Reverte o último batch\n";
+        echo "  php migrate status           Lista status das migrations\n";
+        echo "  php migrate make <nome>      Cria uma nova migration\n\n";
+        break;
+}
+
+/**
+ * Cria uma nova migration
+ */
+function makeMigration(string $name): void
+{
+    $timestamp = date('Y_m_d_His');
+    $className = 'Migration_' . $timestamp . '_' . $name;
+    $filename = __DIR__ . '/database/migrations/' . $className . '.php';
+
+    $template = <<<PHP
+<?php
+
+namespace App\Database\Migrations;
+
+use App\Database\Migration;
+
+class {$className} extends Migration
+{
+    /**
+     * Executa a migration
+     */
+    public function up(): void
+    {
+        // Exemplo: Renomear coluna
+        // \$sql = "ALTER TABLE pessoal CHANGE foto avatar VARCHAR(255) NULL";
+        // \$this->execute(\$sql);
+    }
+
+    /**
+     * Reverte a migration
+     */
+    public function down(): void
+    {
+        // Exemplo: Reverter renomeação
+        // \$sql = "ALTER TABLE pessoal CHANGE avatar foto VARCHAR(255) NULL";
+        // \$this->execute(\$sql);
+    }
+}
+
+PHP;
+
+    if (!is_dir(dirname($filename))) {
+        mkdir(dirname($filename), 0755, true);
+    }
+
+    file_put_contents($filename, $template);
+    
+    echo "\n✅ Migration criada: {$filename}\n\n";
+}

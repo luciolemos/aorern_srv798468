@@ -1,0 +1,152 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}{{ title|default('Gerenciar Usuários') }}{% endblock %}
+{% block content %}
+<div class="container-fluid p-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h1 class="h3 fw-bold mb-1" style="color: #212529;">
+                        <i class="bi bi-people-fill me-2" style="color: #df6301;"></i>{{ title|default('Gerenciar Usuários') }}
+                    </h1>
+                    <p class="text-muted mb-0">Gerencie usuários, roles e permissões</p>
+                </div>
+                <div>
+                    <span class="badge bg-primary fs-6">{{ total }} usuário(s)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0 fw-bold" style="color: #df6301;">
+                        <i class="bi bi-table me-2"></i>Lista de Usuários
+                    </h5>
+                    <div class="input-group" style="max-width: 300px;">
+                        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" id="searchUser" placeholder="Buscar usuário...">
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" id="usuariosTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">ID</th>
+                                    <th>Usuário</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Último Login</th>
+                                    <th>Cadastrado em</th>
+                                    <th class="text-center pe-4">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if usuarios is empty %}
+                                    <tr>
+                                        <td colspan="8" class="text-center py-5 text-muted">
+                                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                            Nenhum usuário cadastrado
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    {% for usuario in usuarios %}
+                                    <tr>
+                                        <td class="ps-4 fw-bold text-muted">#{{ usuario.id }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                {% if usuario.avatar %}
+                                                    <img src="{{ BASE_URL }}{{ usuario.avatar }}" alt="{{ usuario.username }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                                {% else %}
+                                                    <div class="rounded-circle bg-primary d-inline-flex justify-content-center align-items-center text-white" style="width: 40px; height: 40px; font-weight: 700;">
+                                                        {{ usuario.username[0]|upper }}
+                                                    </div>
+                                                {% endif %}
+                                                <span class="fw-semibold">{{ usuario.username }}</span>
+                                            </div>
+                                        </td>
+                                        <td>{{ usuario.email }}</td>
+                                        <td>
+                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/alterar-role" class="d-inline">
+                                                <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                <select name="role" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+                                                    <option value="admin" {% if usuario.role == 'admin' %}selected{% endif %}>Admin</option>
+                                                    <option value="gerente" {% if usuario.role == 'gerente' %}selected{% endif %}>Gerente</option>
+                                                    <option value="operador" {% if usuario.role == 'operador' %}selected{% endif %}>Operador</option>
+                                                    <option value="usuario" {% if usuario.role == 'usuario' %}selected{% endif %}>Usuário</option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            {% set status = usuario.status ?? (usuario.ativo ? 'ativo' : 'pendente') %}
+                                            {% if status == 'ativo' %}
+                                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Ativo</span>
+                                            {% elseif status == 'bloqueado' %}
+                                                <span class="badge bg-danger"><i class="bi bi-slash-circle me-1"></i>Bloqueado</span>
+                                            {% else %}
+                                                <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pendente</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-muted">{{ usuario.ultimo_login ? usuario.ultimo_login|date('d/m/Y H:i') : 'Nunca' }}</td>
+                                        <td class="text-muted">{{ usuario.created_at|date('d/m/Y') }}</td>
+                                        <td class="text-center pe-4">
+                                            <div class="btn-group" role="group">
+                                                {% if status == 'pendente' %}
+                                                    <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
+                                                        <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                        <button type="submit" class="btn btn-sm btn-success" title="Aprovar">
+                                                            <i class="bi bi-check-circle"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form method="POST" action="{{ BASE_URL }}admin/usuarios/desativar" class="d-inline">
+                                                        <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                        <button type="submit" class="btn btn-sm btn-warning" title="Bloquear">
+                                                            <i class="bi bi-slash-circle"></i>
+                                                        </button>
+                                                    </form>
+                                                {% elseif status == 'ativo' %}
+                                                    <form method="POST" action="{{ BASE_URL }}admin/usuarios/desativar" class="d-inline">
+                                                        <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                        <button type="submit" class="btn btn-sm btn-warning" title="Bloquear">
+                                                            <i class="bi bi-pause-circle"></i>
+                                                        </button>
+                                                    </form>
+                                                {% else %}
+                                                    <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
+                                                        <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                        <button type="submit" class="btn btn-sm btn-success" title="Ativar">
+                                                            <i class="bi bi-play-circle"></i>
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Busca simples na tabela
+document.getElementById('searchUser').addEventListener('keyup', function() {
+    const filter = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#usuariosTable tbody tr');
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+    });
+});
+</script>
+{% endblock %}

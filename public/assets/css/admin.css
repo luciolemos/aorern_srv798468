@@ -1,0 +1,720 @@
+/* 🎯 VARIÁVEIS GLOBAIS DO DASHBOARD */
+:root {
+    --admin-sidebar-width: 320px;           /* Largura padrão do menu lateral */
+    --admin-navbar-height: 75px;            /* Altura fixa da navbar superior */
+    --admin-primary: #df6301;               /* Cor primária (Laranja Bombeiros RN) */
+    --admin-primary-dark: #b54f01;          /* Variante escura da cor primária */
+    --admin-dark: #212529;                  /* Cor de fundo escuro (sidebar/bg) */
+    --admin-light: #f8f9fa;                 /* Cor clara (usada em backgrounds) */
+    --admin-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); /* Transição suave */
+    --admin-shadow: 0 0.125rem 0.25rem rgba(223, 99, 1, 0.1);  /* Sombra leve com laranja */
+    --admin-shadow-lg: 0 0.5rem 1rem rgba(223, 99, 1, 0.15);   /* Sombra grande com laranja */
+    --font-primary: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-headings: 'Roboto Condensed', 'Roboto', sans-serif;
+}
+
+/* 🧱 LAYOUT BASE */
+.admin-body {
+    font-family: var(--font-primary) !important;  /* Fonte institucional Roboto */
+    background-color: #f5f7fa;          /* Tom claro para o fundo do painel */
+    min-height: 100vh;                  /* Garante altura total da tela */
+    display: flex;                      /* Define como flex container */
+    flex-direction: column;            /* Coloca o conteúdo em colunas */
+    overflow-x: hidden;                /* Remove scroll horizontal */
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.bg-light {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ✒️ Tipografia padronizada para páginas internas (referência: Cadastrar Bombeiro) */
+.admin-content-area h1,
+.admin-content-area h2,
+.admin-content-area h3 {
+    font-family: var(--font-headings);
+    font-weight: 800;
+    color: var(--admin-primary);
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.25rem;
+}
+
+.admin-content-area h1 i,
+.admin-content-area h2 i,
+.admin-content-area h3 i {
+    color: inherit;
+    font-size: 1.1em;
+}
+
+.admin-content-area .page-subtitle,
+.admin-content-area p.lead,
+.admin-content-area p.text-muted {
+    color: rgba(33, 37, 41, 0.7) !important;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.admin-content-area hr {
+    border-color: rgba(33, 37, 41, 0.1);
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-content-area .form-label,
+.admin-content-area label.form-label {
+    font-family: var(--font-headings);
+    font-weight: 600;
+    color: var(--admin-dark);
+    letter-spacing: 0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.admin-content-area .required-indicator {
+    font-weight: 700;
+    color: #dc3545;
+    font-size: 0.95em;
+    line-height: 1;
+}
+
+/* 🔒 Desativa scroll em mobile quando menu estiver ativo */
+.admin-body.sidebar-active {
+    overflow: hidden;
+}
+
+/* ⚙️ Wrapper geral do dashboard */
+.admin-layout {
+    display: flex;                     /* Sidebar + Main */
+    flex: 1;
+}
+
+/* 🔝 NAVBAR FIXA */
+.admin-navbar {
+    min-height: 80px;
+    height: 80px;
+    background-color: #df6301;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    z-index: 1050;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+.admin-navbar .navbar-logo {
+    height: 48px;
+    width: auto;
+    margin-right: 8px;
+}
+
+.admin-navbar .navbar-brand {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-navbar .fw-bold {
+    font-size: 1.35rem;
+    letter-spacing: 0.5px;
+}
+
+/* Hambúrguer visível no fundo laranja */
+.admin-navbar .navbar-toggler {
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.admin-navbar .navbar-toggler:hover {
+    border-color: rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-navbar .navbar-toggler:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 1);
+}
+
+.admin-navbar .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.admin-navbar #sidebarToggle {
+    height: 48px;
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.admin-navbar #sidebarCollapseBtn {
+    width: 48px;
+    height: 48px;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 0.5rem;
+    color: #fff;
+    background-color: transparent;
+    transition: var(--admin-transition);
+}
+
+.admin-navbar #sidebarCollapseBtn:hover,
+.admin-navbar #sidebarCollapseBtn:focus {
+    border-color: #fff;
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+/* 🧱 LAYOUT BASE */
+.admin-layout {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    position: relative;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 📚 MENU LATERAL */
+.admin-sidebar {
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    background: linear-gradient(180deg, #df6301 0%, #d45d01 50%, #c85601 100%);
+    position: fixed;
+    top: calc(80px - 1px);
+    left: 0;
+    height: calc(100vh - 80px + 1px);
+    z-index: 1040;
+    overflow-y: auto;
+    box-shadow: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Desktop - sidebar visível */
+@media (min-width: 992px) {
+    .admin-sidebar {
+        transform: translateX(0);
+    }
+}
+
+/* Mobile - sidebar escondida por padrão */
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+    .admin-sidebar.active {
+        transform: translateX(0);
+    }
+}
+
+.admin-content-area {
+    margin-left: 320px;
+    width: calc(100% - 320px);
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    background: #f8f9fa;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.admin-content-area main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 !important;
+    padding: 1.5rem 1rem !important;
+}
+
+.admin-content-area .container-fluid {
+    margin: 0 !important;
+    padding: 0 1rem !important;
+}
+
+@media (max-width: 991.98px) {
+    .admin-content-area {
+        margin-left: 0;
+        width: 100%;
+        padding-top: 0;
+    }
+}
+
+/* Sidebar overlay para mobile */
+.admin-sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 1035;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+.admin-sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+
+/* 🎨 Cabeçalho do menu lateral */
+.admin-sidebar .text-uppercase {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Rodapé do menu */
+.admin-sidebar .mt-auto {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 🎯 Scrollbar customizado para WebKit */
+.admin-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.admin-sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+.admin-sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 📋 LINKS DO SIDEBAR */
+.admin-sidebar .nav-link {
+    transition: var(--admin-transition);   /* Suaviza hover e active */
+    margin-bottom: 2px;                    /* Espaçamento vertical */
+    border-radius: 0.375rem;               /* Arredonda levemente */
+    color: #fff3e6 !important; /* Branco creme */
+    font-weight: 400;
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-sidebar .nav-link:hover:not(.active):not(.active-cbmrn) {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff !important; /* Branco puro no hover */
+    transform: translateX(3px);
+    box-shadow: inset 4px 0 0 #ffffff;
+}
+
+.admin-sidebar .nav-link.active,
+.admin-sidebar .nav-link.bg-secondary,
+.admin-sidebar .nav-link.active-cbmrn {
+    background: rgba(0, 0, 0, 0.25) !important;
+    font-weight: 600;
+    border-left: 3px solid #ffffff;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.admin-sidebar .nav-link i {
+    width: 20px;                      /* Alinha os ícones */
+    text-align: center;
+    transition: var(--admin-transition);
+}
+
+/* ▼ Animação para o ícone de seta do menu colapsável */
+.admin-sidebar .nav-item .bi-chevron-down {
+    transition: transform var(--admin-transition);
+    color: #fff3e6;
+}
+.admin-sidebar .nav-item .collapsed .bi-chevron-down {
+    transform: rotate(-90deg);        /* Seta rotacionada */
+}
+
+/* 🎨 Links de submenu (dentro de collapse) */
+.admin-sidebar .collapse .nav-link {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+    margin-left: 0.5rem;
+    padding-left: 1rem !important;
+    color: #fff3e6 !important;
+}
+
+.admin-sidebar .collapse .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left-color: #ffffff;
+    color: #ffffff !important;
+}
+
+.admin-sidebar .collapse .nav-link.bg-secondary,
+.admin-sidebar .collapse .nav-link.active-cbmrn {
+    background: rgba(0, 0, 0, 0.25) !important;
+    border-left: 3px solid #ffffff !important;
+    font-weight: 600;
+    color: #ffffff !important;
+}
+
+/* 🔻 Collapse transition for sidebar menus */
+.admin-sidebar .collapse {
+    transition: height 0.35s ease;
+}
+
+.admin-sidebar .collapse:not(.show) {
+    display: none;
+}
+
+.admin-sidebar .collapse.show {
+    display: block;
+}
+
+/* 🧱 CONTEÚDO PRINCIPAL */
+.content-area {
+    margin-left: var(--admin-sidebar-width);               /* Empurra do lado do menu */
+    width: calc(100% - var(--admin-sidebar-width));        /* Ajusta largura total */
+    min-height: calc(100vh - var(--admin-navbar-height));  /* Garante altura útil */
+    margin-top: var(--admin-navbar-height);                /* Abaixo da navbar */
+    transition: margin 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Desktop: Sidebar visível por padrão e colapsável */
+@media (min-width: 992px) {
+    .admin-sidebar {
+        transform: translateX(0);
+        width: var(--admin-sidebar-width);
+        transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+                    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .admin-sidebar.collapsed {
+        transform: translateX(-100%);
+    }
+
+    .content-area {
+        margin-left: var(--admin-sidebar-width);
+        width: calc(100% - var(--admin-sidebar-width));
+    }
+
+    .admin-content-area {
+        margin-left: var(--admin-sidebar-width);
+        width: calc(100% - var(--admin-sidebar-width));
+        transition: margin 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .admin-content-area.collapsed {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+/* Content area ocupando tela inteira quando sidebar colapsado */
+.content-area.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+
+/* 📱 RESPONSIVIDADE PARA TABLETS & CELULARES */
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        transform: translateX(-100%);    /* Oculta o sidebar */
+        box-shadow: none;
+    }
+
+    .admin-sidebar.active {
+        transform: translateX(0);        /* Exibe ao ativar */
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .content-area {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+}
+
+/* 🔍 AJUSTES PARA MOBILE MENOR (smartphones) */
+@media (max-width: 767.98px) {
+    .breadcrumb {
+        font-size: 0.75rem;
+        padding: 0.25rem 0;
+    }
+
+    .p-4 {
+        padding: 1rem !important;     /* Reduz padding */
+    }
+
+    .admin-sidebar {
+        width: 80%;                   /* Ocupa 80% da largura da tela */
+    }
+}
+
+/* ✅ AJUSTES DE TOASTS (notificações) */
+.toast-container {
+    z-index: 1090;   /* Acima de tudo */
+}
+
+.toast-header {
+    border-bottom: none;
+}
+
+/* ⬇️ DROPDOWN - MENU USUÁRIO */
+.dropdown-menu {
+    box-shadow: var(--admin-shadow-lg);
+    border: none;
+}
+
+.admin-user-toggle {
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.admin-user-toggle:hover,
+.admin-user-toggle:focus {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: #fff !important;
+}
+
+.admin-user-avatar,
+.admin-user-avatar-lg {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.admin-user-avatar-lg {
+    width: 48px;
+    height: 48px;
+    border-color: rgba(223, 99, 1, 0.6);
+    background: rgba(223, 99, 1, 0.1);
+}
+
+.admin-user-avatar img,
+.admin-user-avatar-lg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.admin-user-initial,
+.admin-user-initial-lg {
+    color: #fff;
+    font-weight: 700;
+}
+
+.admin-user-initial-lg {
+    color: #b54f01;
+}
+
+.admin-user-dropdown-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.admin-user-role {
+    background-color: rgba(223, 99, 1, 0.15) !important;
+    color: #b54f01 !important;
+}
+
+.admin-user-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.admin-user-dropdown .dropdown-item:hover {
+    background-color: rgba(223, 99, 1, 0.08);
+    color: #df6301;
+}
+
+.admin-user-dropdown .dropdown-item.text-danger {
+    color: #dc3545 !important;
+}
+
+.admin-user-dropdown .dropdown-item.text-danger:hover {
+    background-color: rgba(220, 53, 69, 0.12);
+    color: #dc3545 !important;
+}
+
+/* 🌓 OVERLAY ESCURO PARA MENU MOBILE */
+.sidebar-overlay {
+    position: fixed;
+    top: var(--admin-navbar-height);  /* Começa abaixo da navbar */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1019;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--admin-transition);
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 📝 ESTILOS ESPECÍFICOS PARA A PÁGINA DE CRIAÇÃO DE POSTAGENS */
+.post-form .form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.post-form .form-control-lg {
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem;
+}
+
+.post-form textarea.form-control {
+    min-height: 300px;
+}
+
+/* Quill.js customização */
+.post-form.quill-enabled #conteudo {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    pointer-events: none;
+    height: 1px;
+    width: 1px;
+}
+
+#conteudo-editor {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    min-height: 320px !important; /* altura mínima mais baixa */
+    margin-bottom: 3.5rem; /* folga para os botões */
+    padding-bottom: 0.75rem;
+    position: relative;
+    z-index: 0;
+    display: block;
+}
+
+#conteudo-editor .ql-toolbar {
+    border: 1px solid #dee2e6;
+    border-bottom: none;
+    border-radius: 0.375rem 0.375rem 0 0;
+    background-color: #f8f9fa;
+}
+
+#conteudo-editor .ql-container {
+    border: 1px solid #dee2e6;
+    border-radius: 0 0 0.375rem 0.375rem;
+    font-size: 1rem;
+    min-height: 300px;
+    margin-bottom: 1rem; /* separa do bloco de botões */
+    overflow: auto;
+}
+
+#conteudo-editor .ql-editor {
+    min-height: 280px;
+    padding: 12px;
+    font-family: var(--font-primary);
+    line-height: 1.6;
+}
+
+#conteudo-editor .ql-editor:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(223, 99, 1, 0.25);
+}
+
+.post-form .action-buttons {
+    margin-top: 1.75rem; /* espaçamento padrão desktop */
+    position: relative;
+    z-index: 5;
+}
+
+@media (max-width: 767.98px) {
+    .post-form .action-buttons {
+        margin-top: 7.25rem !important; /* separação forte no mobile */
+        padding-top: 1rem;
+    }
+
+    #conteudo-editor {
+        margin-bottom: 6rem !important; /* reforço extra em mobile para afastar dos botões */
+        padding-bottom: 1.25rem;
+    }
+
+    /* Garantia: editor não cobre botões no mobile */
+    .post-form .action-buttons .btn {
+        position: relative;
+        z-index: 10;
+    }
+}
+
+.post-form .action-buttons .btn {
+    position: relative;
+    z-index: 6;
+}
+
+.post-form .input-group-text {
+    background-color: #f8f9fa;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 767.98px) {
+    .post-form .action-buttons .btn {
+        width: 100%;       /* Botões responsivos */
+    }
+
+    .post-form textarea.form-control {
+        min-height: 200px; /* Altura menor em mobile */
+    }
+}
+
+/* 💡 FIM DO CSS ADMIN */
+
+/* =======================================================
+   DASHBOARD CARDS - ESTILO INSTITUCIONAL CBMRN
+   ======================================================= */
+.dashboard-card {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0.5rem;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(223, 99, 1, 0.15) !important;
+}
+
+.dashboard-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover .dashboard-icon {
+    transform: scale(1.15);
+}
+
+.dashboard-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.35rem 0.65rem;
+    letter-spacing: 0.5px;
+}
+
+.dashboard-footer {
+    background-color: rgba(223, 99, 1, 0.03);
+    font-size: 0.875rem;
+    color: rgba(33, 37, 41, 0.7);
+}

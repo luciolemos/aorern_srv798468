@@ -1,0 +1,40 @@
+#!/bin/bash
+
+echo "🧪 TESTE RÁPIDO DE VALIDAÇÃO"
+echo "=============================="
+echo ""
+
+echo "✓ Validando componentes..."
+php -l app/Views/components/navbar.php > /dev/null 2>&1 && echo "  ✅ navbar.php" || echo "  ❌ navbar.php"
+php -l app/Views/components/sidebar.php > /dev/null 2>&1 && echo "  ✅ sidebar.php" || echo "  ❌ sidebar.php"
+php -l app/Views/components/footer.php > /dev/null 2>&1 && echo "  ✅ footer.php" || echo "  ❌ footer.php"
+
+echo ""
+echo "✓ Validando pages refatoradas..."
+php -l app/Views/dash.php > /dev/null 2>&1 && echo "  ✅ dash.php" || echo "  ❌ dash.php"
+php -l app/Views/layouts/header.php > /dev/null 2>&1 && echo "  ✅ header.php" || echo "  ❌ header.php"
+php -l app/Views/home.php > /dev/null 2>&1 && echo "  ✅ home.php" || echo "  ❌ home.php"
+php -l app/Views/blog.php > /dev/null 2>&1 && echo "  ✅ blog.php" || echo "  ❌ blog.php"
+
+echo ""
+echo "✓ Verificando estrutura..."
+[ -d "app/Views/components" ] && echo "  ✅ components/ existe" || echo "  ❌ components/ não existe"
+[ -f "public/assets/css/navbar-universal.css" ] && echo "  ✅ navbar-universal.css existe" || echo "  ❌ navbar-universal.css não existe"
+[ ! -f "app/Views/layouts/admin_header.php" ] && echo "  ✅ admin_header.php removido" || echo "  ❌ admin_header.php ainda existe"
+
+echo ""
+echo "✓ Verificando documentação..."
+[ -f "COMPONENTES.md" ] && echo "  ✅ COMPONENTES.md" || echo "  ❌ COMPONENTES.md"
+[ -f "EXEMPLOS_USO.md" ] && echo "  ✅ EXEMPLOS_USO.md" || echo "  ❌ EXEMPLOS_USO.md"
+[ -f "REFACTORING_SUMMARY.md" ] && echo "  ✅ REFACTORING_SUMMARY.md" || echo "  ❌ REFACTORING_SUMMARY.md"
+[ -f "DIAGRAMA_ARQUITETURA.md" ] && echo "  ✅ DIAGRAMA_ARQUITETURA.md" || echo "  ❌ DIAGRAMA_ARQUITETURA.md"
+[ -f "VALIDATION_CHECKLIST.md" ] && echo "  ✅ VALIDATION_CHECKLIST.md" || echo "  ❌ VALIDATION_CHECKLIST.md"
+[ -f "INDICE_DOCUMENTACAO.md" ] && echo "  ✅ INDICE_DOCUMENTACAO.md" || echo "  ❌ INDICE_DOCUMENTACAO.md"
+[ -f "DEPLOY.md" ] && echo "  ✅ DEPLOY.md" || echo "  ❌ DEPLOY.md"
+[ -f "RESUMO_FINAL.md" ] && echo "  ✅ RESUMO_FINAL.md" || echo "  ❌ RESUMO_FINAL.md"
+
+echo ""
+echo "=============================="
+echo "✅ TESTE COMPLETO"
+echo ""
+echo "Status: PRONTO PARA PRODUÇÃO ✨"

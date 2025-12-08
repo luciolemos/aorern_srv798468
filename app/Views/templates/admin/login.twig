@@ -1,0 +1,46 @@
+{% extends "layouts/base.twig" %}
+{% block title %}Login Admin - CBMRN{% endblock %}
+{% block content %}
+    <div class="container py-5" style="min-height: calc(100vh - 75px - 200px);">
+        <div class="row">
+            <div class="col-lg-4 offset-lg-4">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            {# <i class="bi bi-shield-lock" style="font-size: 48px; color: #df6301;"></i> #}
+                              <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_fenix.png" alt="CBMRN" class="navbar-logo" style="height: 56px; width: auto;">
+                            <h2 class="text-center fw-bold mt-3" style="color: #df6301;">Login Administrativo</h2>
+                        </div>
+                        
+                        {% if error %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ error }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endif %}
+                        
+                        <form method="POST" action="{{ BASE_URL }}admin/auth/login">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-bold">Usuário</label>
+                                <input type="text" class="form-control form-control-lg" id="username" name="username" required autofocus>
+                            </div>
+                            <div class="mb-4">
+                                <label for="password" class="form-label fw-bold">Senha</label>
+                                <input type="password" class="form-control form-control-lg" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-lg w-100 fw-bold text-white mb-3" style="background-color: #df6301;">Entrar</button>
+                        </form>
+                        
+                        <hr class="my-4">
+                        
+                        <p class="text-center text-muted small">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Área restrita - Apenas usuários autorizados
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

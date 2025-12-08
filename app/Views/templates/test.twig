@@ -1,0 +1,160 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Home - CBMRN{% endblock %}
+
+{% block content %}
+    {% include 'partials/hero.twig' %}
+    
+    {% include 'partials/stats.twig' with {
+        'stats': [
+            { 'value': totalProfissionais, 'label': 'Profissionais capacitados' },
+            { 'value': '24/7', 'label': 'Disponíveis' },
+            { 'value': '100%', 'label': 'Comprometidos' },
+            { 'value': '50+', 'label': 'Ocorrências atendidas' }
+        ]
+    } %}
+    
+    {# Serviços #}
+    <section class="py-5">
+        <div class="container">
+            <div class="row text-center mb-5" data-aos="fade-down">
+                <div class="col">
+                    <h2 class="fw-bold mb-3" style="color: #212529;">Nossos Serviços</h2>
+                    <p class="text-muted fs-5">Proteção e segurança em todas as situações</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-up">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                        <div style="background: linear-gradient(135deg, #df6301 0%, #b54f01 100%); height: 120px; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-fire" style="font-size: 3rem; color: white;"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Combate a Incêndios</h5>
+                            <p class="card-text text-muted">Resposta rápida e eficiente no combate a incêndios em estruturas, veículos e áreas florestais.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                        <div style="background: linear-gradient(135deg, #df6301 0%, #b54f01 100%); height: 120px; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-ambulance" style="font-size: 3rem; color: white;"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Resgate de Emergência</h5>
+                            <p class="card-text text-muted">Operações de resgate em altura, confinamento, acidentes de trânsito e situações críticas.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                        <div style="background: linear-gradient(135deg, #df6301 0%, #b54f01 100%); height: 120px; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-shield-exclamation" style="font-size: 3rem; color: white;"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Prevenção e Educação</h5>
+                            <p class="card-text text-muted">Programas educativos, inspeções de segurança e capacitação comunitária.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# Diferenciais #}
+    <section class="py-5" style="background: #f8f9fa;">
+        <div class="container">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-5" data-aos="fade-right">
+                    <h2 class="fw-bold mb-3" style="color: #212529;">Resposta rápida e equipe especializada</h2>
+                    <p class="text-muted">Atuamos 24/7 com protocolos claros, integração com outras forças e tecnologia para reduzir o tempo de resposta e ampliar a segurança.</p>
+                    <ul class="list-unstyled text-muted mb-4">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: #df6301;"></i>Tempo médio de despacho reduzido</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: #df6301;"></i>Brigadas treinadas continuamente</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: #df6301;"></i>Equipamentos certificados e revisados</li>
+                    </ul>
+                    <div class="d-flex gap-3">
+                        <a href="tel:193" class="btn btn-lg text-white" style="background-color: #df6301; border: none;">Acionar emergência</a>
+                        <a href="{{ BASE_URL }}contact" class="btn btn-lg btn-outline-dark">Falar com a equipe</a>
+                    </div>
+                </div>
+                <div class="col-lg-7" data-aos="fade-left">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-4 h-100 rounded-4 shadow-sm" style="background: #ffffff; border: 1px solid #f1f1f1;">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background: rgba(223,99,1,0.12);">
+                                        <i class="bi bi-stopwatch" style="color: #df6301; font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold" style="color: #212529;">Pronto atendimento</div>
+                                        <small class="text-muted">Alerta, despacho e chegada otimizados</small>
+                                    </div>
+                                </div>
+                                <p class="text-muted mb-0">Prioridade absoluta para emergências com protocolos testados e comunicação direta.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-4 h-100 rounded-4 shadow-sm" style="background: #ffffff; border: 1px solid #f1f1f1;">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background: rgba(223,99,1,0.12);">
+                                        <i class="bi bi-people" style="color: #df6301; font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold" style="color: #212529;">Equipe especializada</div>
+                                        <small class="text-muted">Formação contínua e certificações</small>
+                                    </div>
+                                </div>
+                                <p class="text-muted mb-0">Instrutores e operadores com treinamentos frequentes em resgate, incêndio e salvamento.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-4 h-100 rounded-4 shadow-sm" style="background: #ffffff; border: 1px solid #f1f1f1;">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background: rgba(223,99,1,0.12);">
+                                        <i class="bi bi-gear-wide-connected" style="color: #df6301; font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold" style="color: #212529;">Equipamentos prontos</div>
+                                        <small class="text-muted">Manutenção preventiva constante</small>
+                                    </div>
+                                </div>
+                                <p class="text-muted mb-0">Frotas, EPIs e ferramentas revisadas para máxima confiabilidade.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-4 h-100 rounded-4 shadow-sm" style="background: #ffffff; border: 1px solid #f1f1f1;">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background: rgba(223,99,1,0.12);">
+                                        <i class="bi bi-shield-check" style="color: #df6301; font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold" style="color: #212529;">Segurança e prevenção</div>
+                                        <small class="text-muted">Planos, simulados e inspeções</small>
+                                    </div>
+                                </div>
+                                <p class="text-muted mb-0">Ações preventivas, auditorias e orientação contínua para reduzir riscos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# Chamada rápida #}
+    <section class="py-5" style="background: linear-gradient(135deg, #df6301 0%, #b54f01 100%);">
+        <div class="container">
+            <div class="row align-items-center text-white g-3">
+                <div class="col-lg-8" data-aos="fade-right">
+                    <h3 class="fw-bold mb-2">193 - Linha direta de emergência</h3>
+                    <p class="mb-0" style="opacity: 0.9;">Acionamento imediato para incêndios, resgates e ocorrências críticas. Informe localização e natureza do incidente.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end" data-aos="fade-left">
+                    <a href="tel:193" class="btn btn-light btn-lg fw-bold text-dark"><i class="bi bi-telephone me-2"></i> Ligar agora</a>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% set currentRoute = current_path|default('') %}
+{% set navItems = [
+    {'slug': '', 'label': 'Início', 'icon': 'bi-house-door', 'url': BASE_URL},
+    {'slug': 'about', 'label': 'Sobre', 'icon': 'bi-info-circle', 'url': BASE_URL ~ 'about'},
+    {'slug': 'blog', 'label': 'Blog', 'icon': 'bi-newspaper', 'url': BASE_URL ~ 'blog'},
+    {'slug': 'contact', 'label': 'Contato', 'icon': 'bi-envelope', 'url': BASE_URL ~ 'contact'}
+] %}
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-site shadow-sm">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ BASE_URL }}">
+            <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="navbar-logo">
+            <span class="fw-bold text-white">CBMRN</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSite" aria-controls="navbarSite" aria-expanded="false" aria-label="Alternar navegação">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarSite">
+            <ul class="navbar-nav gap-1 align-items-lg-center">
+                {% for item in navItems %}
+                    {% set isActive = (item.slug == '' and currentRoute == '') or (item.slug != '' and currentRoute starts with item.slug) %}
+                    <li class="nav-item">
+                        <a class="nav-link {{ isActive ? 'active' : '' }}" href="{{ item.url }}">
+                            <i class="bi {{ item.icon }} me-2"></i>{{ item.label }}
+                        </a>
+                    </li>
+                {% endfor %}
+                {% if not session.user_id %}
+                    <li class="nav-item">
+                        <a class="nav-link text-uppercase fw-semibold" href="{{ BASE_URL }}login/admin">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-light btn-sm text-danger fw-bold" href="{{ BASE_URL }}login/logout">
+                            <i class="bi bi-box-arrow-right me-1"></i>Sair
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .navbar-site {
+        background: linear-gradient(135deg, #df6301 0%, #c55501 100%);
+        min-height: 80px;
+        font-family: 'Montserrat', 'Inter', Arial, sans-serif !important;
+    }
+    .navbar-site .navbar-logo {
+        height: 46px;
+        width: auto;
+        filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25));
+    }
+    .navbar-site .nav-link {
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        color: rgba(255,255,255,0.82);
+        padding: 0.65rem 1rem;
+        position: relative;
+        transition: color 0.2s ease;
+    }
+    .navbar-site .nav-link::after {
+        content: '';
+        position: absolute;
+        left: 1rem;
+        right: 1rem;
+        bottom: 0.25rem;
+        height: 2px;
+        background: rgba(255,255,255,0.9);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+    .navbar-site .nav-link.active,
+    .navbar-site .nav-link:hover {
+        color: #fff;
+        background-color: transparent !important;
+    }
+    .navbar-site .nav-link.active::after,
+    .navbar-site .nav-link:hover::after {
+        opacity: 1;
+    }
+    @media (max-width: 991.98px) {
+        .navbar-site .navbar-nav {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .navbar-site .nav-link {
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-left: 4px solid transparent;
+            background-color: rgba(255,255,255,0.04);
+        }
+        .navbar-site .nav-link::after {
+            display: none;
+        }
+        .navbar-site .nav-link.active,
+        .navbar-site .nav-link:hover {
+            border-left-color: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.12);
+        }
+    }
+</style>

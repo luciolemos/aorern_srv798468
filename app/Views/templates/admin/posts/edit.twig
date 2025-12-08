@@ -1,0 +1,55 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Editar Post - Admin{% endblock %}
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div data-aos="fade-down" class="mb-4">
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-pencil-square me-2"></i>Editar post</h2>
+        <p class="text-muted mb-0">Atualize os dados do post.</p>
+    </div>
+    <hr class="my-4">
+    <div data-aos="fade-up">
+        <form method="post" action="{{ BASE_URL }}admin/posts/update/{{ post.id }}" class="post-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
+            <div class="row g-3">
+                <div class="col-12 col-lg-8">
+                    <label for="titulo" class="form-label fw-bold">Título <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="titulo" name="titulo" value="{{ post.titulo }}" required>
+                    <div class="form-text">Título principal do post</div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <label for="categoria_id" class="form-label fw-bold">Categoria <span class="text-danger">*</span></label>
+                    <select class="form-select" id="categoria_id" name="categoria_id" required>
+                        {% for cat in categorias %}
+                            <option value="{{ cat.id }}" {{ cat.id == post.categoria_id ? 'selected' : '' }}>{{ cat.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label for="slug" class="form-label fw-bold">Slug (URL) <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="slug" name="slug" value="{{ post.slug }}" required>
+                    <div class="form-text">{{ BASE_URL }}blog/</div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label for="capa_url" class="form-label fw-bold">URL da capa</label>
+                    <input type="text" class="form-control" id="capa_url" name="capa_url" value="{{ post.capa_url|default('') }}" placeholder="https://... ou /assets/images/...">
+                    <div class="form-text">Opcional. Recomendamos imagens horizontais 1200×675px.</div>
+                </div>
+                <div class="col-12">
+                    <label for="conteudo" class="form-label fw-bold">Conteúdo do post <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="conteudo" name="conteudo" rows="22" required>{{ post.conteudo }}</textarea>
+                </div>
+            </div>
+            <div class="border-top my-4"></div>
+            <div class="border-top my-4"></div>
+            <div class="action-buttons d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-end py-2">
+                <a href="{{ BASE_URL }}admin/posts" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Voltar
+                </a>
+                <button type="submit" class="btn btn-warning flex-grow-1 flex-md-grow-0">
+                    <i class="bi bi-save me-1"></i> Atualizar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

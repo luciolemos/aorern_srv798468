@@ -1,0 +1,75 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Novo Post - Admin{% endblock %}
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div data-aos="fade-down" class="mb-4">
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-pencil-square me-2"></i>Novo post</h2>
+        <p class="text-muted mb-0">Crie conteúdo para o Blog</p>
+    </div>
+    <hr class="my-4">
+
+    <div data-aos="fade-up">
+        <form action="{{ BASE_URL }}admin/posts/store" method="post" class="post-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
+            <div class="row g-3">
+                <div class="col-12 col-lg-8">
+                    <label for="titulo" class="form-label fw-bold">Título <span class="text-danger">*</span></label>
+                    <input type="text" name="titulo" id="titulo" class="form-control" value="{{ old.titulo|default('') }}" required>
+                    <div class="form-text">Título principal do post</div>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <label for="categoria_id" class="form-label fw-bold">Categoria <span class="text-danger">*</span></label>
+                    <select name="categoria_id" id="categoria_id" class="form-select" required>
+                        <option value="" disabled {{ old.categoria_id is not defined or old.categoria_id == '' ? 'selected' : '' }}>Selecione a categoria</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}" {{ old.categoria_id is defined and old.categoria_id == categoria.id ? 'selected' : '' }}>
+                                {{ categoria.nome }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <label for="slug" class="form-label fw-bold">Slug (URL) <span class="text-danger">*</span></label>
+                    <input type="text" name="slug" id="slug" class="form-control" value="{{ old.slug|default('') }}" required>
+                    <div class="form-text">{{ BASE_URL }}blog/</div>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <label for="capa_url" class="form-label fw-bold">URL da capa</label>
+                    <input type="text" name="capa_url" id="capa_url" class="form-control" value="{{ old.capa_url|default('') }}" placeholder="https://... ou /assets/images/...">
+                    <div class="form-text">Campo opcional. Recomendamos imagens 1200×675px.</div>
+                </div>
+
+                <div class="col-12">
+                    <label for="conteudo" class="form-label fw-bold">Conteúdo do post <span class="text-danger">*</span></label>
+                    <textarea name="conteudo" id="conteudo" rows="10" class="form-control" required>{{ old.conteudo|default('') }}</textarea>
+                </div>
+            </div>
+            <div class="border-top my-4"></div>
+            <div class="border-top my-4"></div>
+            <div class="action-buttons d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-end py-2">
+                <a href="{{ BASE_URL }}admin/posts" class="btn btn-outline-danger order-md-1">
+                    <i class="bi bi-x-circle me-1"></i> Cancelar
+                </a>
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#previewModal">
+                    <i class="bi bi-eye me-1"></i> Visualizar
+                </button>
+                <button type="submit" name="action" value="save_continue" class="btn btn-primary flex-grow-1 flex-md-grow-0">
+                    <i class="bi bi-save me-1"></i> Salvar e Continuar
+                </button>
+                <button type="submit" name="action" value="save_exit" class="btn btn-success flex-grow-1 flex-md-grow-0">
+                    <i class="bi bi-check-circle me-1"></i> Salvar e Sair
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="text-muted small">
+            <i class="bi bi-info-circle me-1"></i> Preencha todos os campos obrigatórios
+        </div>
+    </div>
+</div>
+{% endblock %}

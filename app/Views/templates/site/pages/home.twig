@@ -1,0 +1,277 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}CBMRN - 2º SGB/2º GBM{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/home.css">
+{% endblock %}
+
+{% block content %}
+    {% set profissionais = (totalProfissionais is defined and totalProfissionais > 0) ? totalProfissionais : '50+' %}
+
+    <section class="home-hero text-white position-relative overflow-hidden">
+        <div class="home-hero-pattern"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <p class="home-section-kicker text-white-50 mb-2">2º SGB/2º GBM · CBMRN</p>
+                    <h1 class="home-section-title text-white mb-3">Resposta rápida e tecnologia aplicada ao litoral sul</h1>
+                    <p class="home-section-lead text-white-75 mb-4">Baseados em Goianinha, garantimos cobertura 24/7 para 25 municípios com equipes treinadas, protocolos digitais e integração com outras forças.</p>
+                    <ul class="list-unstyled mb-4 home-hero-list text-white-75">
+                        <li><i class="bi bi-check-circle-fill me-2"></i>Despacho inteligente e monitoramento em tempo real</li>
+                        <li><i class="bi bi-check-circle-fill me-2"></i>Planos de prevenção, vistorias e capacitação comunitária</li>
+                        <li><i class="bi bi-check-circle-fill me-2"></i>Comunicação direta via WhatsApp institucional</li>
+                    </ul>
+                    <div class="home-hero-actions d-flex gap-3 gap-md-4 flex-column flex-md-row">
+                        <a href="tel:193" class="btn btn-light btn-lg text-dark fw-bold flex-fill flex-md-grow-0">
+                            <i class="bi bi-telephone me-2"></i>Ligar 193
+                        </a>
+                        <a href="{{ BASE_URL }}contact" class="btn btn-outline-light btn-lg flex-fill flex-md-grow-0">
+                            <i class="bi bi-envelope me-2"></i>Falar com a equipe
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="home-hero-panel shadow-lg">
+                        <p class="text-uppercase small fw-semibold text-white-50 mb-1">Indicadores</p>
+                        <h2 class="h4 fw-bold text-white mb-4">Operações e cobertura</h2>
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex align-items-start gap-3 py-2">
+                                <div class="home-hero-dot"></div>
+                                <div>
+                                    <p class="mb-0 fw-semibold text-white">{{ profissionais }}</p>
+                                    <small class="text-white-50">profissionais capacitados</small>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-start gap-3 py-2">
+                                <div class="home-hero-dot"></div>
+                                <div>
+                                    <p class="mb-0 fw-semibold text-white">24/7</p>
+                                    <small class="text-white-50">atendimento ininterrupto</small>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-start gap-3 py-2">
+                                <div class="home-hero-dot"></div>
+                                <div>
+                                    <p class="mb-0 fw-semibold text-white">25 municípios</p>
+                                    <small class="text-white-50">nas regiões Litoral Sul e Agreste</small>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-start gap-3 py-2">
+                                <div class="home-hero-dot"></div>
+                                <div>
+                                    <p class="mb-0 fw-semibold text-white">+50 ocorrências</p>
+                                    <small class="text-white-50">monitoradas por mês</small>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-k9 home-section py-5">
+        <div class="container">
+            <div class="row align-items-center gy-4">
+                <div class="col-lg-6">
+                    <img src="{{ BASE_URL }}assets/images/caes/malinois_1600_1600.jpg"
+                         alt="Esquadrão com cães farejadores do CBMRN"
+                         class="img-fluid home-k9-image shadow-sm">
+                </div>
+                <div class="col-lg-6">
+                    <p class="home-section-kicker text-primary mb-2">Esquadrão de Cães de Combate</p>
+                    <h2 class="home-section-title mb-3">Operações com apoio canino especializado</h2>
+                    <p class="home-section-lead text-muted mb-4">O 2º SGB/2º GBM conta com cães treinados para busca, salvamento e apoio psicossocial. 
+                    Os binômios realizam treinamentos semanais, garantindo prontidão para ocorrências urbanas e rurais. 
+                    Os treinamentos são realizados de forma sistemática, com rotinas semanais que englobam socialização, obediência, condicionamento físico, 
+                    ambientação a cenários simulados, pistas de escombros, trilhas rurais e exercícios de resiliência comportamental. 
+                    Essas práticas garantem não apenas a prontidão operacional da tropa, mas também o bem-estar físico e emocional dos cães, condição indispensável 
+                    para o desempenho seguro e eficaz das missões.</p>
+                    <ul class="list-unstyled home-k9-list mb-4">
+                        <li><i class="bi bi-shield-check me-2"></i>Protocolos de segurança e bem-estar animal</li>
+                        <li><i class="bi bi-geo-alt me-2"></i>Prontidão para missões em toda a região</li>
+                        <li><i class="bi bi-heart-pulse me-2"></i>Atuação em ações educativas com a comunidade</li>
+                    </ul>
+                    <a href="{{ BASE_URL }}esquadrao" class="btn btn-primary btn-lg fw-bold">Esquadrão de Cães <i class="bi bi-book"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-services home-section py-5">
+        <div class="container">
+            <header class="text-center mb-5 home-section-header">
+                <p class="home-section-kicker text-muted mb-2">Frentes de atuação</p>
+                <h2 class="home-section-title text-primary mb-3">Serviços essenciais</h2>
+                <p class="home-section-lead text-muted mb-0">Operamos desde o combate a incêndios até programas educativos, sempre com transparência e integração tecnológica.</p>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <article class="home-service-card h-100">
+                        <div class="home-service-icon">
+                            <i class="bi bi-fire"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Combate a incêndios</h3>
+                        <p class="text-muted mb-0">Estruturas urbanas, áreas de vegetação e veículos recebem resposta rápida graças a protocolos digitais de despacho.</p>
+                    </article>
+                </div>
+                <div class="col-md-4">
+                    <article class="home-service-card h-100">
+                        <div class="home-service-icon">
+                            <i class="bi bi-lifebuoy"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Resgate e salvamento</h3>
+                        <p class="text-muted mb-0">Equipes especializadas atuam em altura, espaços confinados e ocorrências veiculares com monitoramento centralizado.</p>
+                    </article>
+                </div>
+                <div class="col-md-4">
+                    <article class="home-service-card h-100">
+                        <div class="home-service-icon">
+                            <i class="bi bi-mortarboard"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Prevenção e educação</h3>
+                        <p class="text-muted mb-0">Visitas, vistorias, palestras e conteúdos digitais fortalecem a cultura de segurança nas comunidades atendidas.</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-highlights home-section py-5">
+        <div class="container">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-5">
+                    <p class="home-section-kicker text-muted mb-2">Tecnologia e pessoas</p>
+                    <h2 class="home-section-title mb-3">Integração entre dados, equipes e frota</h2>
+                    <p class="home-section-lead text-muted mb-4">Acompanhamos cada fase da ocorrência com dashboards em tempo real, garantindo comunicação entre o centro de operações, o efetivo em campo e as defesas civis municipais.</p>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="home-highlight-item">
+                            <i class="bi bi-cpu-fill"></i>
+                            <div>
+                                <p class="fw-semibold mb-0">Monitoramento contínuo</p>
+                                <small class="text-muted">Painéis com status das guarnições e estatísticas de resposta.</small>
+                            </div>
+                        </div>
+                        <div class="home-highlight-item">
+                            <i class="bi bi-diagram-3-fill"></i>
+                            <div>
+                                <p class="fw-semibold mb-0">Integração regional</p>
+                                <small class="text-muted">Parceria com SAMU, Defesa Civil e lideranças municipais.</small>
+                            </div>
+                        </div>
+                        <div class="home-highlight-item">
+                            <i class="bi bi-shield-lock-fill"></i>
+                            <div>
+                                <p class="fw-semibold mb-0">Prontidão certificada</p>
+                                <small class="text-muted">Manutenção preventiva e treinamentos contínuos do efetivo.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <article class="home-metric-card h-100">
+                                <p class="text-uppercase small text-muted mb-1">Tempo médio</p>
+                                <h3 class="display-6 fw-bold text-primary">12min</h3>
+                                <p class="mb-0 text-muted">entre despacho e chegada em ocorrências urbanas.</p>
+                            </article>
+                        </div>
+                        <div class="col-md-6">
+                            <article class="home-metric-card h-100">
+                                <p class="text-uppercase small text-muted mb-1">Cobertura</p>
+                                <h3 class="display-6 fw-bold text-primary">25</h3>
+                                <p class="mb-0 text-muted">municípios assistidos com equipes dedicadas.</p>
+                            </article>
+                        </div>
+                        <div class="col-md-6">
+                            <article class="home-metric-card h-100">
+                                <p class="text-uppercase small text-muted mb-1">Programas educativos</p>
+                                <h3 class="display-6 fw-bold text-primary">+30</h3>
+                                <p class="mb-0 text-muted">ações anuais em escolas e comunidades.</p>
+                            </article>
+                        </div>
+                        <div class="col-md-6">
+                            <article class="home-metric-card h-100">
+                                <p class="text-uppercase small text-muted mb-1">Vistorias técnicas</p>
+                                <h3 class="display-6 fw-bold text-primary">+120</h3>
+                                <p class="mb-0 text-muted">inspeções por ano em edificações estratégicas.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-testimonials home-section py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <p class="home-section-kicker text-muted mb-2">Depoimentos</p>
+                <h2 class="home-section-title text-primary mb-3">Quem confia no nosso trabalho</h2>
+                <p class="home-section-lead text-muted mb-0">Autoridades locais, parceiros e cidadãos falam sobre o impacto do 2º SGB/2º GBM no litoral sul potiguar.</p>
+            </div>
+
+        {% set testimonials = [
+            {
+                'name': 'Antoniela Paiva',
+                'role': 'Prefeita de Goianinha',
+                'quote': '"A presença da unidade em Goianinha reduziu drasticamente os tempos de resposta. Hoje conseguimos apoiar os municípios vizinhos com muito mais eficiência."',
+                'photo': 'assets/images/testimonials/testimonial1.jpg'
+            },
+            {
+                'name': 'Karla Lemos',
+                'role': 'Coord. Defesa Civil - Tibau do Sul',
+                'quote': '"O suporte do 2º SGB é constante. Trabalhamos juntos em planos de prevenção e nas ocorrências críticas, sempre com comunicação clara."',
+                'photo': 'assets/images/testimonials/testimonial2.jpg'
+            },
+            {
+                'name': 'Marta Morais',
+                'role': 'Moradora de Canguaretama',
+                'quote': '"Após um incêndio residencial, fomos atendidos em minutos. A equipe nos orientou, controlou o fogo e deixou toda a vizinhança segura."',
+                'photo': 'assets/images/testimonials/testimonial3.jpg'
+            }
+        ] %}
+
+        <div class="row g-4">
+            {% for testimonial in testimonials %}
+                <div class="col-12 col-md-4">
+                   <div class="home-testimonial-card p-4 h-100">
+                        <div class="d-flex align-items-center mb-3 gap-3">
+                            <div class="testimonial-avatar me-3">
+                                <img src="{{ BASE_URL ~ testimonial.photo }}" alt="{{ testimonial.name }}">
+                            </div>
+                            <div>
+                                <h3 class="h6 fw-semibold mb-0">{{ testimonial.name }}</h3>
+                                <span class="testimonial-role">{{ testimonial.role }}</span>
+                            </div>
+                        </div>
+                        <p class="testimonial-quote mb-0">
+                            {{ testimonial.quote }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="home-services home-section py-5">
+        <div class="container">
+            <div class="row align-items-center g-3">
+                <div class="col-lg-8">                    
+                    <p class="home-section-kicker text-muted mb-2">Canal direto</p>
+                    <h3 class="home-section-title text-primary mb-2">193 - Emergências · WhatsApp (84) 98838-9889</h3>
+                    <p class="home-section-lead text-muted mb-0">Informe localização, tipo de ocorrência e mantenha o contato aberto. Nossa equipe acompanha todo o deslocamento.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <div class="home-cta-actions d-flex gap-3 gap-md-4 flex-column flex-md-row justify-content-center justify-content-lg-end">
+                        <a href="tel:193" class="btn btn-primary btn-lg text-dark fw-bold flex-fill flex-md-grow-0"><i class="bi bi-telephone me-2"></i>Ligar 193</a>
+                        <a href="https://wa.me/5584988389889" target="_blank" class="btn btn-outline-primary btn-lg fw-bold flex-fill flex-md-grow-0"><i class="bi bi-whatsapp me-2"></i>Enviar WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

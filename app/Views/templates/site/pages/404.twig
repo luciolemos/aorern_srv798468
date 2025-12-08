@@ -1,0 +1,16 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Página não encontrada - CBMRN{% endblock %}
+
+{% block content %}
+    <div class="container py-5" style="min-height: calc(100vh - 75px - 200px); display: flex; align-items: center; justify-content: center;">
+        <div class="text-center">
+            <h1 class="display-1 fw-bold" style="color: #df6301;">404</h1>
+            <h2 class="mb-3">Página não encontrada</h2>
+            <p class="text-muted mb-4">Desculpe, a página que você está procurando não existe.</p>
+            <a href="{{ BASE_URL }}" class="btn btn-lg fw-bold" style="background-color: #df6301; color: white;">
+                <i class="bi bi-house-door"></i> Voltar para Home
+            </a>
+        </div>
+    </div>
+{% endblock %}

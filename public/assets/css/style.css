@@ -1,0 +1,58 @@
+/*NOVO HEADER E NOVO FOOTER*/
+/* Animação do link de navegação */
+.nav-link .nav-underline {
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #df6301;  /* Laranja Bombeiros RN */
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover .nav-underline,
+.nav-link.active .nav-underline {
+    width: 100%;
+}
+
+/* Botão scroll top moderno */
+.btn-scroll-top {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.3s ease;
+    background: #df6301;  /* Laranja Bombeiros RN */
+    color: white;
+    border: none;
+}
+
+.btn-scroll-top.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Efeitos hover */
+.hover-underline {
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.hover-underline::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.3s ease;
+}
+
+.hover-underline:hover::after {
+    width: 100%;
+}

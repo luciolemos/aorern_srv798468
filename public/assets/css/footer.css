@@ -1,0 +1,59 @@
+
+
+/* BOTÃO TOPO OTIMIZADO - BOOTSTACK (Bootstrap + Custom) */
+.scroll-top-btn {
+    /* Reset Bootstrap padrão */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Customizações essenciais */
+    width: 3.125rem;
+    height: 3.125rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    /* Sobreposição controlada de estilos Bootstrap */
+    border: 2px solid rgba(255,255,255,0.15) !important;
+    background: linear-gradient(45deg, #0d6efd, #0b5ed7) !important;
+    box-shadow: 0 0.5rem 1.5rem rgba(13, 110, 253, 0.3) !important;
+}
+
+/* Estados de visibilidade */
+.scroll-top-btn.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Interações harmonizadas */
+.scroll-top-btn:hover {
+    transform: translateY(-0.25rem) scale(1.05);
+    background: linear-gradient(45deg, #0b5ed7, #094bad) !important;
+    box-shadow: 0 0.75rem 2rem rgba(13, 110, 253, 0.4) !important;
+}
+
+.scroll-top-btn:active {
+    transform: translateY(0.125rem) scale(0.95);
+}
+
+/* Ícone ajustado */
+.scroll-top-btn i {
+    font-size: 1.25rem;
+    margin-top: -2px; /* Alinhamento ótico */
+}
+
+/* Responsividade integrada */
+@media (max-width: 768px) {
+    .scroll-top-btn {
+        width: 2.75rem;
+        height: 2.75rem;
+        bottom: 1rem !important;
+        right: 1rem !important;
+    }
+
+    .scroll-top-btn i {
+        font-size: 1rem;
+    }
+}

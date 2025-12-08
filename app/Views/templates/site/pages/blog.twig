@@ -1,0 +1,220 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Blog - CBMRN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/blog.css">
+{% endblock %}
+
+{% block content %}
+    {% set has_posts = posts is defined and posts|length > 0 %}
+
+    {% if has_posts %}
+        {% set featured_post = posts|first %}
+        {% set other_posts = posts|slice(1) %}
+
+        <section class="blog-feature-section text-white position-relative overflow-hidden">
+            <div class="blog-feature-pattern"></div>
+            <div class="container-xxl position-relative">
+                <div class="row align-items-start g-4">
+                    <div class="col-lg-7">
+                        {% if featured_post.capa_url %}
+                            <figure class="blog-feature-cover rounded-4 overflow-hidden mb-4">
+                                <img src="{{ featured_post.capa_url }}" alt="Imagem de capa de {{ featured_post.titulo }}" loading="lazy">
+                            </figure>
+                        {% endif %}
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                            <p class="text-uppercase small fw-semibold mb-0 text-white-50">Artigo em destaque</p>
+                            {% if featured_post.categoria_nome %}
+                                {% set categoriaCor = featured_post.categoria_cor|default('#df6301') %}
+                                <span class="blog-category-badge blog-category-badge-hero" style="background-color: {{ categoriaCor }}; border-color: {{ categoriaCor }}; color: #fff;">
+                                    {{ featured_post.categoria_nome }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        <h1 class="fw-bold display-5 mb-3">{{ featured_post.titulo }}</h1>
+                        <p class="blog-feature-meta mb-4">
+                            <span><i class="bi bi-calendar-event me-2"></i>{{ featured_post.criado_em|date('d/m/Y') }}</span>
+                            {% if featured_post.autor %}
+                                <span class="mx-3">•</span>
+                                <span><i class="bi bi-person me-2"></i>{{ featured_post.autor }}</span>
+                            {% endif %}
+                        </p>
+                        <p class="lead mb-4">{{ featured_post.conteudo|striptags|excerpt(260) }}</p>
+                        <div class="d-flex flex-wrap gap-3 blog-feature-actions">
+                            <a href="{{ BASE_URL }}blog/{{ featured_post.slug }}" class="btn btn-light btn-lg fw-bold" aria-label="Ler matéria completa: {{ featured_post.titulo }}">
+                                Ler matéria completa <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                            <a href="#ultimos-posts" class="btn btn-outline-light btn-lg">
+                                Ver mais artigos
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="blog-feature-highlight shadow-lg">
+                            <div class="badge text-bg-light text-black-50 mb-3">
+                                <i class="bi bi-journal-text me-1 text-primary"></i> Últimas publicações
+                            </div>
+                            <ul class="list-unstyled mb-0">
+                                {% for post in posts|slice(0,4) %}
+                                    <li class="d-flex align-items-start gap-3 py-2">
+                                        <div class="blog-feature-dot"></div>
+                                        <div>
+                                            <p class="mb-1 fw-semibold text-white">{{ post.titulo }}</p>
+                                            <small class="text-white-50">{{ post.criado_em|date('d/m/Y') }}</small>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ultimos-posts" class="blog-list-section py-5">
+            <div class="container-xxl">
+                <header class="blog-header text-center mb-5">
+                    <p class="text-uppercase text-muted small mb-2">Novidades e artigos</p>
+                    <h2 class="fw-bold text-primary mb-3">Últimas publicações</h2>
+                    <p class="blog-page-subtitle mb-0">Conteúdos recentes, operações e bastidores do Corpo de Bombeiros Militar do Rio Grande do Norte.</p>
+                </header>
+
+                <div class="blog-filters-wrapper mb-5">
+                    <form action="{{ BASE_URL }}blog" method="get" class="blog-filters row g-3 align-items-end">
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="blog-search" class="form-label text-muted text-uppercase small fw-semibold">Buscar no blog</label>
+                            <input type="search" id="blog-search" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Digite palavras-chave"
+                                   aria-label="Buscar artigos" />
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-4">
+                            <label for="blog-category" class="form-label text-muted text-uppercase small fw-semibold">Categoria</label>
+                            <select id="blog-category" name="categoria" class="form-select" aria-label="Filtrar por categoria">
+                                <option value="">Todas as categorias</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if filters.categoria|default(null) == category.id %}selected{% endif %}>{{ category.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-2 col-lg-2 d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">Aplicar filtros</button>
+                            {% if filters.q|default('') or filters.categoria|default(null) %}
+                                <a href="{{ BASE_URL }}blog" class="btn btn-outline-secondary btn-lg fw-bold">Limpar</a>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+
+                {% if other_posts|length > 0 %}
+                    <div class="row g-4">
+                        {% for post in other_posts %}
+                            <div class="col-md-6 col-xl-4">
+                                <article class="card border-0 shadow-sm blog-post-card h-100">
+                                    {% if post.capa_url %}
+                                        <figure class="blog-card-cover mb-0">
+                                            <img src="{{ post.capa_url }}" alt="Imagem de capa de {{ post.titulo }}" loading="lazy">
+                                        </figure>
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                                            <p class="small text-uppercase fw-semibold text-primary mb-0">Artigo</p>
+                                            {% if post.categoria_nome %}
+                                                {% set categoriaCor = post.categoria_cor|default('#df6301') %}
+                                                <span class="blog-category-badge blog-category-badge-card" style="background-color: {{ categoriaCor }}; border-color: {{ categoriaCor }}; color: #fff;">
+                                                    {{ post.categoria_nome }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        <h3 class="card-title h5 fw-bold mb-2">{{ post.titulo }}</h3>
+                                        <p class="card-text text-muted small mb-3 blog-meta">
+                                            <span><i class="bi bi-calendar-event"></i> {{ post.criado_em|date('d/m/Y') }}</span>
+                                            {% if post.autor %}
+                                                <span class="mx-2">|</span> <span><i class="bi bi-person"></i> {{ post.autor }}</span>
+                                            {% endif %}
+                                        </p>
+                                        <p class="card-text blog-excerpt">{{ post.conteudo|striptags|excerpt(160) }}</p>
+                                        <a href="{{ BASE_URL }}blog/{{ post.slug }}" class="btn btn-sm btn-primary fw-bold" aria-label="Ler mais sobre {{ post.titulo }}">
+                                            Ler mais <i class="bi bi-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info blog-empty-state">
+                        <i class="bi bi-info-circle me-2"></i> Publique mais artigos para preencher os cards inferiores.
+                    </div>
+                {% endif %}
+
+                {% if pagination.last_page|default(1) > 1 %}
+                    {% set queryPrefix = baseQueryString ? baseQueryString ~ '&' : '' %}
+                    <nav class="blog-pagination mt-5" aria-label="Paginação de artigos">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                                {% if pagination.has_prev %}
+                                    <a class="page-link" href="{{ BASE_URL }}blog?{{ queryPrefix }}page={{ pagination.current_page - 1 }}" aria-label="Página anterior">
+                                        &laquo;
+                                    </a>
+                                {% else %}
+                                    <span class="page-link" aria-hidden="true">&laquo;</span>
+                                {% endif %}
+                            </li>
+
+                            {% for pageNumber in 1..pagination.last_page %}
+                                <li class="page-item {% if pageNumber == pagination.current_page %}active{% endif %}">
+                                    {% if pageNumber == pagination.current_page %}
+                                        <span class="page-link">{{ pageNumber }}</span>
+                                    {% else %}
+                                        <a class="page-link" href="{{ BASE_URL }}blog?{{ queryPrefix }}page={{ pageNumber }}">{{ pageNumber }}</a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+
+                            <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                                {% if pagination.has_next %}
+                                    <a class="page-link" href="{{ BASE_URL }}blog?{{ queryPrefix }}page={{ pagination.current_page + 1 }}" aria-label="Próxima página">
+                                        &raquo;
+                                    </a>
+                                {% else %}
+                                    <span class="page-link" aria-hidden="true">&raquo;</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </section>
+    {% else %}
+        <div class="container py-5">
+            <div class="alert alert-info blog-empty-state">
+                <i class="bi bi-info-circle me-2"></i> Nenhum post publicado ainda. Volte em breve!
+            </div>
+            <div class="blog-filters-wrapper mt-4">
+                <form action="{{ BASE_URL }}blog" method="get" class="blog-filters row g-3 align-items-end">
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <label for="blog-search-empty" class="form-label text-muted text-uppercase small fw-semibold">Buscar no blog</label>
+                        <input type="search" id="blog-search-empty" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Digite palavras-chave"
+                               aria-label="Buscar artigos" />
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-4">
+                        <label for="blog-category-empty" class="form-label text-muted text-uppercase small fw-semibold">Categoria</label>
+                        <select id="blog-category-empty" name="categoria" class="form-select" aria-label="Filtrar por categoria">
+                            <option value="">Todas as categorias</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}" {% if filters.categoria|default(null) == category.id %}selected{% endif %}>{{ category.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2 col-lg-2 d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold">Aplicar filtros</button>
+                        {% if filters.q|default('') or filters.categoria|default(null) %}
+                            <a href="{{ BASE_URL }}blog" class="btn btn-outline-secondary btn-lg fw-bold">Limpar</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

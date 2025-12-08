@@ -1,0 +1,146 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+
+{% block title %}Categorias de Posts - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div data-aos="fade-down">
+        <h2 class="text-primary"><i class="bi bi-tags me-2"></i> Categorias de Posts</h2>
+        <p class="lead text-muted">Gerencie categorias de posts do blog</p>
+        <hr class="my-4">
+        <div class="d-flex flex-column flex-md-row gap-2 order-md-2 w-100 w-md-auto justify-content-md-start mt-4 mb-4">
+            <a href="{{ BASE_URL }}admin/post-categories/create" class="btn btn-primary text-white order-md-1">
+                <i class="bi bi-plus-circle"></i> Nova Categoria
+            </a>
+        </div>
+    </div>
+
+    <div data-aos="fade-up">
+        <form method="GET" class="mb-4">
+            <div class="input-group">
+                <input
+                    type="text"
+                    name="q"
+                    class="form-control"
+                    placeholder="Buscar categoria por nome..."
+                    value="{{ q|default('')|e('html_attr') }}"
+                    autofocus
+                >
+                {% if q is not empty %}
+                    <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                {% endif %}
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search me-1"></i> Buscar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if categorias is empty %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i> Nenhuma categoria encontrada.
+        </div>
+    {% else %}
+        <div class="table-responsive" data-aos="fade-up">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th>NOME</th>
+                        <th>SLUG</th>
+                        <th>Cor</th>
+                        <th class="text-center">AÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in categorias %}
+                    <tr>
+                        <td class="text-center"><i class="bi bi-folder text-primary"></i></td>
+                        <td>{{ cat.nome|e }}</td>
+                        <td><code class="text-muted">{{ cat.slug|e }}</code></td>
+                        <td>
+                            <span class="badge text-uppercase" style="background-color: {{ cat.badge_color|default('#df6301') }}; color: #fff;">
+                                {{ cat.badge_color|default('#df6301') }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="{{ BASE_URL }}admin/post-categories/edit/{{ cat.id }}" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-title="Editar">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{{ BASE_URL }}admin/post-categories/delete/{{ cat.id }}" class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Excluir" onclick="return confirm('Deseja excluir esta categoria?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    {% if pagination and pagination.total > 0 %}
+        {% set current = pagination.current_page|default(1) %}
+        {% set last = pagination.last_page|default(1) %}
+        {% set range = 2 %}
+        {% set start = max(1, current - range) %}
+        {% set end = min(last, current + range) %}
+        
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4">
+            <p class="text-muted mb-0 small">
+                Exibindo {{ pagination.from|default(0) }}-{{ pagination.to|default(0) }} de {{ pagination.total|default(0) }} registros
+            </p>
+            {% if last > 1 %}
+                <nav aria-label="Paginação">
+                    <ul class="pagination mb-0">
+                        <li class="page-item {% if current <= 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{% if current <= 1 %}#{% else %}{{ BASE_URL }}admin/post-categories?page={{ current - 1 }}{% if q %}&q={{ q|url_encode }}{% endif %}{% endif %}" tabindex="-1" aria-disabled="{% if current <= 1 %}true{% else %}false{% endif %}">
+                                &laquo;
+                            </a>
+                        </li>
+
+                        {% if start > 1 %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ BASE_URL }}admin/post-categories?page=1{% if q %}&q={{ q|url_encode }}{% endif %}">1</a>
+                            </li>
+                            {% if start > 2 %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% for page in start..end %}
+                            <li class="page-item {% if page == current %}active{% endif %}">
+                                <a class="page-link" href="{{ BASE_URL }}admin/post-categories?page={{ page }}{% if q %}&q={{ q|url_encode }}{% endif %}">{{ page }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if end < last %}
+                            {% if end < last - 1 %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ BASE_URL }}admin/post-categories?page={{ last }}{% if q %}&q={{ q|url_encode }}{% endif %}">{{ last }}</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item {% if current >= last %}disabled{% endif %}">
+                            <a class="page-link" href="{% if current >= last %}#{% else %}{{ BASE_URL }}admin/post-categories?page={{ current + 1 }}{% if q %}&q={{ q|url_encode }}{% endif %}{% endif %}" aria-disabled="{% if current >= last %}true{% else %}false{% endif %}">
+                                &raquo;
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div class="d-flex justify-content-end mt-4">
+        <a href="{{ BASE_URL }}admin" class="btn btn-primary text-white">
+            <i class="bi bi-speedometer2 me-2"></i> Painel
+        </a>
+    </div>
+</div>
+{% endblock %}

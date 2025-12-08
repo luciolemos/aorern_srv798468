@@ -1,0 +1,183 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Esquadrão com Cães - CBMRN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/esquadrao.css">
+{% endblock %}
+
+{% block content %}
+    <section class="esquadrao-hero text-white position-relative overflow-hidden">
+        <div class="esquadrao-hero-overlay"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <p class="section-kicker text-white-50 mb-2">Esquadrão de cães · 2º SGB/2º GBM</p>
+                    <h1 class="section-title text-white mb-3">Binômios preparados para busca, salvamento e apoio à comunidade</h1>
+                    {# <p class="section-lead text-white-75 mb-4">Os cães do Corpo de Bombeiros Militar do RN atuam em ocorrências reais e ações educativas, reforçando o compromisso com resgate especializado no litoral sul e agreste.</p> #}
+                    <p class="section-lead text-white-75 mb-4">Os binômios mantêm disponibilidade para atendimento de ocorrências em 
+                    toda a área de atuação do 2º SGB/2º GBM, podendo ser mobilizados para buscas de pessoas desaparecidas, apoio em desastres naturais, 
+                    avaliação de estruturas colapsadas e suporte emocional em situações de crise.<br>Além das atividades operacionais, o esquadrão 
+                    desenvolve ações de caráter educativo, participando de palestras, demonstrações e campanhas 
+                    de prevenção. Nessas ocasiões, o público tem acesso a informações sobre segurança, 
+                    responsabilidade com animais e o papel dos cães de resgate, fortalecendo o vínculo 
+                    entre o Corpo de Bombeiros e a comunidade.</p>
+                    <div class="d-flex flex-column flex-md-row gap-3">
+                        <a href="https://wa.me/5584988389889" target="_blank" class="btn btn-light btn-lg text-dark fw-bold flex-fill flex-md-grow-0"><i class="bi bi-whatsapp me-2"></i>Acionar equipe</a>
+                        <a href="{{ BASE_URL }}contact" class="btn btn-outline-light btn-lg flex-fill flex-md-grow-0"><i class="bi bi-envelope me-2"></i>Solicitar visita</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="esquadrao-hero-card shadow-lg">
+                        <h2 class="h4 fw-bold text-white mb-4">Indicadores do Esquadrão</h2>
+                        <div class="esquadrao-metrics">
+                            <div>
+                                <p class="display-6 fw-bold text-white mb-0">05</p>
+                                <small class="text-white-50 text-uppercase">binômios ativos</small>
+                            </div>
+                            <div>
+                                <p class="display-6 fw-bold text-white mb-0">12</p>
+                                <small class="text-white-50 text-uppercase">ocorrências 2024</small>
+                            </div>
+                            <div>
+                                <p class="display-6 fw-bold text-white mb-0">30+</p>
+                                <small class="text-white-50 text-uppercase">ações educativas</small>
+                            </div>
+                            <div>
+                                <p class="display-6 fw-bold text-white mb-0">100%</p>
+                                <small class="text-white-50 text-uppercase">treinamento semanal</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="esquadrao-overview section-spacing">
+        <div class="container">
+            <div class="row align-items-center g-4">
+
+                <div class="col-lg-6">
+                    <img src="{{ BASE_URL }}assets/images/caes/malinois_1600_1600.jpg"
+                         alt="Esquadrão com cães farejadores do CBMRN"
+                         class="img-fluid home-k9-image rounded-2 shadow-sm">
+                </div>
+                <div class="col-lg-6">
+                    <p class="section-kicker text-primary mb-2">Treinamento contínuo</p>
+                    <h2 class="section-title mb-3">Protocolo de preparo focado em busca, salvamento e apoio emocional</h2>
+                    <p class="section-lead text-muted mb-4">Os cães são treinados para responder comandos em ambientes urbanos, rurais, áreas de mata e situações com múltiplas vítimas. Cada binômio segue rotinas de condicionamento físico, olfativo e socialização.</p>
+                    <ul class="esquadrao-checklist">
+                        <li><i class="bi bi-check-circle-fill"></i>Simulados mensais com cenários reais do litoral sul</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Treinamento em técnicas de busca e salvamento com instrutores certificados</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Exercícios de socialização para interações seguras com vítimas</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Capacitação em apoio psicossocial para atendimento a vítimas</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Protocolos de segurança e bem-estar acompanhados por veterinários</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Integração com equipes de resgate em altura, mergulho e salvamento veicular</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Atuação em ações de prevenção e educação em escolas e eventos</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Participação em operações de busca e salvamento em áreas urbanas e rurais</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Treinamento em técnicas de apoio psicossocial para interações com vítimas</li>   
+
+                   
+                   
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="esquadrao-capabilities section-spacing">
+        <div class="container">
+            <header class="text-center mb-5">
+                <p class="section-kicker text-muted mb-2">Capacidades operacionais</p>
+                <h2 class="section-title text-primary mb-3">Frentes de atuação do esquadrão</h2>
+                <p class="section-lead text-muted mb-0">Cães preparados para dar suporte às guarnições em diferentes fases da ocorrência.</p>
+            </header>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <article class="esquadrao-card h-100">
+                        <div class="esquadrao-card-icon">
+                            <i class="bi bi-life-preserver"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Busca em estruturas colapsadas</h3>
+                        <p class="text-muted mb-0">Protocolos de varredura rápida para localizar vítimas em deslizamentos, desabamentos e áreas de difícil acesso.</p>
+                    </article>
+                </div>
+                <div class="col-md-4">
+                    <article class="esquadrao-card h-100">
+                        <div class="esquadrao-card-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Rastreamento em áreas rurais</h3>
+                        <p class="text-muted mb-0">Suporte em ocorrências de pessoas desaparecidas, com foco em mata fechada e extensões do agreste.</p>
+                    </article>
+                </div>
+                <div class="col-md-4">
+                    <article class="esquadrao-card h-100">
+                        <div class="esquadrao-card-icon">
+                            <i class="bi bi-heart"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Apoio psicossocial</h3>
+                        <p class="text-muted mb-0">Interação com vítimas, familiares e comunidades para reduzir o trauma após grandes ocorrências.</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="esquadrao-protocols section-spacing text-white">
+        <div class="container">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6">
+                    <h2 class="section-title text-white mb-3">Logística e bem-estar dos cães</h2>
+                    <p class="section-lead text-white-75 mb-4">Os binômios contam com acompanhamento veterinário, alimentação balanceada e equipamentos específicos para transporte seguro em viaturas e aeronaves.</p>
+                    <ul class="esquadrao-checklist text-white mb-4">
+                        <li><i class="bi bi-check-circle-fill"></i>Kennels climatizados e kits individuais para cada animal</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Rotina de avaliação física e behavioral</li>
+                        <li><i class="bi bi-check-circle-fill"></i>Documentação sanitária e chips de identificação atualizados</li>
+                    </ul>
+                    <a href="{{ BASE_URL }}contact" class="btn btn-light btn-lg text-dark fw-bold">Solicitar demonstração</a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="esquadrao-gallery row g-3">
+                         <div class="col-lg-6">
+                    <img src="{{ BASE_URL }}assets/images/caes/malinois_1080_1433.jpg"
+                         alt="Esquadrão com cães farejadores do CBMRN"
+                         class="img-fluid home-k9-image rounded-2 shadow-sm">
+                   </div>
+{#                    <div class="col-lg-6">
+                    <img src="{{ BASE_URL }}assets/images/caes/malinois1.jpg"
+                         alt="Esquadrão com cães farejadores do CBMRN"
+                         class="img-fluid home-k9-image rounded-2 shadow-sm">
+                   </div> #}
+                   <div class="col-lg-6">
+                    <img src="{{ BASE_URL }}assets/images/caes/malinois_1080_1433.png"
+                         alt="Esquadrão com cães farejadores do CBMRN"
+                         class="img-fluid home-k9-image rounded-2 shadow-sm">
+                   </div>
+{#                     <div class="col-lg-6">
+                    <img src="{{ BASE_URL }}assets/images/caes/malinois7.jpg"
+                         alt="Esquadrão com cães farejadores do CBMRN"
+                         class="img-fluid home-k9-image rounded-2 shadow-sm">
+                   </div> #}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="esquadrao-cta section-spacing">
+        <div class="container">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <p class="section-kicker text-primary mb-2">Parcerias e visitas</p>
+                    <h2 class="section-title mb-3">Quer apresentar o esquadrão para sua comunidade?</h2>
+                    <p class="section-lead text-muted mb-0">O 2º SGB/2º GBM realiza palestras, demonstrações e treinamentos compartilhados com escolas, universidades e defesas civis municipais.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="{{ BASE_URL }}contact" class="btn btn-primary btn-lg fw-bold">Agendar presença <i class="bi bi-calendar-event ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

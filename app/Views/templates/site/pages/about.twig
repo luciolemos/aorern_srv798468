@@ -1,0 +1,107 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Sobre Nós - CBMRN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/about.css">
+{% endblock %}
+
+{% block content %}
+    <section class="about-hero text-white position-relative overflow-hidden">
+        <div class="about-hero-pattern"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <p class="text-uppercase small fw-semibold text-white-50 mb-2">Quem somos</p>
+                    <h1 class="display-5 fw-bold mb-3">2º Subgrupamento do 2º GBM</h1>
+                    <p class="lead mb-4">
+                        A atuação do <em>Corpo de Bombeiros Militar do Rio Grande do Norte (CBMRN)</em> no Litoral 
+                        Sul e Agreste apoia-se em uma doutrina moderna, treinamento permanente e integração com forças parceiras, 
+                        assegurando respostas rápidas e eficazes diante dos mais variados cenários de emergência.
+                        Baseados em Goianinha e inaugurados em setembro de 2024, reforçamos a presença do Corpo de 
+                        Bombeiros Militar do RN no Litoral Sul e Agreste, encurtando o tempo de resposta e levando 
+                        segurança especializada para 25 municípios.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 about-hero-actions">
+                        <a href="{{ BASE_URL }}contact" class="btn btn-light btn-lg fw-bold text-dark">
+                            Conheça nossa atuação
+                        </a>
+                        <a href="#nossos-pilares" class="btn btn-outline-light btn-lg">
+                            Missão & valores
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="about-hero-panel shadow-lg">
+                        <p class="text-uppercase small fw-semibold text-white-50 mb-1">Marcos recentes</p>
+                        <h2 class="h4 fw-bold text-white mb-4">Nossa trajetória</h2>
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex align-items-start gap-3 py-2">
+                                {# <div class="about-hero-dot"></div> #}
+                                <div>
+                                    <p class="mb-1 fw-semibold text-white"><i class="bi bi-fire me-2"></i>2024 · Inauguração oficial do 2º SGB/2º GBM</p>
+                                    <small class="text-white-50">Estrutura moderna dedicada ao Litoral Sul e Agreste</small>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-start gap-3 py-2">
+                                {# <div class="about-hero-dot"></div> #}
+                                <div>
+                                    <p class="mb-1 fw-semibold text-white"><i class="bi bi-fire me-2"></i>25 municípios atendidos</p>
+                                    <small class="text-white-50">Cobertura contínua e integrada com outras forças</small>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-start gap-3 py-2">
+                                {# <div class="about-hero-dot"></div> #}
+                                <div>
+                                    <p class="mb-1 fw-semibold text-white"><i class="bi bi-fire me-2"></i>Operações 24/7</p>
+                                    <small class="text-white-50">Equipes prontas para combate a incêndio e salvamento</small>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="nossos-pilares" class="about-pillars py-5">
+        <div class="container">
+            <header class="text-center mb-5 about-pillars-header">
+                <p class="text-uppercase text-muted small mb-2">Nossa essência</p>
+                <h2 class="fw-bold mb-3 text-primary">Missão, cobertura e compromisso</h2>
+                <p class="text-muted mb-0">A mesma energia visual do blog agora apresenta nossos pilares institucionais.</p>
+            </header>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <article class="pillar-card h-100">
+                        <div class="pillar-icon">
+                            <i class="bi bi-compass"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-3">Missão</h3>
+                        <p class="text-muted mb-0">Proteger vidas e patrimônios por meio de operações especializadas, treinamento constante e atendimento humano à comunidade.</p>
+                    </article>
+                </div>
+                <div class="col-md-4">
+                    <article class="pillar-card h-100">
+                        <div class="pillar-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-3">Cobertura geográfica</h3>
+                        <p class="text-muted mb-0">Atuamos em 25 municípios do Litoral Sul e Agreste, reduzindo tempos de chegada e integrando ações com defesas civis municipais.</p>
+                    </article>
+                </div>
+                <div class="col-md-4">
+                    <article class="pillar-card h-100">
+                        <div class="pillar-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-3">Compromisso contínuo</h3>
+                        <p class="text-muted mb-0">Operamos 24/7 com protocolos claros, frota revisada e equipes capacitadas para incêndios, salvamentos e prevenção.</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
