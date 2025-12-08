@@ -52,6 +52,7 @@ class PostsController extends Controller {
             'pagination' => $pagination,
             'userRole' => $userRole,
             'user_id' => $userId,
+            'csrf_token' => CsrfHelper::generateToken(),
             'statusLabels' => [
                 'draft' => 'Rascunho',
                 'pending' => 'Pendente de Revisão',
