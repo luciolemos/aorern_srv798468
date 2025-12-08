@@ -87,13 +87,19 @@
                         <i class="bi bi-save me-1"></i> Atualizar
                     </button>
                 {% elseif post.status == 'published' %}
-                    {# Post publicado - admin pode atualizar ou despublicar #}
+                    {# Post publicado - admin pode atualizar ou ocultar #}
                     <button type="submit" name="action" value="save_update" class="btn btn-warning flex-grow-1 flex-md-grow-0">
                         <i class="bi bi-pencil-square me-1"></i> Atualizar Publicado
                     </button>
-                    <a href="{{ BASE_URL }}admin/posts/unpublish/{{ post.id }}" class="btn btn-outline-warning flex-grow-1 flex-md-grow-0" onclick="return confirm('Despublicar este post e voltar para rascunho?');">
-                        <i class="bi bi-eye-slash me-1"></i> Despublicar
-                    </a>
+                    {% if post.is_hidden|default(0) == 0 %}
+                        <a href="{{ BASE_URL }}admin/posts/hide/{{ post.id }}" class="btn btn-outline-warning flex-grow-1 flex-md-grow-0" onclick="return confirm('Ocultar este post do blog? Ele continuará publicado.');">
+                            <i class="bi bi-eye-slash me-1"></i> Ocultar do Blog
+                        </a>
+                    {% else %}
+                        <a href="{{ BASE_URL }}admin/posts/show/{{ post.id }}" class="btn btn-outline-success flex-grow-1 flex-md-grow-0" onclick="return confirm('Reexibir este post no blog?');">
+                            <i class="bi bi-eye me-1"></i> Exibir no Blog
+                        </a>
+                    {% endif %}
                 {% else %}
                     {# Fallback genérico #}
                     <button type="submit" name="action" value="save_update" class="btn btn-primary flex-grow-1 flex-md-grow-0">

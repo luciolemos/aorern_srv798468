@@ -297,6 +297,44 @@ class PostsController extends Controller {
         exit;
     }
 
+    public function hide(int $id): void {
+        PermissionMiddleware::authorize('posts:approve');
+
+        $post = $this->post->encontrarPorId($id);
+        if (!$post || $post['status'] !== 'published') {
+            $_SESSION['toast'] = ['type' => 'warning', 'message' => '⚠️ Post inválido para ocultar!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
+        $this->post->atualizar($id, [
+            'is_hidden' => 1,
+        ]);
+
+        $_SESSION['toast'] = ['type' => 'success', 'message' => '👁️ Post ocultado do blog (continua publicado).'];
+        header('Location: ' . BASE_URL . 'admin/posts');
+        exit;
+    }
+
+    public function show(int $id): void {
+        PermissionMiddleware::authorize('posts:approve');
+
+        $post = $this->post->encontrarPorId($id);
+        if (!$post || $post['status'] !== 'published') {
+            $_SESSION['toast'] = ['type' => 'warning', 'message' => '⚠️ Post inválido para exibir!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
+        $this->post->atualizar($id, [
+            'is_hidden' => 0,
+        ]);
+
+        $_SESSION['toast'] = ['type' => 'success', 'message' => '✅ Post visível novamente no blog.'];
+        header('Location: ' . BASE_URL . 'admin/posts');
+        exit;
+    }
+
     public function unpublish(int $id): void {
         PermissionMiddleware::authorize('posts:approve');
 
