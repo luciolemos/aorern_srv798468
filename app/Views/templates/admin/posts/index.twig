@@ -62,7 +62,7 @@
                     <select id="category" name="category" class="form-select">
                         <option value="">Todas as Categorias</option>
                         {% for cat in categories %}
-                            <option value="{{ cat.id }}" {% if category == cat.id|string %}selected{% endif %}>
+                            <option value="{{ cat.id }}" {% if category == cat.id %}selected{% endif %}>
                                 {{ cat.nome|e }}
                             </option>
                         {% endfor %}
@@ -76,7 +76,7 @@
                     <select id="author" name="author" class="form-select">
                         <option value="">Todos os Autores</option>
                         {% for auth in allAuthors %}
-                            <option value="{{ auth.user_id }}" {% if author == auth.user_id|string %}selected{% endif %}>
+                            <option value="{{ auth.user_id }}" {% if author == auth.user_id %}selected{% endif %}>
                                 {{ auth.name|e|default('(sem nome)') }}
                             </option>
                         {% endfor %}
