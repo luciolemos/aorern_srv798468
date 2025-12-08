@@ -338,7 +338,8 @@ class PostsController extends Controller {
             return true;
         }
 
-        if ($post['user_id'] == $userId && $post['status'] === 'draft') {
+        // Usuário pode editar seus próprios rascunhos e posts rejeitados
+        if ($post['user_id'] == $userId && in_array($post['status'], ['draft', 'rejected'])) {
             return true;
         }
 
