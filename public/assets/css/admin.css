@@ -239,7 +239,9 @@ body.bg-light {
 
 .admin-content-area .container-fluid {
     margin: 0 !important;
-    padding: 0 1rem !important;
+    padding: 0 !important;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 @media (max-width: 991.98px) {
@@ -725,6 +727,7 @@ body.bg-light {
     max-width: 100%;
     margin-left: 0;
     box-sizing: border-box;
+    overflow-x: hidden;
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
