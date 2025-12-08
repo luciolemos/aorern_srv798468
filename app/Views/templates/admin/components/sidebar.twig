@@ -33,8 +33,9 @@
                     <span><i class="bi bi-people-fill me-2"></i> Gestão de Pessoal</span>
                     <i class="bi bi-chevron-down small"></i>
                 </a>
-                <div class="collapse {{ subRoute in ['pessoal','funcoes'] ? 'show' : '' }}" id="pessoalCollapse">
+                <div class="collapse {{ subRoute in ['pessoal','funcoes','usuarios'] ? 'show' : '' }}" id="pessoalCollapse">
                     <ul class="nav flex-column ms-3">
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/usuarios" class="nav-link py-1 px-3 small {{ subRoute == 'usuarios' ? 'active-cbmrn' : '' }}"><i class="bi bi-people me-1"></i> Usuários</a></li>
                         <li class="nav-item"><a href="{{ BASE_URL }}admin/pessoal" class="nav-link py-1 px-3 small {{ subRoute == 'pessoal' ? 'active-cbmrn' : '' }}"><i class="bi bi-person-lines-fill me-1"></i> Bombeiros</a></li>
                         <li class="nav-item"><a href="{{ BASE_URL }}admin/funcoes" class="nav-link py-1 px-3 small {{ subRoute == 'funcoes' ? 'active-cbmrn' : '' }}"><i class="bi bi-tags me-1"></i> Funções</a></li>
                     </ul>
@@ -57,9 +58,8 @@
                     <span><i class="bi bi-gear me-2"></i> Configurações</span>
                     <i class="bi bi-chevron-down small"></i>
                 </a>
-                <div class="collapse {{ subRoute in ['status','versions','info','usuarios'] ? 'show' : '' }}" id="configCollapse">
+                <div class="collapse {{ subRoute in ['status','versions','info'] ? 'show' : '' }}" id="configCollapse">
                     <ul class="nav flex-column ms-3">
-                        <li class="nav-item"><a href="{{ BASE_URL }}admin/usuarios" class="nav-link py-1 px-3 small {{ subRoute == 'usuarios' ? 'active-cbmrn' : '' }}"><i class="bi bi-people me-1"></i> Usuários</a></li>
                         <li class="nav-item"><a href="{{ BASE_URL }}admin/status" class="nav-link py-1 px-3 small {{ subRoute == 'status' ? 'active-cbmrn' : '' }}"><i class="bi bi-check-circle me-1"></i> Status</a></li>
                         <li class="nav-item"><a href="{{ BASE_URL }}admin/system/versions" class="nav-link py-1 px-3 small {{ subRoute == 'versions' ? 'active-cbmrn' : '' }}"><i class="bi bi-code-slash me-1"></i> Versões</a></li>
                         <li class="nav-item"><a href="{{ BASE_URL }}admin/system/info" class="nav-link py-1 px-3 small {{ subRoute == 'info' ? 'active-cbmrn' : '' }}"><i class="bi bi-info-circle me-1"></i> Info</a></li>
