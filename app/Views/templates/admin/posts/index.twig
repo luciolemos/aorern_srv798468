@@ -73,9 +73,22 @@
                                 'published': 'bg-success',
                                 'rejected': 'bg-danger'
                             } %}
-                            <span class="badge {{ statusBadgeClass[post.status]|default('bg-secondary') }} text-uppercase" style="font-size: 0.75rem;">
-                                {{ statusLabels[post.status]|default(post.status) }}
-                            </span>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge {{ statusBadgeClass[post.status]|default('bg-secondary') }} text-uppercase" style="font-size: 0.75rem;">
+                                    {{ statusLabels[post.status]|default(post.status) }}
+                                </span>
+                                {% if post.status == 'published' %}
+                                    {% if post.is_hidden|default(0) == 1 %}
+                                        <span title="Post oculto do blog" data-bs-toggle="tooltip">
+                                            <i class="bi bi-eye-slash text-warning" style="font-size: 0.9rem;"></i>
+                                        </span>
+                                    {% else %}
+                                        <span title="Post visível no blog" data-bs-toggle="tooltip">
+                                            <i class="bi bi-eye text-success" style="font-size: 0.9rem;"></i>
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
                         </td>
                         <td class="d-none d-md-table-cell">
                             {% if post.categoria_nome %}
