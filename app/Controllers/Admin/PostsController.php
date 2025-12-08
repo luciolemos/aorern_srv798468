@@ -50,6 +50,7 @@ class PostsController extends Controller {
             'q' => $q,
             'pagination' => $pagination,
             'userRole' => $userRole,
+            'user_id' => $userId,
             'statusLabels' => [
                 'draft' => 'Rascunho',
                 'pending' => 'Pendente de Revisão',
