@@ -1,100 +1,94 @@
 {% extends 'admin/layouts/base_admin.twig' %}
-{% block title %}{{ title|default('Gerenciar Usuários') }}{% endblock %}
+
+{% block title %}Usuários - Admin{% endblock %}
+
 {% block content %}
-<div class="container-fluid p-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
-                    <h1 class="h3 fw-bold mb-1" style="color: #212529;">
-                        <i class="bi bi-people-fill me-2" style="color: #df6301;"></i>{{ title|default('Gerenciar Usuários') }}
-                    </h1>
-                    <p class="text-muted mb-0">Gerencie usuários, roles e permissões</p>
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div data-aos="fade-down">
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-people-fill me-2"></i> Usuários do Sistema</h2>
+        <p class="text-muted mb-0">Gerencie usuários, roles e permissões</p>
+        <hr class="my-4">
+
+        <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
+            <a href="{{ BASE_URL }}admin/auth/register" class="btn btn-primary text-white">
+                <i class="bi bi-plus-circle me-1"></i> Novo Usuário
+            </a>
+        </div>
+    </div>
+
+    <!-- Painel de Filtros Avançado -->
+    <div data-aos="fade-up" class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light border-bottom">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Filtros Avançados</strong></h5>
+                {% set hasActiveFilters = q or role or status %}
+                {% if hasActiveFilters %}
+                    <a href="{{ BASE_URL }}admin/usuarios" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar Filtros
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-2 align-items-end">
+                <!-- Busca -->
+                <div class="col">
+                    <label class="form-label small mb-1" for="search"><i class="bi bi-search me-1"></i> <strong>Busca</strong></label>
+                    <input
+                        type="text"
+                        id="search"
+                        name="q"
+                        class="form-control form-control-sm"
+                        placeholder="Nome ou email..."
+                        value="{{ q|default('')|e('html_attr') }}"
+                    >
                 </div>
-                <div>
-                    <span class="badge bg-primary fs-6">{{ total }} usuário(s)</span>
+
+                <!-- Filtro por Role -->
+                <div class="col">
+                    <label class="form-label small mb-1" for="role"><i class="bi bi-shield me-1"></i> <strong>Role</strong></label>
+                    <select id="role" name="role" class="form-select form-select-sm">
+                        <option value="">Todas</option>
+                        <option value="admin" {% if role == 'admin' %}selected{% endif %}>Admin</option>
+                        <option value="gerente" {% if role == 'gerente' %}selected{% endif %}>Gerente</option>
+                        <option value="operador" {% if role == 'operador' %}selected{% endif %}>Operador</option>
+                        <option value="usuario" {% if role == 'usuario' %}selected{% endif %}>Usuário</option>
+                    </select>
                 </div>
+
+                <!-- Filtro por Status -->
+                <div class="col">
+                    <label class="form-label small mb-1" for="status"><i class="bi bi-check-circle me-1"></i> <strong>Status</strong></label>
+                    <select id="status" name="status" class="form-select form-select-sm">
+                        <option value="">Todos</option>
+                        <option value="ativo" {% if status == 'ativo' %}selected{% endif %}>Ativo</option>
+                        <option value="pendente" {% if status == 'pendente' %}selected{% endif %}>Pendente</option>
+                        <option value="bloqueado" {% if status == 'bloqueado' %}selected{% endif %}>Bloqueado</option>
+                    </select>
+                </div>
+
+                <!-- Botão de Busca -->
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center" style="height: 31px;">
+                        <i class="bi bi-search me-1"></i> Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
             </div>
         </div>
     </div>
 
-    <div class="row mb-3">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-light border-bottom">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Filtros Avançados</strong></h5>
-                        {% set hasActiveFilters = q or role or status %}
-                        {% if hasActiveFilters %}
-                            <a href="{{ BASE_URL }}admin/usuarios" class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar Filtros
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="card-body">
-                    <form method="GET" class="row g-2 align-items-end">
-                        <!-- Busca -->
-                        <div class="col">
-                            <label class="form-label small mb-1" for="search"><i class="bi bi-search me-1"></i> <strong>Busca</strong></label>
-                            <input
-                                type="text"
-                                id="search"
-                                name="q"
-                                class="form-control form-control-sm"
-                                placeholder="Nome ou email..."
-                                value="{{ q|default('')|e('html_attr') }}"
-                            >
-                        </div>
-
-                        <!-- Filtro por Role -->
-                        <div class="col">
-                            <label class="form-label small mb-1" for="role"><i class="bi bi-shield me-1"></i> <strong>Role</strong></label>
-                            <select id="role" name="role" class="form-select form-select-sm">
-                                <option value="">Todas</option>
-                                <option value="admin" {% if role == 'admin' %}selected{% endif %}>Admin</option>
-                                <option value="gerente" {% if role == 'gerente' %}selected{% endif %}>Gerente</option>
-                                <option value="operador" {% if role == 'operador' %}selected{% endif %}>Operador</option>
-                                <option value="usuario" {% if role == 'usuario' %}selected{% endif %}>Usuário</option>
-                            </select>
-                        </div>
-
-                        <!-- Filtro por Status -->
-                        <div class="col">
-                            <label class="form-label small mb-1" for="status"><i class="bi bi-check-circle me-1"></i> <strong>Status</strong></label>
-                            <select id="status" name="status" class="form-select form-select-sm">
-                                <option value="">Todos</option>
-                                <option value="ativo" {% if status == 'ativo' %}selected{% endif %}>Ativo</option>
-                                <option value="pendente" {% if status == 'pendente' %}selected{% endif %}>Pendente</option>
-                                <option value="bloqueado" {% if status == 'bloqueado' %}selected{% endif %}>Bloqueado</option>
-                            </select>
-                        </div>
-
-                        <!-- Botão de Busca -->
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center" style="height: 31px;">
-                                <i class="bi bi-search me-1"></i> Buscar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    {% if usuarios is empty %}
+        <div class="alert alert-info alert-dismissible fade show">
+            <i class="bi bi-info-circle me-2"></i> Nenhum usuário encontrado
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0 fw-bold" style="color: #df6301;">
-                        <i class="bi bi-table me-2"></i>Lista de Usuários
-                    </h5>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0" id="usuariosTable">
-                            <thead class="table-light">
-                                <tr>
+    {% else %}
+        <div class="table-responsive" data-aos="fade-up">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
                                     <th class="ps-4">ID</th>
                                     <th>Usuário</th>
                                     <th>Email</th>
@@ -104,118 +98,106 @@
                                     <th>Cadastrado em</th>
                                     <th class="text-center pe-4">Ações</th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {% if usuarios is empty %}
-                                    <tr>
-                                        <td colspan="8" class="text-center py-5 text-muted">
-                                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                                            Nenhum usuário cadastrado
-                                        </td>
-                                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td class="text-center">{{ usuario.id }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if usuario.avatar %}
+                                        <img src="{{ BASE_URL }}{{ usuario.avatar }}" alt="{{ usuario.username }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="rounded-circle bg-primary d-inline-flex justify-content-center align-items-center text-white" style="width: 40px; height: 40px; font-weight: 700;">
+                                            {{ usuario.username[0]|upper }}
+                                        </div>
+                                    {% endif %}
+                                    <span class="fw-semibold">{{ usuario.username }}</span>
+                                </div>
+                            </td>
+                            <td>{{ usuario.email }}</td>
+                            <td>
+                                <form method="POST" action="{{ BASE_URL }}admin/usuarios/alterar-role" class="d-inline">
+                                    <input type="hidden" name="id" value="{{ usuario.id }}">
+                                    <select name="role" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+                                        <option value="admin" {% if usuario.role == 'admin' %}selected{% endif %}>Admin</option>
+                                        <option value="gerente" {% if usuario.role == 'gerente' %}selected{% endif %}>Gerente</option>
+                                        <option value="operador" {% if usuario.role == 'operador' %}selected{% endif %}>Operador</option>
+                                        <option value="usuario" {% if usuario.role == 'usuario' %}selected{% endif %}>Usuário</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td>
+                                {% set status = usuario.status ?? (usuario.ativo ? 'ativo' : 'pendente') %}
+                                {% if status == 'ativo' %}
+                                    <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Ativo</span>
+                                {% elseif status == 'bloqueado' %}
+                                    <span class="badge bg-danger"><i class="bi bi-slash-circle me-1"></i>Bloqueado</span>
                                 {% else %}
-                                    {% for usuario in usuarios %}
-                                    <tr>
-                                        <td class="ps-4 fw-bold text-muted">#{{ usuario.id }}</td>
-                                        <td>
-                                            <div class="d-flex align-items-center gap-2">
-                                                {% if usuario.avatar %}
-                                                    <img src="{{ BASE_URL }}{{ usuario.avatar }}" alt="{{ usuario.username }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-                                                {% else %}
-                                                    <div class="rounded-circle bg-primary d-inline-flex justify-content-center align-items-center text-white" style="width: 40px; height: 40px; font-weight: 700;">
-                                                        {{ usuario.username[0]|upper }}
-                                                    </div>
-                                                {% endif %}
-                                                <span class="fw-semibold">{{ usuario.username }}</span>
-                                            </div>
-                                        </td>
-                                        <td>{{ usuario.email }}</td>
-                                        <td>
-                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/alterar-role" class="d-inline">
-                                                <input type="hidden" name="id" value="{{ usuario.id }}">
-                                                <select name="role" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
-                                                    <option value="admin" {% if usuario.role == 'admin' %}selected{% endif %}>Admin</option>
-                                                    <option value="gerente" {% if usuario.role == 'gerente' %}selected{% endif %}>Gerente</option>
-                                                    <option value="operador" {% if usuario.role == 'operador' %}selected{% endif %}>Operador</option>
-                                                    <option value="usuario" {% if usuario.role == 'usuario' %}selected{% endif %}>Usuário</option>
-                                                </select>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            {% set status = usuario.status ?? (usuario.ativo ? 'ativo' : 'pendente') %}
-                                            {% if status == 'ativo' %}
-                                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Ativo</span>
-                                            {% elseif status == 'bloqueado' %}
-                                                <span class="badge bg-danger"><i class="bi bi-slash-circle me-1"></i>Bloqueado</span>
-                                            {% else %}
-                                                <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pendente</span>
-                                            {% endif %}
-                                        </td>
-                                        <td class="text-muted">{{ usuario.ultimo_login ? usuario.ultimo_login|date('d/m/Y H:i') : 'Nunca' }}</td>
-                                        <td class="text-muted">{{ usuario.created_at|date('d/m/Y') }}</td>
-                                        <td class="text-center pe-4">
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
-                                                    <i class="bi bi-three-dots-vertical"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    {% if status == 'pendente' %}
-                                                        <li>
-                                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
-                                                                <input type="hidden" name="id" value="{{ usuario.id }}">
-                                                                <button type="submit" class="dropdown-item">
-                                                                    <i class="bi bi-check-circle me-2"></i> Aprovar
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                        <li>
-                                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/desativar" class="d-inline">
-                                                                <input type="hidden" name="id" value="{{ usuario.id }}">
-                                                                <button type="submit" class="dropdown-item">
-                                                                    <i class="bi bi-slash-circle me-2"></i> Bloquear
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                    {% elseif status == 'ativo' %}
-                                                        <li>
-                                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/desativar" class="d-inline">
-                                                                <input type="hidden" name="id" value="{{ usuario.id }}">
-                                                                <button type="submit" class="dropdown-item">
-                                                                    <i class="bi bi-pause-circle me-2"></i> Bloquear
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                    {% else %}
-                                                        <li>
-                                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
-                                                                <input type="hidden" name="id" value="{{ usuario.id }}">
-                                                                <button type="submit" class="dropdown-item">
-                                                                    <i class="bi bi-play-circle me-2"></i> Ativar
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                    {% endif %}
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li>
-                                                        <form method="POST" action="{{ BASE_URL }}admin/usuarios/deletar" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
-                                                            <input type="hidden" name="id" value="{{ usuario.id }}">
-                                                            <button type="submit" class="dropdown-item text-danger">
-                                                                <i class="bi bi-trash me-2"></i> Excluir
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
+                                    <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pendente</span>
                                 {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                            </td>
+                            <td class="text-muted small">{{ usuario.ultimo_login ? usuario.ultimo_login|date('d/m/Y H:i') : 'Nunca' }}</td>
+                            <td class="text-muted small">{{ usuario.created_at|date('d/m/Y') }}</td>
+                            <td class="text-center">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        {% if status == 'pendente' %}
+                                            <li>
+                                                <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
+                                                    <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="bi bi-check-circle me-2"></i> Aprovar
+                                                    </button>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <form method="POST" action="{{ BASE_URL }}admin/usuarios/desativar" class="d-inline">
+                                                    <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="bi bi-slash-circle me-2"></i> Bloquear
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        {% elseif status == 'ativo' %}
+                                            <li>
+                                                <form method="POST" action="{{ BASE_URL }}admin/usuarios/desativar" class="d-inline">
+                                                    <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="bi bi-pause-circle me-2"></i> Bloquear
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        {% else %}
+                                            <li>
+                                                <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
+                                                    <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="bi bi-play-circle me-2"></i> Ativar
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        {% endif %}
+                                        <li>
+                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/deletar" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
+                                                <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="bi bi-trash me-2"></i> Excluir
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-        </div>
+        {% endif %}
     </div>
 </div>
 
