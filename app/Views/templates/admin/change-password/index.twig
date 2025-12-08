@@ -1,8 +1,108 @@
 {% extends 'admin/layouts/base_admin.twig' %}
-{% block title %}Change-password - Admin{% endblock %}
+{% block title %}Alterar Senha{% endblock %}
 {% block content %}
-<div class="container-fluid px-3 px-md-4" style="padding-top: 2rem !important;">
-    <h1 class="mb-4">Change-password</h1>
-    <p class="text-muted">Template Twig em construção. Conteúdo será migrado em breve.</p>
+<div class="container-fluid p-4">
+    <div class="row g-4">
+        <div class="col-12 d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <h1 class="h3 fw-bold mb-1" style="color: #212529;">
+                    <i class="bi bi-shield-lock me-2" style="color: #df6301;"></i>{{ title|default('Alterar Senha') }}
+                </h1>
+                <p class="text-muted mb-0">Atualize sua senha periodicamente para manter sua conta segura.</p>
+            </div>
+            <a href="{{ BASE_URL }}admin/perfil" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Voltar para o Perfil
+            </a>
+        </div>
+
+        <div class="col-lg-8">
+            <form action="{{ BASE_URL }}admin/alterar-senha/update" method="POST" class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold" style="color: #df6301;">
+                        <i class="bi bi-key me-2"></i>Dados de Acesso
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token|default('') }}">
+
+                    <div class="mb-4">
+                        <label for="current_password" class="form-label fw-bold">Senha atual</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" class="form-control" id="current_password" name="current_password" placeholder="Digite sua senha atual" minlength="6" required>
+                        </div>
+                        <small class="text-muted">Esta etapa confirma que é você quem está realizando a alteração.</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="password" class="form-label fw-bold">Nova senha</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Crie uma nova senha" minlength="6" required>
+                            </div>
+                            <small class="text-muted">Use ao menos 6 caracteres. Recomendamos letras, números e símbolos.</small>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="password_confirmation" class="form-label fw-bold">Confirmar nova senha</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-check2-circle"></i></span>
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Repita a nova senha" minlength="6" required>
+                            </div>
+                            <small class="text-muted">Digite a mesma senha para evitar erros de digitação.</small>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="submit" class="btn btn-primary" style="background-color: #df6301; border-color: #df6301;">
+                            <i class="bi bi-floppy me-2"></i>Salvar nova senha
+                        </button>
+                        <a href="{{ BASE_URL }}admin/perfil" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-2"></i>Cancelar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom">
+                    <h6 class="mb-0 fw-bold" style="color: #df6301;">
+                        <i class="bi bi-lightbulb me-2"></i>Boas práticas
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex align-items-start mb-3">
+                            <i class="bi bi-dot fs-4 text-primary me-1"></i>
+                            <span>Crie senhas únicas para cada sistema.</span>
+                        </li>
+                        <li class="d-flex align-items-start mb-3">
+                            <i class="bi bi-dot fs-4 text-primary me-1"></i>
+                            <span>Evite datas de aniversário ou sequências fáceis.</span>
+                        </li>
+                        <li class="d-flex align-items-start mb-3">
+                            <i class="bi bi-dot fs-4 text-primary me-1"></i>
+                            <span>Não compartilhe sua senha com outras pessoas.</span>
+                        </li>
+                        <li class="d-flex align-items-start">
+                            <i class="bi bi-dot fs-4 text-primary me-1"></i>
+                            <span>Ative 2FA sempre que estiver disponível.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert alert-warning border-0 shadow-sm mb-0" role="alert">
+                <div class="d-flex">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <div>
+                        Após salvar a nova senha, você será desconectado por segurança e precisará fazer login novamente.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

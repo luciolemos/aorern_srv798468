@@ -187,20 +187,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Sidebar collapse toggle (desktop)
     const collapseBtn = document.getElementById('sidebarCollapseBtn');
     const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
-    const adminLayout = document.querySelector('.admin-layout');
     const updateCollapsedUI = (isCollapsed) => {
         if (!sidebar || !contentArea || !collapseBtn) return;
 
         if (isCollapsed) {
             sidebar.classList.add('collapsed');
             contentArea.classList.add('collapsed');
-            adminLayout?.classList.add('collapsed');
             collapseBtn.innerHTML = '<i class="bi bi-layout-sidebar-inset-reverse fs-5"></i>';
             collapseBtn.title = 'Expandir menu';
         } else {
             sidebar.classList.remove('collapsed');
             contentArea.classList.remove('collapsed');
-            adminLayout?.classList.remove('collapsed');
             collapseBtn.innerHTML = '<i class="bi bi-layout-sidebar-inset fs-5"></i>';
             collapseBtn.title = 'Recolher menu';
         }

@@ -9,7 +9,8 @@ use App\Core\Controller;
 use App\Core\Request;
 use App\Middleware\AuthMiddleware;
 use App\Models\User;
-use App\Helpers\Validator;
+ use App\Helpers\Validator;
+ use App\Helpers\CsrfHelper;
 
 class AlterarSenhaController extends Controller {
 
@@ -30,7 +31,8 @@ class AlterarSenhaController extends Controller {
      */
     public function index() {
         $data = [
-            'title' => 'Alterar Senha'
+            'title' => 'Alterar Senha',
+            'csrf_token' => CsrfHelper::generateToken()
         ];
 
         $this->renderTwig('admin/change-password/index', array_merge($data, AdminHelper::getUserData('change-password')));
