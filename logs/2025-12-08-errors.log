@@ -26,3 +26,113 @@ Stack trace:
 #23 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
 #24 {main}
 
+[2025-12-08 09:43:15] PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?,?)' at line 1 in /var/www/mvc/app/Helpers/Paginator.php:28
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(28): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(141): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(40): App\Models\Post->paginarPorStatus()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 09:43:52] PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?,?)' at line 1 in /var/www/mvc/app/Helpers/Paginator.php:28
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(28): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(141): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(40): App\Models\Post->paginarPorStatus()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 09:43:53] PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?,?)' at line 1 in /var/www/mvc/app/Helpers/Paginator.php:28
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(28): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(141): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(40): App\Models\Post->paginarPorStatus()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 09:43:53] PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?,?)' at line 1 in /var/www/mvc/app/Helpers/Paginator.php:28
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(28): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(141): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(40): App\Models\Post->paginarPorStatus()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 09:43:54] PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?,?)' at line 1 in /var/www/mvc/app/Helpers/Paginator.php:28
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(28): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(141): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(40): App\Models\Post->paginarPorStatus()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 09:43:54] PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?,?)' at line 1 in /var/www/mvc/app/Helpers/Paginator.php:28
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(28): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(141): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(40): App\Models\Post->paginarPorStatus()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 09:43:54] PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?,?)' at line 1 in /var/www/mvc/app/Helpers/Paginator.php:28
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(28): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(141): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(40): App\Models\Post->paginarPorStatus()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 09:43:54] PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?,?)' at line 1 in /var/www/mvc/app/Helpers/Paginator.php:28
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(28): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(141): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(40): App\Models\Post->paginarPorStatus()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 09:43:54] PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?,?)' at line 1 in /var/www/mvc/app/Helpers/Paginator.php:28
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(28): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(141): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(40): App\Models\Post->paginarPorStatus()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 09:44:10] PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?,?)' at line 1 in /var/www/mvc/app/Helpers/Paginator.php:28
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(28): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(141): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(40): App\Models\Post->paginarPorStatus()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+

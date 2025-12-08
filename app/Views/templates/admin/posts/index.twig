@@ -139,70 +139,73 @@
                             </div>
                         </td>
                     </tr>
-
-                    <!-- Modal de Revisão -->
-                    {% if post.status == 'pending' %}
-                    <div class="modal fade" id="reviewModal{{ post.id }}" tabindex="-1">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header border-bottom">
-                                    <h5 class="modal-title">Revisar Post</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <h6 class="fw-bold">{{ post.titulo|e }}</h6>
-                                    <p class="small text-muted mb-3">Autor: <strong>{{ post.autor|e }}</strong> | Criado em: {{ post.criado_em|date('d/m/Y H:i') }}</p>
-                                    <div class="alert alert-light border" style="max-height: 300px; overflow-y: auto;">
-                                        {{ post.conteudo|striptags|slice(0, 300) }}{% if post.conteudo|length > 300 %}...{% endif %}
-                                    </div>
-                                </div>
-                                <div class="modal-footer border-top">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                    {% if userRole == 'admin' %}
-                                        <a href="{{ BASE_URL }}admin/posts/approve/{{ post.id }}" class="btn btn-success">
-                                            <i class="bi bi-check-circle me-1"></i> Aprovar
-                                        </a>
-                                    {% endif %}
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ post.id }}" data-bs-dismiss="modal">
-                                        <i class="bi bi-x-circle me-1"></i> Rejeitar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-
-                    <!-- Modal de Rejeição -->
-                    {% if post.status == 'pending' %}
-                    <div class="modal fade" id="rejectModal{{ post.id }}" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header border-bottom bg-danger-light">
-                                    <h5 class="modal-title">Rejeitar Post</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <form method="POST" action="{{ BASE_URL }}admin/posts/reject/{{ post.id }}">
-                                    <div class="modal-body">
-                                        <input type="hidden" name="csrf_token" value="{{ csrf_token|default('') }}">
-                                        <label for="reject_reason{{ post.id }}" class="form-label fw-bold">Motivo da Rejeição:</label>
-                                        <textarea id="reject_reason{{ post.id }}" name="reject_reason" class="form-control" rows="4" required placeholder="Descreva o motivo..."></textarea>
-                                    </div>
-                                    <div class="modal-footer border-top">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="bi bi-x-circle me-1"></i> Rejeitar
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+
+        <!-- Modais de Revisão e Rejeição (fora do loop da tabela) -->
+        {% for post in posts %}
+            {% if post.status == 'pending' %}
+                <!-- Modal de Revisão -->
+                <div class="modal fade" id="reviewModal{{ post.id }}" tabindex="-1" aria-labelledby="reviewModalLabel{{ post.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header border-bottom">
+                                <h5 class="modal-title" id="reviewModalLabel{{ post.id }}">Revisar Post</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h6 class="fw-bold">{{ post.titulo|e }}</h6>
+                                <p class="small text-muted mb-3">Autor: <strong>{{ post.autor|e }}</strong> | Criado em: {{ post.criado_em|date('d/m/Y H:i') }}</p>
+                                <div class="alert alert-light border" style="max-height: 300px; overflow-y: auto;">
+                                    {{ post.conteudo|striptags|slice(0, 500) }}{% if post.conteudo|length > 500 %}...{% endif %}
+                                </div>
+                            </div>
+                            <div class="modal-footer border-top">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                {% if userRole == 'admin' %}
+                                    <a href="{{ BASE_URL }}admin/posts/approve/{{ post.id }}" class="btn btn-success">
+                                        <i class="bi bi-check-circle me-1"></i> Aprovar
+                                    </a>
+                                {% endif %}
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ post.id }}" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-circle me-1"></i> Rejeitar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de Rejeição -->
+                <div class="modal fade" id="rejectModal{{ post.id }}" tabindex="-1" aria-labelledby="rejectModalLabel{{ post.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header border-bottom bg-light">
+                                <h5 class="modal-title text-danger" id="rejectModalLabel{{ post.id }}">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>Rejeitar Post
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <form method="POST" action="{{ BASE_URL }}admin/posts/reject/{{ post.id }}">
+                                <div class="modal-body">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token|default('') }}">
+                                    <p class="mb-3"><strong>Post:</strong> {{ post.titulo|e }}</p>
+                                    <label for="reject_reason{{ post.id }}" class="form-label fw-bold">Motivo da Rejeição:</label>
+                                    <textarea id="reject_reason{{ post.id }}" name="reject_reason" class="form-control" rows="4" required placeholder="Descreva detalhadamente o motivo da rejeição..."></textarea>
+                                </div>
+                                <div class="modal-footer border-top">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="bi bi-x-circle me-1"></i> Confirmar Rejeição
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
     {% endif %}
 
     {% if pagination and pagination.total > 0 %}

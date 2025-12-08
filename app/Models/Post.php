@@ -123,17 +123,20 @@ class Post extends Database {
         $conditions = [];
         $params = [];
 
-        // Filtra por status(es)
+        // Filtra por status(es) usando named parameters
         if (!empty($statuses)) {
-            $placeholders = implode(',', array_fill(0, count($statuses), '?'));
-            $conditions[] = "p.status IN ($placeholders)";
-            $params = array_merge($params, $statuses);
+            $placeholders = [];
+            foreach ($statuses as $i => $status) {
+                $key = ":status{$i}";
+                $placeholders[] = $key;
+                $params[$key] = $status;
+            }
+            $conditions[] = "p.status IN (" . implode(',', $placeholders) . ")";
         }
 
         if ($busca) {
-            $conditions[] = "(p.titulo LIKE ? OR p.conteudo LIKE ?)";
-            $params[] = '%' . $busca . '%';
-            $params[] = '%' . $busca . '%';
+            $conditions[] = "(p.titulo LIKE :busca OR p.conteudo LIKE :busca)";
+            $params[':busca'] = '%' . $busca . '%';
         }
 
         $where = implode(' AND ', $conditions);
@@ -144,10 +147,9 @@ class Post extends Database {
             $from,
             $where,
             'p.criado_em DESC',
-            [],
+            $params,
             $page,
-            $perPage,
-            $params
+            $perPage
         );
     }
 
