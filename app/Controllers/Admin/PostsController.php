@@ -220,6 +220,7 @@ class PostsController extends Controller {
         
         $validated = $validator->validated();
         $rawConteudo = $request->post('conteudo', '');
+        $action = $request->post('action', 'save_update');
 
         $data = [
             'titulo' => $validated['titulo'] ?? '',
@@ -229,9 +230,25 @@ class PostsController extends Controller {
             'capa_url' => $validated['capa_url'] ?? null,
         ];
 
+        // Atualizar status baseado na ação
+        if ($action === 'save_draft') {
+            $data['status'] = 'draft';
+            $data['reject_reason'] = null; // Limpa motivo de rejeição ao salvar como rascunho
+        } elseif ($action === 'save_submit') {
+            $data['status'] = 'pending';
+            $data['reject_reason'] = null; // Limpa motivo de rejeição ao submeter
+        }
+        // Se action === 'save_update', mantém o status atual (não altera)
+
         $this->post->atualizar($id, $data);
 
-        $_SESSION['toast'] = ['type' => 'success', 'message' => '✅ Post atualizado com sucesso!'];
+        $message = match($action) {
+            'save_draft' => '✅ Post salvo como rascunho!',
+            'save_submit' => '✅ Post submetido para revisão!',
+            default => '✅ Post atualizado com sucesso!',
+        };
+
+        $_SESSION['toast'] = ['type' => 'success', 'message' => $message];
         unset($_SESSION['old_input']);
         header('Location: ' . BASE_URL . 'admin/posts');
         exit;

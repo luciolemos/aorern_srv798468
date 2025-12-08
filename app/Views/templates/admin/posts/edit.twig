@@ -68,14 +68,35 @@
                 </div>
             </div>
             <div class="border-top my-4"></div>
-            <div class="border-top my-4"></div>
             <div class="action-buttons d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-end py-2">
                 <a href="{{ BASE_URL }}admin/posts" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left me-1"></i> Voltar
                 </a>
-                <button type="submit" class="btn btn-warning flex-grow-1 flex-md-grow-0">
-                    <i class="bi bi-save me-1"></i> Atualizar
-                </button>
+                
+                {% if post.status == 'draft' or post.status == 'rejected' %}
+                    {# Usuário pode salvar como rascunho ou submeter #}
+                    <button type="submit" name="action" value="save_draft" class="btn btn-secondary flex-grow-1 flex-md-grow-0">
+                        <i class="bi bi-save me-1"></i> Salvar como Rascunho
+                    </button>
+                    <button type="submit" name="action" value="save_submit" class="btn btn-success flex-grow-1 flex-md-grow-0">
+                        <i class="bi bi-send me-1"></i> Submeter para Revisão
+                    </button>
+                {% elseif post.status == 'pending' %}
+                    {# Post em revisão - apenas atualizar #}
+                    <button type="submit" name="action" value="save_update" class="btn btn-primary flex-grow-1 flex-md-grow-0">
+                        <i class="bi bi-save me-1"></i> Atualizar
+                    </button>
+                {% elseif post.status == 'published' %}
+                    {# Post publicado - admin pode atualizar #}
+                    <button type="submit" name="action" value="save_update" class="btn btn-warning flex-grow-1 flex-md-grow-0">
+                        <i class="bi bi-pencil-square me-1"></i> Atualizar Publicado
+                    </button>
+                {% else %}
+                    {# Fallback genérico #}
+                    <button type="submit" name="action" value="save_update" class="btn btn-primary flex-grow-1 flex-md-grow-0">
+                        <i class="bi bi-save me-1"></i> Atualizar
+                    </button>
+                {% endif %}
             </div>
         </form>
     </div>
