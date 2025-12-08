@@ -22,12 +22,19 @@ class UsuariosController extends Controller {
      * Lista todos os usuários cadastrados
      */
     public function index(): void {
-        $usuarios = $this->userModel->listar();
+        $q = $_GET['q'] ?? '';
+        $role = $_GET['role'] ?? '';
+        $status = $_GET['status'] ?? '';
+        
+        $usuarios = $this->userModel->listarComFiltros($q, $role, $status);
         
         $dados = [
             'usuarios' => $usuarios,
             'total' => count($usuarios),
-            'title' => 'Gerenciar Usuários'
+            'title' => 'Gerenciar Usuários',
+            'q' => $q,
+            'role' => $role,
+            'status' => $status
         ];
 
         $this->renderTwig('admin/usuarios/index', array_merge($dados, AdminHelper::getUserData('usuarios')));

@@ -170,4 +170,35 @@ class User {
         $stmt = $this->db->query("SELECT COUNT(*) as total FROM {$this->table}");
         return (int) $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     }
+
+    /**
+     * Lista usuários com filtros
+     */
+    public function listarComFiltros(?string $busca = null, ?string $role = null, ?string $status = null): array {
+        $sql = "SELECT id, username, email, avatar, role, ativo, status, ultimo_login, created_at, updated_at 
+                FROM {$this->table} 
+                WHERE 1=1";
+        $params = [];
+
+        if ($busca) {
+            $sql .= " AND (username LIKE :busca OR email LIKE :busca)";
+            $params[':busca'] = '%' . $busca . '%';
+        }
+
+        if ($role) {
+            $sql .= " AND role = :role";
+            $params[':role'] = $role;
+        }
+
+        if ($status) {
+            $sql .= " AND status = :status";
+            $params[':status'] = $status;
+        }
+
+        $sql .= " ORDER BY created_at DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

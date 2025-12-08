@@ -18,6 +18,70 @@
         </div>
     </div>
 
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Filtros Avançados</strong></h5>
+                        {% set hasActiveFilters = q or role or status %}
+                        {% if hasActiveFilters %}
+                            <a href="{{ BASE_URL }}admin/usuarios" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar Filtros
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="GET" class="row g-2 align-items-end">
+                        <!-- Busca -->
+                        <div class="col">
+                            <label class="form-label small mb-1" for="search"><i class="bi bi-search me-1"></i> <strong>Busca</strong></label>
+                            <input
+                                type="text"
+                                id="search"
+                                name="q"
+                                class="form-control form-control-sm"
+                                placeholder="Nome ou email..."
+                                value="{{ q|default('')|e('html_attr') }}"
+                            >
+                        </div>
+
+                        <!-- Filtro por Role -->
+                        <div class="col">
+                            <label class="form-label small mb-1" for="role"><i class="bi bi-shield me-1"></i> <strong>Role</strong></label>
+                            <select id="role" name="role" class="form-select form-select-sm">
+                                <option value="">Todas</option>
+                                <option value="admin" {% if role == 'admin' %}selected{% endif %}>Admin</option>
+                                <option value="gerente" {% if role == 'gerente' %}selected{% endif %}>Gerente</option>
+                                <option value="operador" {% if role == 'operador' %}selected{% endif %}>Operador</option>
+                                <option value="usuario" {% if role == 'usuario' %}selected{% endif %}>Usuário</option>
+                            </select>
+                        </div>
+
+                        <!-- Filtro por Status -->
+                        <div class="col">
+                            <label class="form-label small mb-1" for="status"><i class="bi bi-check-circle me-1"></i> <strong>Status</strong></label>
+                            <select id="status" name="status" class="form-select form-select-sm">
+                                <option value="">Todos</option>
+                                <option value="ativo" {% if status == 'ativo' %}selected{% endif %}>Ativo</option>
+                                <option value="pendente" {% if status == 'pendente' %}selected{% endif %}>Pendente</option>
+                                <option value="bloqueado" {% if status == 'bloqueado' %}selected{% endif %}>Bloqueado</option>
+                            </select>
+                        </div>
+
+                        <!-- Botão de Busca -->
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center" style="height: 31px;">
+                                <i class="bi bi-search me-1"></i> Buscar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card border-0 shadow-sm">
@@ -25,10 +89,6 @@
                     <h5 class="mb-0 fw-bold" style="color: #df6301;">
                         <i class="bi bi-table me-2"></i>Lista de Usuários
                     </h5>
-                    <div class="input-group" style="max-width: 300px;">
-                        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control" id="searchUser" placeholder="Buscar usuário...">
-                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -94,35 +154,57 @@
                                         <td class="text-muted">{{ usuario.ultimo_login ? usuario.ultimo_login|date('d/m/Y H:i') : 'Nunca' }}</td>
                                         <td class="text-muted">{{ usuario.created_at|date('d/m/Y') }}</td>
                                         <td class="text-center pe-4">
-                                            <div class="btn-group" role="group">
-                                                {% if status == 'pendente' %}
-                                                    <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
-                                                        <input type="hidden" name="id" value="{{ usuario.id }}">
-                                                        <button type="submit" class="btn btn-sm btn-success" title="Aprovar">
-                                                            <i class="bi bi-check-circle"></i>
-                                                        </button>
-                                                    </form>
-                                                    <form method="POST" action="{{ BASE_URL }}admin/usuarios/desativar" class="d-inline">
-                                                        <input type="hidden" name="id" value="{{ usuario.id }}">
-                                                        <button type="submit" class="btn btn-sm btn-warning" title="Bloquear">
-                                                            <i class="bi bi-slash-circle"></i>
-                                                        </button>
-                                                    </form>
-                                                {% elseif status == 'ativo' %}
-                                                    <form method="POST" action="{{ BASE_URL }}admin/usuarios/desativar" class="d-inline">
-                                                        <input type="hidden" name="id" value="{{ usuario.id }}">
-                                                        <button type="submit" class="btn btn-sm btn-warning" title="Bloquear">
-                                                            <i class="bi bi-pause-circle"></i>
-                                                        </button>
-                                                    </form>
-                                                {% else %}
-                                                    <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
-                                                        <input type="hidden" name="id" value="{{ usuario.id }}">
-                                                        <button type="submit" class="btn btn-sm btn-success" title="Ativar">
-                                                            <i class="bi bi-play-circle"></i>
-                                                        </button>
-                                                    </form>
-                                                {% endif %}
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    {% if status == 'pendente' %}
+                                                        <li>
+                                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
+                                                                <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                                <button type="submit" class="dropdown-item">
+                                                                    <i class="bi bi-check-circle me-2"></i> Aprovar
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                        <li>
+                                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/desativar" class="d-inline">
+                                                                <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                                <button type="submit" class="dropdown-item">
+                                                                    <i class="bi bi-slash-circle me-2"></i> Bloquear
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                    {% elseif status == 'ativo' %}
+                                                        <li>
+                                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/desativar" class="d-inline">
+                                                                <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                                <button type="submit" class="dropdown-item">
+                                                                    <i class="bi bi-pause-circle me-2"></i> Bloquear
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                    {% else %}
+                                                        <li>
+                                                            <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
+                                                                <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                                <button type="submit" class="dropdown-item">
+                                                                    <i class="bi bi-play-circle me-2"></i> Ativar
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                    {% endif %}
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li>
+                                                        <form method="POST" action="{{ BASE_URL }}admin/usuarios/deletar" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este usuário?')">
+                                                            <input type="hidden" name="id" value="{{ usuario.id }}">
+                                                            <button type="submit" class="dropdown-item text-danger">
+                                                                <i class="bi bi-trash me-2"></i> Excluir
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </td>
                                     </tr>
@@ -137,16 +219,4 @@
     </div>
 </div>
 
-<script>
-// Busca simples na tabela
-document.getElementById('searchUser').addEventListener('keyup', function() {
-    const filter = this.value.toLowerCase();
-    const rows = document.querySelectorAll('#usuariosTable tbody tr');
-    
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(filter) ? '' : 'none';
-    });
-});
-</script>
 {% endblock %}
