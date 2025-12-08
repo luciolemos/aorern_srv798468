@@ -83,18 +83,18 @@
         </div>
     {% else %}
         <div class="table-responsive" data-aos="fade-up">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0" style="table-layout: auto; max-width: 100%;">
                 <thead class="table-light">
                     <tr>
-                                    <th class="ps-4">ID</th>
-                                    <th>Usuário</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    <th>Último Login</th>
-                                    <th>Cadastrado em</th>
-                                    <th class="text-center pe-4">Ações</th>
-                                </tr>
+                        <th class="text-center" style="width: 60px;">ID</th>
+                        <th>Usuário</th>
+                        <th class="d-none d-md-table-cell">Email</th>
+                        <th class="d-none d-lg-table-cell" style="width: 120px;">Role</th>
+                        <th class="d-none d-sm-table-cell" style="width: 100px;">Status</th>
+                        <th class="d-none d-xl-table-cell" style="width: 120px;">Último Login</th>
+                        <th class="d-none d-xl-table-cell" style="width: 120px;">Cadastrado em</th>
+                        <th class="text-center" style="width: 80px;">Ações</th>
+                    </tr>
                     </thead>
                     <tbody>
                         {% for usuario in usuarios %}
@@ -112,8 +112,8 @@
                                     <span class="fw-semibold">{{ usuario.username }}</span>
                                 </div>
                             </td>
-                            <td>{{ usuario.email }}</td>
-                            <td>
+                            <td class="d-none d-md-table-cell">{{ usuario.email }}</td>
+                            <td class="d-none d-lg-table-cell">
                                 <form method="POST" action="{{ BASE_URL }}admin/usuarios/alterar-role" class="d-inline">
                                     <input type="hidden" name="id" value="{{ usuario.id }}">
                                     <select name="role" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
@@ -124,7 +124,7 @@
                                     </select>
                                 </form>
                             </td>
-                            <td>
+                            <td class="d-none d-sm-table-cell">
                                 {% set status = usuario.status ?? (usuario.ativo ? 'ativo' : 'pendente') %}
                                 {% if status == 'ativo' %}
                                     <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Ativo</span>
@@ -134,8 +134,8 @@
                                     <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pendente</span>
                                 {% endif %}
                             </td>
-                            <td class="text-muted small">{{ usuario.ultimo_login ? usuario.ultimo_login|date('d/m/Y H:i') : 'Nunca' }}</td>
-                            <td class="text-muted small">{{ usuario.created_at|date('d/m/Y') }}</td>
+                            <td class="text-muted small d-none d-xl-table-cell">{{ usuario.ultimo_login ? usuario.ultimo_login|date('d/m/Y H:i') : 'Nunca' }}</td>
+                            <td class="text-muted small d-none d-xl-table-cell">{{ usuario.created_at|date('d/m/Y') }}</td>
                             <td class="text-center">
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">

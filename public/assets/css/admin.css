@@ -718,3 +718,40 @@ body.bg-light {
     font-size: 0.875rem;
     color: rgba(33, 37, 41, 0.7);
 }
+
+/* Footer ajustável com sidebar */
+.admin-content-area footer {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    box-sizing: border-box;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Garantir que table-responsive respeite limites do container */
+.admin-content-area .table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.admin-content-area table {
+    max-width: 100%;
+}
+
+/* Footer ajustável com sidebar */
+.admin-content-area footer {
+    width: 100%;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 992px) {
+    .admin-content-area footer {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .admin-content-area.collapsed footer {
+        margin-left: 0;
+        width: 100%;
+    }
+}
