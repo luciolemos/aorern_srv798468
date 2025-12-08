@@ -123,6 +123,10 @@
                                     <a href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}" class="btn btn-outline-primary" title="Editar">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
+                                    <!-- Botão Despublicar (Admin) -->
+                                    <a href="{{ BASE_URL }}admin/posts/unpublish/{{ post.id }}" class="btn btn-outline-warning" title="Despublicar e voltar para rascunho" onclick="return confirm('Despublicar este post e voltar para rascunho?');">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </a>
                                 {% elseif post.status == 'rejected' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
                                     <!-- Botão Editar após Rejeição -->
                                     <a href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}" class="btn btn-outline-warning" title="Reabrir e Corrigir">

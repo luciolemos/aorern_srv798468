@@ -87,10 +87,13 @@
                         <i class="bi bi-save me-1"></i> Atualizar
                     </button>
                 {% elseif post.status == 'published' %}
-                    {# Post publicado - admin pode atualizar #}
+                    {# Post publicado - admin pode atualizar ou despublicar #}
                     <button type="submit" name="action" value="save_update" class="btn btn-warning flex-grow-1 flex-md-grow-0">
                         <i class="bi bi-pencil-square me-1"></i> Atualizar Publicado
                     </button>
+                    <a href="{{ BASE_URL }}admin/posts/unpublish/{{ post.id }}" class="btn btn-outline-warning flex-grow-1 flex-md-grow-0" onclick="return confirm('Despublicar este post e voltar para rascunho?');">
+                        <i class="bi bi-eye-slash me-1"></i> Despublicar
+                    </a>
                 {% else %}
                     {# Fallback genérico #}
                     <button type="submit" name="action" value="save_update" class="btn btn-primary flex-grow-1 flex-md-grow-0">

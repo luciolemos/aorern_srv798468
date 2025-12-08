@@ -297,6 +297,27 @@ class PostsController extends Controller {
         exit;
     }
 
+    public function unpublish(int $id): void {
+        PermissionMiddleware::authorize('posts:approve');
+
+        $post = $this->post->encontrarPorId($id);
+        if (!$post || $post['status'] !== 'published') {
+            $_SESSION['toast'] = ['type' => 'warning', 'message' => '⚠️ Post inválido para despublicação!'];
+            header('Location: ' . BASE_URL . 'admin/posts');
+            exit;
+        }
+
+        $this->post->atualizar($id, [
+            'status' => 'draft',
+            'reject_reason' => null,
+            'published_at' => null,
+        ]);
+
+        $_SESSION['toast'] = ['type' => 'success', 'message' => '✅ Post despublicado e salvo como rascunho!'];
+        header('Location: ' . BASE_URL . 'admin/posts');
+        exit;
+    }
+
     public function reject(int $id): void {
         PermissionMiddleware::authorize('posts:reject');
 
