@@ -3,9 +3,37 @@
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
     <div data-aos="fade-down" class="mb-4">
-        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-pencil-square me-2"></i>Editar post</h2>
-        <p class="text-muted mb-0">Atualize os dados do post.</p>
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-pencil-square me-2"></i>Editar Post</h2>
+                <p class="text-muted mb-0">Atualize os dados do post</p>
+            </div>
+            {% if post.status %}
+                {% set statusBadgeClass = {
+                    'draft': 'bg-secondary',
+                    'pending': 'bg-warning text-dark',
+                    'in_review': 'bg-info',
+                    'published': 'bg-success',
+                    'rejected': 'bg-danger'
+                } %}
+                <div>
+                    <span class="badge {{ statusBadgeClass[post.status]|default('bg-secondary') }} text-uppercase" style="font-size: 1rem;">
+                        {{ post.status|replace({'_': ' '})|title }}
+                    </span>
+                </div>
+            {% endif %}
+        </div>
     </div>
+
+    {% if post.status == 'rejected' and post.reject_reason %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Motivo da Rejeição:</strong>
+            <p class="mb-0">{{ post.reject_reason }}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endif %}
+
     <hr class="my-4">
     <div data-aos="fade-up">
         <form method="post" action="{{ BASE_URL }}admin/posts/update/{{ post.id }}" class="post-form">

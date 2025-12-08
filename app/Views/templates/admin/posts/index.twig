@@ -5,13 +5,13 @@
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
     <div data-aos="fade-down">
-        <h2 class="text-primary"><i class="bi bi-file-earmark-text me-2"></i> Posts do Blog</h2>
-        <p class="lead text-muted">Aqui você gerencia suas postagens</p>
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-file-earmark-text me-2"></i> Posts do Blog</h2>
+        <p class="text-muted mb-0">Gerencie suas postagens e fluxo de aprovação</p>
         <hr class="my-4">
 
-        <div class="d-flex flex-column flex-md-row gap-2 order-md-2 w-100 w-md-auto justify-content-md-start mt-4 mb-4">
+        <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
             <a href="{{ BASE_URL }}admin/posts/create" class="btn btn-primary text-white">
-                <i class="bi bi-plus-circle"></i> Novo post
+                <i class="bi bi-plus-circle me-1"></i> Novo Post
             </a>
         </div>
     </div>
@@ -40,7 +40,7 @@
     </div>
 
     {% if posts is empty %}
-        <div class="alert alert-info">
+        <div class="alert alert-info alert-dismissible fade show">
             <i class="bi bi-info-circle me-2"></i> Nenhum post encontrado
         </div>
     {% else %}
@@ -48,12 +48,13 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th class="text-center">#</th>
+                        <th class="text-center" style="width: 60px;">#</th>
                         <th>TÍTULO</th>
-                        <th class="d-none d-sm-table-cell">CATEGORIA</th>
-                        <th class="d-none d-lg-table-cell">AUTOR</th>
-                        <th class="d-none d-lg-table-cell">DATA CRIAÇÃO</th>
-                        <th class="text-center">AÇÕES</th>
+                        <th class="d-none d-sm-table-cell" style="width: 120px;">STATUS</th>
+                        <th class="d-none d-md-table-cell" style="width: 100px;">CATEGORIA</th>
+                        <th class="d-none d-lg-table-cell" style="width: 100px;">AUTOR</th>
+                        <th class="d-none d-lg-table-cell" style="width: 120px;">DATA</th>
+                        <th class="text-center" style="width: 180px;">AÇÕES</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,30 +63,142 @@
                         <td class="text-center">{{ post.id }}</td>
                         <td>
                             <i class="bi bi-file-earmark-text text-primary me-1"></i>
-                            {{ post.titulo|e }}
+                            <strong>{{ post.titulo|e }}</strong>
                         </td>
                         <td class="d-none d-sm-table-cell">
+                            {% set statusBadgeClass = {
+                                'draft': 'bg-secondary',
+                                'pending': 'bg-warning text-dark',
+                                'in_review': 'bg-info',
+                                'published': 'bg-success',
+                                'rejected': 'bg-danger'
+                            } %}
+                            <span class="badge {{ statusBadgeClass[post.status]|default('bg-secondary') }} text-uppercase" style="font-size: 0.75rem;">
+                                {{ statusLabels[post.status]|default(post.status) }}
+                            </span>
+                        </td>
+                        <td class="d-none d-md-table-cell">
                             {% if post.categoria_nome %}
-                                <span class="badge text-uppercase" style="background-color: {{ post.categoria_cor|default('#df6301') }}; color: #fff;">
+                                <span class="badge text-uppercase" style="background-color: {{ post.categoria_cor|default('#df6301') }}; color: #fff; font-size: 0.7rem;">
                                     {{ post.categoria_nome|e }}
                                 </span>
                             {% else %}
-                                <span class="text-muted">Sem categoria</span>
+                                <span class="text-muted small">-</span>
                             {% endif %}
                         </td>
-                        <td class="d-none d-lg-table-cell">{{ post.autor|e }}</td>
-                        <td class="d-none d-lg-table-cell">{{ post.criado_em|date('d/m/Y H:i') }}</td>
+                        <td class="d-none d-lg-table-cell">
+                            <small>{{ post.autor|e }}</small>
+                        </td>
+                        <td class="d-none d-lg-table-cell">
+                            <small class="text-muted">{{ post.criado_em|date('d/m/Y') }}</small>
+                        </td>
                         <td class="text-center">
-                            <div class="d-flex justify-content-center gap-2">
-                                <a href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}" class="btn btn-sm btn-outline-primary" title="Editar">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <a href="{{ BASE_URL }}admin/posts/delete/{{ post.id }}" class="btn btn-sm btn-outline-danger" title="Excluir" onclick="return confirm('Deseja excluir este post?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                            <div class="btn-group btn-group-sm" role="group">
+                                {% if post.status == 'draft' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
+                                    <!-- Botão Editar (Rascunho) -->
+                                    <a href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}" class="btn btn-outline-primary" title="Editar Rascunho">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <!-- Botão Submeter para Revisão -->
+                                    <a href="{{ BASE_URL }}admin/posts/submit/{{ post.id }}" class="btn btn-outline-success" title="Submeter para Revisão">
+                                        <i class="bi bi-send"></i>
+                                    </a>
+                                {% elseif post.status == 'pending' and userRole != 'usuario' %}
+                                    <!-- Botão Revisar (Gerente/Admin) -->
+                                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#reviewModal{{ post.id }}" title="Revisar Post">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <!-- Botão Aprovar (Admin) -->
+                                    {% if userRole == 'admin' %}
+                                        <a href="{{ BASE_URL }}admin/posts/approve/{{ post.id }}" class="btn btn-outline-success" title="Aprovar e Publicar">
+                                            <i class="bi bi-check-circle"></i>
+                                        </a>
+                                    {% endif %}
+                                    <!-- Botão Rejeitar (Admin/Gerente) -->
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ post.id }}" title="Rejeitar">
+                                        <i class="bi bi-x-circle"></i>
+                                    </button>
+                                {% elseif post.status == 'published' and userRole == 'admin' %}
+                                    <!-- Botão Editar (Admin apenas) -->
+                                    <a href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}" class="btn btn-outline-primary" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                {% elseif post.status == 'rejected' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
+                                    <!-- Botão Editar após Rejeição -->
+                                    <a href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}" class="btn btn-outline-warning" title="Reabrir e Corrigir">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                {% endif %}
+                                
+                                <!-- Botão Deletar (Admin) -->
+                                {% if userRole == 'admin' %}
+                                    <a href="{{ BASE_URL }}admin/posts/delete/{{ post.id }}" class="btn btn-outline-danger" title="Deletar" onclick="return confirm('Deseja excluir este post permanentemente?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                {% endif %}
                             </div>
                         </td>
                     </tr>
+
+                    <!-- Modal de Revisão -->
+                    {% if post.status == 'pending' %}
+                    <div class="modal fade" id="reviewModal{{ post.id }}" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header border-bottom">
+                                    <h5 class="modal-title">Revisar Post</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h6 class="fw-bold">{{ post.titulo|e }}</h6>
+                                    <p class="small text-muted mb-3">Autor: <strong>{{ post.autor|e }}</strong> | Criado em: {{ post.criado_em|date('d/m/Y H:i') }}</p>
+                                    <div class="alert alert-light border">
+                                        {{ post.conteudo|striptags|truncate(300) }}
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-top">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                    {% if userRole == 'admin' %}
+                                        <a href="{{ BASE_URL }}admin/posts/approve/{{ post.id }}" class="btn btn-success">
+                                            <i class="bi bi-check-circle me-1"></i> Aprovar
+                                        </a>
+                                    {% endif %}
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ post.id }}" data-bs-dismiss="modal">
+                                        <i class="bi bi-x-circle me-1"></i> Rejeitar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Modal de Rejeição -->
+                    {% if post.status == 'pending' %}
+                    <div class="modal fade" id="rejectModal{{ post.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header border-bottom bg-danger-light">
+                                    <h5 class="modal-title">Rejeitar Post</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form method="POST" action="{{ BASE_URL }}admin/posts/reject/{{ post.id }}">
+                                    <div class="modal-body">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token|default('') }}">
+                                        <label for="reject_reason{{ post.id }}" class="form-label fw-bold">Motivo da Rejeição:</label>
+                                        <textarea id="reject_reason{{ post.id }}" name="reject_reason" class="form-control" rows="4" required placeholder="Descreva o motivo..."></textarea>
+                                    </div>
+                                    <div class="modal-footer border-top">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="bi bi-x-circle me-1"></i> Rejeitar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
                     {% endfor %}
                 </tbody>
             </table>
@@ -98,59 +211,50 @@
         {% set range = 2 %}
         {% set start = max(1, current - range) %}
         {% set end = min(last, current + range) %}
-        
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4">
-            <p class="text-muted mb-0 small">
-                Exibindo {{ pagination.from|default(0) }}-{{ pagination.to|default(0) }} de {{ pagination.total|default(0) }} registros
-            </p>
-            {% if last > 1 %}
-                <nav aria-label="Paginação">
-                    <ul class="pagination mb-0">
-                        <li class="page-item {% if current <= 1 %}disabled{% endif %}">
-                            <a class="page-link" href="{% if current <= 1 %}#{% else %}{{ BASE_URL }}admin/posts?page={{ current - 1 }}{% if q %}&q={{ q|url_encode }}{% endif %}{% endif %}" tabindex="-1" aria-disabled="{% if current <= 1 %}true{% else %}false{% endif %}">
-                                &laquo;
+
+        <nav aria-label="Paginação" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if current > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ pagination.path }}?{{ (pagination.query|keys)|map(k => k ~ '=' ~ pagination.query[k])|join('&') }}&page=1">
+                            <i class="bi bi-chevron-bar-left"></i> Primeira
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ pagination.path }}?{{ (pagination.query|keys)|map(k => k ~ '=' ~ pagination.query[k])|join('&') }}&page={{ current - 1 }}">
+                            <i class="bi bi-chevron-left"></i> Anterior
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for page in range(start, end) %}
+                    {% if page == current %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ pagination.path }}?{{ (pagination.query|keys)|map(k => k ~ '=' ~ pagination.query[k])|join('&') }}&page={{ page }}">
+                                {{ page }}
                             </a>
                         </li>
+                    {% endif %}
+                {% endfor %}
 
-                        {% if start > 1 %}
-                            <li class="page-item">
-                                <a class="page-link" href="{{ BASE_URL }}admin/posts?page=1{% if q %}&q={{ q|url_encode }}{% endif %}">1</a>
-                            </li>
-                            {% if start > 2 %}
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            {% endif %}
-                        {% endif %}
-
-                        {% for page in start..end %}
-                            <li class="page-item {% if page == current %}active{% endif %}">
-                                <a class="page-link" href="{{ BASE_URL }}admin/posts?page={{ page }}{% if q %}&q={{ q|url_encode }}{% endif %}">{{ page }}</a>
-                            </li>
-                        {% endfor %}
-
-                        {% if end < last %}
-                            {% if end < last - 1 %}
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            {% endif %}
-                            <li class="page-item">
-                                <a class="page-link" href="{{ BASE_URL }}admin/posts?page={{ last }}{% if q %}&q={{ q|url_encode }}{% endif %}">{{ last }}</a>
-                            </li>
-                        {% endif %}
-
-                        <li class="page-item {% if current >= last %}disabled{% endif %}">
-                            <a class="page-link" href="{% if current >= last %}#{% else %}{{ BASE_URL }}admin/posts?page={{ current + 1 }}{% if q %}&q={{ q|url_encode }}{% endif %}{% endif %}" aria-disabled="{% if current >= last %}true{% else %}false{% endif %}">
-                                &raquo;
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            {% endif %}
-        </div>
+                {% if current < last %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ pagination.path }}?{{ (pagination.query|keys)|map(k => k ~ '=' ~ pagination.query[k])|join('&') }}&page={{ current + 1 }}">
+                            Próxima <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ pagination.path }}?{{ (pagination.query|keys)|map(k => k ~ '=' ~ pagination.query[k])|join('&') }}&page={{ last }}">
+                            Última <i class="bi bi-chevron-bar-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
     {% endif %}
-
-    <div class="d-flex justify-content-end mt-4">
-        <a href="{{ BASE_URL }}admin" class="btn btn-primary text-white">
-            <i class="bi bi-speedometer2 me-2"></i> Painel
-        </a>
-    </div>
 </div>
 {% endblock %}
