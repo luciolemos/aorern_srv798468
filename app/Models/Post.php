@@ -116,6 +116,41 @@ class Post extends Database {
         );
     }
 
+    public function paginarPorStatus(array $statuses, int $page = 1, int $perPage = 10, ?string $busca = null): array
+    {
+        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";
+        $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id";
+        $conditions = [];
+        $params = [];
+
+        // Filtra por status(es)
+        if (!empty($statuses)) {
+            $placeholders = implode(',', array_fill(0, count($statuses), '?'));
+            $conditions[] = "p.status IN ($placeholders)";
+            $params = array_merge($params, $statuses);
+        }
+
+        if ($busca) {
+            $conditions[] = "(p.titulo LIKE ? OR p.conteudo LIKE ?)";
+            $params[] = '%' . $busca . '%';
+            $params[] = '%' . $busca . '%';
+        }
+
+        $where = implode(' AND ', $conditions);
+
+        return Paginator::paginate(
+            $this->connect(),
+            $select,
+            $from,
+            $where,
+            'p.criado_em DESC',
+            [],
+            $page,
+            $perPage,
+            $params
+        );
+    }
+
     public function listarPublico(?string $busca, ?int $categoriaId, int $page = 1, int $perPage = 7): array
     {
         $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";

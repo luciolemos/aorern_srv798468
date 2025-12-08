@@ -36,7 +36,8 @@ class PostsController extends Controller {
         if ($userRole === 'usuario') {
             $result = $this->post->paginarPorAutor($userId, $page, $perPage, $q ?: null);
         } else {
-            $result = $this->post->paginar($page, $perPage, $q ?: null);
+            // Admin e gerente veem APENAS posts pendentes e publicados (não rascunhos privados)
+            $result = $this->post->paginarPorStatus(['pending', 'published'], $page, $perPage, $q ?: null);
         }
 
         $posts = $result['data'];
