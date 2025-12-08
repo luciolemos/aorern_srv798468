@@ -24,7 +24,7 @@ class Post extends Database {
     }
 
     public function encontrarPorSlug(string $slug): ?array {
-        $stmt = $this->connect()->prepare("SELECT p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id WHERE p.slug = ?");
+        $stmt = $this->connect()->prepare("SELECT p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id WHERE p.slug = ? AND p.status = 'published'");
         $stmt->execute([$slug]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
@@ -42,14 +42,14 @@ class Post extends Database {
     }
 
     public function encontrarAnterior(string $criadoEm): ?array {
-        $sql = "SELECT slug, titulo FROM {$this->table} WHERE criado_em < :criado_em ORDER BY criado_em DESC LIMIT 1";
+        $sql = "SELECT slug, titulo FROM {$this->table} WHERE criado_em < :criado_em AND status = 'published' ORDER BY criado_em DESC LIMIT 1";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([':criado_em' => $criadoEm]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function encontrarProximo(string $criadoEm): ?array {
-        $sql = "SELECT slug, titulo FROM {$this->table} WHERE criado_em > :criado_em ORDER BY criado_em ASC LIMIT 1";
+        $sql = "SELECT slug, titulo FROM {$this->table} WHERE criado_em > :criado_em AND status = 'published' ORDER BY criado_em ASC LIMIT 1";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([':criado_em' => $criadoEm]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
@@ -160,6 +160,10 @@ class Post extends Database {
 
         $conditions = [];
         $params = [];
+
+        // APENAS posts publicados no blog público
+        $conditions[] = "p.status = :status";
+        $params[':status'] = 'published';
 
         if ($busca) {
             $conditions[] = "(p.titulo LIKE :busca OR p.conteudo LIKE :busca)";
