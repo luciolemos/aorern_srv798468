@@ -220,7 +220,7 @@ class Post extends Database {
         ?string $author = null,
         ?string $visibility = null
     ): array {
-        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor, u.name AS autor";
+        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor, u.username AS autor";
         $from = "FROM {$this->table} p 
                  LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id
                  LEFT JOIN users u ON u.id = p.user_id";
@@ -283,11 +283,11 @@ class Post extends Database {
      * Lista autores únicos que têm posts
      */
     public function listarAutoresUnicos(): array {
-        $sql = "SELECT DISTINCT p.user_id, u.name 
+        $sql = "SELECT DISTINCT p.user_id, u.username AS name 
                 FROM {$this->table} p
                 LEFT JOIN users u ON u.id = p.user_id
                 WHERE p.user_id IS NOT NULL
-                ORDER BY u.name ASC";
+                ORDER BY u.username ASC";
         return $this->connect()->query($sql)->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 }

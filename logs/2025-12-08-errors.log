@@ -136,3 +136,25 @@ Stack trace:
 #6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
 #7 {main}
 
+[2025-12-08 12:24:46] PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.name' in 'field list' in /var/www/mvc/app/Helpers/Paginator.php:45
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(45): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(270): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(58): App\Models\Post->paginarComFiltros()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 12:26:04] PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.name' in 'field list' in /var/www/mvc/app/Helpers/Paginator.php:45
+Stack trace:
+#0 /var/www/mvc/app/Helpers/Paginator.php(45): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(270): App\Helpers\Paginator::paginate()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(58): App\Models\Post->paginarComFiltros()
+#3 [internal function]: App\Controllers\Admin\PostsController->index()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
