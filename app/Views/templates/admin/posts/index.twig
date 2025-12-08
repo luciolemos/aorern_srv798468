@@ -93,87 +93,103 @@
                             <small class="text-muted">{{ post.criado_em|date('d/m/Y') }}</small>
                         </td>
                         <td class="text-center">
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    {% if post.status == 'draft' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
-                                        <!-- DRAFT: Editar + Submeter -->
-                                        <li>
-                                            <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}">
-                                                <i class="bi bi-pencil-square me-2"></i> Editar Rascunho
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/submit/{{ post.id }}">
-                                                <i class="bi bi-send me-2"></i> Submeter para Revisão
-                                            </a>
-                                        </li>
+                            {# Verifica se há ações disponíveis para este post #}
+                            {% set hasActions = false %}
+                            {% if post.status == 'draft' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
+                                {% set hasActions = true %}
+                            {% elseif post.status == 'pending' and userRole != 'usuario' %}
+                                {% set hasActions = true %}
+                            {% elseif post.status == 'published' and userRole == 'admin' %}
+                                {% set hasActions = true %}
+                            {% elseif post.status == 'rejected' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
+                                {% set hasActions = true %}
+                            {% endif %}
 
-                                    {% elseif post.status == 'pending' and userRole != 'usuario' %}
-                                        <!-- PENDING: Revisar + Aprovar/Rejeitar -->
-                                        <li>
-                                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewModal{{ post.id }}">
-                                                <i class="bi bi-eye me-2"></i> Revisar Post
-                                            </button>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
+                            {% if hasActions %}
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        {% if post.status == 'draft' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
+                                            <!-- DRAFT: Editar + Submeter -->
+                                            <li>
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}">
+                                                    <i class="bi bi-pencil-square me-2"></i> Editar Rascunho
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/submit/{{ post.id }}">
+                                                    <i class="bi bi-send me-2"></i> Submeter para Revisão
+                                                </a>
+                                            </li>
+
+                                        {% elseif post.status == 'pending' and userRole != 'usuario' %}
+                                            <!-- PENDING: Revisar + Aprovar/Rejeitar -->
+                                            <li>
+                                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reviewModal{{ post.id }}">
+                                                    <i class="bi bi-eye me-2"></i> Revisar Post
+                                                </button>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            {% if userRole == 'admin' %}
+                                                <li>
+                                                    <a class="dropdown-item text-success" href="{{ BASE_URL }}admin/posts/approve/{{ post.id }}">
+                                                        <i class="bi bi-check-circle me-2"></i> Aprovar e Publicar
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            <li>
+                                                <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ post.id }}">
+                                                    <i class="bi bi-x-circle me-2"></i> Rejeitar
+                                                </button>
+                                            </li>
+
+                                        {% elseif post.status == 'published' and userRole == 'admin' %}
+                                            <!-- PUBLISHED: Editar + Ocultar/Exibir -->
+                                            <li>
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}">
+                                                    <i class="bi bi-pencil-square me-2"></i> Editar Post
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            {% if post.is_hidden|default(0) == 0 %}
+                                                <li>
+                                                    <a class="dropdown-item text-warning" href="{{ BASE_URL }}admin/posts/hide/{{ post.id }}" onclick="return confirm('Ocultar este post do blog? Ele continuará publicado, mas não aparecerá no site.');">
+                                                        <i class="bi bi-eye-slash me-2"></i> Ocultar do Blog
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li>
+                                                    <a class="dropdown-item text-success" href="{{ BASE_URL }}admin/posts/show/{{ post.id }}" onclick="return confirm('Reexibir este post no blog?');">
+                                                        <i class="bi bi-eye me-2"></i> Exibir no Blog
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+
+                                        {% elseif post.status == 'rejected' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
+                                            <!-- REJECTED: Editar + Submeter -->
+                                            <li>
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}">
+                                                    <i class="bi bi-pencil-square me-2"></i> Reabrir e Corrigir
+                                                </a>
+                                            </li>
+                                        {% endif %}
+
+                                        <!-- Deletar (sempre para admin) -->
                                         {% if userRole == 'admin' %}
+                                            <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <a class="dropdown-item text-success" href="{{ BASE_URL }}admin/posts/approve/{{ post.id }}">
-                                                    <i class="bi bi-check-circle me-2"></i> Aprovar e Publicar
+                                                <a class="dropdown-item text-danger" href="{{ BASE_URL }}admin/posts/delete/{{ post.id }}" onclick="return confirm('Deseja excluir este post permanentemente?')">
+                                                    <i class="bi bi-trash me-2"></i> Deletar
                                                 </a>
                                             </li>
                                         {% endif %}
-                                        <li>
-                                            <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ post.id }}">
-                                                <i class="bi bi-x-circle me-2"></i> Rejeitar
-                                            </button>
-                                        </li>
-
-                                    {% elseif post.status == 'published' and userRole == 'admin' %}
-                                        <!-- PUBLISHED: Editar + Ocultar/Exibir -->
-                                        <li>
-                                            <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}">
-                                                <i class="bi bi-pencil-square me-2"></i> Editar Post
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        {% if post.is_hidden|default(0) == 0 %}
-                                            <li>
-                                                <a class="dropdown-item text-warning" href="{{ BASE_URL }}admin/posts/hide/{{ post.id }}" onclick="return confirm('Ocultar este post do blog? Ele continuará publicado, mas não aparecerá no site.');">
-                                                    <i class="bi bi-eye-slash me-2"></i> Ocultar do Blog
-                                                </a>
-                                            </li>
-                                        {% else %}
-                                            <li>
-                                                <a class="dropdown-item text-success" href="{{ BASE_URL }}admin/posts/show/{{ post.id }}" onclick="return confirm('Reexibir este post no blog?');">
-                                                    <i class="bi bi-eye me-2"></i> Exibir no Blog
-                                                </a>
-                                            </li>
-                                        {% endif %}
-
-                                    {% elseif post.status == 'rejected' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
-                                        <!-- REJECTED: Editar + Submeter -->
-                                        <li>
-                                            <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}">
-                                                <i class="bi bi-pencil-square me-2"></i> Reabrir e Corrigir
-                                            </a>
-                                        </li>
-                                    {% endif %}
-
-                                    <!-- Deletar (sempre para admin) -->
-                                    {% if userRole == 'admin' %}
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item text-danger" href="{{ BASE_URL }}admin/posts/delete/{{ post.id }}" onclick="return confirm('Deseja excluir este post permanentemente?')">
-                                                <i class="bi bi-trash me-2"></i> Deletar
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
+                                    </ul>
+                                </div>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
