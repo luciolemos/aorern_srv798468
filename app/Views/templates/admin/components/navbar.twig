@@ -14,6 +14,47 @@
             <span class="fw-bold text-white" style="letter-spacing: 0.5px;">CBMRN</span>
         </a> #}
         <div class="d-flex align-items-center gap-2 ms-auto">
+            {% set pendingCount = notifications.pending_users|default(0) %}
+            {% set occurrenceCount = notifications.occurrences_in_progress|default(0) %}
+            {% set totalAlerts = pendingCount + occurrenceCount %}
+            <div class="dropdown">
+                <button class="btn btn-outline-light btn-sm position-relative d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi {{ totalAlerts > 0 ? 'bi-bell-fill text-warning' : 'bi-bell' }} fs-6"></i>
+                    <span class="d-none d-md-inline small fw-semibold">Notificações</span>
+                    <i class="bi bi-chevron-down d-none d-md-inline small"></i>
+                    {% if totalAlerts > 0 %}
+                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">{{ totalAlerts }}</span>
+                    {% endif %}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="min-width: 260px;">
+                    <li class="px-3 py-2 border-bottom">
+                        <small class="text-uppercase text-muted fw-semibold">Alertas</small>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ BASE_URL }}admin/usuarios?status=pendente">
+                            <span><i class="bi bi-people me-2"></i>Contas pendentes</span>
+                            {% if pendingCount > 0 %}
+                                <span class="badge bg-danger rounded-pill">{{ pendingCount }}</span>
+                            {% else %}
+                                <span class="badge bg-success-subtle text-success">OK</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ BASE_URL }}admin/livro-ocorrencias?status=em_andamento">
+                            <span><i class="bi bi-journal-medical me-2"></i>Ocorrências em andamento</span>
+                            {% if occurrenceCount > 0 %}
+                                <span class="badge bg-warning text-dark rounded-pill">{{ occurrenceCount }}</span>
+                            {% else %}
+                                <span class="badge bg-success-subtle text-success">OK</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% if totalAlerts == 0 %}
+                        <li><span class="dropdown-item-text text-muted small">Nenhum alerta pendente.</span></li>
+                    {% endif %}
+                </ul>
+            </div>
             <div class="dropdown">
                 <button class="btn btn-outline-light btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {% if user.avatar %}
