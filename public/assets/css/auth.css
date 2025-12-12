@@ -1,0 +1,86 @@
+/* auth.css */
+.auth-hero {
+    min-height: calc(100vh - 120px);
+    padding: clamp(3rem, 6vw, 6rem) 0;
+    background: linear-gradient(130deg, #0f1f2d 0%, #1f2f44 45%, #1b283b 100%);
+}
+
+.auth-hero .site-hero-pattern {
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.25), transparent 50%),
+                radial-gradient(circle at 80% 10%, rgba(255,255,255,0.12), transparent 35%);
+    opacity: 0.45;
+}
+
+.auth-hero-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-hero-logo img {
+    max-width: 120px;
+    width: 32vw;
+    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.35));
+}
+
+.auth-benefits .icon-circle {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+}
+
+.auth-benefits .icon-list-item {
+    color: rgba(255,255,255,0.8);
+}
+
+.auth-card {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(6,16,30,0.75);
+    backdrop-filter: blur(16px);
+    border-radius: 1.5rem;
+}
+
+.auth-form .form-control {
+    border-radius: 1rem;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+.auth-form .form-control:focus {
+    border-color: rgba(223,99,1,0.7);
+    box-shadow: 0 0 0 0.2rem rgba(223,99,1,0.25);
+    background: rgba(15,23,42,0.9);
+    color: #fff;
+}
+
+.auth-form .form-label {
+    font-weight: 600;
+}
+
+.auth-form input::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+.auth-hero .alert {
+    border-radius: 1rem;
+}
+
+@media (max-width: 768px) {
+    .auth-hero {
+        min-height: auto;
+        padding: 3rem 0;
+    }
+
+    .auth-hero-logo img {
+        max-width: 90px;
+    }
+
+    .auth-card {
+        border-radius: 1.25rem;
+    }
+
+    .auth-hero .btn {
+        width: 100%;
+    }
+}

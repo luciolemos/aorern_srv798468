@@ -320,3 +320,25 @@ Stack trace:
 #22 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
 #23 {main}
 
+[2025-12-08 18:58:04] PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'autor' in 'field list' in /var/www/mvc/app/Core/Database.php:135
+Stack trace:
+#0 /var/www/mvc/app/Core/Database.php(135): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(33): App\Core\Database->insert()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(179): App\Models\Post->criar()
+#3 [internal function]: App\Controllers\Admin\PostsController->store()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+
+[2025-12-08 19:02:09] PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'autor' in 'field list' in /var/www/mvc/app/Core/Database.php:135
+Stack trace:
+#0 /var/www/mvc/app/Core/Database.php(135): PDOStatement->execute()
+#1 /var/www/mvc/app/Models/Post.php(33): App\Core\Database->insert()
+#2 /var/www/mvc/app/Controllers/Admin/PostsController.php(179): App\Models\Post->criar()
+#3 [internal function]: App\Controllers\Admin\PostsController->store()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+

@@ -1,0 +1,38 @@
+{% if items is defined and items|length > 0 %}
+    {% set labelField = label_field is defined ? label_field : 'label' %}
+    {% set titleField = title_field is defined ? title_field : 'title' %}
+    {% set descriptionField = description_field is defined ? description_field : 'description' %}
+
+    {% if title_level is defined and title_level %}
+        {% set normalizedLevel = title_level %}
+        {% if normalizedLevel < 1 or normalizedLevel > 6 %}
+            {% set normalizedLevel = 3 %}
+        {% endif %}
+        {% set titleTag = 'h' ~ normalizedLevel %}
+    {% else %}
+        {% set titleTag = title_tag is defined ? title_tag : 'h3' %}
+    {% endif %}
+
+    <div class="timeline {{ timeline_class|default('') }}">
+        {% for item in items %}
+            {% set labelValue = labelField ? attribute(item, labelField) : null %}
+            {% set titleValue = titleField ? attribute(item, titleField) : null %}
+            {% set descriptionValue = descriptionField ? attribute(item, descriptionField) : null %}
+
+            <article class="timeline-item {{ item_class|default('') }}">
+                <div class="timeline-dot"></div>
+                <div>
+                    {% if labelValue %}
+                        <span class="timeline-year">{{ labelValue }}</span>
+                    {% endif %}
+                    {% if titleValue %}
+                        <{{ titleTag }} class="timeline-title {{ title_class|default('h6 fw-bold mb-1') }}">{{ titleValue }}</{{ titleTag }}>
+                    {% endif %}
+                    {% if descriptionValue %}
+                        <p class="timeline-description {{ description_class|default('mb-0 text-muted') }}">{{ descriptionValue }}</p>
+                    {% endif %}
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+{% endif %}

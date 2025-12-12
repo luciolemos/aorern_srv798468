@@ -19,7 +19,7 @@ class PermissionMiddleware
      * @param string|null $redirectTo URL para redirecionar se negar (default: /login/admin)
      * @throws \Exception Se não autenticado
      */
-    public static function authorize(string $permission, string $redirectTo = null): void
+    public static function authorize(string $permission, ?string $redirectTo = null): void
     {
         // Primeiro verifica autenticação
         if (!AuthMiddleware::isAuthenticated()) {

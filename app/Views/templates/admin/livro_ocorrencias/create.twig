@@ -1,0 +1,132 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Registrar ocorrência - Livro{% endblock %}
+
+{% block styles %}
+<style>
+    .livro-autocomplete { position: relative; }
+    .livro-autocomplete .autocomplete-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        border-radius: 0 0 .5rem .5rem;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+        z-index: 1050;
+        max-height: 260px;
+        overflow-y: auto;
+    }
+    .livro-autocomplete .autocomplete-results button {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        text-align: left;
+        padding: .65rem .9rem;
+        font-size: 0.9rem;
+    }
+    .livro-autocomplete .autocomplete-results button:hover {
+        background: rgba(223, 99, 1, 0.08);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4" data-module="livro-ocorrencias">
+    <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+        <div>
+            <p class="text-uppercase small text-muted mb-1">Registro oficial</p>
+            <h1 class="h3 fw-bold" style="color: var(--admin-primary, #df6301);">
+                <i class="bi bi-journal-plus me-2"></i>
+                Nova ocorrência
+            </h1>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ BASE_URL }}admin/livro-ocorrencias" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+    <hr class="mt-4">
+
+    <form method="post" action="{{ BASE_URL }}admin/livro-ocorrencias/store" class="row g-4" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <label class="form-label text-uppercase small fw-semibold">Protocolo</label>
+                            <input type="text" class="form-control" name="protocolo" value="{{ old.protocolo|default(protocolo)|e('html_attr') }}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase small fw-semibold">Data e hora *</label>
+                            <input type="datetime-local" class="form-control" name="data_ocorrencia" value="{{ old.data_ocorrencia|default(defaultDate)|e('html_attr') }}" required>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label text-uppercase small fw-semibold">Município *</label>
+                            <div class="livro-autocomplete" data-autocomplete="municipios">
+                                <input type="hidden" name="municipio_codigo" value="{{ old.municipio_codigo|default('')|e('html_attr') }}" data-autocomplete-code>
+                                <input type="hidden" name="municipio_label" value="{{ old.municipio_label|default(municipioSelecionado)|e('html_attr') }}" data-autocomplete-label>
+                                <input type="text" class="form-control" placeholder="Digite para localizar o município" value="{{ old.municipio_label|default('')|e('html_attr') }}" data-autocomplete-input autocomplete="off" required>
+                                <div class="autocomplete-results d-none" data-autocomplete-results></div>
+                            </div>
+                            <div class="form-text">Utilize o acervo IBGE carregado no sistema.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase small fw-semibold">Subgrupamento *</label>
+                            <select name="subgrupamento" class="form-select" required>
+                                <option value="" disabled {{ old.subgrupamento is empty ? 'selected' : '' }}>Selecione</option>
+                                {% for grupo in subgrupamentos %}
+                                    <option value="{{ grupo }}" {{ old.subgrupamento == grupo ? 'selected' : '' }}>{{ grupo }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase small fw-semibold">Tipo de ocorrência *</label>
+                            <select name="tipo_ocorrencia" class="form-select" required>
+                                <option value="" disabled {{ old.tipo_ocorrencia is empty ? 'selected' : '' }}>Selecione</option>
+                                {% for tipo in tipoOptions %}
+                                    <option value="{{ tipo }}" {{ old.tipo_ocorrencia == tipo ? 'selected' : '' }}>{{ tipo }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase small fw-semibold">Status *</label>
+                            <select name="status" class="form-select" required>
+                                <option value="" disabled {{ old.status is empty ? 'selected' : '' }}>Selecione</option>
+                                {% for value, label in statusOptions %}
+                                    <option value="{{ value }}" {{ old.status == value ? 'selected' : '' }}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-uppercase small fw-semibold">Descrição operacional *</label>
+                            <textarea name="descricao" rows="6" class="form-control" placeholder="Relate a ocorrência com detalhes" required>{{ old.descricao|default('')|e }}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-uppercase small fw-semibold">Relatório de conclusão</label>
+                            <textarea name="relatorio_conclusao" rows="4" class="form-control" placeholder="Opcional — utilize após encerramento">{{ old.relatorio_conclusao|default('')|e }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 d-flex flex-column flex-md-row gap-2 justify-content-end">
+            <a href="{{ BASE_URL }}admin/livro-ocorrencias" class="btn btn-outline-secondary">
+                Cancelar
+            </a>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-circle me-1"></i>
+                Registrar ocorrência
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ BASE_URL }}assets/js/livro-ocorrencias.js" defer></script>
+{% endblock %}

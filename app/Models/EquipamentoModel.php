@@ -111,7 +111,7 @@ class EquipamentoModel {
         return (int) $stmt->fetch(\PDO::FETCH_ASSOC)['total'];
     }
 
-    public function paginar(int $page = 1, int $perPage = 12, ?string $termo = null): array
+    public function paginar(int $page = 1, ?int $perPage = 12, ?string $termo = null): array
     {
         $select = "e.*, c.nome AS categoria_nome";
         $from = "FROM {$this->table} e LEFT JOIN categorias_equipamentos c ON e.categoria_id = c.id";

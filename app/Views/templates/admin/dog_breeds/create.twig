@@ -1,0 +1,99 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Nova Raça K9 - Admin{% endblock %}
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="mb-4">
+        <a href="{{ BASE_URL }}admin/dog-breeds" class="btn btn-link text-decoration-none px-0 text-muted">
+            <i class="bi bi-arrow-left"></i> Voltar para raças
+        </a>
+        <h2 class="fw-bold mt-2 text-primary"><i class="bi bi-plus-circle me-2"></i>Cadastro de raça K9</h2>
+        <p class="text-muted mb-0">Defina os dados básicos para disponibilizar uma nova raça no catálogo do canil.</p>
+    </div>
+
+    <form action="{{ BASE_URL }}admin/dog-breeds/store" method="post" class="card border-0 shadow-sm" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Nome da raça</label>
+                    <input type="text" class="form-control" name="name" placeholder="Ex: Pastor Belga Malinois" required data-slug-source>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Slug</label>
+                    <input type="text" class="form-control text-lowercase" name="slug" placeholder="pastor-belga-malinois" maxlength="140" data-slug-target>
+                    <div class="form-text">Identificador único usado nas URLs internas.</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Porte</label>
+                    <select name="size" class="form-select">
+                        {% for value, label in sizeOptions %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Função predominante</label>
+                    <select name="function" class="form-select">
+                        <option value="">Selecione</option>
+                        {% for value, label in functionOptions %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Origem (país/região)</label>
+                    <input type="text" class="form-control" name="origin" placeholder="Ex: Alemanha">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Imagem da raça</label>
+                    <input type="file" class="form-control" name="image_file" accept="image/jpeg,image/png,image/webp">
+                    <div class="form-text">PNG, JPG ou WebP até 10MB. O arquivo será salvo em nosso diretório interno.</div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Descrição detalhada</label>
+                    <textarea name="description" rows="6" class="form-control" placeholder="Contextualize histórico, temperamento e recomendações de emprego."></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+            <a href="{{ BASE_URL }}admin/dog-breeds" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Cancelar</a>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Salvar raça</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        (function() {
+            const source = document.querySelector('[data-slug-source]');
+            const target = document.querySelector('[data-slug-target]');
+            if (!source || !target) {
+                return;
+            }
+
+            let userEdited = target.value.trim().length > 0;
+
+            const slugify = (value) => {
+                return value
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-zA-Z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .toLowerCase();
+            };
+
+            target.addEventListener('input', () => {
+                userEdited = target.value.trim().length > 0;
+            });
+
+            source.addEventListener('input', () => {
+                if (userEdited) {
+                    return;
+                }
+                target.value = slugify(source.value);
+            });
+        })();
+    </script>
+{% endblock %}

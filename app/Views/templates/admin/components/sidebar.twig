@@ -54,6 +54,24 @@
                 </div>
             </li>
             <li class="nav-item mt-1">
+                <a class="nav-link py-2 px-3 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#k9Collapse">
+                    <span><i class="bi bi-shield-shaded me-2"></i> Gestão K9</span>
+                    <i class="bi bi-chevron-down small"></i>
+                </a>
+                <div class="collapse {{ subRoute in ['dog-breeds','dogs'] ? 'show' : '' }}" id="k9Collapse">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/dogs" class="nav-link py-1 px-3 small {{ subRoute == 'dogs' ? 'active-cbmrn' : '' }}"><i class="bi bi-shield-plus me-1"></i> Cães</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/dog-breeds" class="nav-link py-1 px-3 small {{ subRoute == 'dog-breeds' ? 'active-cbmrn' : '' }}"><i class="bi bi-badge-cc-fill me-1"></i> Raças</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item mt-1">
+                <a href="{{ BASE_URL }}admin/livro-ocorrencias" class="nav-link py-2 px-3 rounded d-flex align-items-center gap-2 {{ subRoute == 'livro-ocorrencias' ? 'active-cbmrn' : '' }}">
+                    <i class="bi bi-journal-check"></i>
+                    <span>Livro de ocorrências</span>
+                </a>
+            </li>
+            <li class="nav-item mt-1">
                 <a class="nav-link py-2 px-3 d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#configCollapse">
                     <span><i class="bi bi-gear me-2"></i> Configurações</span>
                     <i class="bi bi-chevron-down small"></i>

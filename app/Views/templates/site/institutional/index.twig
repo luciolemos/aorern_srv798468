@@ -1,0 +1,140 @@
+{% extends 'layouts/base.twig' %}
+
+{% block title %}Institucional - CBMRN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/institutional.css">
+{% endblock %}
+
+{% block content %}
+<section class="inst-hero inst-hero-light py-5 py-lg-5">
+    <div class="container">
+        {% include 'site/partials/breadcrumb.twig' with { breadcrumbs: breadcrumbs } %}
+        <p class="inst-hero-tag">Transparência Institucional</p>
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <h1 class="display-5 fw-bold text-white">{{ page.title }}</h1>
+                <p class="lead text-white-75 mb-4">{{ page.lead }}</p>
+                <div class="inst-hero-stats mt-3">
+                    {% for stat in page.highlight_stats %}
+                        <div class="inst-stat">
+                            <span class="value">{{ stat.value }}</span>
+                            <span class="label">{{ stat.label }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    {% include 'site/components/button.twig' with {
+                        href: '#menu-institucional',
+                        label: 'Explorar seções',
+                        icon: 'bi-diagram-3',
+                        variant: 'inst',
+                        size: 'lg'
+                    } %}
+                    {% include 'site/components/button.twig' with {
+                        href: BASE_URL ~ 'contact',
+                        label: 'Fale conosco',
+                        icon: 'bi-chat-left-text',
+                        variant: 'light-outline',
+                        size: 'lg'
+                    } %}
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="inst-spotlight-card">
+                    <p class="text-uppercase small fw-semibold text-white-50 mb-2">{{ page.tagline }}</p>
+                    <h3 class="h4 text-white fw-bold mb-3">Portal vivo da instituição</h3>
+                    <p class="text-white-75 mb-4">Cada menu reúne dados oficiais revisados trimestralmente pelos setores responsáveis.</p>
+                    <ul class="list-unstyled mb-0 text-white-75">
+                        <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle text-white"></i> Conteúdo alinhado ao Plano Operacional 2025.</li>
+                        <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle text-white"></i> Linguagem unificada com o site e redes sociais.</li>
+                        <li class="d-flex gap-2"><i class="bi bi-check-circle text-white"></i> Acesso rápido a links, manuais e formulários.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="menu-institucional" class="py-5">
+    <div class="container">
+        {% include 'site/components/section-header.twig' with {
+            kicker: 'Menu Institucional',
+            title: 'Escolha o conteúdo desejado',
+            subtitle: 'As seções abaixo foram destacadas no menu do site e agora contam com páginas dedicadas.',
+            align: 'center',
+            title_class: 'text-primary',
+            extra_class: 'mb-5'
+        } %}
+        <div class="inst-card-grid">
+            {% for item in menuItems %}
+                <article class="inst-card">
+                    <div class="inst-card-icon">
+                        <i class="bi {{ item.icon }}"></i>
+                    </div>
+                    <h3 class="h5 fw-bold">{{ item.title }}</h3>
+                    <p class="text-muted mb-4">{{ item.description }}</p>
+                    {% include 'site/components/button.twig' with {
+                        href: item.url,
+                        label: 'Acessar conteúdo',
+                        icon: 'bi-arrow-up-right',
+                        icon_position: 'end',
+                        variant: 'link',
+                        size: 'md',
+                        button_class: 'text-decoration-none ps-0'
+                    } %}
+                </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4 align-items-stretch">
+            {% for pillar in page.pillars %}
+                <div class="col-md-4">
+                    <article class="inst-pillar-card h-100">
+                        <div class="inst-pillar-icon">
+                            <i class="bi {{ pillar.icon }}"></i>
+                        </div>
+                        <h3 class="h5 fw-bold">{{ pillar.title }}</h3>
+                        <p class="text-muted mb-0">{{ pillar.description }}</p>
+                    </article>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-5">
+                {% include 'site/components/section-header.twig' with {
+                    title: 'Marcos institucionais recentes',
+                    subtitle: 'Os marcos abaixo ajudam a contar a evolução do 2º SGB/2º GBM e reforçam por que o conteúdo institucional precisa estar sempre atualizado.',
+                    title_class: 'text-primary',
+                    extra_class: 'mb-4'
+                } %}
+                {% include 'site/components/button.twig' with {
+                    href: BASE_URL ~ 'blog',
+                    label: 'Ler novidades no blog',
+                    icon: 'bi-journal-text',
+                    variant: 'inst',
+                    size: 'md'
+                } %}
+            </div>
+            <div class="col-lg-7">
+                {% include 'site/components/timeline.twig' with {
+                    items: page.milestones,
+                    label_field: 'year',
+                    title_field: 'title',
+                    description_field: 'description'
+                } %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

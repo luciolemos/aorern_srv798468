@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 
 use App\Helpers\AdminHelper;
+use App\Helpers\PaginationHelper;
 
 use App\Core\Controller;
 use App\Core\Request;
@@ -16,6 +17,8 @@ use App\Models\ObraModel;
 class PessoalController extends Controller {
 
     private PessoalModel $model;
+    private const PESSOAL_AVATAR_DIR = 'uploads/pessoal/';
+    private const STATUS_OPTIONS = ['Ativo', 'Afastado', 'Férias', 'Demitido'];
 
     public function __construct() {
         $this->model = new PessoalModel();
@@ -25,19 +28,63 @@ class PessoalController extends Controller {
     public function index(): void {
         $request = Request::capture();
         $q = $request->query('q', '');
+        $status = $this->sanitizeStatus($request->query('status'));
+        $funcaoId = $this->sanitizeInteger($request->query('funcao_id'));
+        $obraId = $this->sanitizeInteger($request->query('obra_id'));
+        $admissaoInicio = $this->sanitizeDate($request->query('admissao_inicio'));
+        $admissaoFim = $this->sanitizeDate($request->query('admissao_fim'));
         $page = max(1, (int) $request->query('page', 1));
-        $perPage = 12;
-        
-        $result = $this->model->paginar($page, $perPage, $q ?: null);
+        $defaultPerPage = 10;
+        $perPageRaw = $request->query('per_page');
+        [$perPage, $perPageSelection] = PaginationHelper::resolve($perPageRaw, $defaultPerPage);
+        $perPageQueryValue = ($perPageRaw !== null && $perPageRaw !== '') ? $perPageSelection : null;
+
+        $filters = [
+            'q' => $q ?: null,
+            'status' => $status,
+            'funcao_id' => $funcaoId,
+            'obra_id' => $obraId,
+            'admissao_inicio' => $admissaoInicio,
+            'admissao_fim' => $admissaoFim,
+        ];
+        $result = $this->model->paginar($page, $perPage, $filters);
         $pessoal = $result['data'];
         $pagination = array_merge($result['meta'], [
             'path' => BASE_URL . 'admin/pessoal',
             'query' => array_filter([
                 'q' => $q,
+                'status' => $status,
+                'funcao_id' => $funcaoId,
+                'obra_id' => $obraId,
+                'admissao_inicio' => $admissaoInicio,
+                'admissao_fim' => $admissaoFim,
+                'per_page' => $perPageQueryValue,
             ], fn($value) => $value !== null && $value !== ''),
         ]);
 
-        $this->renderTwig('admin/pessoal/index', array_merge(compact('pessoal', 'q', 'pagination'), AdminHelper::getUserData('pessoal')));
+        $perPageOptions = PaginationHelper::options($defaultPerPage);
+        $funcoes = (new FuncaoModel())->listar();
+        $obras = (new ObraModel())->listarObrasSimples();
+        $statusOptions = self::STATUS_OPTIONS;
+
+        $this->renderTwig('admin/pessoal/index', array_merge(
+            compact(
+                'pessoal',
+                'q',
+                'status',
+                'funcaoId',
+                'obraId',
+                'admissaoInicio',
+                'admissaoFim',
+                'pagination',
+                'perPageOptions',
+                'perPageSelection',
+                'funcoes',
+                'obras',
+                'statusOptions'
+            ),
+            AdminHelper::getUserData('pessoal')
+        ));
     }
 
     public function cadastrar(): void {
@@ -205,7 +252,8 @@ class PessoalController extends Controller {
         }
 
         // Caminho absoluto
-        $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/assets/funcionarios/avatars/';
+        $publicRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? (dirname(__DIR__, 3) . '/public'), '/');
+        $upload_dir = $publicRoot . '/' . self::PESSOAL_AVATAR_DIR;
 
         // Garante que o diretório existe
         if (!is_dir($upload_dir)) {
@@ -240,6 +288,33 @@ class PessoalController extends Controller {
         // Ajusta permissões do arquivo
         @chmod($filepath, 0644);
 
-        return 'assets/funcionarios/avatars/' . $filename;
+        return self::PESSOAL_AVATAR_DIR . $filename;
+    }
+
+    private function sanitizeInteger(?string $value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return ctype_digit((string) $value) ? (int) $value : null;
+    }
+
+    private function sanitizeStatus(?string $status): ?string
+    {
+        if ($status === null || $status === '') {
+            return null;
+        }
+
+        return in_array($status, self::STATUS_OPTIONS, true) ? $status : null;
+    }
+
+    private function sanitizeDate(?string $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return preg_match('/^\d{4}-\d{2}-\d{2}$/', $value) ? $value : null;
     }
 }

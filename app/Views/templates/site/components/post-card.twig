@@ -1,0 +1,50 @@
+<article class="post-card {{ card_class|default('') }}">
+    {% if cover_url %}
+        <figure class="post-card-cover mb-0">
+            <img src="{{ cover_url }}" alt="{{ cover_alt|default(title) }}" loading="lazy">
+        </figure>
+    {% endif %}
+    <div class="post-card-body {{ body_class|default('') }}">
+        <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+            {% if badge_label %}
+                <p class="post-card-badge {{ badge_class|default('small text-uppercase fw-semibold text-primary mb-0') }}">{{ badge_label }}</p>
+            {% endif %}
+            {% if category_name %}
+                <span class="blog-category-badge post-card-category" style="background-color: {{ category_color|default('#df6301') }}; border-color: {{ category_color|default('#df6301') }}; color: #fff;">
+                    {{ category_name }}
+                </span>
+            {% endif %}
+        </div>
+        {% if title %}
+            <h3 class="post-card-title {{ title_class|default('h5 fw-bold mb-2') }}">{{ title }}</h3>
+        {% endif %}
+        {% if meta_date or meta_author %}
+            <p class="post-card-meta text-muted small mb-3">
+                {% if meta_date %}
+                    <span><i class="bi bi-calendar-event"></i> {{ meta_date }}</span>
+                {% endif %}
+                {% if meta_author %}
+                    <span class="mx-2">|</span>
+                    <span><i class="bi bi-person"></i> {{ meta_author }}</span>
+                {% endif %}
+            </p>
+        {% endif %}
+        {% if excerpt %}
+            <p class="post-card-excerpt mb-3">{{ excerpt }}</p>
+        {% endif %}
+        {% if url %}
+            {% include 'site/components/button.twig' with {
+                href: url,
+                label: cta_label|default('Ler mais'),
+                icon: 'bi-arrow-right',
+                icon_position: 'end',
+                variant: 'solid',
+                size: 'sm',
+                button_class: 'fw-bold post-card-cta',
+                attrs: {
+                    'aria-label': cta_aria|default('Ler mais sobre ' ~ title)
+                }
+            } %}
+        {% endif %}
+    </div>
+</article>

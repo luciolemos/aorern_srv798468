@@ -198,9 +198,108 @@ i.text-primary {
 }
 
 /* 🔊 TOAST */
-.toast-header {
-    background-color: var(--bombeiros-orange);
-    color: white;
+.toast-container {
+    z-index: 1085;
+    width: min(360px, 90vw);
+    pointer-events: none;
+}
+
+.toast-container .toast.modern-toast {
+    pointer-events: auto;
+    width: 100%;
+    border: none;
+    border-radius: 1.25rem;
+    background: rgba(7, 17, 35, 0.95);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 20px 45px rgba(7, 17, 35, 0.45);
+    color: #fff;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    position: relative;
+    padding: 0;
+    transform: translateY(calc(var(--toast-index, 0) * -6px));
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.toast-container .toast.modern-toast:last-child {
+    margin-bottom: 0;
+}
+
+.toast-glow {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--toast-accent, var(--bombeiros-orange));
+}
+
+.toast-body {
+    padding: 1rem 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.toast-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.toast-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.15rem;
+}
+
+.toast-message {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.toast-success {
+    --toast-accent: #1dd1a1;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(13, 148, 136, 0.35));
+}
+
+.toast-warning {
+    --toast-accent: #f6c343;
+    background: linear-gradient(135deg, rgba(250, 204, 21, 0.15), rgba(245, 158, 11, 0.4));
+}
+
+.toast-danger {
+    --toast-accent: #f87171;
+    background: linear-gradient(135deg, rgba(248, 113, 113, 0.18), rgba(239, 68, 68, 0.45));
+}
+
+.toast-info {
+    --toast-accent: var(--bombeiros-orange);
+    background: linear-gradient(135deg, rgba(223, 99, 1, 0.12), rgba(223, 99, 1, 0.4));
+}
+
+.toast-container .btn-close-white {
+    filter: invert(1);
+    opacity: 0.75;
+    transition: opacity 0.2s ease;
+}
+
+.toast-container .btn-close-white:hover {
+    opacity: 1;
+}
+
+@media (max-width: 575.98px) {
+    .toast-container {
+        left: 0;
+        right: 0;
+        width: calc(100% - 2rem);
+        margin: 0 auto;
+    }
 }
 
 /* 🎭 MODAL HEADER */

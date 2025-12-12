@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 
 use App\Helpers\AdminHelper;
+use App\Helpers\PaginationHelper;
 
 use App\Core\Controller;
 use App\Core\Request;
@@ -23,7 +24,10 @@ class CategoriasController extends Controller {
         $request = Request::capture();
         $termo = $request->query('q', '');
         $page = max(1, (int) $request->query('page', 1));
-        $perPage = 12;
+        $defaultPerPage = 10;
+        $perPageRaw = $request->query('per_page');
+        [$perPage, $perPageSelection] = PaginationHelper::resolve($perPageRaw, $defaultPerPage);
+        $perPageQueryValue = ($perPageRaw !== null && $perPageRaw !== '') ? $perPageSelection : null;
         
         $result = $this->model->paginar($page, $perPage, $termo ?: null);
         $categorias = $result['data'];
@@ -31,13 +35,18 @@ class CategoriasController extends Controller {
             'path' => BASE_URL . 'admin/categorias',
             'query' => array_filter([
                 'q' => $termo,
+                'per_page' => $perPageQueryValue,
             ], fn($value) => $value !== null && $value !== ''),
         ]);
+
+        $perPageOptions = PaginationHelper::options($defaultPerPage);
 
         $this->renderTwig('admin/categorias/index', array_merge([
             'categorias' => $categorias,
             'q' => $termo,
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'perPageOptions' => $perPageOptions,
+            'perPageSelection' => $perPageSelection,
         ], AdminHelper::getUserData('categorias')));
     }
 

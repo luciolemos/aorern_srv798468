@@ -1,0 +1,24 @@
+{% set alignClass = '' %}
+{% if align|default('start') == 'center' %}
+    {% set alignClass = 'text-center' %}
+{% elseif align|default('start') == 'end' %}
+    {% set alignClass = 'text-end' %}
+{% endif %}
+
+{% set headingLevel = heading_level|default(2) %}
+{% if headingLevel < 1 or headingLevel > 6 %}
+    {% set headingLevel = 2 %}
+{% endif %}
+{% set headingTag = 'h' ~ headingLevel %}
+
+<header class="section-header {{ alignClass }} {{ extra_class|default('') }}">
+    {% if kicker %}
+        <p class="section-kicker mb-2 {{ kicker_class|default('') }}">{{ kicker }}</p>
+    {% endif %}
+    {% if title %}
+        <{{ headingTag }} class="section-title mb-3 {{ title_class|default('') }}">{{ title }}</{{ headingTag }}>
+    {% endif %}
+    {% if subtitle %}
+        <p class="section-lead mb-0 {{ subtitle_class|default('') }}">{{ subtitle }}</p>
+    {% endif %}
+</header>

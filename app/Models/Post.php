@@ -61,7 +61,7 @@ class Post extends Database {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function paginar(int $page = 1, int $perPage = 10, ?string $busca = null): array
+    public function paginar(int $page = 1, ?int $perPage = 10, ?string $busca = null): array
     {
         $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";
         $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id";
@@ -85,7 +85,7 @@ class Post extends Database {
         );
     }
 
-    public function paginarPorAutor(?int $userId, int $page = 1, int $perPage = 10, ?string $busca = null, ?string $status = null, ?string $category = null, ?string $visibility = null): array
+    public function paginarPorAutor(?int $userId, int $page = 1, ?int $perPage = 10, ?string $busca = null, ?string $status = null, ?string $category = null, ?string $visibility = null): array
     {
         $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";
         $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id";
@@ -134,7 +134,7 @@ class Post extends Database {
         );
     }
 
-    public function paginarPorStatus(array $statuses, int $page = 1, int $perPage = 10, ?string $busca = null): array
+    public function paginarPorStatus(array $statuses, int $page = 1, ?int $perPage = 10, ?string $busca = null): array
     {
         $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";
         $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id";
@@ -171,7 +171,7 @@ class Post extends Database {
         );
     }
 
-    public function listarPublico(?string $busca, ?int $categoriaId, int $page = 1, int $perPage = 7): array
+    public function listarPublico(?string $busca, ?int $categoriaId, int $page = 1, ?int $perPage = 7): array
     {
         $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";
         $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id";
@@ -213,7 +213,7 @@ class Post extends Database {
      */
     public function paginarComFiltros(
         int $page = 1,
-        int $perPage = 10,
+        ?int $perPage = 10,
         ?string $busca = null,
         ?string $status = null,
         ?string $category = null,

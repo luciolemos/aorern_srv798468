@@ -9,6 +9,7 @@ use App\Models\PessoalModel;
 use App\Models\CategoriaModel;
 use App\Models\EquipamentoModel;
 use App\Models\ObraModel;
+use App\Helpers\AdminHelper;
 
 class DashboardController extends Controller {
     public function index() {
@@ -31,11 +32,6 @@ class DashboardController extends Controller {
         $ultimos_equipamentos = $equipamentoModel->all('id DESC', 5);
         $ultimas_obras = $obraModel->all('id DESC', 3);
 
-        $userName = $_SESSION['user_name'] ?? 'Usuário';
-        $userEmail = $_SESSION['user_email'] ?? '';
-        $userAvatar = $_SESSION['user_avatar'] ?? '';
-        $initial = function_exists('mb_substr') ? mb_substr($userName, 0, 1, 'UTF-8') : substr($userName, 0, 1);
-        
         $dados = [
             'total_funcoes'       => $total_funcoes,
             'total_pessoal'       => $total_pessoal,
@@ -46,15 +42,8 @@ class DashboardController extends Controller {
             'ultimos_equipamentos' => $ultimos_equipamentos,
             'ultimas_obras'        => $ultimas_obras,
             'ultimo_login'        => $_SESSION['last_activity'] ?? time(),
-            'user' => [
-                'name' => $userName,
-                'email' => $userEmail ?: 'admin@cbmrn',
-                'initial' => strtoupper($initial ?: 'U'),
-                'avatar' => $userAvatar
-            ],
-            'subRoute' => 'dashboard'
         ];
 
-        $this->renderTwig('admin/dashboard', $dados);
+        $this->renderTwig('admin/dashboard', array_merge($dados, AdminHelper::getUserData('dashboard')));
     }
 }

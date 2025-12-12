@@ -8,34 +8,94 @@
         <h2 class="text-primary"><i class="bi bi-list-columns-reverse me-2"></i> Bombeiros</h2>
         <p class="lead text-muted">Lista de bombeiros cadastrados</p>
         <hr class="my-4">
-        <div class="d-flex flex-column flex-md-row gap-2 order-md-2 w-100 w-md-auto justify-content-md-start mt-4 mb-4">
-            <a href="{{ BASE_URL }}admin/pessoal/cadastrar" class="btn btn-primary text-white order-md-1">
-                <i class="bi bi-plus-circle"></i> Novo registro
+        <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
+            <a href="{{ BASE_URL }}admin/pessoal/cadastrar" class="btn btn-primary text-white">
+                <i class="bi bi-plus-circle me-1"></i> Novo registro
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary ms-md-auto">
+                <i class="bi bi-speedometer2 me-1"></i> Painel
             </a>
         </div>
     </div>
 
     <div data-aos="fade-up">
-        <form method="GET" class="mb-4">
-            <div class="input-group">
-                <input
-                    type="text"
-                    name="q"
-                    class="form-control"
-                    placeholder="Buscar por nome, CPF, telefone ou função..."
-                    value="{{ q|default('')|e('html_attr') }}"
-                    autofocus
-                >
-                {% if q is not empty %}
-                    <a href="{{ BASE_URL }}admin/pessoal" class="btn btn-outline-secondary">
-                        <i class="bi bi-x-lg"></i>
-                    </a>
-                {% endif %}
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search me-1"></i> Buscar
-                </button>
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-light border-bottom">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                    <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Busca Avançada</strong></h5>
+                    {% set hasActiveFilters = q or status or funcaoId or obraId or admissaoInicio or admissaoFim %}
+                    {% if hasActiveFilters %}
+                        <a href="{{ BASE_URL }}admin/pessoal" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar filtros
+                        </a>
+                    {% endif %}
+                </div>
             </div>
-        </form>
+            <div class="card-body">
+                <form method="GET" class="row g-3 g-xl-4 align-items-end">
+                    <input type="hidden" name="per_page" value="{{ perPageSelection|default('')|e('html_attr') }}">
+
+                    <div class="col-12 col-lg-4">
+                        <label class="form-label small mb-1" for="pessoalSearch"><i class="bi bi-search me-1"></i> <strong>Busca</strong></label>
+                        <input
+                            type="text"
+                            id="pessoalSearch"
+                            name="q"
+                            class="form-control"
+                            placeholder="Nome, CPF, telefone..."
+                            value="{{ q|default('')|e('html_attr') }}"
+                            autofocus
+                        >
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <label class="form-label small mb-1" for="funcaoFilter"><i class="bi bi-award me-1"></i> <strong>Função</strong></label>
+                        <select id="funcaoFilter" name="funcao_id" class="form-select">
+                            <option value="">Todas</option>
+                            {% for funcao in funcoes %}
+                                <option value="{{ funcao.id }}" {% if funcaoId == funcao.id %}selected{% endif %}>{{ funcao.nome|default('Sem função')|e }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-2">
+                        <label class="form-label small mb-1" for="statusFilter"><i class="bi bi-activity me-1"></i> <strong>Status</strong></label>
+                        <select id="statusFilter" name="status" class="form-select">
+                            <option value="">Todos</option>
+                            {% for statusOption in statusOptions %}
+                                <option value="{{ statusOption }}" {% if status == statusOption %}selected{% endif %}>{{ statusOption }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-lg-3">
+                        <label class="form-label small mb-1" for="obraFilter"><i class="bi bi-building me-1"></i> <strong>Obra</strong></label>
+                        <select id="obraFilter" name="obra_id" class="form-select">
+                            <option value="">Todas</option>
+                            {% for obra in obras %}
+                                <option value="{{ obra.id }}" {% if obraId == obra.id %}selected{% endif %}>{{ obra.descricao|default('Sem descrição')|e }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-2">
+                        <label class="form-label small mb-1" for="admissaoInicio"><i class="bi bi-calendar-event me-1"></i> <strong>Admissão (de)</strong></label>
+                        <input type="date" id="admissaoInicio" name="admissao_inicio" class="form-control" value="{{ admissaoInicio|default('')|e('html_attr') }}">
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-2">
+                        <label class="form-label small mb-1" for="admissaoFim"><i class="bi bi-calendar-check me-1"></i> <strong>Admissão (até)</strong></label>
+                        <input type="date" id="admissaoFim" name="admissao_fim" class="form-control" value="{{ admissaoFim|default('')|e('html_attr') }}">
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-grid">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center w-100">
+                            <i class="bi bi-search me-1"></i> Buscar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     {% if pessoal is empty %}
@@ -76,11 +136,11 @@
                                 {% if p.foto is not empty and p.foto %}
                                     <img src="{{ BASE_URL }}{{ p.foto|e('html_attr') }}"
                                          alt="{{ p.nome|default('')|e('html_attr') }}"
-                                         class="rounded-circle shadow-sm"
-                                         style="width: 48px; height: 48px; object-fit: cover; border: 2px solid #df6301;">
+                                         class="rounded shadow-sm"
+                                         style="width: 48px; height: 48px; object-fit: cover; border-radius: .25rem;">
                                 {% else %}
-                                    <span class="avatar-fallback rounded-circle d-inline-flex align-items-center justify-content-center bg-primary text-white fw-bold"
-                                          style="width: 48px; height: 48px; font-size: 18px;">
+                                    <span class="avatar-fallback rounded d-inline-flex align-items-center justify-content-center bg-primary text-white fw-bold"
+                                          style="width: 48px; height: 48px; font-size: 18px; border-radius: .25rem;">
                                         {{ (p.nome|default('?'))[0:1]|upper }}
                                     </span>
                                 {% endif %}
@@ -92,13 +152,22 @@
                             <td style="vertical-align: middle;">{{ p.telefone|default('')|e }}</td>
                             <td style="vertical-align: middle;"><span class="badge {{ badgeClass }}">{{ status }}</span></td>
                             <td class="text-center" style="vertical-align: middle;">
-                                <div class="d-flex justify-content-center gap-2">
-                                    <a href="{{ BASE_URL }}admin/pessoal/editar/{{ p.id }}" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-title="Editar">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                    <a href="{{ BASE_URL }}admin/pessoal/deletar/{{ p.id }}" class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" data-bs-title="Excluir" onclick="return confirm('Deseja excluir este post?')">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="{{ BASE_URL }}admin/pessoal/editar/{{ p.id }}">
+                                                <i class="bi bi-pencil-square me-2"></i> Editar
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ BASE_URL }}admin/pessoal/deletar/{{ p.id }}" onclick="return confirm('Deseja remover este registro do efetivo?')">
+                                                <i class="bi bi-trash me-2"></i> Excluir
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </td>
                         </tr>
@@ -115,58 +184,75 @@
         {% set start = max(1, current - range) %}
         {% set end = min(last, current + range) %}
         
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4">
-            <p class="text-muted mb-0 small">
-                Exibindo {{ pagination.from|default(0) }}-{{ pagination.to|default(0) }} de {{ pagination.total|default(0) }} registros
+        {% set queryPairs = [] %}
+        {% for key, value in pagination.query|default({}) %}
+            {% set queryPairs = queryPairs|merge([key ~ '=' ~ value|url_encode]) %}
+        {% endfor %}
+        {% set baseQueryString = queryPairs ? queryPairs|join('&') ~ '&' : '' %}
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3 mt-4">
+            <p class="text-muted small mb-0">
+                Exibindo {{ pagination.from|default(0) }}–{{ pagination.to|default(0) }} de {{ pagination.total|default(0) }} registros
             </p>
-            {% if last > 1 %}
-                <nav aria-label="Paginação">
-                    <ul class="pagination mb-0">
-                        <li class="page-item {% if current <= 1 %}disabled{% endif %}">
-                            <a class="page-link" href="{% if current <= 1 %}#{% else %}{{ BASE_URL }}admin/pessoal?page={{ current - 1 }}{% if q %}&q={{ q|url_encode }}{% endif %}{% endif %}" tabindex="-1" aria-disabled="{% if current <= 1 %}true{% else %}false{% endif %}">
-                                &laquo;
-                            </a>
-                        </li>
-
-                        {% if start > 1 %}
-                            <li class="page-item">
-                                <a class="page-link" href="{{ BASE_URL }}admin/pessoal?page=1{% if q %}&q={{ q|url_encode }}{% endif %}">1</a>
-                            </li>
-                            {% if start > 2 %}
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            {% endif %}
-                        {% endif %}
-
-                        {% for page in start..end %}
-                            <li class="page-item {% if page == current %}active{% endif %}">
-                                <a class="page-link" href="{{ BASE_URL }}admin/pessoal?page={{ page }}{% if q %}&q={{ q|url_encode }}{% endif %}">{{ page }}</a>
-                            </li>
-                        {% endfor %}
-
-                        {% if end < last %}
-                            {% if end < last - 1 %}
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            {% endif %}
-                            <li class="page-item">
-                                <a class="page-link" href="{{ BASE_URL }}admin/pessoal?page={{ last }}{% if q %}&q={{ q|url_encode }}{% endif %}">{{ last }}</a>
-                            </li>
-                        {% endif %}
-
-                        <li class="page-item {% if current >= last %}disabled{% endif %}">
-                            <a class="page-link" href="{% if current >= last %}#{% else %}{{ BASE_URL }}admin/pessoal?page={{ current + 1 }}{% if q %}&q={{ q|url_encode }}{% endif %}{% endif %}" aria-disabled="{% if current >= last %}true{% else %}false{% endif %}">
-                                &raquo;
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            {% endif %}
+            <form method="GET" class="d-flex align-items-center gap-2 mb-0">
+                <input type="hidden" name="page" value="1">
+                {% for key, value in pagination.query|default({}) %}
+                    {% if key != 'per_page' %}
+                        <input type="hidden" name="{{ key }}" value="{{ value|e('html_attr') }}">
+                    {% endif %}
+                {% endfor %}
+                <label class="text-muted small mb-0">Registros por página</label>
+                <select name="per_page" class="form-select form-select-sm" onchange="this.form.submit()">
+                    {% for option in perPageOptions %}
+                        <option value="{{ option.value }}" {% if option.value == perPageSelection %}selected{% endif %}>{{ option.label }}</option>
+                    {% endfor %}
+                </select>
+            </form>
         </div>
+
+        <nav aria-label="Paginação" class="mt-3">
+            <ul class="pagination justify-content-center mb-0">
+                    <li class="page-item {% if current <= 1 %}disabled{% endif %}">
+                        <a class="page-link" href="{% if current <= 1 %}#{% else %}{{ pagination.path }}?{{ baseQueryString }}page={{ current - 1 }}{% endif %}" tabindex="-1" aria-disabled="{% if current <= 1 %}true{% else %}false{% endif %}">
+                            &laquo;
+                        </a>
+                    </li>
+
+                    {% if start > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page=1">1</a>
+                        </li>
+                        {% if start > 2 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endif %}
+
+                    {% for page in start..end %}
+                        <li class="page-item {% if page == current %}active{% endif %}">
+                            {% if page == current %}
+                                <span class="page-link">{{ page }}</span>
+                            {% else %}
+                                <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ page }}">{{ page }}</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+
+                    {% if end < last %}
+                        {% if end < last - 1 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ last }}">{{ last }}</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item {% if current >= last %}disabled{% endif %}">
+                        <a class="page-link" href="{% if current >= last %}#{% else %}{{ pagination.path }}?{{ baseQueryString }}page={{ current + 1 }}{% endif %}" aria-disabled="{% if current >= last %}true{% else %}false{% endif %}">
+                            &raquo;
+                        </a>
+                    </li>
+            </ul>
+        </nav>
     {% endif %}
 
-    <div class="d-flex justify-content-end mt-4">
-        <a href="{{ BASE_URL }}admin" class="btn btn-primary text-white">
-            <i class="bi bi-speedometer2 me-2"></i> Painel
-        </a>
-    </div>
 </div>
 {% endblock %}

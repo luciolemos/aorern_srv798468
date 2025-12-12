@@ -1,0 +1,112 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Editar Raça K9 - Admin{% endblock %}
+{% block content %}
+{% set currentImage = null %}
+{% if breed.image_url %}
+    {% if breed.image_url starts with 'http' %}
+        {% set currentImage = breed.image_url %}
+    {% else %}
+        {% set currentImage = BASE_URL ~ breed.image_url %}
+    {% endif %}
+{% endif %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="mb-4 d-flex flex-column flex-md-row gap-3 align-items-start align-items-md-center">
+        <div>
+            <a href="{{ BASE_URL }}admin/dog-breeds" class="btn btn-link text-decoration-none px-0 text-muted">
+                <i class="bi bi-arrow-left"></i> Voltar para raças
+            </a>
+            <h2 class="fw-bold mt-2 text-primary"><i class="bi bi-pencil-square me-2"></i>Editar raça</h2>
+            <p class="text-muted mb-0">Atualize as características operacionais desta raça.</p>
+        </div>
+        {% if currentImage %}
+            <img src="{{ currentImage|e('html_attr') }}" alt="{{ breed.name|e('html_attr') }}" class="rounded shadow-sm ms-md-auto" style="width: 120px; height: 120px; object-fit: cover;">
+        {% endif %}
+    </div>
+
+    <form method="post" action="{{ BASE_URL }}admin/dog-breeds/update/{{ breed.id }}" class="card border-0 shadow-sm" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Nome da raça</label>
+                    <input type="text" class="form-control" name="name" value="{{ breed.name|e('html_attr') }}" required data-slug-source>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Slug</label>
+                    <input type="text" class="form-control text-lowercase" name="slug" value="{{ breed.slug|e('html_attr') }}" maxlength="140" data-slug-target>
+                    <div class="form-text">Mantenha o identificador amigável desta raça.</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Porte</label>
+                    <select name="size" class="form-select">
+                        {% for value, label in sizeOptions %}
+                            <option value="{{ value }}" {% if breed.size == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Função predominante</label>
+                    <select name="function" class="form-select">
+                        <option value="">Selecione</option>
+                        {% for value, label in functionOptions %}
+                            <option value="{{ value }}" {% if breed.function == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Origem</label>
+                    <input type="text" class="form-control" name="origin" value="{{ breed.origin|e('html_attr') }}" placeholder="País ou região">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Imagem da raça</label>
+                    <input type="file" class="form-control" name="image_file" accept="image/jpeg,image/png,image/webp">
+                    <div class="form-text">Enviar um novo arquivo substitui a imagem atual. Deixe em branco para manter.</div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Descrição</label>
+                    <textarea name="description" rows="6" class="form-control" placeholder="Histórico, aptidões e observações.">{{ breed.description|e }}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+            <a href="{{ BASE_URL }}admin/dog-breeds" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Cancelar</a>
+            <button type="submit" class="btn btn-warning text-white"><i class="bi bi-save me-1"></i> Atualizar raça</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        (function() {
+            const source = document.querySelector('[data-slug-source]');
+            const target = document.querySelector('[data-slug-target]');
+            if (!source || !target) {
+                return;
+            }
+
+            let userEdited = target.value.trim().length > 0;
+
+            const slugify = (value) => {
+                return value
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-zA-Z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .toLowerCase();
+            };
+
+            target.addEventListener('input', () => {
+                userEdited = target.value.trim().length > 0;
+            });
+
+            source.addEventListener('input', () => {
+                if (userEdited) {
+                    return;
+                }
+                target.value = slugify(source.value);
+            });
+        })();
+    </script>
+{% endblock %}

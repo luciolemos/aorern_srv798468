@@ -460,11 +460,13 @@ body.bg-light {
 
 /* ✅ AJUSTES DE TOASTS (notificações) */
 .toast-container {
-    z-index: 1090;   /* Acima de tudo */
+    z-index: 1200;   /* Acima de tudo */
+    right: clamp(0.75rem, 2vw, 2rem) !important;
+    bottom: clamp(0.75rem, 2vw, 2rem) !important;
 }
 
-.toast-header {
-    border-bottom: none;
+.toast-container .toast.modern-toast {
+    border-radius: 1.35rem;
 }
 
 /* ⬇️ DROPDOWN - MENU USUÁRIO */

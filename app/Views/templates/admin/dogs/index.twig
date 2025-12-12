@@ -1,0 +1,300 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Cães Operacionais - Admin{% endblock %}
+
+{% block styles %}
+<style>
+    .dogs-page .filter-form .form-control,
+    .dogs-page .filter-form .form-select {
+        min-height: 40px;
+    }
+
+    .dogs-page .btn-search {
+        height: 38px;
+        font-weight: 600;
+    }
+
+    .dogs-page .dog-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: .25rem;
+        object-fit: cover;
+    }
+
+    .dogs-page .dog-avatar-fallback {
+        width: 48px;
+        height: 48px;
+        border-radius: .25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bs-light);
+        color: var(--admin-primary, #df6301);
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4 dogs-page">
+    <div>
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-shield-fill-plus me-2"></i> Gestão de cães operacionais</h2>
+        <p class="text-muted mb-0">Controle o cadastro de binômios, acompanhe status operacionais e mantenha o histórico atualizado.</p>
+        <hr class="my-4">
+
+        <div class="d-flex flex-column flex-md-row gap-2 w-100 justify-content-md-start align-items-md-center mb-4">
+            <a href="{{ BASE_URL }}admin/dogs/create" class="btn btn-primary text-white">
+                <i class="bi bi-plus-circle me-1"></i> Novo cão
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary ms-md-auto">
+                <i class="bi bi-speedometer2 me-1"></i> Painel
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-funnel me-2"></i><strong>Filtros Avançados</strong></h5>
+            {% if q or filterBreed or filterStatus or filterFunction or filterSex %}
+                <a href="{{ BASE_URL }}admin/dogs" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar filtros
+                </a>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-3 align-items-end filter-form">
+                <input type="hidden" name="per_page" value="{{ perPageSelection|default('')|e('html_attr') }}">
+                <div class="col-12 col-md-4">
+                    <label class="form-label fw-semibold">Buscar por nome ou slug</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" value="{{ q|default('')|e('html_attr') }}" placeholder="Ex: Thor">
+                        {% if q %}
+                            <a href="{{ BASE_URL }}admin/dogs" class="btn btn-outline-secondary" title="Limpar busca">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-12 col-md-3 col-lg-2">
+                    <label class="form-label fw-semibold">Raça</label>
+                    <select name="breed" class="form-select">
+                        <option value="">Todas</option>
+                        {% for breed in breeds %}
+                            <option value="{{ breed.id }}" {% if breed.id == filterBreed %}selected{% endif %}>{{ breed.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-3 col-lg-2">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="status" class="form-select">
+                        <option value="">Todos</option>
+                        {% for value, label in statusOptions %}
+                            <option value="{{ value }}" {% if value == filterStatus %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-3 col-lg-2">
+                    <label class="form-label fw-semibold">Função</label>
+                    <select name="function" class="form-select">
+                        <option value="">Todas</option>
+                        {% for value, label in functionOptions %}
+                            <option value="{{ value }}" {% if value == filterFunction %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-3 col-lg-2">
+                    <label class="form-label fw-semibold">Sexo</label>
+                    <select name="sex" class="form-select">
+                        <option value="">Todos</option>
+                        {% for value, label in sexOptions %}
+                            <option value="{{ value }}" {% if value == filterSex %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-2 col-lg-1">
+                    <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center text-white w-100 btn-search">
+                        <i class="bi bi-search me-1"></i> Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if dogs is empty %}
+        <div class="alert alert-info mt-4 d-flex align-items-center gap-2" role="alert">
+            <i class="bi bi-info-circle"></i>
+            Nenhum cão encontrado para os filtros aplicados.
+        </div>
+    {% else %}
+        {% set statusColorMap = {
+            'available': 'success',
+            'training': 'warning',
+            'adopted': 'info',
+            'inactive': 'secondary'
+        } %}
+        {% set sexBadgeMap = {
+            'male': 'primary',
+            'female': 'danger',
+            'unknown': 'secondary'
+        } %}
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-uppercase small">
+                            <tr>
+                                <th class="ps-4">Cão</th>
+                                <th>Raça</th>
+                                <th>Função</th>
+                                <th>Status</th>
+                                <th>Treinamento</th>
+                                <th>Peso</th>
+                                <th>Atualizado</th>
+                                <th class="text-center pe-4">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dog in dogs %}
+                                {% set avatarSrc = null %}
+                                {% if dog.avatar %}
+                                    {% if dog.avatar starts with 'http' %}
+                                        {% set avatarSrc = dog.avatar %}
+                                    {% else %}
+                                        {% set avatarSrc = BASE_URL ~ dog.avatar %}
+                                    {% endif %}
+                                {% endif %}
+                                {% set sexLabel = sexOptions[dog.sex]|default('Indefinido') %}
+                                {% set statusLabel = statusOptions[dog.status]|default('N/D') %}
+                                {% set trainingLabel = trainingOptions[dog.training_phase]|default('N/D') %}
+                                {% set weightDisplay = dog.weight_kg ? dog.weight_kg ~ ' kg' : 'N/D' %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            {% if avatarSrc %}
+                                                <img src="{{ avatarSrc|e('html_attr') }}" alt="{{ dog.name|e('html_attr') }}" class="dog-avatar rounded shadow-sm">
+                                            {% else %}
+                                                <div class="dog-avatar-fallback rounded shadow-sm">
+                                                    {{ dog.name|slice(0,1)|upper|default('K')|e }}
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                <div class="fw-semibold">{{ dog.name|e }}</div>
+                                                <small class="text-muted">/{{ dog.slug|e }}</small>
+                                                <div class="small text-muted mt-1">
+                                                    <span class="badge bg-{{ sexBadgeMap[dog.sex]|default('secondary') }} bg-opacity-25 text-dark fw-semibold">{{ sexLabel }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ dog.breed_name|default('N/D')|e }}</td>
+                                    <td>
+                                        {% if dog.operational_function %}
+                                            <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ functionOptions[dog.operational_function]|default('N/D') }}</span>
+                                        {% else %}
+                                            <span class="text-muted">N/D</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ statusColorMap[dog.status]|default('secondary') }} text-uppercase small">{{ statusLabel }}</span>
+                                    </td>
+                                    <td>
+                                        {% if dog.training_phase %}
+                                            <span class="badge text-bg-light border">{{ trainingLabel }}</span>
+                                        {% else %}
+                                            <span class="text-muted">N/D</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ weightDisplay }}</td>
+                                    <td><small class="text-muted">{{ dog.updated_at ? dog.updated_at|date('d/m/Y H:i') : 'N/D' }}</small></td>
+                                    <td class="text-center pe-4">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                                <i class="bi bi-three-dots-vertical"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/dogs/edit/{{ dog.id }}">
+                                                        <i class="bi bi-pencil-square me-2"></i> Editar
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/dogs/delete/{{ dog.id }}" onclick="return confirm('Deseja remover este cão?');">
+                                                        <i class="bi bi-trash me-2"></i> Excluir
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if pagination and pagination.total > 0 %}
+        {% set current = pagination.current_page|default(1) %}
+        {% set last = pagination.last_page|default(1) %}
+        {% set range = 2 %}
+        {% set start = max(1, current - range) %}
+        {% set end = min(last, current + range) %}
+
+        {% set perPageQuerySuffix = perPageSelection ? '&per_page=' ~ perPageSelection|url_encode : '' %}
+
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3 mt-4">
+            <p class="text-muted mb-0 small">
+                Exibindo {{ pagination.from|default(0) }}-{{ pagination.to|default(0) }} de {{ pagination.total|default(0) }} registros
+            </p>
+            <form method="GET" class="d-flex align-items-center gap-2">
+                <input type="hidden" name="page" value="1">
+                {% for key, value in pagination.query|default({}) %}
+                    {% if key != 'per_page' %}
+                        <input type="hidden" name="{{ key }}" value="{{ value|e('html_attr') }}">
+                    {% endif %}
+                {% endfor %}
+                <label class="text-muted small mb-0">Registros por página</label>
+                <select name="per_page" class="form-select form-select-sm" onchange="this.form.submit()">
+                    {% for option in perPageOptions %}
+                        <option value="{{ option.value }}" {% if option.value == perPageSelection %}selected{% endif %}>{{ option.label }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+
+        {% if last > 1 %}
+            <nav aria-label="Paginação de cães">
+                    <ul class="pagination justify-content-center mb-0">
+                        <li class="page-item {% if current <= 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{% if current <= 1 %}#{% else %}{{ BASE_URL }}admin/dogs?page={{ current - 1 }}{% if q %}&q={{ q|url_encode }}{% endif %}{% if filterBreed %}&breed={{ filterBreed }}{% endif %}{% if filterStatus %}&status={{ filterStatus }}{% endif %}{% if filterFunction %}&function={{ filterFunction }}{% endif %}{% if filterSex %}&sex={{ filterSex }}{% endif %}{{ perPageQuerySuffix }}{% endif %}">&laquo;</a>
+                        </li>
+
+                        {% if start > 1 %}
+                            <li class="page-item"><a class="page-link" href="{{ BASE_URL }}admin/dogs?page=1{% if q %}&q={{ q|url_encode }}{% endif %}{% if filterBreed %}&breed={{ filterBreed }}{% endif %}{% if filterStatus %}&status={{ filterStatus }}{% endif %}{% if filterFunction %}&function={{ filterFunction }}{% endif %}{% if filterSex %}&sex={{ filterSex }}{% endif %}{{ perPageQuerySuffix }}">1</a></li>
+                            {% if start > 2 %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% for page in start..end %}
+                            <li class="page-item {% if page == current %}active{% endif %}">
+                                <a class="page-link" href="{{ BASE_URL }}admin/dogs?page={{ page }}{% if q %}&q={{ q|url_encode }}{% endif %}{% if filterBreed %}&breed={{ filterBreed }}{% endif %}{% if filterStatus %}&status={{ filterStatus }}{% endif %}{% if filterFunction %}&function={{ filterFunction }}{% endif %}{% if filterSex %}&sex={{ filterSex }}{% endif %}{{ perPageQuerySuffix }}">{{ page }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if end < last %}
+                            {% if end < last - 1 %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                            <li class="page-item"><a class="page-link" href="{{ BASE_URL }}admin/dogs?page={{ last }}{% if q %}&q={{ q|url_encode }}{% endif %}{% if filterBreed %}&breed={{ filterBreed }}{% endif %}{% if filterStatus %}&status={{ filterStatus }}{% endif %}{% if filterFunction %}&function={{ filterFunction }}{% endif %}{% if filterSex %}&sex={{ filterSex }}{% endif %}{{ perPageQuerySuffix }}">{{ last }}</a></li>
+                        {% endif %}
+
+                        <li class="page-item {% if current >= last %}disabled{% endif %}">
+                            <a class="page-link" href="{% if current >= last %}#{% else %}{{ BASE_URL }}admin/dogs?page={{ current + 1 }}{% if q %}&q={{ q|url_encode }}{% endif %}{% if filterBreed %}&breed={{ filterBreed }}{% endif %}{% if filterStatus %}&status={{ filterStatus }}{% endif %}{% if filterFunction %}&function={{ filterFunction }}{% endif %}{% if filterSex %}&sex={{ filterSex }}{% endif %}{{ perPageQuerySuffix }}{% endif %}">&raquo;</a>
+                        </li>
+                    </ul>
+            </nav>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

@@ -31,11 +31,12 @@ class PostCategoryModel
 
     public function salvar(array $dados): bool
     {
-        $sql = "INSERT INTO {$this->table} (staff_id, nome, badge_color, descricao) VALUES (:staff_id, :nome, :badge_color, :descricao)";
+        $sql = "INSERT INTO {$this->table} (staff_id, nome, slug, badge_color, descricao) VALUES (:staff_id, :nome, :slug, :badge_color, :descricao)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             ':staff_id' => $dados['staff_id'],
             ':nome' => $dados['nome'],
+            ':slug' => $dados['slug'],
             ':badge_color' => $dados['badge_color'],
             ':descricao' => $dados['descricao']
         ]);
@@ -43,10 +44,11 @@ class PostCategoryModel
 
     public function atualizar(int $id, array $dados): bool
     {
-        $sql = "UPDATE {$this->table} SET nome = :nome, badge_color = :badge_color, descricao = :descricao WHERE id = :id";
+        $sql = "UPDATE {$this->table} SET nome = :nome, slug = :slug, badge_color = :badge_color, descricao = :descricao WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             ':nome' => $dados['nome'],
+            ':slug' => $dados['slug'],
             ':badge_color' => $dados['badge_color'],
             ':descricao' => $dados['descricao'],
             ':id' => $id
@@ -74,7 +76,7 @@ class PostCategoryModel
         return ((int)($row['total'] ?? 0)) > 0;
     }
 
-    public function paginar(int $page = 1, int $perPage = 10, ?string $busca = null): array
+    public function paginar(int $page = 1, ?int $perPage = 10, ?string $busca = null): array
     {
         $select = "c.*";
         $from = "FROM {$this->table} c";

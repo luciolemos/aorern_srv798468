@@ -3,6 +3,8 @@
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Core\Request;
+use App\Helpers\PaginationHelper;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\PermissionMiddleware;
 use App\Models\User;
@@ -22,19 +24,45 @@ class UsuariosController extends Controller {
      * Lista todos os usuários cadastrados
      */
     public function index(): void {
-        $q = $_GET['q'] ?? '';
-        $role = $_GET['role'] ?? '';
-        $status = $_GET['status'] ?? '';
-        
-        $usuarios = $this->userModel->listarComFiltros($q, $role, $status);
-        
+        $request = Request::capture();
+        $page = max(1, (int) $request->query('page', 1));
+        $q = trim($request->query('q', ''));
+        $role = $request->query('role', '');
+        $status = $request->query('status', '');
+
+        $defaultPerPage = 10;
+        $perPageRaw = $request->query('per_page');
+        [$perPage, $perPageSelection] = PaginationHelper::resolve($perPageRaw, $defaultPerPage);
+        $perPageQueryValue = ($perPageRaw !== null && $perPageRaw !== '') ? $perPageSelection : null;
+
+        $result = $this->userModel->paginarComFiltros(
+            $page,
+            $perPage,
+            $q !== '' ? $q : null,
+            $role !== '' ? $role : null,
+            $status !== '' ? $status : null
+        );
+
+        $usuarios = $result['data'];
+        $pagination = array_merge($result['meta'], [
+            'path' => BASE_URL . 'admin/usuarios',
+            'query' => array_filter([
+                'q' => $q,
+                'role' => $role,
+                'status' => $status,
+                'per_page' => $perPageQueryValue,
+            ], fn ($value) => $value !== null && $value !== ''),
+        ]);
+
         $dados = [
             'usuarios' => $usuarios,
-            'total' => count($usuarios),
+            'pagination' => $pagination,
             'title' => 'Gerenciar Usuários',
             'q' => $q,
             'role' => $role,
-            'status' => $status
+            'status' => $status,
+            'perPageOptions' => PaginationHelper::options($defaultPerPage),
+            'perPageSelection' => $perPageSelection,
         ];
 
         $this->renderTwig('admin/usuarios/index', array_merge($dados, AdminHelper::getUserData('usuarios')));

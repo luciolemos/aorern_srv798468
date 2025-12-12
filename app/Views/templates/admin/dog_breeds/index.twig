@@ -1,0 +1,238 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Raças K9 - Admin{% endblock %}
+
+{% block styles %}
+<style>
+    .dog-breeds-page .filter-form .form-control,
+    .dog-breeds-page .filter-form .form-select {
+        min-height: 40px;
+    }
+
+    .dog-breeds-page .btn-search {
+        height: 38px;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4 dog-breeds-page">
+    <div>
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-shield-shaded me-2"></i> Gestão de raças K9</h2>
+        <p class="text-muted mb-0">Gerencie o registro de raças homologadas pelo CBMRN para emprego operacional.</p>
+        <hr class="my-4">
+
+        <div class="d-flex flex-column flex-md-row gap-2 w-100 justify-content-md-start align-items-md-center mb-4">
+            <a href="{{ BASE_URL }}admin/dog-breeds/create" class="btn btn-primary text-white">
+                <i class="bi bi-plus-circle me-1"></i> Nova raça
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary ms-md-auto">
+                <i class="bi bi-speedometer2 me-1"></i> Painel
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-funnel me-2"></i><strong>Filtros Avançados</strong></h5>
+            {% if q or filterSize or filterFunction %}
+                <a href="{{ BASE_URL }}admin/dog-breeds" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar filtros
+                </a>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-3 align-items-end filter-form">
+                <input type="hidden" name="per_page" value="{{ perPageSelection|default('')|e('html_attr') }}">
+                <div class="col-12 col-md-5">
+                    <label class="form-label fw-semibold">Buscar por nome</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" value="{{ q|default('')|e('html_attr') }}" placeholder="Ex: Pastor Alemão">
+                        {% if q %}
+                            <a href="{{ BASE_URL }}admin/dog-breeds" class="btn btn-outline-secondary" title="Limpar busca">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold">Porte</label>
+                    <select name="size" class="form-select">
+                        <option value="">Todos</option>
+                        {% for value, label in sizeOptions %}
+                            <option value="{{ value }}" {% if value == filterSize %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold">Função</label>
+                    <select name="function" class="form-select">
+                        <option value="">Todas</option>
+                        {% for value, label in functionOptions %}
+                            <option value="{{ value }}" {% if value == filterFunction %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 col-md-1">
+                    <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center text-white w-100 btn-search">
+                        <i class="bi bi-search me-1"></i> Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if breeds is empty %}
+        <div class="alert alert-info mt-4 d-flex align-items-center gap-2" role="alert">
+            <i class="bi bi-info-circle"></i>
+            Nenhuma raça encontrada para os filtros aplicados.
+        </div>
+    {% else %}
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-uppercase small">
+                            <tr>
+                                <th class="ps-4">Raça</th>
+                                <th>Porte</th>
+                                <th>Função</th>
+                                <th>Origem</th>
+                                <th>Criada em</th>
+                                <th class="text-center pe-4">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for breed in breeds %}
+                                {% set imageSrc = null %}
+                                {% if breed.image_url %}
+                                    {% if breed.image_url starts with 'http' %}
+                                        {% set imageSrc = breed.image_url %}
+                                    {% else %}
+                                        {% set imageSrc = BASE_URL ~ breed.image_url %}
+                                    {% endif %}
+                                {% endif %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            {% if imageSrc %}
+                                                <img src="{{ imageSrc|e('html_attr') }}" alt="{{ breed.name|e('html_attr') }}" class="rounded" style="width: 48px; height: 48px; object-fit: cover;">
+                                            {% else %}
+                                                <div class="rounded bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-weight: 600;">
+                                                    {{ breed.name|slice(0,1)|upper|e }}
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                <div class="fw-semibold">{{ breed.name|e }}</div>
+                                                <small class="text-muted">/{{ breed.slug|e }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if breed.size %}
+                                            <span class="badge text-bg-light border">{{ sizeOptions[breed.size]|default('N/D') }}</span>
+                                        {% else %}
+                                            <span class="text-muted">N/D</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if breed.function %}
+                                            <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ functionOptions[breed.function]|default('N/D') }}</span>
+                                        {% else %}
+                                            <span class="text-muted">N/D</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ breed.origin|default('N/D')|e }}</td>
+                                    <td><small class="text-muted">{{ breed.created_at ? breed.created_at|date('d/m/Y') : 'N/D' }}</small></td>
+                                    <td class="text-center pe-4">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                                <i class="bi bi-three-dots-vertical"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/dog-breeds/edit/{{ breed.id }}">
+                                                        <i class="bi bi-pencil-square me-2"></i> Editar
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/dog-breeds/delete/{{ breed.id }}" onclick="return confirm('Deseja remover esta raça?');">
+                                                        <i class="bi bi-trash me-2"></i> Excluir
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if pagination and pagination.total > 0 %}
+        {% set current = pagination.current_page|default(1) %}
+        {% set last = pagination.last_page|default(1) %}
+        {% set range = 2 %}
+        {% set start = max(1, current - range) %}
+        {% set end = min(last, current + range) %}
+
+        {% set perPageQuerySuffix = perPageSelection ? '&per_page=' ~ perPageSelection|url_encode : '' %}
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3 mt-4">
+            <p class="text-muted mb-0 small">
+                Exibindo {{ pagination.from|default(0) }}-{{ pagination.to|default(0) }} de {{ pagination.total|default(0) }} raças
+            </p>
+            <form method="GET" class="d-flex align-items-center gap-2">
+                <input type="hidden" name="page" value="1">
+                {% for key, value in pagination.query|default({}) %}
+                    {% if key != 'per_page' %}
+                        <input type="hidden" name="{{ key }}" value="{{ value|e('html_attr') }}">
+                    {% endif %}
+                {% endfor %}
+                <label class="text-muted small mb-0">Registros por página</label>
+                <select name="per_page" class="form-select form-select-sm" onchange="this.form.submit()">
+                    {% for option in perPageOptions %}
+                        <option value="{{ option.value }}" {% if option.value == perPageSelection %}selected{% endif %}>{{ option.label }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+        {% if last > 1 %}
+            <nav aria-label="Paginação de raças">
+                    <ul class="pagination justify-content-center mb-0">
+                        <li class="page-item {% if current <= 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{% if current <= 1 %}#{% else %}{{ BASE_URL }}admin/dog-breeds?page={{ current - 1 }}{% if q %}&q={{ q|url_encode }}{% endif %}{% if filterSize %}&size={{ filterSize }}{% endif %}{% if filterFunction %}&function={{ filterFunction }}{% endif %}{{ perPageQuerySuffix }}{% endif %}">&laquo;</a>
+                        </li>
+
+                        {% if start > 1 %}
+                            <li class="page-item"><a class="page-link" href="{{ BASE_URL }}admin/dog-breeds?page=1{% if q %}&q={{ q|url_encode }}{% endif %}{% if filterSize %}&size={{ filterSize }}{% endif %}{% if filterFunction %}&function={{ filterFunction }}{% endif %}{{ perPageQuerySuffix }}">1</a></li>
+                            {% if start > 2 %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% for page in start..end %}
+                            <li class="page-item {% if page == current %}active{% endif %}">
+                                <a class="page-link" href="{{ BASE_URL }}admin/dog-breeds?page={{ page }}{% if q %}&q={{ q|url_encode }}{% endif %}{% if filterSize %}&size={{ filterSize }}{% endif %}{% if filterFunction %}&function={{ filterFunction }}{% endif %}{{ perPageQuerySuffix }}">{{ page }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if end < last %}
+                            {% if end < last - 1 %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                            <li class="page-item"><a class="page-link" href="{{ BASE_URL }}admin/dog-breeds?page={{ last }}{% if q %}&q={{ q|url_encode }}{% endif %}{% if filterSize %}&size={{ filterSize }}{% endif %}{% if filterFunction %}&function={{ filterFunction }}{% endif %}{{ perPageQuerySuffix }}">{{ last }}</a></li>
+                        {% endif %}
+
+                        <li class="page-item {% if current >= last %}disabled{% endif %}">
+                            <a class="page-link" href="{% if current >= last %}#{% else %}{{ BASE_URL }}admin/dog-breeds?page={{ current + 1 }}{% if q %}&q={{ q|url_encode }}{% endif %}{% if filterSize %}&size={{ filterSize }}{% endif %}{% if filterFunction %}&function={{ filterFunction }}{% endif %}{{ perPageQuerySuffix }}{% endif %}">&raquo;</a>
+                        </li>
+                    </ul>
+            </nav>
+        {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

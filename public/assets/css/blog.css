@@ -1,19 +1,4 @@
 /* blog.css */
-.blog-feature-section {
-    background: linear-gradient(120deg, #0e1c2e 0%, #df6301 60%, #ff8833 100%);
-    padding: clamp(3rem, 6vw, 6rem) 0;
-}
-
-.blog-feature-pattern {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.2), transparent 45%),
-                radial-gradient(circle at 80% 0%, rgba(255,255,255,0.08), transparent 35%),
-                repeating-linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 2px, transparent 2px, transparent 8px);
-    opacity: 0.4;
-    pointer-events: none;
-}
-
 .blog-feature-meta span {
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -23,16 +8,7 @@
     min-width: 220px;
 }
 
-.blog-feature-highlight {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 1.25rem;
-    padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(6px);
-}
-
 .blog-feature-cover,
-.blog-card-cover,
 .post-cover {
     position: relative;
     width: 100%;
@@ -45,8 +21,24 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.blog-feature-section {
+    background: linear-gradient(130deg, #0f1f2d 0%, #1f2f44 45%, #1b283b 100%);
+}
+
+.blog-feature-section .site-hero-pattern {
+    background: radial-gradient(circle at 20% 15%, rgba(255,255,255,0.25), transparent 45%),
+                radial-gradient(circle at 80% 5%, rgba(255,255,255,0.12), transparent 35%);
+    opacity: 0.45;
+}
+
 .post-cover {
     border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.post-share-card {
+    background: linear-gradient(135deg, #fffdf7 0%, #fff4ea 100%);
+    border-radius: 1.25rem;
+    border: 1px solid rgba(223, 99, 1, 0.12);
 }
 
 .post-share-card .share-btn {
@@ -65,8 +57,34 @@
     box-shadow: 0 8px 18px rgba(0,0,0,0.12);
 }
 
+.post-share-card .share-btn-facebook {
+    background: #1877f2;
+    color: #fff;
+}
+
+.post-share-card .share-btn-twitter {
+    background: #1d9bf0;
+    color: #fff;
+}
+
+.post-share-card .share-btn-whatsapp {
+    background: #25d366;
+    color: #0b4624;
+}
+
+.post-share-card .share-btn-linkedin {
+    background: #0a66c2;
+    color: #fff;
+}
+
+.post-share-card .share-btn-facebook:hover,
+.post-share-card .share-btn-twitter:hover,
+.post-share-card .share-btn-whatsapp:hover,
+.post-share-card .share-btn-linkedin:hover {
+    filter: brightness(1.05);
+}
+
 .blog-feature-cover img,
-.blog-card-cover img,
 .post-cover img {
     position: absolute;
     inset: 0;
@@ -74,13 +92,6 @@
     height: 100%;
     object-fit: cover;
     display: block;
-}
-
-.blog-card-cover {
-    margin: 0;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
-    overflow: hidden;
 }
 
 .blog-category-badge {
@@ -103,48 +114,18 @@
     background: transparent;
 }
 
-.blog-feature-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.7);
-    margin-top: 0.5rem;
-}
-
 .blog-list-section {
     background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
 }
 
-.blog-header {
+.blog-list-section .section-header {
     max-width: 780px;
-    margin: 0 auto 2rem;
+    margin: 0 auto;
 }
 
 .blog-page-subtitle {
     color: #6c757d;
     font-size: 1rem;
-}
-
-.blog-post-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-radius: 1rem;
-    overflow: hidden;
-}
-
-.blog-post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-}
-
-.blog-meta i {
-    color: var(--bombeiros-orange);
-    margin-right: 0.35rem;
-}
-
-.blog-excerpt {
-    color: #4f4f4f;
-    line-height: 1.6;
-    margin-bottom: 1.25rem;
 }
 
 .blog-empty-state {

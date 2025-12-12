@@ -121,20 +121,48 @@ class PessoalModel {
         return (int) $stmt->fetch(\PDO::FETCH_ASSOC)['total'];
     }
 
-    public function paginar(int $page = 1, int $perPage = 12, ?string $termo = null): array
+    public function paginar(int $page = 1, ?int $perPage = 12, array $filters = []): array
     {
         $select = "p.*, f.nome AS funcao_nome";
         $from = "FROM {$this->table} p LEFT JOIN funcoes f ON f.id = p.funcao_id";
-        $where = '';
+        $conditions = [];
         $params = [];
 
+        $termo = trim($filters['q'] ?? '') ?: null;
         if ($termo) {
-            $where = "(p.nome LIKE :termo
+            $conditions[] = "(p.nome LIKE :termo
                 OR p.cpf LIKE :termo
                 OR p.telefone LIKE :termo
                 OR f.nome LIKE :termo)";
             $params[':termo'] = '%' . $termo . '%';
         }
+
+        if (!empty($filters['status'])) {
+            $conditions[] = 'p.status = :status';
+            $params[':status'] = $filters['status'];
+        }
+
+        if (!empty($filters['funcao_id'])) {
+            $conditions[] = 'p.funcao_id = :funcao_id';
+            $params[':funcao_id'] = (int) $filters['funcao_id'];
+        }
+
+        if (!empty($filters['obra_id'])) {
+            $conditions[] = 'p.obra_id = :obra_id';
+            $params[':obra_id'] = (int) $filters['obra_id'];
+        }
+
+        if (!empty($filters['admissao_inicio'])) {
+            $conditions[] = 'p.data_admissao >= :admissao_inicio';
+            $params[':admissao_inicio'] = $filters['admissao_inicio'];
+        }
+
+        if (!empty($filters['admissao_fim'])) {
+            $conditions[] = 'p.data_admissao <= :admissao_fim';
+            $params[':admissao_fim'] = $filters['admissao_fim'];
+        }
+
+        $where = implode(' AND ', $conditions);
 
         return Paginator::paginate(
             $this->db,

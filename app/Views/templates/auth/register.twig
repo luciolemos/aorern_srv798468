@@ -2,55 +2,114 @@
 
 {% block title %}Registrar - CBMRN{% endblock %}
 
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/auth.css">
+{% endblock %}
+
 {% block content %}
-    <div class="container py-5" style="min-height: calc(100vh - 75px - 200px);">
-        <div class="row">
-            <div class="col-lg-5 offset-lg-3">
-                <div class="card border-0 shadow-lg">
-                    <div class="card-body p-5">
-                        <h2 class="text-center fw-bold mb-5" style="color: #df6301;">Criar Conta</h2>
-                        
+    <section class="auth-hero register-hero site-hero">
+        <div class="site-hero-pattern"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 hero-content">
+{#                     <div class="auth-hero-logo mb-4">
+                        <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="img-fluid">
+                    </div> #}
+                    <p class="section-kicker text-white-50 mb-2">Solicitar acesso</p>
+                    <h1 class="section-title text-white mb-3">Registro de colaboradores</h1>
+                    <p class="section-lead text-white-75 mb-4">Novos usuários têm acesso ao painel administrativo após validação pelo comando. Preencha seus dados institucionais e aguarde a confirmação. Esse fluxo garante segurança e rastreabilidade das alterações no portal.</p>
+                    <ul class="auth-benefits icon-list text-white-75 mb-4">
+                        <li class="icon-list-item">
+                            <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-person-badge"></i></span>
+                            <span>Usuários identificados e aprovados pela chefia</span>
+                        </li>
+                        <li class="icon-list-item">
+                            <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-card-image"></i></span>
+                            <span>Perfil com foto para facilitar auditorias</span>
+                        </li>
+                        <li class="icon-list-item">
+                            <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-check2-circle"></i></span>
+                            <span>Confirmação por e-mail corporativo</span>
+                        </li>
+                    </ul>
+                    <div class="d-flex flex-wrap gap-3">
+                        {% include 'site/components/button.twig' with {
+                            href: BASE_URL ~ 'login/admin',
+                            label: 'Já tenho conta',
+                            icon: 'bi-box-arrow-in-right',
+                            variant: 'solid',
+                            size: 'lg'
+                        } %}
+                        {% include 'site/components/button.twig' with {
+                            href: 'mailto:suporte@2sgb2gbm.org',
+                            label: 'Falar com suporte',
+                            icon: 'bi-envelope',
+                            variant: 'solid',
+                            size: 'lg',
+                            button_class: 'fw-bold text-dark'
+                        } %}
+                    </div>
+                </div>
+                <div class="col-lg-5 ms-lg-auto hero-panel-col">
+                    <div class="auth-card hero-panel hero-panel--dark">
+{#                         <div class="text-center mb-4">
+                            <p class="hero-panel-badge text-white-75"><i class="bi bi-file-earmark-text me-2"></i>Formulário de registro</p>
+                            <h2 class="h4 fw-bold text-white mb-1">Preencha seus dados</h2>
+                            <p class="text-white-50 small mb-0">Campos obrigatórios com *.</p>
+                        </div> #}
+                        <div class="auth-hero-logo mb-4">
+                        <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="img-fluid">
+                        </div>
+
                         {% if error %}
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {{ error }}
+                                <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         {% endif %}
-                        
-                        <form method="POST" action="{{ BASE_URL }}register/store" enctype="multipart/form-data">
+
+                        <form method="POST" action="{{ BASE_URL }}register/store" enctype="multipart/form-data" class="auth-form">
                             <div class="mb-3">
-                                <label for="username" class="form-label fw-bold">Usuário</label>
-                                <input type="text" class="form-control form-control-lg" id="username" name="username" required>
+                                <label for="username" class="form-label text-white">Usuário*</label>
+                                <input type="text" class="form-control form-control-lg" id="username" name="username" required autofocus>
                             </div>
                             <div class="mb-3">
-                                <label for="nome" class="form-label fw-bold">Nome completo</label>
+                                <label for="nome" class="form-label text-white">Nome completo*</label>
                                 <input type="text" class="form-control form-control-lg" id="nome" name="nome" required>
                             </div>
                             <div class="mb-3">
-                                <label for="email" class="form-label fw-bold">Email</label>
+                                <label for="email" class="form-label text-white">Email corporativo*</label>
                                 <input type="email" class="form-control form-control-lg" id="email" name="email" required>
                             </div>
                             <div class="mb-3">
-                                <label for="avatar" class="form-label fw-bold">Foto de Perfil (opcional)</label>
+                                <label for="avatar" class="form-label text-white">Foto de perfil (opcional)</label>
                                 <input type="file" class="form-control form-control-lg" id="avatar" name="avatar" accept="image/jpeg,image/png,image/webp">
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label fw-bold">Senha</label>
+                                <label for="password" class="form-label text-white">Senha*</label>
                                 <input type="password" class="form-control form-control-lg" id="password" name="password" required>
                             </div>
                             <div class="mb-4">
-                                <label for="password_confirm" class="form-label fw-bold">Confirmar Senha</label>
+                                <label for="password_confirm" class="form-label text-white">Confirmar senha*</label>
                                 <input type="password" class="form-control form-control-lg" id="password_confirm" name="password_confirm" required>
                             </div>
-                            <button type="submit" class="btn btn-lg w-100 fw-bold text-white mb-3" style="background-color: #df6301;">Registrar</button>
+                            {% include 'site/components/button.twig' with {
+                                label: 'Enviar para aprovação',
+                                icon: 'bi-send',
+                                variant: 'solid',
+                                size: 'lg',
+                                type: 'submit',
+                                button_class: 'w-100 fw-bold'
+                            } %}
                         </form>
-                        
-                        <p class="text-center mt-4">
-                            Já tem uma conta? <a href="{{ BASE_URL }}login/admin" class="fw-bold text-decoration-none" style="color: #df6301;">Faça login aqui</a>
+
+                        <p class="text-center text-white-50 small mt-4 mb-0">
+                            Já recebeu aprovação? <a href="{{ BASE_URL }}login/admin" class="text-white fw-semibold text-decoration-none">Faça login</a>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 {% endblock %}

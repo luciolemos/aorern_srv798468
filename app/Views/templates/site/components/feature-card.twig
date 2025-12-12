@@ -1,0 +1,16 @@
+<article class="feature-card {{ card_class|default('') }}">
+    {% if icon %}
+        <div class="feature-card-icon {{ icon_class|default('') }}">
+            <i class="{{ icon }}"></i>
+        </div>
+    {% endif %}
+    {% if eyebrow %}
+        <p class="feature-card-eyebrow {{ eyebrow_class|default('small text-uppercase fw-semibold text-muted mb-1') }}">{{ eyebrow }}</p>
+    {% endif %}
+    {% if title %}
+        <h3 class="{{ title_class|default('h5 fw-bold mb-2') }}">{{ title }}</h3>
+    {% endif %}
+    {% if description %}
+        <p class="{{ description_class|default('text-muted mb-0') }}">{{ description }}</p>
+    {% endif %}
+</article>

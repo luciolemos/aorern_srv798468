@@ -1,0 +1,372 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Livro de ocorrências - Admin{% endblock %}
+
+{% block styles %}
+<style>
+    .livro-autocomplete { position: relative; }
+    .livro-autocomplete .autocomplete-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        border-radius: 0 0 .5rem .5rem;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+        z-index: 50;
+        max-height: 240px;
+        overflow-y: auto;
+    }
+    .livro-autocomplete .autocomplete-results button {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        text-align: left;
+        padding: .65rem .9rem;
+        font-size: 0.9rem;
+    }
+    .livro-autocomplete .autocomplete-results button:hover {
+        background: rgba(223, 99, 1, 0.08);
+    }
+    .livro-status-badge {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.7rem;
+    }
+    .livro-table td small { color: #6b7280; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4" data-module="livro-ocorrencias">
+    {% set municipioLabel = municipioSelecionado ? municipioSelecionado.nome ~ ' / ' ~ municipioSelecionado.uf : '' %}
+    <div>
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-journal-check me-2"></i> Livro-registro de ocorrências</h2>
+        <p class="text-muted mb-0">Gerencie as ocorrências operacionais registradas pelo CBMRN</p>
+        <hr class="my-4">
+
+        <div class="d-flex flex-column flex-md-row gap-2 w-100 justify-content-md-start align-items-md-center mb-4">
+            <a href="{{ BASE_URL }}admin/livro-ocorrencias/create" class="btn btn-primary text-white">
+                <i class="bi bi-plus-circle me-1"></i> Nova ocorrência
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary ms-md-auto">
+                <i class="bi bi-speedometer2 me-1"></i> Painel
+            </a>
+        </div>
+    </div>
+
+    {% set hasFilters = filters.q or filters.status or filters.tipo or filters.subgrupamento or filters.municipio or filters.data_inicio or filters.data_fim %}
+    <section class="mt-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Filtros Avançados</strong></h5>
+                {% if hasFilters %}
+                    <a href="{{ BASE_URL }}admin/livro-ocorrencias" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar Filtros
+                    </a>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <form method="get" class="row g-3 align-items-end" id="livroFilters">
+                    <input type="hidden" name="per_page" value="{{ perPageSelection|default('')|e('html_attr') }}">
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold" for="livroBusca">Busca livre</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" id="livroBusca" name="q" class="form-control" placeholder="Protocolo, município ou palavra-chave" value="{{ filters.q|default('')|e('html_attr') }}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small fw-semibold" for="livroStatus">Status</label>
+                        <select id="livroStatus" name="status" class="form-select">
+                            <option value="">Todos</option>
+                            {% for value, label in statusOptions %}
+                                <option value="{{ value }}" {{ filters.status == value ? 'selected' : '' }}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-semibold" for="livroTipo">Tipo</label>
+                        <select id="livroTipo" name="tipo" class="form-select">
+                            <option value="">Todos</option>
+                            {% for tipo in tipoOptions %}
+                                <option value="{{ tipo }}" {{ filters.tipo == tipo ? 'selected' : '' }}>{{ tipo }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-semibold" for="livroSubgrupamento">Subgrupamento</label>
+                        <select id="livroSubgrupamento" name="subgrupamento" class="form-select">
+                            <option value="">Todos</option>
+                            {% for grupo in subgrupamentos %}
+                                <option value="{{ grupo }}" {{ filters.subgrupamento == grupo ? 'selected' : '' }}>{{ grupo }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold">Município</label>
+                        <div class="livro-autocomplete" data-autocomplete="municipios">
+                            <input type="hidden" name="municipio" value="{{ filters.municipio|default('')|e('html_attr') }}" data-autocomplete-code>
+                            <input type="hidden" value="{{ municipioLabel|e('html_attr') }}" data-autocomplete-label>
+                            <input type="text" class="form-control" placeholder="Busque por município" value="{{ municipioLabel|e('html_attr') }}" data-autocomplete-input autocomplete="off">
+                            <div class="autocomplete-results d-none" data-autocomplete-results></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-semibold" for="livroDataInicio">Período inicial</label>
+                        <input type="date" id="livroDataInicio" name="data_inicio" class="form-control" value="{{ filters.data_inicio|default('')|e('html_attr') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-semibold" for="livroDataFim">Período final</label>
+                        <input type="date" id="livroDataFim" name="data_fim" class="form-control" value="{{ filters.data_fim|default('')|e('html_attr') }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center w-100" style="height: 38px;">
+                            <i class="bi bi-search me-1"></i> Buscar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    {% if registros is empty %}
+        <div class="alert alert-info mt-4">
+            <i class="bi bi-info-circle me-1"></i> Nenhuma ocorrência encontrada para os filtros atuais.
+        </div>
+    {% else %}
+        {% set statusTotals = {} %}
+        {% for registro in registros %}
+            {% set statusKey = registro.status %}
+            {% set statusTotals = statusTotals|merge({ (statusKey): (statusTotals[statusKey]|default(0)) + 1 }) %}
+        {% endfor %}
+
+        <section class="row g-3 mt-4">
+            {% for statusKey, label in statusOptions %}
+                <article class="col-6 col-md-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <p class="text-uppercase small text-muted mb-1">{{ label }}</p>
+                            <h3 class="h4 fw-bold mb-0">{{ statusTotals[statusKey]|default(0) }}</h3>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+
+        <section class="mt-4">
+            <div class="table-responsive shadow-sm rounded-3">
+                <table class="table table-hover align-middle mb-0 livro-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center" style="width: 60px;">#</th>
+                            <th style="width: 140px;">Protocolo</th>
+                            <th>Município / Data</th>
+                            <th class="d-none d-md-table-cell">Tipo / Subgrupamento</th>
+                            <th style="width: 140px;">Status</th>
+                            <th class="d-none d-lg-table-cell" style="width: 160px;">Responsável</th>
+                            <th class="text-center" style="width: 160px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for registro in registros %}
+                            <tr>
+                                <td class="text-center">{{ registro.id }}</td>
+                                <td>
+                                    <span class="badge bg-dark-subtle text-dark text-uppercase">{{ registro.protocolo }}</span>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">{{ registro.municipio_nome }}</div>
+                                    <small>{{ registro.data_ocorrencia|date('d/m/Y \\à\\s H\\hi') }}</small>
+                                </td>
+                                <td class="d-none d-md-table-cell">
+                                    <div class="fw-semibold">{{ registro.tipo_ocorrencia }}</div>
+                                    <small>{{ registro.subgrupamento }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge livro-status-badge
+                                        {% if registro.status == 'aberta' %} bg-warning text-dark
+                                        {% elseif registro.status == 'em_andamento' %} bg-info text-dark
+                                        {% elseif registro.status == 'concluida' %} bg-success
+                                        {% else %} bg-secondary text-white{% endif %}">
+                                        {{ statusOptions[registro.status]|default(registro.status) }}
+                                    </span>
+                                </td>
+                                <td class="d-none d-lg-table-cell">
+                                    <small>{{ registro.responsavel_nome|default('—') }}</small>
+                                </td>
+                                <td class="text-center">
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#livroDetalhe{{ registro.id }}">
+                                                    <i class="bi bi-eye me-2"></i> Detalhes
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/livro-ocorrencias/edit/{{ registro.id }}">
+                                                    <i class="bi bi-pencil-square me-2"></i> Editar
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/livro-ocorrencias/destroy/{{ registro.id }}" onclick="return confirm('Remover este registro do livro?');">
+                                                    <i class="bi bi-trash me-2"></i> Excluir
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        {% for registro in registros %}
+            <div class="modal fade" id="livroDetalhe{{ registro.id }}" tabindex="-1" aria-labelledby="livroDetalheLabel{{ registro.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light">
+                            <h5 class="modal-title" id="livroDetalheLabel{{ registro.id }}">
+                                <i class="bi bi-journal-text me-2"></i>Protocolo {{ registro.protocolo }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <p class="text-muted small mb-1">Município</p>
+                                    <p class="fw-semibold mb-0">{{ registro.municipio_nome }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-muted small mb-1">Data</p>
+                                    <p class="fw-semibold mb-0">{{ registro.data_ocorrencia|date('d/m/Y \\à\\s H\\hi') }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-muted small mb-1">Tipo</p>
+                                    <p class="fw-semibold mb-0">{{ registro.tipo_ocorrencia }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-muted small mb-1">Subgrupamento</p>
+                                    <p class="fw-semibold mb-0">{{ registro.subgrupamento }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-muted small mb-1">Status</p>
+                                    <p class="fw-semibold mb-0">{{ statusOptions[registro.status]|default(registro.status) }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-muted small mb-1">Responsável</p>
+                                    <p class="fw-semibold mb-0">{{ registro.responsavel_nome|default('—') }}</p>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-muted text-uppercase small mb-1">Descrição operacional</p>
+                                <div class="border rounded p-3 bg-light-subtle">
+                                    {{ registro.descricao|e|nl2br }}
+                                </div>
+                            </div>
+                            {% if registro.relatorio_conclusao %}
+                                <div>
+                                    <p class="text-muted text-uppercase small mb-1">Relatório de conclusão</p>
+                                    <div class="border rounded p-3 bg-light">
+                                        {{ registro.relatorio_conclusao|e|nl2br }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                            <a href="{{ BASE_URL }}admin/livro-ocorrencias/edit/{{ registro.id }}" class="btn btn-primary">
+                                <i class="bi bi-pencil me-1"></i>Editar registro
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if pagination and pagination.total > 0 %}
+            {% set current = pagination.current_page|default(1) %}
+            {% set last = pagination.last_page|default(1) %}
+            {% set range = 2 %}
+            {% set start = max(1, current - range) %}
+            {% set end = min(last, current + range) %}
+            {% set queryPairs = [] %}
+            {% for key, value in pagination.query|default({}) %}
+                {% set queryPairs = queryPairs|merge([key ~ '=' ~ value|url_encode]) %}
+            {% endfor %}
+            {% set baseQueryString = queryPairs ? queryPairs|join('&') ~ '&' : '' %}
+
+            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3 mt-4">
+                <p class="text-muted small mb-0">
+                    Exibindo {{ pagination.from|default(0) }}–{{ pagination.to|default(0) }} de {{ pagination.total|default(0) }} registros
+                </p>
+                <form method="GET" class="d-flex align-items-center gap-2">
+                    <input type="hidden" name="page" value="1">
+                    {% for key, value in pagination.query|default({}) %}
+                        {% if key != 'per_page' %}
+                            <input type="hidden" name="{{ key }}" value="{{ value|e('html_attr') }}">
+                        {% endif %}
+                    {% endfor %}
+                    <label class="text-muted small mb-0">Registros por página</label>
+                    <select name="per_page" class="form-select form-select-sm" onchange="this.form.submit()">
+                        {% for option in perPageOptions %}
+                            <option value="{{ option.value }}" {% if option.value == perPageSelection %}selected{% endif %}>{{ option.label }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            {% if last > 1 %}
+                <nav aria-label="Paginação do livro" class="mt-3">
+                    <ul class="pagination justify-content-center">
+                        {% if current > 1 %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page=1" aria-label="Primeira">
+                                    <i class="bi bi-chevron-bar-left"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ current - 1 }}" aria-label="Anterior">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for page in range(start, end) %}
+                            <li class="page-item {{ page == current ? 'active' : '' }}">
+                                {% if page == current %}
+                                    <span class="page-link">{{ page }}</span>
+                                {% else %}
+                                    <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ page }}">{{ page }}</a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+
+                        {% if current < last %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ current + 1 }}" aria-label="Próxima">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ last }}" aria-label="Última">
+                                    <i class="bi bi-chevron-bar-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ BASE_URL }}assets/js/livro-ocorrencias.js" defer></script>
+{% endblock %}

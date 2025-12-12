@@ -2,23 +2,71 @@
 
 {% block title %}Login Admin - CBMRN{% endblock %}
 
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/auth.css">
+{% endblock %}
+
 {% block content %}
-    <div class="container py-5" style="min-height: calc(100vh - 75px - 200px);">
-        <div class="row">
-            <div class="col-lg-4 offset-lg-4">
-                <div class="card border-0 shadow-lg" style="border-top: 4px solid #df6301;">
-                    <div class="card-body p-5">
-                        <div class="text-center mb-4">
-                            <i class="bi bi-speedometer2" style="font-size: 3rem; color: #df6301;"></i>
-                            <h2 class="text-center fw-bold mt-3" style="color: #df6301;">Painel Admin</h2>
-                            <p class="text-muted small">Acesso restrito a administradores e usuários registrados</p>
+    <section class="auth-hero login-hero site-hero">
+        <div class="site-hero-pattern"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 hero-content">
+  {#                   <div class="auth-hero-logo mb-4">
+                        <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="img-fluid">
+                    </div> #}
+                    <p class="section-kicker text-white-50 mb-2">Painel do 2º SGB/2º GBM</p>
+                    <h1 class="section-title text-white mb-3">Autenticação administrativa</h1>
+                    <p class="section-lead text-white-75 mb-4">Esta área integra o mesmo design do portal institucional, mas continua restrita a usuários autorizados. Utilize seu usuário corporativo e senha para acessar indicadores, conteúdos internos e gestão do site.</p>
+                    <ul class="auth-benefits icon-list text-white-75 mb-4">
+                        <li class="icon-list-item">
+                            <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-shield-lock"></i></span>
+                            <span>Conexões monitoradas e protegidas pelo CBMRN</span>
+                        </li>
+                        <li class="icon-list-item">
+                            <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-activity"></i></span>
+                            <span>Indicadores em tempo real e conteúdo interno</span>
+                        </li>
+                        <li class="icon-list-item">
+                            <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-people"></i></span>
+                            <span>Equipe autorizada de gestores e editores</span>
+                        </li>
+                    </ul>
+                    <div class="d-flex flex-wrap gap-3">
+                        {% include 'site/components/button.twig' with {
+                            href: BASE_URL,
+                            label: 'Voltar ao site',
+                            icon: 'bi-arrow-left',
+                            variant: 'solid',
+                            size: 'lg'
+                        } %}
+                        {% include 'site/components/button.twig' with {
+                            href: 'tel:193',
+                            label: 'Canal emergencial',
+                            icon: 'bi-telephone',
+                            variant: 'solid',
+                            size: 'lg',
+                            button_class: 'fw-bold text-dark'
+                        } %}
+                    </div>
+                </div>
+                <div class="col-lg-5 ms-lg-auto hero-panel-col">
+                    <div class="auth-card hero-panel hero-panel--dark">
+{#                         <div class="text-center mb-4">
+                            <p class="hero-panel-badge text-white-75"><i class="bi bi-lock-fill me-2"></i>Área restrita</p>
+                            <h2 class="h4 fw-bold text-white mb-1">Acesse o painel</h2>
+                            <p class="text-white-50 small mb-0">Somente credenciais autorizadas.</p>
+                        </div> #}
+                        <div class="auth-hero-logo mb-4">
+                        <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="img-fluid">
                         </div>
-                        
+
                         {% if success %}
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <i class="bi bi-check-circle me-2"></i>
                                 {% if success == 'account_created' %}
-                                    <strong>Conta criada com sucesso!</strong> Agora você pode fazer login com suas credenciais abaixo.
+                                    <strong>Conta criada com sucesso!</strong> Agora você pode fazer login.
                                 {% else %}
                                     {{ success }}
                                 {% endif %}
@@ -33,30 +81,37 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         {% endif %}
-                        
-                        <form method="POST" action="{{ BASE_URL }}login/authenticate-admin">
+
+                        <form method="POST" action="{{ BASE_URL }}login/authenticate-admin" class="auth-form">
                             <div class="mb-3">
-                                <label for="username" class="form-label fw-bold">Usuário</label>
+                                <label for="username" class="form-label text-white fw-semibold">Usuário</label>
                                 <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="seu.usuario" required autofocus>
-                                <small class="text-muted d-block mt-1">Apenas administradores têm acesso</small>
+                                <small class="text-white-50 d-block mt-1">Apenas administradores têm acesso</small>
                             </div>
                             <div class="mb-4">
-                                <label for="password" class="form-label fw-bold">Senha</label>
+                                <label for="password" class="form-label text-white fw-semibold">Senha</label>
                                 <input type="password" class="form-control form-control-lg" id="password" name="password" required>
                             </div>
-                            <button type="submit" class="btn btn-lg w-100 fw-bold text-white" style="background-color: #df6301;">
-                                <i class="bi bi-box-arrow-in-right me-2"></i>Entrar no Painel
-                            </button>
+                            {% include 'site/components/button.twig' with {
+                                label: 'Entrar no painel',
+                                icon: 'bi-box-arrow-in-right',
+                                variant: 'solid',
+                                size: 'lg',
+                                type: 'submit',
+                                button_class: 'w-100 fw-bold'
+                            } %}
                         </form>
-                        
-                        <hr class="my-4">
-                        
-                        <p class="text-center text-muted small mb-0">
-                            Não tem uma conta? <a href="{{ BASE_URL }}register" class="fw-bold text-decoration-none" style="color: #df6301;">Registre-se aqui</a>
+
+                        <hr class="text-white-25 my-4">
+                        <p class="text-center text-white-50 small mb-0">
+                            Precisa de suporte? <a href="{{ BASE_URL }}contact" class="text-white fw-semibold text-decoration-none">Fale com o comando</a>
+                        </p>
+                        <p class="text-center text-white-50 small mt-3 mb-0">
+                            Não possui acesso? <a href="{{ BASE_URL }}register" class="text-white fw-semibold text-decoration-none">Solicitar registro</a>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 {% endblock %}

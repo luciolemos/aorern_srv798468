@@ -1,0 +1,11 @@
+<article class="stat-card-lg {{ card_class|default('') }}">
+    {% if label %}
+        <p class="stat-card-label {{ label_class|default('text-uppercase small text-muted mb-1') }}">{{ label }}</p>
+    {% endif %}
+    {% if value %}
+        <p class="stat-card-value {{ value_class|default('display-6 fw-bold text-primary mb-2') }}">{{ value }}</p>
+    {% endif %}
+    {% if description %}
+        <p class="stat-card-description {{ description_class|default('text-muted mb-0') }}">{{ description }}</p>
+    {% endif %}
+</article>

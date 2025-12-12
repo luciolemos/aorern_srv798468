@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 
 use App\Helpers\AdminHelper;
+use App\Helpers\PaginationHelper;
 
 use App\Core\Controller;
 use App\Core\Request;
@@ -23,7 +24,10 @@ class FuncoesController extends Controller {
         $request = Request::capture();
         $q = $request->query('q', '');
         $page = max(1, (int) $request->query('page', 1));
-        $perPage = 12;
+        $defaultPerPage = 10;
+        $perPageRaw = $request->query('per_page');
+        [$perPage, $perPageSelection] = PaginationHelper::resolve($perPageRaw, $defaultPerPage);
+        $perPageQueryValue = ($perPageRaw !== null && $perPageRaw !== '') ? $perPageSelection : null;
         
         $result = $this->model->paginar($page, $perPage, $q ?: null);
         $funcoes = $result['data'];
@@ -31,10 +35,16 @@ class FuncoesController extends Controller {
             'path' => BASE_URL . 'admin/funcoes',
             'query' => array_filter([
                 'q' => $q,
+                'per_page' => $perPageQueryValue,
             ], fn($value) => $value !== null && $value !== ''),
         ]);
 
-        $this->renderTwig('admin/funcoes/index', array_merge(compact('funcoes', 'q', 'pagination'), AdminHelper::getUserData('funcoes')));
+        $perPageOptions = PaginationHelper::options($defaultPerPage);
+
+        $this->renderTwig('admin/funcoes/index', array_merge(
+            compact('funcoes', 'q', 'pagination', 'perPageOptions', 'perPageSelection'),
+            AdminHelper::getUserData('funcoes')
+        ));
     }
 
     public function cadastrar(): void {

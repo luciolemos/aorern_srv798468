@@ -10,13 +10,18 @@
     <form action="{{ BASE_URL }}admin/post-categories/store" method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
         <div class="row g-3">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label class="form-label fw-bold">Código da categoria</label>
                 <input type="text" name="staff_id" class="form-control" value="POSTCAT-{{ 'now'|date('YmdHis') }}" readonly>
             </div>
             <div class="col-md-5">
                 <label class="form-label fw-bold">Nome da categoria</label>
-                <input type="text" name="nome" class="form-control" required>
+                <input type="text" name="nome" class="form-control" required data-slug-source>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Slug</label>
+                <input type="text" name="slug" class="form-control text-lowercase" placeholder="ex: operacoes" data-slug-target maxlength="140">
+                <div class="form-text">Link amigável utilizado nas URLs do blog.</div>
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-bold">Cor do badge</label>
@@ -81,5 +86,35 @@
             colorInput.addEventListener('input', syncFromColor);
             hexInput.addEventListener('blur', syncFromHex);
         });
+
+        (function() {
+            const source = document.querySelector('[data-slug-source]');
+            const target = document.querySelector('[data-slug-target]');
+            if (!source || !target) {
+                return;
+            }
+
+            let userEdited = target.value.trim().length > 0;
+
+            const slugify = (value) => {
+                return value
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-zA-Z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .toLowerCase();
+            };
+
+            target.addEventListener('input', () => {
+                userEdited = target.value.trim().length > 0;
+            });
+
+            source.addEventListener('input', () => {
+                if (userEdited) {
+                    return;
+                }
+                target.value = slugify(source.value);
+            });
+        })();
     </script>
 {% endblock %}

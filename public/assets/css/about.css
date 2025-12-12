@@ -1,42 +1,18 @@
 /* about.css */
-.about-hero {
-    background: linear-gradient(125deg, #0e1c2e 0%, #df6301 60%, #ff8833 100%);
-    padding: clamp(3rem, 6vw, 6rem) 0;
-}
-
-.about-hero-pattern {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.2), transparent 45%),
-                radial-gradient(circle at 80% 0%, rgba(255,255,255,0.08), transparent 35%),
-                repeating-linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 2px, transparent 2px, transparent 8px);
-    opacity: 0.35;
-    pointer-events: none;
-}
-
 .about-hero-actions .btn {
     min-width: 210px;
 }
 
-.about-hero-panel {
-    background: rgba(6, 16, 30, 0.55);
-    border-radius: 1.5rem;
-    padding: 2.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(8px);
+.about-hero {
+    background: linear-gradient(130deg, #0f1f2d 0%, #1f2f44 45%, #1b283b 100%);
 }
 
-.about-hero-panel ul li + li {
-    border-top: 1px solid rgba(255,255,255,0.1);
+.about-hero .site-hero-pattern {
+    background: radial-gradient(circle at 25% 20%, rgba(255,255,255,0.25), transparent 50%),
+                radial-gradient(circle at 75% 10%, rgba(255,255,255,0.15), transparent 35%);
+    opacity: 0.4;
 }
 
-.about-hero-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.7);
-    margin-top: 0.35rem;
-}
 
 .about-pillars {
     background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
@@ -79,7 +55,4 @@
         width: 100%;
     }
 
-    .about-hero-panel {
-        padding: 2rem;
-    }
 }

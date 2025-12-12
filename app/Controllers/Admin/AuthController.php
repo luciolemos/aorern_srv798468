@@ -12,6 +12,7 @@ use App\Models\User;
 class AuthController extends Controller {
 
     private User $userModel;
+    private const USER_AVATAR_DIR = 'uploads/users/';
 
     public function __construct() {
         $this->userModel = new User();
@@ -276,9 +277,8 @@ class AuthController extends Controller {
                 return null;
             }
 
-            // Caminho absoluto do diretório
-            $base_path = dirname(dirname(__DIR__));
-            $upload_dir = $base_path . '/public/assets/avatars/';
+            $publicRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? (dirname(__DIR__, 3) . '/public'), '/');
+            $upload_dir = $publicRoot . '/' . self::USER_AVATAR_DIR;
 
             // Garante que o diretório existe
             if (!is_dir($upload_dir)) {
@@ -321,7 +321,7 @@ class AuthController extends Controller {
             @chmod($filepath, 0644);
 
             error_log('[AVATAR-REGISTER] Upload bem-sucedido: ' . $filename);
-            return 'assets/avatars/' . $filename;
+            return self::USER_AVATAR_DIR . $filename;
 
         } catch (\Exception $e) {
             error_log('[AVATAR-REGISTER] Exceção: ' . $e->getMessage());

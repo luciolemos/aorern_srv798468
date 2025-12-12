@@ -13,6 +13,7 @@ use App\Models\User;
 class PerfilController extends Controller {
 
     private User $userModel;
+    private const USER_AVATAR_DIR = 'uploads/users/';
 
     public function __construct() {
         $this->userModel = new User();
@@ -282,7 +283,8 @@ class PerfilController extends Controller {
         }
 
         // Caminho absoluto
-        $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/assets/avatars/';
+        $publicRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? (dirname(__DIR__, 3) . '/public'), '/');
+        $upload_dir = $publicRoot . '/' . self::USER_AVATAR_DIR;
 
         // Garante que o diretório existe
         if (!is_dir($upload_dir)) {
@@ -317,6 +319,6 @@ class PerfilController extends Controller {
         // Ajusta permissões do arquivo
         @chmod($filepath, 0644);
 
-        return 'assets/avatars/' . $filename;
+        return self::USER_AVATAR_DIR . $filename;
     }
 }

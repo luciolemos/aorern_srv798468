@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Helpers\AdminHelper;
 use App\Helpers\CsrfHelper;
+use App\Helpers\PaginationHelper;
 use App\Core\Controller;
 use App\Core\Request;
 use App\Middleware\AuthMiddleware;
@@ -26,7 +27,10 @@ class PostCategoriesController extends Controller
         $request = Request::capture();
         $q = $request->query('q', '');
         $page = max(1, (int) $request->query('page', 1));
-        $perPage = 10;
+        $defaultPerPage = 10;
+        $perPageRaw = $request->query('per_page');
+        [$perPage, $perPageSelection] = PaginationHelper::resolve($perPageRaw, $defaultPerPage);
+        $perPageQueryValue = ($perPageRaw !== null && $perPageRaw !== '') ? $perPageSelection : null;
 
         $result = $this->model->paginar($page, $perPage, $q ?: null);
         $categorias = $result['data'];
@@ -34,10 +38,16 @@ class PostCategoriesController extends Controller
             'path' => BASE_URL . 'admin/post-categories',
             'query' => array_filter([
                 'q' => $q,
+                'per_page' => $perPageQueryValue,
             ], fn($value) => $value !== null && $value !== ''),
         ]);
 
-        $this->renderTwig('admin/post_categories/index', array_merge(compact('categorias', 'q', 'pagination'), AdminHelper::getUserData('post-categories')));
+        $perPageOptions = PaginationHelper::options($defaultPerPage);
+
+        $this->renderTwig('admin/post_categories/index', array_merge(
+            compact('categorias', 'q', 'pagination', 'perPageOptions', 'perPageSelection'),
+            AdminHelper::getUserData('post-categories')
+        ));
     }
 
     public function create(): void
@@ -52,11 +62,15 @@ class PostCategoriesController extends Controller
         PermissionMiddleware::authorize('post_categories:create');
         $request = Request::capture();
         CsrfHelper::verifyOrDie();
+        $staffId = $request->post('staff_id', 'POSTCAT-' . date('YmdHis'));
+        $nome = trim($request->post('nome', ''));
+        $slugInput = trim($request->post('slug', ''));
         $color = $this->sanitizeColor($request->post('badge_color'));
 
         $dados = [
-            'staff_id' => $request->post('staff_id', 'POSTCAT-' . date('YmdHis')),
-            'nome' => trim($request->post('nome', '')),
+            'staff_id' => $staffId,
+            'nome' => $nome,
+            'slug' => $this->generateSlug($slugInput !== '' ? $slugInput : $nome, $staffId),
             'badge_color' => $color,
             'descricao' => trim($request->post('descricao', ''))
         ];
@@ -84,10 +98,20 @@ class PostCategoriesController extends Controller
         PermissionMiddleware::authorize('post_categories:edit');
         $request = Request::capture();
         CsrfHelper::verifyOrDie();
+        $categoria = $this->model->buscar($id);
+        if (!$categoria) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Categoria não encontrada.'];
+            header('Location: ' . BASE_URL . 'admin/post-categories');
+            exit;
+        }
+
+        $nome = trim($request->post('nome', ''));
+        $slugInput = trim($request->post('slug', ''));
         $color = $this->sanitizeColor($request->post('badge_color'));
 
         $dados = [
-            'nome' => trim($request->post('nome', '')),
+            'nome' => $nome,
+            'slug' => $this->generateSlug($slugInput !== '' ? $slugInput : $nome, $categoria['staff_id'] ?? null, $categoria['slug'] ?? null),
             'badge_color' => $color,
             'descricao' => trim($request->post('descricao', ''))
         ];
@@ -111,6 +135,47 @@ class PostCategoriesController extends Controller
         header('Location: ' . BASE_URL . 'admin/post-categories');
         exit;
 }
+
+    private function generateSlug(?string $value, ?string $fallback = null, ?string $preserve = null): string
+    {
+        $base = trim((string)($value ?? ''));
+
+        if ($base === '' && $preserve) {
+            return $preserve;
+        }
+
+        if ($base === '') {
+            $base = trim((string)($fallback ?? ''));
+        }
+
+        if ($base === '') {
+            return strtolower('cat-' . uniqid());
+        }
+
+        $transliterated = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $base);
+        if ($transliterated === false || $transliterated === null) {
+            $transliterated = $base;
+        }
+
+        $slug = strtolower($transliterated);
+        $slug = preg_replace('/[^a-z0-9]+/', '-', $slug ?? '');
+        $slug = trim((string)$slug, '-');
+
+        if ($slug === '' && $preserve) {
+            return $preserve;
+        }
+
+        if ($slug === '') {
+            $slug = strtolower(preg_replace('/[^a-z0-9]+/', '-', (string)($fallback ?? '')));
+            $slug = trim($slug, '-');
+        }
+
+        if ($slug === '') {
+            $slug = strtolower('cat-' . uniqid());
+        }
+
+        return substr($slug, 0, 140);
+    }
 
     private function sanitizeColor(?string $color): string
     {

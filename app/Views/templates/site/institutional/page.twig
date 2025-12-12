@@ -1,0 +1,205 @@
+{% extends 'layouts/base.twig' %}
+
+{% block title %}{{ page.title }} - CBMRN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/institutional.css">
+{% endblock %}
+
+{% block content %}
+<section class="inst-hero py-5 py-lg-5">
+    <div class="container">
+        {% include 'site/partials/breadcrumb.twig' with { breadcrumbs: breadcrumbs } %}
+        <p class="inst-hero-tag">{{ page.badge|default('Conteúdo Institucional') }}</p>
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <h1 class="display-5 fw-bold text-white">{{ page.title }}</h1>
+                {% if page.tagline %}<p class="text-white-75 fs-5 mb-1">{{ page.tagline }}</p>{% endif %}
+                <p class="lead text-white-75 mb-4">{{ page.lead }}</p>
+                {% if page.hero_highlights is defined and page.hero_highlights|length > 0 %}
+                    <div class="inst-hero-stats mt-4">
+                        {% for stat in page.hero_highlights %}
+                            <div class="inst-stat">
+                                <span class="value">{{ stat.value }}</span>
+                                <span class="label">{{ stat.label }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    {% if page.cta %}
+                        {% include 'site/components/button.twig' with {
+                            href: page.cta.url,
+                            label: page.cta.label,
+                            icon: page.cta.icon|default('bi-lightning-charge'),
+                            variant: 'inst',
+                            size: 'lg'
+                        } %}
+                    {% endif %}
+                    {% include 'site/components/button.twig' with {
+                        href: BASE_URL ~ 'institucional',
+                        label: 'Ver todas as seções',
+                        icon: 'bi-view-list',
+                        variant: 'light-outline',
+                        size: 'lg'
+                    } %}
+                </div>
+            </div>
+            <div class="col-lg-5">
+                {% if page.media and page.media.type == 'image' %}
+                    <div class="inst-media frame">
+                        <img src="{{ page.media.src }}" alt="{{ page.media.alt|default(page.title) }}" class="img-fluid">
+                        {% if page.media.caption %}
+                            <small class="text-white-75 d-block mt-2">{{ page.media.caption }}</small>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="inst-spotlight-card">
+                        <h3 class="h4 text-white fw-bold mb-3">{{ page.spotlight.title|default('Ponto focal') }}</h3>
+                        <p class="text-white-75 mb-4">{{ page.spotlight.description|default('Conteúdo atualizado pela diretoria responsável.') }}</p>
+                        {% if page.spotlight.chips %}
+                            <div class="d-flex flex-wrap gap-2">
+                                {% for chip in page.spotlight.chips %}
+                                    <span class="badge rounded-pill bg-white text-inst-primary">{{ chip }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                {% if page.sections %}
+                    {% for section in page.sections %}
+                        <article class="inst-section-card mb-4">
+                            <div class="inst-section-icon">
+                                <i class="bi {{ section.icon|default('bi-shield-check') }}"></i>
+                            </div>
+                            <div>
+                                <h2 class="h4 fw-bold">{{ section.title }}</h2>
+                                <p class="text-muted mb-3">{{ section.description }}</p>
+                                {% if section.items %}
+                                    <ul class="inst-list">
+                                        {% for item in section.items %}
+                                            <li><i class="bi bi-dot"></i> {{ item }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </article>
+                    {% endfor %}
+                {% endif %}
+
+                {% if page.value_cards %}
+                    <div class="row g-3 mb-4">
+                        {% for value in page.value_cards %}
+                            <div class="col-md-6">
+                                <div class="inst-value-card">
+                                    <h3 class="h6 fw-bold text-inst-primary mb-1">{{ value.title }}</h3>
+                                    <p class="mb-0 text-muted">{{ value.description }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if page.timeline %}
+                    <div class="inst-timeline-wrapper mb-4">
+                        <h3 class="h5 fw-bold mb-3 text-inst-primary">Linha do tempo</h3>
+                        {% include 'site/components/timeline.twig' with {
+                            items: page.timeline,
+                            label_field: 'label',
+                            description_field: 'description',
+                            title_field: null,
+                            description_class: 'mb-0 text-muted'
+                        } %}
+                    </div>
+                {% endif %}
+
+                {% if page.lyrics %}
+                    <div class="inst-lyrics">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-music-note-beamed fs-3 text-inst-primary"></i>
+                            <h3 class="h5 fw-bold mb-0">Letra do hino</h3>
+                        </div>
+                        {% if page.lyrics_note %}
+                            <div class="alert alert-warning mb-4">{{ page.lyrics_note }}</div>
+                        {% endif %}
+                        <div class="row g-3">
+                            {% for stanza in page.lyrics %}
+                                <div class="col-md-4">
+                                    <article class="inst-lyrics-card h-100">
+                                        <h4 class="h6 text-uppercase text-inst-primary">{{ stanza.title }}</h4>
+                                        <p class="mb-0">{{ stanza.lines|join('<br>')|raw }}</p>
+                                    </article>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if page.links %}
+                    <div class="inst-links-grid">
+                        {% for link in page.links %}
+                            <article class="inst-link-card">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge rounded-pill bg-inst-soft">{{ link.tag|default('Oficial') }}</span>
+                                    <i class="bi bi-box-arrow-up-right text-inst-primary"></i>
+                                </div>
+                                <h3 class="h5 fw-bold">{{ link.label }}</h3>
+                                <p class="text-muted">{{ link.description }}</p>
+                                <a href="{{ link.url }}" class="stretched-link" target="_blank" rel="noopener">Acessar portal</a>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                {% if page.spotlight and page.media %}
+                    <div class="inst-side-card mb-4">
+                        <h3 class="h6 fw-bold text-uppercase text-muted">Destaque</h3>
+                        <p class="mb-0">{{ page.spotlight.description }}</p>
+                    </div>
+                {% endif %}
+
+                <div class="inst-side-card mb-4">
+                    <h3 class="h6 fw-bold text-uppercase text-muted">Outros temas</h3>
+                    <ul class="list-unstyled mb-0">
+                        {% for item in menuItems %}
+                            <li class="mb-2">
+                                <a class="inst-side-link" href="{{ item.url }}">
+                                    <i class="bi bi-arrow-right-short"></i>{{ item.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {% if page.resources %}
+                    <div class="inst-side-card">
+                        <h3 class="h6 fw-bold text-uppercase text-muted">Materiais relacionados</h3>
+                        <ul class="list-unstyled mb-0">
+                            {% for resource in page.resources %}
+                                <li class="mb-3">
+                                    <p class="mb-1 fw-semibold">{{ resource.label }}</p>
+                                    <small class="text-muted d-block">{{ resource.type }}</small>
+                                    <a href="{{ resource.url }}" class="inst-side-link" {% if resource.external %}target="_blank" rel="noopener"{% endif %}>
+                                        <i class="bi bi-box-arrow-up-right me-1"></i> Acessar
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

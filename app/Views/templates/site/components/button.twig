@@ -1,0 +1,69 @@
+{% set tag = href is defined and href ? 'a' : 'button' %}
+{% set variant = variant|default('solid') %}
+{% set size = size|default('lg') %}
+{% set icon_position = icon_position|default('start') %}
+{% set is_external = target|default('') == '_blank' %}
+{% set label_hidden = label_hidden|default(false) %}
+{% set icon_class = icon_class|default('') %}
+
+{% set buttonClasses = ['btn'] %}
+{% if variant == 'solid' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-theme']) %}
+{% elseif variant == 'outline' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-theme-outline']) %}
+{% elseif variant == 'ghost' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-theme-ghost']) %}
+{% elseif variant == 'muted' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-theme-muted']) %}
+{% elseif variant == 'surface' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-theme-surface']) %}
+{% elseif variant == 'neutral-outline' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-theme-outline-neutral']) %}
+{% elseif variant == 'light-outline' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-outline-light']) %}
+{% elseif variant == 'inst' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-inst-primary']) %}
+{% elseif variant == 'link' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-link']) %}
+{% endif %}
+
+{% if size == 'sm' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-sm']) %}
+{% elseif size == 'md' %}
+    {% set buttonClasses = buttonClasses %}
+{% elseif size == 'lg' %}
+    {% set buttonClasses = buttonClasses|merge(['btn-lg']) %}
+{% endif %}
+
+{% if button_class is defined and button_class %}
+    {% set buttonClasses = buttonClasses|merge([button_class]) %}
+{% endif %}
+
+{% set label_value = label|default(text|default('')) %}
+
+<{% if tag == 'a' %}a href="{{ href }}"{% else %}button type="{{ type|default('button') }}"{% endif %}
+    class="{{ buttonClasses|join(' ') }}"
+    {% if tag == 'a' and target|default(null) %}target="{{ target }}"{% endif %}
+    {% if tag == 'a' and (rel|default(null) or is_external) %}
+        rel="{{ rel|default('noopener noreferrer') }}"
+    {% endif %}
+    {% if disabled|default(false) %}disabled aria-disabled="true"{% endif %}
+    {% if attrs is defined %}
+        {% for attrName, attrValue in attrs %}
+            {{ attrName }}="{{ attrValue }}"
+        {% endfor %}
+    {% endif %}>
+    {% if icon is defined and icon and icon_position != 'end' %}
+        <i class="bi {{ icon }} btn-icon{% if icon_class %} {{ icon_class }}{% endif %}"></i>
+    {% endif %}
+    {% if label_value %}
+        {% if label_hidden %}
+            <span class="visually-hidden">{{ label_value }}</span>
+        {% else %}
+            <span>{{ label_value }}</span>
+        {% endif %}
+    {% endif %}
+    {% if icon is defined and icon and icon_position == 'end' %}
+        <i class="bi {{ icon }} btn-icon{% if icon_class %} {{ icon_class }}{% endif %}"></i>
+    {% endif %}
+</{% if tag == 'a' %}a{% else %}button{% endif %}>

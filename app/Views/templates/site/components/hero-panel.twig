@@ -1,0 +1,61 @@
+{% set theme = theme|default('light') %}
+{% set themeClass = 'hero-panel--' ~ theme %}
+
+{% set headingLevel = title_level|default(2) %}
+{% if headingLevel < 1 or headingLevel > 6 %}
+    {% set headingLevel = 2 %}
+{% endif %}
+{% set headingTag = 'h' ~ headingLevel %}
+
+<div class="hero-panel {{ themeClass }} {{ panel_class|default('') }}">
+    {% if badge %}
+        <div class="hero-panel-badge {{ badge_class|default('') }}">{{ badge|raw }}</div>
+    {% endif %}
+
+    {% if eyebrow %}
+        <p class="hero-panel-eyebrow {{ eyebrow_class|default('') }}">{{ eyebrow }}</p>
+    {% endif %}
+
+    {% if title %}
+        <{{ headingTag }} class="hero-panel-title {{ title_class|default('') }}">{{ title }}</{{ headingTag }}>
+    {% endif %}
+
+    {% if description %}
+        <p class="hero-panel-description {{ description_class|default('') }}">{{ description }}</p>
+    {% endif %}
+
+    {% if items is defined and items|length > 0 %}
+        <ul class="hero-panel-list {{ list_class|default('') }}">
+            {% for item in items %}
+                <li class="hero-panel-item {{ item.item_class|default('') }}">
+                    {% if item.icon %}
+                        <div class="hero-panel-icon {{ item.icon_class|default('') }}"{% if item.icon_style %} style="{{ item.icon_style }}"{% endif %}>
+                            <i class="{{ item.icon }} {{ item.icon_inner_class|default('') }}"></i>
+                        </div>
+                    {% elseif item.dot|default(false) %}
+                        <div class="hero-panel-dot {{ item.dot_class|default('') }}"></div>
+                    {% endif %}
+                    <div class="hero-panel-item-content">
+                        {% if item.title_html is defined %}
+                            <p class="hero-panel-item-title {{ item.title_class|default('') }}">{{ item.title_html|raw }}</p>
+                        {% elseif item.title %}
+                            <p class="hero-panel-item-title {{ item.title_class|default('') }}">{{ item.title }}</p>
+                        {% endif %}
+                        {% if item.meta %}
+                            <small class="hero-panel-item-meta {{ item.meta_class|default('') }}">{{ item.meta }}</small>
+                        {% endif %}
+                        {% if item.description_html is defined %}
+                            <p class="hero-panel-item-description {{ item.description_class|default('') }}">{{ item.description_html|raw }}</p>
+                        {% elseif item.description %}
+                            <p class="hero-panel-item-description {{ item.description_class|default('') }}">{{ item.description }}</p>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if body_html is defined %}
+        <div class="hero-panel-body {{ body_class|default('') }}">{{ body_html|raw }}</div>
+    {% endif %}
+</div>

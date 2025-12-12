@@ -1,0 +1,25 @@
+[2025-12-09 12:07:47] Twig\Error\SyntaxError: A mapping value must be followed by a comma. Unexpected token "name" of value "button_class" ("punctuation" expected with value ",") in "site/pages/home.twig" at line 53. in /var/www/mvc/app/Views/templates/site/pages/home.twig:53
+Stack trace:
+#0 /var/www/mvc/vendor/twig/twig/src/ExpressionParser/Prefix/LiteralExpressionParser.php(195): Twig\TokenStream->expect()
+#1 /var/www/mvc/vendor/twig/twig/src/ExpressionParser/Prefix/LiteralExpressionParser.php(83): Twig\ExpressionParser\Prefix\LiteralExpressionParser->parseMappingExpression()
+#2 /var/www/mvc/vendor/twig/twig/src/Parser.php(384): Twig\ExpressionParser\Prefix\LiteralExpressionParser->parse()
+#3 /var/www/mvc/vendor/twig/twig/src/TokenParser/IncludeTokenParser.php(56): Twig\Parser->parseExpression()
+#4 /var/www/mvc/vendor/twig/twig/src/TokenParser/IncludeTokenParser.php(35): Twig\TokenParser\IncludeTokenParser->parseArguments()
+#5 /var/www/mvc/vendor/twig/twig/src/Parser.php(224): Twig\TokenParser\IncludeTokenParser->parse()
+#6 /var/www/mvc/vendor/twig/twig/src/TokenParser/BlockTokenParser.php(46): Twig\Parser->subparse()
+#7 /var/www/mvc/vendor/twig/twig/src/Parser.php(224): Twig\TokenParser\BlockTokenParser->parse()
+#8 /var/www/mvc/vendor/twig/twig/src/Parser.php(104): Twig\Parser->subparse()
+#9 /var/www/mvc/vendor/twig/twig/src/Environment.php(558): Twig\Parser->parse()
+#10 /var/www/mvc/vendor/twig/twig/src/Environment.php(589): Twig\Environment->parse()
+#11 /var/www/mvc/vendor/twig/twig/src/Environment.php(408): Twig\Environment->compileSource()
+#12 /var/www/mvc/vendor/twig/twig/src/Environment.php(370): Twig\Environment->loadTemplate()
+#13 /var/www/mvc/vendor/twig/twig/src/Environment.php(333): Twig\Environment->load()
+#14 /var/www/mvc/app/Core/TwigEngine.php(57): Twig\Environment->render()
+#15 /var/www/mvc/app/Core/Controller.php(28): App\Core\TwigEngine->render()
+#16 /var/www/mvc/app/Controllers/Site/HomeController.php(13): App\Core\Controller->renderTwig()
+#17 [internal function]: App\Controllers\Site\HomeController->index()
+#18 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#19 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#20 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#21 {main}
+

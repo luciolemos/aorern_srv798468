@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 
 use App\Helpers\AdminHelper;
+use App\Helpers\PaginationHelper;
 
 use App\Core\Controller;
 use App\Core\Request;
@@ -25,7 +26,10 @@ class EquipamentosController extends Controller {
         $request = Request::capture();
         $q = $request->query('q', '');
         $page = max(1, (int) $request->query('page', 1));
-        $perPage = 12;
+        $defaultPerPage = 10;
+        $perPageRaw = $request->query('per_page');
+        [$perPage, $perPageSelection] = PaginationHelper::resolve($perPageRaw, $defaultPerPage);
+        $perPageQueryValue = ($perPageRaw !== null && $perPageRaw !== '') ? $perPageSelection : null;
         
         $result = $this->model->paginar($page, $perPage, $q ?: null);
         $equipamentos = $result['data'];
@@ -33,10 +37,16 @@ class EquipamentosController extends Controller {
             'path' => BASE_URL . 'admin/equipamentos',
             'query' => array_filter([
                 'q' => $q,
+                'per_page' => $perPageQueryValue,
             ], fn($value) => $value !== null && $value !== ''),
         ]);
 
-        $this->renderTwig('admin/equipamentos/index', array_merge(compact('equipamentos', 'q', 'pagination'), AdminHelper::getUserData('equipamentos')));
+        $perPageOptions = PaginationHelper::options($defaultPerPage);
+
+        $this->renderTwig('admin/equipamentos/index', array_merge(
+            compact('equipamentos', 'q', 'pagination', 'perPageOptions', 'perPageSelection'),
+            AdminHelper::getUserData('equipamentos')
+        ));
     }
 
     public function cadastrar(): void {
@@ -79,7 +89,26 @@ class EquipamentosController extends Controller {
     public function atualizar(int $id): void {
         PermissionMiddleware::authorize('equipamentos:edit');
         $request = Request::capture();
-        $this->model->atualizar($id, $request->post());
+        $registro = $this->model->buscar($id);
+        if (!$registro) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Equipamento não encontrado.'];
+            header('Location: ' . BASE_URL . 'admin/equipamentos');
+            exit;
+        }
+
+        $dados = [
+            'nome'               => trim((string) $request->post('nome', $registro['nome'] ?? '')),
+            'codigo'             => trim((string) $request->post('codigo', $registro['codigo'] ?? '')),
+            'serial_number'      => trim((string) $request->post('serial_number', $registro['serial_number'] ?? '')),
+            'marca'              => trim((string) $request->post('marca', $registro['marca'] ?? '')),
+            'modelo'             => trim((string) $request->post('modelo', $registro['modelo'] ?? '')),
+            'data_fabricacao'    => $request->post('data_fabricacao', $registro['data_fabricacao'] ?? null) ?: null,
+            'estado'             => trim((string) $request->post('estado', $registro['estado'] ?? '')),
+            'quantidade_estoque' => (int) $request->post('quantidade_estoque', $registro['quantidade_estoque'] ?? 0),
+            'categoria_id'       => (int) $request->post('categoria_id', $registro['categoria_id'] ?? 0),
+        ];
+
+        $this->model->atualizar($id, $dados);
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Equipamento atualizado!'];
         header('Location: ' . BASE_URL . 'admin/equipamentos');

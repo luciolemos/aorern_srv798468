@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Helpers\Paginator;
 use PDO;
 
 class User {
@@ -172,33 +173,58 @@ class User {
     }
 
     /**
+     * Contagem de usuários por status
+     */
+    public function contarPorStatus(string $status): int {
+        $stmt = $this->db->prepare("SELECT COUNT(*) as total FROM {$this->table} WHERE status = :status");
+        $stmt->execute([':status' => $status]);
+        return (int) $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+
+    /**
      * Lista usuários com filtros
      */
     public function listarComFiltros(?string $busca = null, ?string $role = null, ?string $status = null): array {
-        $sql = "SELECT id, username, email, avatar, role, ativo, status, ultimo_login, created_at, updated_at 
-                FROM {$this->table} 
-                WHERE 1=1";
+        $result = $this->paginarComFiltros(1, null, $busca, $role, $status);
+        return $result['data'];
+    }
+
+    public function paginarComFiltros(
+        int $page,
+        ?int $perPage,
+        ?string $busca = null,
+        ?string $role = null,
+        ?string $status = null
+    ): array {
+        $conditions = [];
         $params = [];
 
         if ($busca) {
-            $sql .= " AND (username LIKE :busca OR email LIKE :busca)";
+            $conditions[] = '(username LIKE :busca OR email LIKE :busca)';
             $params[':busca'] = '%' . $busca . '%';
         }
 
         if ($role) {
-            $sql .= " AND role = :role";
+            $conditions[] = 'role = :role';
             $params[':role'] = $role;
         }
 
         if ($status) {
-            $sql .= " AND status = :status";
+            $conditions[] = 'status = :status';
             $params[':status'] = $status;
         }
 
-        $sql .= " ORDER BY created_at DESC";
+        $where = $conditions ? implode(' AND ', $conditions) : '';
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return Paginator::paginate(
+            $this->db,
+            'id, username, email, avatar, role, ativo, status, ultimo_login, created_at, updated_at',
+            "FROM {$this->table}",
+            $where,
+            'created_at DESC',
+            $params,
+            $page,
+            $perPage
+        );
     }
 }

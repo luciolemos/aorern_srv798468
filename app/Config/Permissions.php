@@ -81,6 +81,22 @@ class Permissions
 
         // ====== STATUS ======
         'status:view' => ['admin', 'gerente'],
+
+        // ====== LIVRO DE OCORRÊNCIAS ======
+        'livro_ocorrencias:list' => ['admin', 'gerente', 'operador'],
+        'livro_ocorrencias:create' => ['admin', 'gerente'],
+        'livro_ocorrencias:edit' => ['admin', 'gerente'],
+        'livro_ocorrencias:delete' => ['admin'],
+
+        // ====== GESTÃO K9 ======
+        'dog_breeds:list' => ['admin', 'gerente', 'operador'],
+        'dog_breeds:create' => ['admin', 'gerente'],
+        'dog_breeds:edit' => ['admin', 'gerente'],
+        'dog_breeds:delete' => ['admin'],
+        'dogs:list' => ['admin', 'gerente', 'operador'],
+        'dogs:create' => ['admin', 'gerente'],
+        'dogs:edit' => ['admin', 'gerente'],
+        'dogs:delete' => ['admin'],
     ];
 
     /**

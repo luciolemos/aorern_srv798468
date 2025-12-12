@@ -6,6 +6,7 @@ use App\Core\Controller;
 use App\Models\User;
 
 class RegisterController extends Controller {
+    private const USER_AVATAR_DIR = 'uploads/users/';
     public function index() {
         $errorKey = $_GET['error'] ?? null;
         $error = null;
@@ -95,7 +96,7 @@ class RegisterController extends Controller {
     }
 
     /**
-     * Salva avatar em uploads/avatars e retorna o caminho relativo
+     * Salva avatar em uploads/users e retorna o caminho relativo
      */
     private function processAvatar(array $file): ?string {
         $allowed = ['image/jpeg', 'image/png', 'image/webp'];
@@ -103,8 +104,8 @@ class RegisterController extends Controller {
             return null;
         }
 
-        // Caminho físico em /public/uploads/avatars
-        $uploadsDir = dirname(__DIR__, 3) . '/public/uploads/avatars/';
+        $publicRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? (dirname(__DIR__, 3) . '/public'), '/');
+        $uploadsDir = $publicRoot . '/' . self::USER_AVATAR_DIR;
         if (!is_dir($uploadsDir)) {
             @mkdir($uploadsDir, 0775, true);
         }
@@ -115,7 +116,7 @@ class RegisterController extends Controller {
 
         if (move_uploaded_file($file['tmp_name'], $destPath)) {
             // retorna caminho relativo para servir via BASE_URL
-            return 'uploads/avatars/' . $filename;
+            return self::USER_AVATAR_DIR . $filename;
         }
 
         return null;

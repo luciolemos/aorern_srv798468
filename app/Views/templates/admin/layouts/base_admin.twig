@@ -20,7 +20,7 @@
 
     {% block styles %}{% endblock %}
 </head>
-<body class="bg-light">
+<body class="bg-light" data-base-url="{{ BASE_URL }}">
     {{ toast_html|raw }}
     
     {% include 'admin/components/navbar.twig' %}
@@ -42,6 +42,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="{{ BASE_URL }}assets/vendor/quill.js" defer></script>
     <script src="{{ BASE_URL }}assets/js/admin.js" defer></script>
+    <script src="{{ BASE_URL }}assets/js/toast-init.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof AOS !== 'undefined') {

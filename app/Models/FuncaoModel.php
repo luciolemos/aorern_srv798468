@@ -71,7 +71,7 @@ class FuncaoModel {
         return (int) $stmt->fetch(\PDO::FETCH_ASSOC)['total'];
     }
 
-    public function paginar(int $page = 1, int $perPage = 12, ?string $busca = null): array
+    public function paginar(int $page = 1, ?int $perPage = 12, ?string $busca = null): array
     {
         $select = "f.*";
         $from = "FROM {$this->table} f";

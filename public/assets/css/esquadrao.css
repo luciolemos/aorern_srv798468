@@ -1,62 +1,58 @@
 /* esquadrao.css */
-.section-kicker {
-    text-transform: uppercase;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-}
-
-.section-title {
-    font-family: var(--font-headings);
-    font-size: clamp(2rem, 3vw, 2.7rem);
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-.section-lead {
-    font-size: 1.05rem;
-    line-height: 1.7;
+.site-hero.esquadrao-hero {
+    padding: clamp(3rem, 6vw, 6rem) 0;
+    background: linear-gradient(130deg, #0f1f2d 0%, #1f2f44 45%, #1b283b 100%);
+    position: relative;
+    overflow: hidden;
 }
 
 .section-spacing {
     padding: clamp(3rem, 6vw, 5rem) 0;
 }
 
-.esquadrao-hero {
-    padding: clamp(3rem, 6vw, 6rem) 0;
-    background: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
-    position: relative;
+.site-hero.esquadrao-hero .site-hero-pattern {
+    background: radial-gradient(circle at 25% 20%, rgba(255,255,255,0.25), transparent 50%),
+                radial-gradient(circle at 75% 10%, rgba(255,255,255,0.15), transparent 35%);
+    opacity: 0.4;
 }
 
-.esquadrao-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(115deg, rgba(10,15,25,0.85), rgba(223,99,1,0.6));
-    z-index: 0;
+.site-hero.esquadrao-hero .hero-panel-col {
+    display: flex;
+    justify-content: center;
 }
 
-.esquadrao-hero .container,
-.esquadrao-hero .row,
-.esquadrao-hero .col-lg-6 {
-    position: relative;
-    z-index: 1;
+.about-hero-actions .btn {
+    min-width: 210px;
 }
 
-.esquadrao-hero-card {
-    border-radius: 1.5rem;
-    background: rgba(6,16,30,0.6);
-    border: 1px solid rgba(255,255,255,0.15);
-    padding: 2.5rem;
+.hero-panel-footnote {
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
-.esquadrao-metrics {
+.esquadrao-metrics-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.5rem;
+    gap: 1.25rem;
+}
+
+.esquadrao-metrics-grid > div {
+    border-radius: 1.15rem;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.04);
+    padding: 1.25rem;
+}
+
+.esquadrao-metrics-grid small {
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 0.35rem;
 }
 
 .esquadrao-overview {
-    background: linear-gradient(135deg, #ffffff 0%, #fff4ea 100%);
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
 }
 
 .esquadrao-image {
@@ -74,13 +70,30 @@
     gap: 0.75rem;
 }
 
-.esquadrao-checklist i {
-    color: var(--bombeiros-orange, #df6301);
-    margin-right: 0.65rem;
+.esquadrao-checklist .icon-circle {
+    font-size: 1.1rem;
+}
+
+.esquadrao-checklist .icon-circle.icon-ghost {
+    color: #fff;
 }
 
 .esquadrao-capabilities {
     background: #fff;
+}
+
+.pillar-card {
+    border-radius: 1.25rem;
+    border: 1px solid rgba(223, 99, 1, 0.15);
+    padding: 2rem;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pillar-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 35px rgba(0,0,0,0.08);
 }
 
 .esquadrao-card {
@@ -126,7 +139,7 @@
 }
 
 @media (max-width: 768px) {
-    .esquadrao-metrics {
+    .esquadrao-metrics-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 1rem;
     }
@@ -141,5 +154,15 @@
 
     .section-title {
         font-size: clamp(1.8rem, 6vw, 2.4rem);
+    }
+
+    .about-hero-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .esquadrao-metrics-grid {
+        grid-template-columns: minmax(0, 1fr);
     }
 }

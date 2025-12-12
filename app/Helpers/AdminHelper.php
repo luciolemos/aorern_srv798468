@@ -2,7 +2,40 @@
 
 namespace App\Helpers;
 
+use App\Models\User;
+use App\Models\LivroOcorrenciaModel;
+
 class AdminHelper {
+    private static ?int $pendingUsersCache = null;
+    private static ?int $occurrencesInProgressCache = null;
+
+    private static function pendingUsersCount(): int {
+        if (self::$pendingUsersCache === null) {
+            try {
+                $userModel = new User();
+                self::$pendingUsersCache = $userModel->contarPorStatus('pendente');
+            } catch (\Throwable $th) {
+                error_log('AdminHelper pending count error: ' . $th->getMessage());
+                self::$pendingUsersCache = 0;
+            }
+        }
+
+        return self::$pendingUsersCache;
+    }
+
+    private static function occurrencesInProgressCount(): int {
+        if (self::$occurrencesInProgressCache === null) {
+            try {
+                $model = new LivroOcorrenciaModel();
+                self::$occurrencesInProgressCache = $model->contarPorStatus('em_andamento');
+            } catch (\Throwable $th) {
+                error_log('AdminHelper occurrences count error: ' . $th->getMessage());
+                self::$occurrencesInProgressCache = 0;
+            }
+        }
+
+        return self::$occurrencesInProgressCache;
+    }
     /**
      * Retorna dados do usuário para templates admin
      */
@@ -19,7 +52,11 @@ class AdminHelper {
                 'initial' => strtoupper($initial ?: 'U'),
                 'avatar' => $userAvatar
             ],
-            'subRoute' => $subRoute
+            'subRoute' => $subRoute,
+            'notifications' => [
+                'pending_users' => self::pendingUsersCount(),
+                'occurrences_in_progress' => self::occurrencesInProgressCount(),
+            ],
         ];
     }
 }

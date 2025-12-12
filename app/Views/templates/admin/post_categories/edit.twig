@@ -12,7 +12,12 @@
         <div class="row g-3">
             <div class="col-md-8">
                 <label class="form-label fw-bold">Nome da categoria</label>
-                <input type="text" class="form-control" name="nome" value="{{ categoria.nome }}" required>
+                <input type="text" class="form-control" name="nome" value="{{ categoria.nome }}" required data-slug-source>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Slug</label>
+                <input type="text" class="form-control text-lowercase" name="slug" value="{{ categoria.slug }}" data-slug-target maxlength="140">
+                <div class="form-text">Atualize o identificador da URL, se necessário.</div>
             </div>
             <div class="col-md-4">
                 <label class="form-label fw-bold">Cor do badge</label>
@@ -77,5 +82,35 @@
             colorInput.addEventListener('input', syncFromColor);
             hexInput.addEventListener('blur', syncFromHex);
         });
+
+        (function() {
+            const source = document.querySelector('[data-slug-source]');
+            const target = document.querySelector('[data-slug-target]');
+            if (!source || !target) {
+                return;
+            }
+
+            let userEdited = target.value.trim().length > 0;
+
+            const slugify = (value) => {
+                return value
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-zA-Z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
+                    .toLowerCase();
+            };
+
+            target.addEventListener('input', () => {
+                userEdited = target.value.trim().length > 0;
+            });
+
+            source.addEventListener('input', () => {
+                if (userEdited) {
+                    return;
+                }
+                target.value = slugify(source.value);
+            });
+        })();
     </script>
 {% endblock %}

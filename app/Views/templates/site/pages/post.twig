@@ -40,44 +40,91 @@
                         </figure>
                     {% endif %}
 
-                    <div class="post-share-card card border-0 shadow-sm mb-4">
-                        <div class="card-body d-flex flex-column flex-md-row align-items-md-center gap-3">
-                            <div>
-                                <p class="text-muted text-uppercase small fw-semibold mb-1">Compartilhar</p>
-                                <p class="mb-0 text-muted">Divulgue este conteúdo nas suas redes.</p>
-                            </div>
-                            <div class="d-flex flex-wrap gap-2 ms-md-auto">
-                                <a class="btn btn-light border share-btn" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl|url_encode }}" title="Facebook">
-                                    <i class="bi bi-facebook text-primary"></i> Facebook
-                                </a>
-                                <a class="btn btn-light border share-btn" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url={{ shareUrl|url_encode }}&text={{ post.titulo|url_encode }}" title="Twitter / X">
-                                    <i class="bi bi-twitter text-primary"></i> Twitter
-                                </a>
-                                <a class="btn btn-light border share-btn" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text={{ (post.titulo ~ ' - ' ~ shareUrl)|url_encode }}" title="WhatsApp">
-                                    <i class="bi bi-whatsapp text-success"></i> WhatsApp
-                                </a>
-                                <a class="btn btn-light border share-btn" target="_blank" rel="noopener" href="https://www.linkedin.com/shareArticle?mini=true&url={{ shareUrl|url_encode }}&title={{ post.titulo|url_encode }}" title="LinkedIn">
-                                    <i class="bi bi-linkedin text-primary"></i> LinkedIn
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="post-content mb-5" style="line-height: 1.8; font-size: 1.1rem;">
                         {{ post.conteudo|raw }}
                     </div>
 
                     <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
                         {% if previousPost %}
-                            <a href="{{ BASE_URL }}blog/{{ previousPost.slug }}" class="btn btn-outline-primary btn-lg fw-bold">
-                                <i class="bi bi-arrow-left me-2"></i> Artigo anterior
-                            </a>
+                            {% include 'site/components/button.twig' with {
+                                href: BASE_URL ~ 'blog/' ~ previousPost.slug,
+                                label: 'Artigo anterior',
+                                icon: 'bi-arrow-left',
+                                variant: 'outline',
+                                size: 'lg',
+                                button_class: 'fw-bold'
+                            } %}
                         {% endif %}
                         {% if nextPost %}
-                            <a href="{{ BASE_URL }}blog/{{ nextPost.slug }}" class="btn btn-primary btn-lg fw-bold">
-                                Próximo artigo <i class="bi bi-arrow-right ms-2"></i>
-                            </a>
+                            {% include 'site/components/button.twig' with {
+                                href: BASE_URL ~ 'blog/' ~ nextPost.slug,
+                                label: 'Próximo artigo',
+                                icon: 'bi-arrow-right',
+                                icon_position: 'end',
+                                variant: 'solid',
+                                size: 'lg',
+                                button_class: 'fw-bold'
+                            } %}
                         {% endif %}
+                    </div>
+
+                    <div class="post-share-card card border-0 shadow-sm mt-4">
+                        <div class="card-body d-flex flex-column flex-md-row align-items-md-center gap-3">
+                            <div>
+                                <p class="text-muted text-uppercase small fw-semibold mb-1">Compartilhar</p>
+                                <p class="mb-0 text-muted">Divulgue este conteúdo nas suas redes.</p>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2 ms-md-auto">
+                                {% include 'site/components/button.twig' with {
+                                    href: 'https://www.facebook.com/sharer/sharer.php?u=' ~ shareUrl|url_encode,
+                                    label: 'Facebook',
+                                    icon: 'bi-facebook',
+                                    icon_class: 'text-white',
+                                    variant: 'surface',
+                                    size: 'md',
+                                    button_class: 'share-btn share-btn-facebook',
+                                    target: '_blank',
+                                    rel: 'noopener',
+                                    attrs: {'title': 'Facebook'}
+                                } %}
+                                {% include 'site/components/button.twig' with {
+                                    href: 'https://twitter.com/intent/tweet?url=' ~ shareUrl|url_encode ~ '&text=' ~ post.titulo|url_encode,
+                                    label: 'Twitter',
+                                    icon: 'bi-twitter',
+                                    icon_class: 'text-white',
+                                    variant: 'surface',
+                                    size: 'md',
+                                    button_class: 'share-btn share-btn-twitter',
+                                    target: '_blank',
+                                    rel: 'noopener',
+                                    attrs: {'title': 'Twitter / X'}
+                                } %}
+                                {% include 'site/components/button.twig' with {
+                                    href: 'https://api.whatsapp.com/send?text=' ~ (post.titulo ~ ' - ' ~ shareUrl)|url_encode,
+                                    label: 'WhatsApp',
+                                    icon: 'bi-whatsapp',
+                                    icon_class: 'text-white',
+                                    variant: 'surface',
+                                    size: 'md',
+                                    button_class: 'share-btn share-btn-whatsapp',
+                                    target: '_blank',
+                                    rel: 'noopener',
+                                    attrs: {'title': 'WhatsApp'}
+                                } %}
+                                {% include 'site/components/button.twig' with {
+                                    href: 'https://www.linkedin.com/shareArticle?mini=true&url=' ~ shareUrl|url_encode ~ '&title=' ~ post.titulo|url_encode,
+                                    label: 'LinkedIn',
+                                    icon: 'bi-linkedin',
+                                    icon_class: 'text-white',
+                                    variant: 'surface',
+                                    size: 'md',
+                                    button_class: 'share-btn share-btn-linkedin',
+                                    target: '_blank',
+                                    rel: 'noopener',
+                                    attrs: {'title': 'LinkedIn'}
+                                } %}
+                            </div>
+                        </div>
                     </div>
                 </article>
 

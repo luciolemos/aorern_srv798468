@@ -1,0 +1,18 @@
+<div class="testimonial-card {{ card_class|default('') }}">
+    <div class="d-flex align-items-center mb-3 gap-3">
+        {% if photo %}
+            <div class="testimonial-card-avatar">
+                <img src="{{ photo }}" alt="{{ name }}">
+            </div>
+        {% endif %}
+        <div>
+            <h3 class="h6 fw-semibold mb-0">{{ name }}</h3>
+            {% if role %}
+                <span class="testimonial-card-role">{{ role }}</span>
+            {% endif %}
+        </div>
+    </div>
+    {% if quote %}
+        <p class="testimonial-card-quote mb-0">{{ quote }}</p>
+    {% endif %}
+</div>
