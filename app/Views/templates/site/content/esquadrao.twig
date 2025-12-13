@@ -35,7 +35,7 @@
         <div class="container position-relative">
             <div class="row align-items-center g-5">
                 <div class="col-lg-6 hero-content">
-                    <p class="section-kicker text-white-50 mb-2">Esquadrão de cães do 2º SGB</p>
+                    <p class="section-kicker text-white-50 mb-2">Esquadrão de cães do 2º Subgrupamento de Bombeiros Militar</p>
                     <h1 class="section-title text-white mb-3">Binômios preparados para busca, salvamento e apoio à comunidade</h1>
                     <p class="section-lead text-white-75 mb-4">Os binômios do 2º SGB mantêm disponibilidade para atendimento de ocorrências em 
                     toda a área de atuação sob sua jurisdição, podendo ser mobilizados para buscas de pessoas desaparecidas, apoio em desastres naturais, 
@@ -85,9 +85,19 @@
                          class="img-fluid home-k9-image rounded-2 shadow-sm">
                 </div>
                 <div class="col-lg-6">
-                    <p class="section-kicker text-primary mb-2">Treinamento contínuo</p>
+                            {% include 'site/components/section-header.twig' with {
+                            kicker: 'Treinamento contínuo',
+                            title: 'Protocolo de preparo focado em busca, salvamento e apoio emocional',
+                            subtitle: 'Os cães são treinados para responder comandos em ambientes urbanos, rurais, áreas de mata e situações com múltiplas vítimas. Cada binômio segue rotinas de condicionamento físico, olfativo e socialização.',
+                            align: 'feft',
+                            kicker_class: 'text-muted mb-2',
+                            title_class: 'section-title text-primary mb-3',
+                            subtitle_class: 'section-lead text-muted mb-0',
+                            extra_class: 'mb-4'
+            } %}
+                    {# <p class="section-kicker text-primary mb-2">Treinamento contínuo</p>
                     <h2 class="section-title mb-3">Protocolo de preparo focado em busca, salvamento e apoio emocional</h2>
-                    <p class="section-lead text-muted mb-4">Os cães são treinados para responder comandos em ambientes urbanos, rurais, áreas de mata e situações com múltiplas vítimas. Cada binômio segue rotinas de condicionamento físico, olfativo e socialização.</p>
+                    <p class="section-lead text-muted mb-4">Os cães são treinados para responder comandos em ambientes urbanos, rurais, áreas de mata e situações com múltiplas vítimas. Cada binômio segue rotinas de condicionamento físico, olfativo e socialização.</p> #}
                     <ul class="esquadrao-checklist icon-list">
                         <li class="icon-list-item">
                             <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-check-circle-fill"></i></span>

@@ -26,6 +26,7 @@ class TwigEngine {
         // Adicionar funções globais
         $this->twig->addGlobal('BASE_URL', BASE_URL);
         $this->twig->addGlobal('APP_ENV', $_ENV['APP_ENV'] ?? 'prod');
+        $this->twig->addGlobal('TINYMCE_API_KEY', TINYMCE_API_KEY ?? 'no-api-key');
         $this->twig->addGlobal('toast_html', Toast::render());
         
         // Adicionar dados da sessão para acesso global nos templates

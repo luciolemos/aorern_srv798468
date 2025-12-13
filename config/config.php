@@ -25,3 +25,5 @@ define('SMTP_PASS', $_ENV['SMTP_PASS']);
 define('SMTP_FROM', $_ENV['SMTP_FROM']);
 define('SMTP_FROM_NAME', $_ENV['SMTP_FROM_NAME']);
 
+define('TINYMCE_API_KEY', $_ENV['TINYMCE_API_KEY'] ?? 'no-api-key');
+

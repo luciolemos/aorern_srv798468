@@ -1,5 +1,62 @@
 {# Footer #}
 <footer class="text-white pt-5 pb-4" style="background: #df6301; border-top: 4px solid #df6301;">
+    <style>
+        .footer-social {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .footer-social__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.45rem 0.9rem;
+            min-height: 42px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.2px;
+            transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+        }
+        .footer-social__link i {
+            font-size: 0.95rem;
+            line-height: 1;
+        }
+        .footer-social__link:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .footer-social__link[data-network="github"] {
+            background: linear-gradient(120deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+        }
+        .footer-social__link[data-network="linkedin"] {
+            background: linear-gradient(120deg, rgba(10,102,194,0.35), rgba(10,102,194,0.15));
+        }
+        .footer-social__link[data-network="twitter"] {
+            background: linear-gradient(120deg, rgba(29,155,240,0.35), rgba(29,155,240,0.15));
+        }
+        .footer-social__link[data-network="instagram"] {
+            background: linear-gradient(120deg, rgba(225,48,108,0.4), rgba(255,196,0,0.1));
+        }
+        .footer-social__link[data-network="facebook"] {
+            background: linear-gradient(120deg, rgba(59,89,152,0.35), rgba(59,89,152,0.15));
+        }
+        .footer-social__link[data-network="whatsapp"] {
+            background: linear-gradient(120deg, rgba(37,211,102,0.4), rgba(7,94,84,0.1));
+        }
+        .footer-social__label {
+            font-weight: 600;
+        }
+        @media (max-width: 575px) {
+            .footer-social__link {
+                flex: 1 1 48%;
+                justify-content: center;
+            }
+        }
+    </style>
     <div class="container">
         <div class="row gy-4 align-items-start">
             <div class="col-lg-4 col-md-6">
@@ -42,18 +99,30 @@ Monitoramento, relatórios e transparência em tempo real.
                     <li class="mb-2"><a class="text-decoration-none text-white" style="opacity:0.85;" href="{{ BASE_URL }}coverage">Área de cobertura</a></li>
                 </ul>
                 <h6 class="text-uppercase fw-bold mb-3" style="color: #fff; letter-spacing: 0.5px;">Redes Sociais</h6>
-                <div class="d-flex gap-2">
-                    <a href="https://github.com/luciolemos/system" class="btn btn-outline-light btn-sm" target="_blank" title="GitHub">
+                <div class="footer-social">
+                    <a href="https://github.com/luciolemos/system" class="footer-social__link" data-network="github" target="_blank" title="GitHub">
                         <i class="bi bi-github"></i>
+                        <span class="footer-social__label">GitHub</span>
                     </a>
-                    <a href="https://www.linkedin.com/in/lucciolemos/" class="btn btn-outline-light btn-sm" target="_blank" title="LinkedIn">
+                    <a href="https://www.linkedin.com/in/lucciolemos/" class="footer-social__link" data-network="linkedin" target="_blank" title="LinkedIn">
                         <i class="bi bi-linkedin"></i>
+                        <span class="footer-social__label">LinkedIn</span>
                     </a>
-                    <a href="https://x.com/lucciolemos" class="btn btn-outline-light btn-sm" target="_blank" title="Twitter">
+                    <a href="https://x.com/lucciolemos" class="footer-social__link" data-network="twitter" target="_blank" title="Twitter">
                         <i class="bi bi-twitter"></i>
+                        <span class="footer-social__label">X / Twitter</span>
                     </a>
-                    <a href="https://x.com/lucciolemos" class="btn btn-outline-light btn-sm" target="_blank" title="Instagram">
+                    <a href="https://x.com/lucciolemos" class="footer-social__link" data-network="instagram" target="_blank" title="Instagram">
                         <i class="bi bi-instagram"></i>
+                        <span class="footer-social__label">Instagram</span>
+                    </a>
+                    <a href="https://www.facebook.com/lucciolemos" class="footer-social__link" data-network="facebook" target="_blank" title="Facebook">
+                        <i class="bi bi-facebook"></i>
+                        <span class="footer-social__label">Facebook</span>
+                    </a>
+                    <a href="https://wa.me/5584988389889" class="footer-social__link" data-network="whatsapp" target="_blank" title="WhatsApp">
+                        <i class="bi bi-whatsapp"></i>
+                        <span class="footer-social__label">WhatsApp</span>
                     </a>
                 </div>
             </div>

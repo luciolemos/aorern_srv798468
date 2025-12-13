@@ -1,0 +1,100 @@
+<script src="https://cdn.tiny.cloud/1/{{ TINYMCE_API_KEY }}/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const textarea = document.querySelector('#conteudo');
+    if (!textarea) {
+        return;
+    }
+
+    const form = textarea.closest('form');
+    if (!form) {
+        return;
+    }
+
+    const MIN_CHARS = 10;
+    const hadNativeRequired = textarea.hasAttribute('required');
+    if (hadNativeRequired) {
+        textarea.removeAttribute('required');
+    }
+
+    const errorNote = document.createElement('div');
+    errorNote.className = 'text-danger small mt-2 d-none';
+    errorNote.dataset.editorError = 'true';
+    textarea.insertAdjacentElement('afterend', errorNote);
+
+    function showError(message) {
+        errorNote.textContent = message;
+        errorNote.classList.remove('d-none');
+    }
+
+    function hideError() {
+        errorNote.classList.add('d-none');
+    }
+
+    function removeNativeRequired() {
+        if (hadNativeRequired && textarea.hasAttribute('required')) {
+            textarea.removeAttribute('required');
+        }
+    }
+
+    function restoreNativeRequired() {
+        if (hadNativeRequired && !textarea.hasAttribute('required')) {
+            textarea.setAttribute('required', 'required');
+        }
+    }
+
+    function validateEditorContent(editor) {
+        const plainText = editor.getContent({ format: 'text' }).trim();
+        if (plainText.length < MIN_CHARS) {
+            showError('O conteúdo do post precisa ter pelo menos 10 caracteres.');
+            editor.focus();
+            return false;
+        }
+        hideError();
+        return true;
+    }
+
+    form.addEventListener('submit', function (event) {
+        const editorInstance = window.tinymce ? tinymce.get(textarea.id) : null;
+        if (!editorInstance) {
+            restoreNativeRequired();
+            return;
+        }
+        editorInstance.save();
+        if (!validateEditorContent(editorInstance)) {            event.preventDefault();
+        }
+    });
+
+    function initTinyMCE() {
+        if (typeof tinymce === 'undefined') {
+            restoreNativeRequired();
+            return;
+        }
+
+        tinymce.init({
+            selector: '#conteudo',
+            menubar: false,
+            branding: false,
+            height: 520,
+            language: 'pt_BR',
+            plugins: 'autolink charmap code fullscreen image link lists media table wordcount',
+            toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | removeformat code fullscreen',
+            promotion: false,
+            setup(editor) {
+                editor.on('init', function () {
+                    removeNativeRequired();
+                });
+                editor.on('keyup change', function () {
+                    if (!errorNote.classList.contains('d-none')) {
+                        validateEditorContent(editor);
+                    }
+                });
+            }
+        }).catch(function () {
+            restoreNativeRequired();
+        });
+    }
+
+    initTinyMCE();
+});
+</script>

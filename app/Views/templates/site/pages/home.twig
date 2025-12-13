@@ -10,7 +10,7 @@
 {% block content %}
     {% set profissionais = (totalProfissionais is defined and totalProfissionais > 0) ? totalProfissionais : '50+' %}
 
-        <section class="home-hero site-hero">
+    <section class="home-hero site-hero">
                 <div class="site-hero-pattern"></div>
             <div class="container-fluid position-relative px-3 px-md-4">
                 <div class="row justify-content-center">
@@ -28,15 +28,23 @@
                             <p class="text-white mb-4" style="font-size: 1.1rem; line-height: 1.7; max-width: 600px; opacity: 0.92; margin: 0 auto;"><i>"Alienam vitam et bona salvare"</i></p>
                             {# <p class="section-lead text-white-75 mb-4">Baseados em Goianinha, garantimos cobertura 24/7 com equipes treinadas, protocolos digitais e integração permanente com SAMU, Defesa Civil e demais parceiros regionais.</p> #}
                             <div class="home-hero-actions d-flex flex-column flex-md-row justify-content-center gap-3 gap-md-4">
-                                {% include 'site/components/button.twig' with {
+                             {#                                {% include 'site/components/button.twig' with {
                                     href: 'tel:193',
                                     label: 'Ligar 193',
                                     icon: 'bi-telephone',
                                     variant: 'solid',
                                     size: 'lg',
                                     button_class: 'fw-bold text-white',
+                                } %} #}
+                                   {% include 'site/components/button.twig' with {
+                                    href: 'tel:193',
+                                    label: 'Ligar 193',
+                                    icon: 'bi-telephone',
+                                    variant: 'solid',
+                                    size: 'lg',
+                                   
                                 } %}
-                {#                 {% include 'site/components/button.twig' with {
+                               {#{% include 'site/components/button.twig' with {
                                     href: BASE_URL ~ 'contact',
                                     label: 'Falar com a equipe',
                                     icon: 'bi-envelope',
@@ -44,20 +52,29 @@
                                     size: 'lg',
                                     button_class: 'w-100 w-md-auto'
                                 } %} #}
-                                {% include 'site/components/button.twig' with {
+
+                                 {% include 'site/components/button.twig' with {
+                                    href: 'https://wa.me/5584988389889',
+                                    label: 'WhatsApp',
+                                    icon: 'bi-whatsapp',
+                                   variant: 'solid',
+                                    size: 'lg',
+                                } %}
+
+                          {#{% include 'site/components/button.twig' with {
                             href: 'https://wa.me/5584988389889',
                             label: 'WhatsApp',
                             icon: 'bi-whatsapp',
                             variant: 'solid',
                             size: 'lg',
                             button_class: 'fw-bold text-dark',
-                        } %}
+                        } %} #}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+    </section>
 
     <section class="home-k9 home-section py-5">
         <div class="container">
@@ -102,12 +119,11 @@
                     </ul>
                     {% include 'site/components/button.twig' with {
                         href: BASE_URL ~ 'esquadrao',
-                        label: 'Leia mais',
+                        label: 'Saiba mais',
                         icon: 'bi-arrow-right',
-                        icon_position: 'end',
+                        icon_position: 'end',                       
                         variant: 'solid',
-                        size: 'lg',
-                        button_class: 'fw-bold text-white'
+                                    size: 'lg',
                        
                     } %}
                 </div>
@@ -115,7 +131,7 @@
         </div>
     </section>
 
-    <section class="home-services home-section py-5">
+   {# <section class="home-services home-section py-5">
         <div class="container">
             {% include 'site/components/section-header.twig' with {
                 kicker: 'Frentes de atuação',
@@ -160,9 +176,80 @@
                 {% endfor %}
             </div>
         </div>
-    </section>
+    </section> #}
 
-    <section class="home-highlights home-section py-5">
+    <section class="home-occurrence-metrics home-highlights home-section py-5">
+      {% set ocorrenciaCards = ocorrenciasPorTipo|default([]) %}
+      {% if ocorrenciaCards|length > 0 %}
+        
+        <div class="container">
+            <div class="row align-items-center g-4">
+                    <div class="col-lg-6">
+                        {% include 'site/components/section-header.twig' with {
+                        kicker: 'Tecnologia e pessoas',
+                        title: 'Integração entre dados, equipes e frota',
+                        subtitle: 'Acompanhamos cada fase da ocorrência com dashboards em tempo real, garantindo comunicação entre o centro de operações, o efetivo em campo e as defesas civis municipais.',
+                        kicker_class: 'text-muted',
+                        subtitle_class: 'text-muted',
+                        extra_class: 'mb-4'
+                    } %}
+                        {# <p class="text-uppercase text-muted small fw-semibold mb-1">Monitoramento operacional</p>
+                        <h3 class="h4 fw-bold mb-2">Ocorrências por tipo</h3>
+                        <p class="text-muted mb-0">Atualizado a partir do Livro de Ocorrências. Destaque imediato para as frentes com maior demanda.</p> #}
+                         <p class="text-muted mb-0">Indicadores de desempenho do 2º Subgrupamento de Bombeiros Militar</p>
+                    </div>
+                    <div class="col-lg-6 text-lg-end">
+                        {% include 'site/components/button.twig' with {
+                            href: BASE_URL ~ 'admin/livro-ocorrencias',
+                            label: 'Abrir painel completo',
+                            icon: 'bi-speedometer2',
+                            variant: 'solid',
+                            size: 'lg',
+                            button_class: 'd-none d-lg-inline-flex ms-lg-auto',
+                            target: '_blank',
+                            attrs: {
+                                rel: 'noopener'
+                            }
+                        } %}
+                    </div>
+                </div>
+                {% set cardRows = ocorrenciaCards|batch(4, null) %}
+                {% for row in cardRows %}
+                    <div class="row g-3 g-md-4 mt-2 mt-md-4">
+                        {% for ocorrencia in row %}
+                            {% if ocorrencia %}
+                                <div class="col-12 col-sm-6 col-xl-3">
+                                    <article class="occurrence-card h-100">
+                                        <p class="occurrence-card-label text-uppercase small mb-1">{{ ocorrencia.tipo|default('Não classificada') }}</p>
+                                        <p class="occurrence-card-value mb-0">{{ ocorrencia.total }}</p>
+                                        <p class="occurrence-card-meta text-muted mb-0">{{ ocorrencia.meta|default('Registros recentes') }}</p>
+                                    </article>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <div class="row mt-3 d-lg-none">
+                    <div class="col text-center">
+                        {% include 'site/components/button.twig' with {
+                            href: BASE_URL ~ 'admin/livro-ocorrencias',
+                            label: 'Abrir painel completo',
+                            icon: 'bi-speedometer2',
+                            variant: 'solid',
+                            size: 'lg',
+                            button_class: 'fw-bold text-white',
+                            target: '_blank',
+                            attrs: {
+                                rel: 'noopener'
+                            }
+                        } %}
+                    </div>
+                </div>
+            </div>       
+      {% endif %}
+     </section>
+
+{#      <section class="home-highlights home-section py-5">
         <div class="container">
             <div class="row align-items-center g-4">
                 <div class="col-lg-5">
@@ -243,9 +330,9 @@
                 </div>
             </div>
         </div>
-    </section>
+     </section> #}
 
-    <section class="home-testimonials home-section py-5">
+     <section class="home-testimonials home-section py-5">
         <div class="container">
             {% include 'site/components/section-header.twig' with {
                 kicker: 'Depoimentos',
@@ -292,9 +379,9 @@
                 </div>
             {% endfor %}
         </div>
-    </section>
+     </section>
 
-    <section class="home-services home-section py-5">
+     <section class="home-services home-section py-5">
         <div class="container">
             <div class="row align-items-center g-3">
                 <div class="col-lg-8">                    
@@ -332,5 +419,5 @@
                 </div>
             </div>
         </div>
-    </section>
+     </section>
 {% endblock %}

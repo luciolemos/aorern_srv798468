@@ -119,11 +119,14 @@ class PostsController extends Controller {
         $categorias = $this->categories->listar();
         $csrf = CsrfHelper::generateToken();
         $old = $_SESSION['old_input'] ?? [];
+        $validationErrors = $_SESSION['validation_errors'] ?? [];
+        unset($_SESSION['old_input'], $_SESSION['validation_errors']);
         
         $this->renderTwig('admin/posts/create', array_merge([
             'categorias' => $categorias,
             'csrf_token' => $csrf,
-            'old' => $old
+            'old' => $old,
+            'validationErrors' => $validationErrors,
         ], AdminHelper::getUserData('posts')));
     }
 
@@ -144,6 +147,8 @@ class PostsController extends Controller {
         if (isset($payload['capa_url']) && trim($payload['capa_url']) === '') {
             unset($payload['capa_url']);
         }
+        $rawConteudoInput = $payload['conteudo'] ?? '';
+        $payload['conteudo'] = trim(strip_tags($rawConteudoInput));
 
         $validator = Validator::make($payload, [
             'titulo' => 'required|min:5|max:200',
@@ -154,14 +159,15 @@ class PostsController extends Controller {
         ]);
         
         if ($validator->fails()) {
-            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Erro de validação: ' . implode(', ', array_map(fn($e) => $e[0], $validator->errors()))];
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Erro de validação. Confira os campos destacados.'];
             $_SESSION['old_input'] = $request->post();
+            $_SESSION['validation_errors'] = $validator->errors();
             header('Location: ' . BASE_URL . 'admin/posts/create');
             exit;
         }
         
         $validated = $validator->validated();
-        $rawConteudo = $request->post('conteudo', '');
+        $rawConteudo = $rawConteudoInput;
         $action = $request->post('action', 'save_exit');
 
         $userRole = $_SESSION['user_role'] ?? 'usuario';
@@ -192,7 +198,7 @@ class PostsController extends Controller {
         };
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => $message];
-        unset($_SESSION['old_input']);
+        unset($_SESSION['old_input'], $_SESSION['validation_errors']);
 
         $redirect = $action === 'save_continue'
             ? BASE_URL . 'admin/posts/create'
@@ -222,12 +228,15 @@ class PostsController extends Controller {
         $categorias = $this->categories->listar();
         $csrf = CsrfHelper::generateToken();
         $old = $_SESSION['old_input'] ?? [];
+        $validationErrors = $_SESSION['validation_errors'] ?? [];
+        unset($_SESSION['old_input'], $_SESSION['validation_errors']);
         
         $this->renderTwig('admin/posts/edit', array_merge([
             'post' => $post,
             'categorias' => $categorias,
             'csrf_token' => $csrf,
-            'old' => $old
+            'old' => $old,
+            'validationErrors' => $validationErrors,
         ], AdminHelper::getUserData('posts')));
     }
 
@@ -251,6 +260,8 @@ class PostsController extends Controller {
         if (isset($payload['capa_url']) && trim($payload['capa_url']) === '') {
             unset($payload['capa_url']);
         }
+        $rawConteudoInput = $payload['conteudo'] ?? '';
+        $payload['conteudo'] = trim(strip_tags($rawConteudoInput));
 
         $validator = Validator::make($payload, [
             'titulo' => 'required|min:5|max:200',
@@ -261,14 +272,15 @@ class PostsController extends Controller {
         ]);
         
         if ($validator->fails()) {
-            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Erro de validação.'];
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Erro de validação. Confira os campos destacados.'];
             $_SESSION['old_input'] = $request->post();
+            $_SESSION['validation_errors'] = $validator->errors();
             header('Location: ' . BASE_URL . 'admin/posts/edit/' . $id);
             exit;
         }
         
         $validated = $validator->validated();
-        $rawConteudo = $request->post('conteudo', '');
+        $rawConteudo = $rawConteudoInput;
         $action = $request->post('action', 'save_update');
 
         $data = [
@@ -298,7 +310,7 @@ class PostsController extends Controller {
         };
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => $message];
-        unset($_SESSION['old_input']);
+        unset($_SESSION['old_input'], $_SESSION['validation_errors']);
         header('Location: ' . BASE_URL . 'admin/posts');
         exit;
     }

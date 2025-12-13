@@ -1,0 +1,218 @@
+<script>
+(function () {
+    const TINYMCE_SRC = 'https://cdn.tiny.cloud/1/{{ TINYMCE_API_KEY }}/tinymce/7/tinymce.min.js';
+    const MAX_ATTEMPTS = 30;
+    const RETRY_DELAY = 150;
+
+    function loadTinyMCE(onSuccess, onFailure) {
+        if (window.tinymce && typeof window.tinymce.init === 'function') {
+            onSuccess();
+            return;
+        }
+
+        if (window.__livroTinyLoader) {
+            window.__livroTinyLoader.success.push(onSuccess);
+            if (onFailure) {
+                window.__livroTinyLoader.failure.push(onFailure);
+            }
+            return;
+        }
+
+        window.__livroTinyLoader = {
+            success: [onSuccess],
+            failure: onFailure ? [onFailure] : []
+        };
+
+        const script = document.createElement('script');
+        script.src = TINYMCE_SRC;
+        script.referrerPolicy = 'origin';
+        script.addEventListener('load', () => {
+            const loader = window.__livroTinyLoader;
+            loader.success.forEach((cb) => cb());
+            window.__livroTinyLoader = null;
+        });
+        script.addEventListener('error', () => {
+            const loader = window.__livroTinyLoader;
+            loader.failure.forEach((cb) => cb());
+            window.__livroTinyLoader = null;
+        });
+        document.head.appendChild(script);
+    }
+
+    function bootstrapEditors() {
+        const fields = Array.from(document.querySelectorAll('[data-livro-editor]'));
+        if (!fields.length) {
+            return;
+        }
+
+        const requiredMap = new WeakMap();
+        const errorMap = new WeakMap();
+        const formFieldMap = new Map();
+
+        fields.forEach((field, index) => {
+            if (!field.id) {
+                field.id = `livro-editor-${index + 1}`;
+            }
+
+            const isRequired = field.dataset.editorRequired === 'true' || field.hasAttribute('required');
+            requiredMap.set(field, isRequired);
+
+            const form = field.closest('form');
+            if (form) {
+                if (!formFieldMap.has(form)) {
+                    formFieldMap.set(form, []);
+                }
+                formFieldMap.get(form).push(field);
+            }
+
+            const errorNote = document.createElement('div');
+            errorNote.className = 'text-danger small mt-2 d-none';
+            errorNote.dataset.editorError = field.id;
+            field.insertAdjacentElement('afterend', errorNote);
+            errorMap.set(field, errorNote);
+        });
+
+        function getMinChars(field) {
+            const fallback = requiredMap.get(field) ? 10 : 0;
+            const attr = field.dataset.editorMin;
+            const value = parseInt(attr !== undefined ? attr : fallback, 10);
+            return Number.isNaN(value) ? fallback : value;
+        }
+
+        function getDesiredHeight(field) {
+            const attr = field.dataset.editorHeight;
+            const value = parseInt(attr !== undefined ? attr : 480, 10);
+            return Number.isNaN(value) ? 480 : value;
+        }
+
+        function showError(field, message) {
+            const errorNode = errorMap.get(field);
+            if (!errorNode) {
+                return;
+            }
+            errorNode.textContent = message;
+            errorNode.classList.remove('d-none');
+        }
+
+        function hideError(field) {
+            const errorNode = errorMap.get(field);
+            if (!errorNode) {
+                return;
+            }
+            errorNode.classList.add('d-none');
+        }
+
+        function restoreNativeRequirements() {
+            fields.forEach((field) => {
+                if (requiredMap.get(field)) {
+                    field.setAttribute('required', 'required');
+                }
+            });
+        }
+
+        function validateEditorContent(editor, field) {
+            if (!requiredMap.get(field)) {
+                hideError(field);
+                return true;
+            }
+            const plainText = editor.getContent({ format: 'text' }).trim();
+            if (plainText.length < getMinChars(field)) {
+                showError(field, `Preencha pelo menos ${getMinChars(field)} caracteres.`);
+                editor.focus();
+                return false;
+            }
+            hideError(field);
+            return true;
+        }
+
+        formFieldMap.forEach((fieldList, form) => {
+            form.addEventListener('submit', (event) => {
+                let formValid = true;
+                fieldList.forEach((field) => {
+                    const instance = window.tinymce ? tinymce.get(field.id) : null;
+                    if (!instance) {
+                        return;
+                    }
+                    instance.save();
+                    const isValid = validateEditorContent(instance, field);
+                    if (!isValid) {
+                        formValid = false;
+                    }
+                });
+                if (!formValid) {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        let started = false;
+
+        function startEditors() {
+            if (started) {
+                return;
+            }
+            started = true;
+
+            tinymce.init({
+                selector: '[data-livro-editor]',
+                menubar: false,
+                branding: false,
+                language: 'pt_BR',
+                plugins: 'autolink charmap code fullscreen image link lists media table wordcount',
+                toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | removeformat code fullscreen',
+                promotion: false,
+                setup(editor) {
+                    const field = editor.targetElm || document.getElementById(editor.id);
+                    if (!field) {
+                        return;
+                    }
+                    editor.on('init', function () {
+                        if (requiredMap.get(field) && field.hasAttribute('required')) {
+                            field.removeAttribute('required');
+                        }
+                        const desiredHeight = getDesiredHeight(field);
+                        if (editor.theme && typeof editor.theme.resizeTo === 'function' && desiredHeight) {
+                            editor.theme.resizeTo(null, desiredHeight);
+                        }
+                    });
+                    editor.on('keyup change', function () {
+                        const errorNode = errorMap.get(field);
+                        if (errorNode && !errorNode.classList.contains('d-none')) {
+                            validateEditorContent(editor, field);
+                        }
+                    });
+                }
+            }).catch(() => {
+                restoreNativeRequirements();
+            });
+        }
+
+        function waitForTiny(attempt = 0) {
+            if (window.tinymce && typeof window.tinymce.init === 'function') {
+                startEditors();
+                return;
+            }
+
+            if (attempt >= MAX_ATTEMPTS) {
+                restoreNativeRequirements();
+                console.warn('[Livro] TinyMCE não pôde ser carregado.');
+                return;
+            }
+
+            setTimeout(() => waitForTiny(attempt + 1), RETRY_DELAY);
+        }
+
+        if (window.tinymce) {
+            startEditors();
+        } else {
+            loadTinyMCE(waitForTiny, restoreNativeRequirements);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootstrapEditors);
+    } else {
+        bootstrapEditors();
+    }
+})();
+</script>

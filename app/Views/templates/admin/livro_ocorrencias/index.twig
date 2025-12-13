@@ -266,14 +266,14 @@
                             <div class="mb-3">
                                 <p class="text-muted text-uppercase small mb-1">Descrição operacional</p>
                                 <div class="border rounded p-3 bg-light-subtle">
-                                    {{ registro.descricao|e|nl2br }}
+                                    {{ registro.descricao|default('')|raw }}
                                 </div>
                             </div>
                             {% if registro.relatorio_conclusao %}
                                 <div>
                                     <p class="text-muted text-uppercase small mb-1">Relatório de conclusão</p>
                                     <div class="border rounded p-3 bg-light">
-                                        {{ registro.relatorio_conclusao|e|nl2br }}
+                                        {{ registro.relatorio_conclusao|default('')|raw }}
                                     </div>
                                 </div>
                             {% endif %}

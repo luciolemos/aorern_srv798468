@@ -66,6 +66,38 @@ class LivroOcorrenciaModel extends Database
         return sprintf('OCR-%s-%04d', $dia, $sequencial);
     }
 
+    public function contarPorTipo(int $limit = 4, ?string $status = null): array
+    {
+        $sql = "SELECT tipo_ocorrencia AS tipo, COUNT(*) AS total FROM {$this->table} WHERE " .
+            "tipo_ocorrencia IS NOT NULL AND tipo_ocorrencia <> ''";
+
+        $params = [];
+
+        if ($status) {
+            $sql .= " AND status = :status";
+            $params[':status'] = $status;
+        }
+
+        $sql .= " GROUP BY tipo_ocorrencia ORDER BY total DESC";
+
+        if ($limit > 0) {
+            $sql .= " LIMIT :limit";
+        }
+
+        $stmt = $this->connect()->prepare($sql);
+
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+
+        if ($limit > 0) {
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
     public function paginarComFiltros(
         int $page = 1,
         ?int $perPage = 12,

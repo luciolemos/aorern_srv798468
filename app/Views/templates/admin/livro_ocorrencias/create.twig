@@ -101,14 +101,32 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="col-12">
-                            <label class="form-label text-uppercase small fw-semibold">Descrição operacional *</label>
-                            <textarea name="descricao" rows="6" class="form-control" placeholder="Relate a ocorrência com detalhes" required>{{ old.descricao|default('')|e }}</textarea>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label text-uppercase small fw-semibold">Relatório de conclusão</label>
-                            <textarea name="relatorio_conclusao" rows="4" class="form-control" placeholder="Opcional — utilize após encerramento">{{ old.relatorio_conclusao|default('')|e }}</textarea>
-                        </div>
+                            <div class="col-12">
+                                <label class="form-label text-uppercase small fw-semibold">Descrição operacional *</label>
+                                <textarea
+                                    name="descricao"
+                                    id="descricao_editor"
+                                    rows="6"
+                                    class="form-control"
+                                    data-livro-editor
+                                    data-editor-required="true"
+                                    data-editor-min="10"
+                                    data-editor-height="520"
+                                    placeholder="Relate a ocorrência com detalhes"
+                                    required>{{ old.descricao|default('')|raw }}</textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label text-uppercase small fw-semibold">Relatório de conclusão</label>
+                                <textarea
+                                    name="relatorio_conclusao"
+                                    id="relatorio_editor"
+                                    rows="4"
+                                    class="form-control"
+                                    data-livro-editor
+                                    data-editor-min="0"
+                                    data-editor-height="380"
+                                    placeholder="Opcional — utilize após encerramento">{{ old.relatorio_conclusao|default('')|raw }}</textarea>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -128,5 +146,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ BASE_URL }}assets/js/livro-ocorrencias.js" defer></script>
+    {% include 'admin/livro_ocorrencias/partials/editor_scripts.twig' %}
+    <script src="{{ BASE_URL }}assets/js/livro-ocorrencias.js" defer></script>
 {% endblock %}

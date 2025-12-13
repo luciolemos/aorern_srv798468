@@ -6,6 +6,41 @@
     {{ parent() }}
         <link rel="stylesheet" href="{{ BASE_URL }}assets/css/contact.css">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <style>
+            .contact-social {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 0.5rem;
+            }
+            .contact-social__link {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.35rem;
+                padding: 0.5rem 0.9rem;
+                border-radius: 999px;
+                border: 1px solid rgba(0, 0, 0, 0.08);
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: #0f172a;
+                text-decoration: none;
+                transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+            }
+            .contact-social__link i {
+                font-size: 1rem;
+            }
+            .contact-social__link:hover {
+                transform: translateY(-2px);
+                border-color: rgba(15, 23, 42, 0.25);
+                box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+            }
+            .contact-social__link[data-network="github"] { background: linear-gradient(120deg, rgba(15,23,42,0.08), rgba(15,23,42,0.02)); }
+            .contact-social__link[data-network="linkedin"] { background: linear-gradient(120deg, rgba(10,102,194,0.15), rgba(10,102,194,0.05)); }
+            .contact-social__link[data-network="twitter"] { background: linear-gradient(120deg, rgba(29,155,240,0.18), rgba(29,155,240,0.05)); }
+            .contact-social__link[data-network="instagram"] { background: linear-gradient(120deg, rgba(225,48,108,0.2), rgba(255,196,0,0.12)); }
+            .contact-social__link[data-network="facebook"] { background: linear-gradient(120deg, rgba(59,89,152,0.18), rgba(59,89,152,0.05)); }
+            .contact-social__link[data-network="whatsapp"] { background: linear-gradient(120deg, rgba(37,211,102,0.2), rgba(7,94,84,0.08)); }
+        </style>
 {% endblock %}
 
 {% block content %}
@@ -60,7 +95,7 @@
                                 icon: 'bi bi-envelope-fill',
                                 icon_inner_class: 'text-danger fs-5',
                                 title: 'suporte@2sgb2gbm.org',
-                                description_html: '<small class="text-white-50">2gbm_2sgb@cbm.rn.gov.br</small>',
+                                description_html: '<small class="text-white-50">2sgb2gbm@2sgb2gbm.org</small>',
                                 item_class: 'py-2'
                             }
                         ]
@@ -130,6 +165,7 @@
                             <div class="col-12">
                                 {% include 'site/components/button.twig' with {
                                     label: 'Enviar mensagem',
+                                    icon: 'bi-send',
                                     variant: 'solid',
                                     size: 'lg',
                                     type: 'submit',
@@ -168,13 +204,39 @@
                                 <i class="bi bi-envelope-fill contact-direct-icon text-danger"></i>
                                 <div>
                                     <h3 class="h6 fw-semibold mb-1">E-mail</h3>
-                                    <p class="mb-0 small">suporte@2sgb2gbm.org<br>2gbm_2sgb@cbm.rn.gov.br</p>
+                                    <p class="mb-0 small">suporte@2sgb2gbm.org<br>2sgb2gbm@2sgb2gbm.org</p>
                                 </div>
                             </div>
                             <hr class="my-4">
                             <div>
                                 <h3 class="h6 fw-semibold mb-3">Redes sociais</h3>
-                                <div class="d-flex gap-2">
+                                <div class="contact-social">
+                                    <a href="https://github.com/luciolemos/system" class="contact-social__link" data-network="github" target="_blank" title="GitHub">
+                                        <i class="bi bi-github"></i>
+                                        <span>GitHub</span>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/lucciolemos/" class="contact-social__link" data-network="linkedin" target="_blank" title="LinkedIn">
+                                        <i class="bi bi-linkedin"></i>
+                                        <span>LinkedIn</span>
+                                    </a>
+                                    <a href="https://x.com/lucciolemos" class="contact-social__link" data-network="twitter" target="_blank" title="Twitter / X">
+                                        <i class="bi bi-twitter"></i>
+                                        <span>X</span>
+                                    </a>
+                                    <a href="https://x.com/lucciolemos" class="contact-social__link" data-network="instagram" target="_blank" title="Instagram">
+                                        <i class="bi bi-instagram"></i>
+                                        <span>Instagram</span>
+                                    </a>
+                                    <a href="https://www.facebook.com/lucciolemos" class="contact-social__link" data-network="facebook" target="_blank" title="Facebook">
+                                        <i class="bi bi-facebook"></i>
+                                        <span>Facebook</span>
+                                    </a>
+                                    <a href="https://wa.me/5584988389889" class="contact-social__link" data-network="whatsapp" target="_blank" title="WhatsApp">
+                                        <i class="bi bi-whatsapp"></i>
+                                        <span>WhatsApp</span>
+                                    </a>
+                                </div>
+                               {#  <div class="d-flex gap-2">
                                     {% include 'site/components/button.twig' with {
                                         href: 'https://github.com/luciolemos/system',
                                         label: 'GitHub',
@@ -211,7 +273,7 @@
                                         target: '_blank',
                                         attrs: {'title': 'Twitter'}
                                     } %}
-                                </div>
+                                </div> #}
                             </div>
                         </div>
                     </aside>

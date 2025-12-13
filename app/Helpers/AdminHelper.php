@@ -4,10 +4,12 @@ namespace App\Helpers;
 
 use App\Models\User;
 use App\Models\LivroOcorrenciaModel;
+use App\Models\Post;
 
 class AdminHelper {
     private static ?int $pendingUsersCache = null;
     private static ?int $occurrencesInProgressCache = null;
+    private static ?int $postsPendingReviewCache = null;
 
     private static function pendingUsersCount(): int {
         if (self::$pendingUsersCache === null) {
@@ -36,6 +38,20 @@ class AdminHelper {
 
         return self::$occurrencesInProgressCache;
     }
+
+    private static function postsPendingReviewCount(): int {
+        if (self::$postsPendingReviewCache === null) {
+            try {
+                $postModel = new Post();
+                self::$postsPendingReviewCache = $postModel->contarPorStatus('pending');
+            } catch (\Throwable $th) {
+                error_log('AdminHelper posts pending count error: ' . $th->getMessage());
+                self::$postsPendingReviewCache = 0;
+            }
+        }
+
+        return self::$postsPendingReviewCache;
+    }
     /**
      * Retorna dados do usuário para templates admin
      */
@@ -56,6 +72,7 @@ class AdminHelper {
             'notifications' => [
                 'pending_users' => self::pendingUsersCount(),
                 'occurrences_in_progress' => self::occurrencesInProgressCount(),
+                'posts_pending_review' => self::postsPendingReviewCount(),
             ],
         ];
     }

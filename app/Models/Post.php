@@ -208,6 +208,12 @@ class Post extends Database {
         );
     }
 
+    public function contarPorStatus(string $status): int {
+        $stmt = $this->connect()->prepare("SELECT COUNT(*) AS total FROM {$this->table} WHERE status = :status");
+        $stmt->execute([':status' => $status]);
+        return (int) ($stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
+    }
+
     /**
      * Pagina posts com filtros avançados (para admin/gerente)
      */

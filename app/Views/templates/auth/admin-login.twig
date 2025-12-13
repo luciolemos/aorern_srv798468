@@ -16,8 +16,8 @@
   {#                   <div class="auth-hero-logo mb-4">
                         <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="img-fluid">
                     </div> #}
-                    <p class="section-kicker text-white-50 mb-2">Painel do 2º SGB/2º GBM</p>
-                    <h1 class="section-title text-white mb-3">Autenticação administrativa</h1>
+                    <p class="section-kicker text-white-50 mb-2">Painel de Administração do 2º Subgrupamento de Bombeiros Militar</p>
+                    <h1 class="section-title text-white mb-3">Requer privilégios administrativos</h1>
                     <p class="section-lead text-white-75 mb-4">Esta área integra o mesmo design do portal institucional, mas continua restrita a usuários autorizados. Utilize seu usuário corporativo e senha para acessar indicadores, conteúdos internos e gestão do site.</p>
                     <ul class="auth-benefits icon-list text-white-75 mb-4">
                         <li class="icon-list-item">
@@ -36,7 +36,7 @@
                     <div class="d-flex flex-wrap gap-3">
                         {% include 'site/components/button.twig' with {
                             href: BASE_URL,
-                            label: 'Voltar ao site',
+                            label: 'Voltar à página inicial',
                             icon: 'bi-arrow-left',
                             variant: 'solid',
                             size: 'lg'
@@ -103,9 +103,9 @@
                         </form>
 
                         <hr class="text-white-25 my-4">
-                        <p class="text-center text-white-50 small mb-0">
+{#                         <p class="text-center text-white-50 small mb-0">
                             Precisa de suporte? <a href="{{ BASE_URL }}contact" class="text-white fw-semibold text-decoration-none">Fale com o comando</a>
-                        </p>
+                        </p> #}
                         <p class="text-center text-white-50 small mt-3 mb-0">
                             Não possui acesso? <a href="{{ BASE_URL }}register" class="text-white fw-semibold text-decoration-none">Solicitar registro</a>
                         </p>
