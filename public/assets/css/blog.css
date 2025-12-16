@@ -26,9 +26,9 @@
 }
 
 .blog-feature-section .site-hero-pattern {
-    background: radial-gradient(circle at 20% 15%, rgba(255,255,255,0.25), transparent 45%),
-                radial-gradient(circle at 80% 5%, rgba(255,255,255,0.12), transparent 35%);
-    opacity: 0.45;
+    background: radial-gradient(circle at 25% 20%, rgba(255,255,255,0.25), transparent 50%),
+                radial-gradient(circle at 75% 10%, rgba(255,255,255,0.15), transparent 35%);
+    opacity: 0.4;
 }
 
 .post-cover {
@@ -47,7 +47,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
-    border-radius: 0.65rem;
+    border-radius: 1.95rem;
     font-weight: 600;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -58,6 +58,38 @@
 }
 
 .post-share-card .share-btn-facebook {
+
+.post-share-card .share-actions {
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.post-share-card .share-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, #ff7a18 0%, #ffb347 100%);
+    box-shadow: 0 12px 24px rgba(223, 99, 1, 0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.post-share-card .share-icon:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 18px 30px rgba(223, 99, 1, 0.35);
+    filter: brightness(1.05);
+}
+
+.post-share-card .share-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+}
     background: #1877f2;
     color: #fff;
 }
@@ -160,6 +192,30 @@
     box-shadow: 0 0 0 0.25rem rgba(223, 99, 1, 0.15);
 }
 
+.blog-filters .blog-filters-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.blog-filters .blog-filters-actions .btn {
+    width: 100%;
+    min-width: auto;
+}
+
+@media (min-width: 768px) {
+    .blog-filters .blog-filters-actions {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .blog-filters .blog-filters-actions .btn {
+        width: auto;
+    }
+}
+
 .blog-pagination .page-link {
     color: var(--bombeiros-orange);
     border-radius: 0;
@@ -216,5 +272,11 @@
     .blog-pagination .page-link {
         margin-left: 0;
         border-radius: 0.5rem;
+    }
+
+    .post-card .post-card-cta {
+        width: auto;
+        display: inline-flex;
+        justify-content: flex-start;
     }
 }
