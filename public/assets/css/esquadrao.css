@@ -16,9 +16,68 @@
     opacity: 0.4;
 }
 
-.site-hero.esquadrao-hero .hero-panel-col {
-    display: flex;
-    justify-content: center;
+
+.esquadrao-indicators {
+    background: linear-gradient(135deg, #0f1f2d 0%, #1f2f44 45%, #1b283b 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.esquadrao-indicators::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.2), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(255,255,255,0.08), transparent 35%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.04) 2px, transparent 2px, transparent 8px);
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.esquadrao-indicators > .container,
+.esquadrao-indicators .row {
+    position: relative;
+    z-index: 2;
+}
+
+.esquadrao-indicators .text-muted {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.esquadrao-indicator-card {
+    border-radius: 1.25rem;
+    border: 1px solid rgba(223, 99, 1, 0.4);
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 45px rgba(5, 10, 20, 0.5);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+}
+
+.esquadrao-indicator-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 10%, rgba(223, 99, 1, 0.35), transparent 55%);
+    pointer-events: none;
+}
+
+.esquadrao-indicator-card-label {
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.esquadrao-indicator-card-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffb347;
+    line-height: 1;
+}
+
+.esquadrao-indicator-card-meta {
+    font-size: 0.95rem;
 }
 
 .about-hero-actions .btn {
@@ -39,9 +98,10 @@
 
 .esquadrao-metrics-grid > div {
     border-radius: 1.15rem;
-    border: 1px solid rgba(255,255,255,0.18);
-    background: rgba(255,255,255,0.04);
-    padding: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    padding: 1.35rem;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .esquadrao-metrics-grid small {

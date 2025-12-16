@@ -49,7 +49,10 @@
             <a href="{{ BASE_URL }}admin/livro-ocorrencias/create" class="btn btn-primary text-white">
                 <i class="bi bi-plus-circle me-1"></i> Nova ocorrência
             </a>
-            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary ms-md-auto">
+            <a href="{{ BASE_URL }}admin/livro-tipos" class="btn btn-outline-primary">
+                <i class="bi bi-ui-checks me-1"></i> Tipos
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
                 <i class="bi bi-speedometer2 me-1"></i> Painel
             </a>
         </div>
@@ -59,7 +62,7 @@
     <section class="mt-4">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Filtros Avançados</strong></h5>
+                <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Busca Avançada</strong></h5>
                 {% if hasFilters %}
                     <a href="{{ BASE_URL }}admin/livro-ocorrencias" class="btn btn-sm btn-outline-danger">
                         <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar Filtros
@@ -90,7 +93,9 @@
                         <select id="livroTipo" name="tipo" class="form-select">
                             <option value="">Todos</option>
                             {% for tipo in tipoOptions %}
-                                <option value="{{ tipo }}" {{ filters.tipo == tipo ? 'selected' : '' }}>{{ tipo }}</option>
+                                <option value="{{ tipo.id }}" {{ filters.tipo == tipo.id ? 'selected' : '' }}>
+                                    {{ tipo.nome }}{% if tipo.ativo is defined and not tipo.ativo %} (inativo){% endif %}
+                                </option>
                             {% endfor %}
                         </select>
                     </div>
@@ -157,31 +162,48 @@
         <section class="mt-4">
             <div class="table-responsive shadow-sm rounded-3">
                 <table class="table table-hover align-middle mb-0 livro-table">
-                    <thead class="table-light">
+                    <thead class="table-light text-uppercase">
                         <tr>
-                            <th class="text-center" style="width: 60px;">#</th>
-                            <th style="width: 140px;">Protocolo</th>
-                            <th>Município / Data</th>
-                            <th class="d-none d-md-table-cell">Tipo / Subgrupamento</th>
-                            <th style="width: 140px;">Status</th>
-                            <th class="d-none d-lg-table-cell" style="width: 160px;">Responsável</th>
-                            <th class="text-center" style="width: 160px;">Ações</th>
+                            <th style="width: 140px;">PROTOCOLO</th>
+                            <th>MUNICÍPIO</th>
+                            <th style="width: 160px;">ABERTURA</th>
+                            <th style="width: 160px;">FECHAMENTO</th>
+                            <th class="d-none d-md-table-cell">TIPO / SUBGRUPAMENTO</th>
+                            <th style="width: 140px;">STATUS</th>
+                            <th class="d-none d-lg-table-cell" style="width: 160px;">RESPONSÁVEL</th>
+                            <th class="text-center" style="width: 160px;">AÇÕES</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for registro in registros %}
                             <tr>
-                                <td class="text-center">{{ registro.id }}</td>
                                 <td>
                                     <span class="badge bg-dark-subtle text-dark text-uppercase">{{ registro.protocolo }}</span>
                                 </td>
                                 <td>
-                                    <div class="fw-semibold">{{ registro.municipio_nome }}</div>
+                                    <div class="text-body">{{ registro.municipio_nome }}</div>
+                                    <small class="text-muted">Código {{ registro.municipio_codigo }}</small>
+                                </td>
+                                <td>
                                     <small>{{ registro.data_ocorrencia|date('d/m/Y \\à\\s H\\hi') }}</small>
                                 </td>
+                                <td>
+                                    {% if registro.closed_at %}
+                                        <small>{{ registro.closed_at|date('d/m/Y \\à\\s H\\hi') }}</small>
+                                    {% else %}
+                                        <span class="badge bg-light text-muted">Em aberto</span>
+                                    {% endif %}
+                                </td>
                                 <td class="d-none d-md-table-cell">
-                                    <div class="fw-semibold">{{ registro.tipo_ocorrencia }}</div>
-                                    <small>{{ registro.subgrupamento }}</small>
+                                    <div class="d-flex flex-column gap-1">
+                                        <div class="d-flex align-items-center gap-2">
+                                            {% if registro.tipo_badge_color %}
+                                                <span class="rounded-circle d-inline-block" style="width: .75rem; height: .75rem; background-color: {{ registro.tipo_badge_color|default('#d1d5db')|e('html_attr') }};"></span>
+                                            {% endif %}
+                                            <span class="text-body">{{ registro.tipo_nome|default('Tipo não informado') }}</span>
+                                        </div>
+                                        <small>{{ registro.subgrupamento }}</small>
+                                    </div>
                                 </td>
                                 <td>
                                     <span class="badge livro-status-badge
@@ -197,7 +219,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="dropdown">
-                                        <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                        <button class="btn btn-link text-secondary p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
@@ -248,7 +270,12 @@
                                 </div>
                                 <div class="col-md-6">
                                     <p class="text-muted small mb-1">Tipo</p>
-                                    <p class="fw-semibold mb-0">{{ registro.tipo_ocorrencia }}</p>
+                                    <p class="fw-semibold mb-0 d-flex align-items-center gap-2">
+                                        {% if registro.tipo_badge_color %}
+                                            <span class="rounded-circle d-inline-block" style="width: .65rem; height: .65rem; background-color: {{ registro.tipo_badge_color|default('#d1d5db')|e('html_attr') }};"></span>
+                                        {% endif %}
+                                        {{ registro.tipo_nome|default('Tipo não informado') }}
+                                    </p>
                                 </div>
                                 <div class="col-md-6">
                                     <p class="text-muted small mb-1">Subgrupamento</p>
@@ -261,6 +288,16 @@
                                 <div class="col-md-6">
                                     <p class="text-muted small mb-1">Responsável</p>
                                     <p class="fw-semibold mb-0">{{ registro.responsavel_nome|default('—') }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-muted small mb-1">Encerramento</p>
+                                    <p class="fw-semibold mb-0">
+                                        {% if registro.closed_at %}
+                                            {{ registro.closed_at|date('d/m/Y \\à\\s H\\hi') }}
+                                        {% else %}
+                                            Em aberto
+                                        {% endif %}
+                                    </p>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -323,22 +360,22 @@
 
             {% if last > 1 %}
                 <nav aria-label="Paginação do livro" class="mt-3">
-                    <ul class="pagination justify-content-center">
-                        {% if current > 1 %}
-                            <li class="page-item">
-                                <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page=1" aria-label="Primeira">
-                                    <i class="bi bi-chevron-bar-left"></i>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ current - 1 }}" aria-label="Anterior">
-                                    <i class="bi bi-chevron-left"></i>
-                                </a>
-                            </li>
+                    <ul class="pagination justify-content-center mb-0">
+                        <li class="page-item {% if current <= 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{% if current <= 1 %}#{% else %}{{ pagination.path }}?{{ baseQueryString }}page={{ current - 1 }}{% endif %}" aria-label="Anterior">
+                                &laquo;
+                            </a>
+                        </li>
+
+                        {% if start > 1 %}
+                            <li class="page-item"><a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page=1">1</a></li>
+                            {% if start > 2 %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
                         {% endif %}
 
-                        {% for page in range(start, end) %}
-                            <li class="page-item {{ page == current ? 'active' : '' }}">
+                        {% for page in start..end %}
+                            <li class="page-item {% if page == current %}active{% endif %}">
                                 {% if page == current %}
                                     <span class="page-link">{{ page }}</span>
                                 {% else %}
@@ -347,18 +384,18 @@
                             </li>
                         {% endfor %}
 
-                        {% if current < last %}
-                            <li class="page-item">
-                                <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ current + 1 }}" aria-label="Próxima">
-                                    <i class="bi bi-chevron-right"></i>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ last }}" aria-label="Última">
-                                    <i class="bi bi-chevron-bar-right"></i>
-                                </a>
-                            </li>
+                        {% if end < last %}
+                            {% if end < last - 1 %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                            <li class="page-item"><a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ last }}">{{ last }}</a></li>
                         {% endif %}
+
+                        <li class="page-item {% if current >= last %}disabled{% endif %}">
+                            <a class="page-link" href="{% if current >= last %}#{% else %}{{ pagination.path }}?{{ baseQueryString }}page={{ current + 1 }}{% endif %}" aria-label="Próxima">
+                                &raquo;
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             {% endif %}

@@ -3,105 +3,121 @@
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
     <div class="mb-4">
-        <a href="{{ BASE_URL }}admin/dogs" class="btn btn-link text-decoration-none px-0 text-muted">
+{#         <a href="{{ BASE_URL }}admin/dogs" class="btn btn-link text-decoration-none px-0 text-muted">
             <i class="bi bi-arrow-left"></i> Voltar para cães
-        </a>
-        <h2 class="fw-bold mt-2 text-primary"><i class="bi bi-plus-circle me-2"></i>Cadastro de cão operacional</h2>
+        </a> #}
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-pencil-square me-2"></i>Cadastro de cão operacional</h2>
         <p class="text-muted mb-0">Preencha os dados básicos para incluir o cão no plantel e disponibilizá-lo para escalas.</p>
     </div>
-
-    <form action="{{ BASE_URL }}admin/dogs/store" method="post" class="card border-0 shadow-sm" enctype="multipart/form-data">
+        <hr class="my-4">
+<div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
+{#             <a href="{{ BASE_URL }}admin/pessoal/cadastrar" class="btn btn-primary text-white">
+                <i class="bi bi-plus-circle me-1"></i> Novo bombeiro
+            </a> #}
+            <a href="{{ BASE_URL }}admin/dogs" class="btn btn-primary">
+                <i class="bi bi-shield-plus me-1"></i> Cães
+            </a>
+            <a href="{{ BASE_URL }}admin/dog-breeds" class="btn btn-outline-primary">
+                <i class="bi bi-diagram-3 me-1"></i> Raças
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
+                <i class="bi bi-speedometer2 me-1"></i> Painel
+            </a>
+        </div>
+     <div>
+        <form action="{{ BASE_URL }}admin/dogs/store" method="post" class="dog-create-form" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
-        <div class="card-body">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Nome operacional</label>
-                    <input type="text" class="form-control" name="name" placeholder="Ex: Thor" required data-slug-source>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Slug</label>
-                    <input type="text" class="form-control text-lowercase" name="slug" placeholder="thor-k9" maxlength="140" data-slug-target>
-                    <div class="form-text">Identificador único usado em URLs e integrações internas.</div>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold">Raça</label>
-                    <select name="breed_id" class="form-select" required>
-                        <option value="" selected disabled>Selecione</option>
-                        {% for breed in breeds %}
-                            <option value="{{ breed.id }}">{{ breed.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold">Sexo</label>
-                    <select name="sex" class="form-select">
-                        {% for value, label in sexOptions %}
-                            <option value="{{ value }}" {% if value == 'unknown' %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold">Peso (kg)</label>
-                    <input type="number" step="0.1" min="0" class="form-control" name="weight_kg" placeholder="Ex: 32.5">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold">Data de nascimento</label>
-                    <input type="date" class="form-control" name="birth_date">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold">Cidade de nascimento</label>
-                    <input type="text" class="form-control" name="birth_city" placeholder="Ex: Natal">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold">Estado (UF)</label>
-                    <input type="text" class="form-control text-uppercase" name="birth_state" maxlength="2" placeholder="RN">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold">Função operacional</label>
-                    <select name="operational_function" class="form-select">
-                        <option value="">Selecione</option>
-                        {% for value, label in functionOptions %}
-                            <option value="{{ value }}">{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold">Fase de treinamento</label>
-                    <select name="training_phase" class="form-select">
-                        <option value="">Não definido</option>
-                        {% for value, label in trainingOptions %}
-                            <option value="{{ value }}">{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-semibold">Status</label>
-                    <select name="status" class="form-select">
-                        {% for value, label in statusOptions %}
-                            <option value="{{ value }}" {% if value == 'available' %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Retrato do cão</label>
-                    <input type="file" class="form-control" name="avatar" accept="image/jpeg,image/png,image/webp">
-                    <div class="form-text">PNG, JPG ou WebP até 10MB. O arquivo é armazenado no diretório interno de uploads.</div>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold">Marcas identificadoras</label>
-                    <textarea name="identifying_marks" rows="3" class="form-control" placeholder="Cicatrizes, manchas e outras referências visuais."></textarea>
-                </div>
-                <div class="col-12">
-                    <label class="form-label fw-semibold">Observações gerais</label>
-                    <textarea name="notes" rows="5" class="form-control" placeholder="Histórico do binômio, desempenho e orientações médicas."></textarea>
-                </div>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Nome operacional</label>
+                <input type="text" class="form-control" name="name" placeholder="Ex: Thor" required data-slug-source>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Slug</label>
+                <input type="text" class="form-control text-lowercase" name="slug" placeholder="thor-k9" maxlength="140" data-slug-target>
+                <div class="form-text">Identificador único usado em URLs e integrações internas.</div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Raça</label>
+                <select name="breed_id" class="form-select" required>
+                    <option value="" selected disabled>Selecione</option>
+                    {% for breed in breeds %}
+                        <option value="{{ breed.id }}">{{ breed.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Sexo</label>
+                <select name="sex" class="form-select">
+                    {% for value, label in sexOptions %}
+                        <option value="{{ value }}" {% if value == 'unknown' %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Peso (kg)</label>
+                <input type="number" step="0.1" min="0" class="form-control" name="weight_kg" placeholder="Ex: 32.5">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Data de nascimento</label>
+                <input type="date" class="form-control" name="birth_date">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Cidade de nascimento</label>
+                <input type="text" class="form-control" name="birth_city" placeholder="Ex: Natal">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Estado (UF)</label>
+                <input type="text" class="form-control text-uppercase" name="birth_state" maxlength="2" placeholder="RN">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Função operacional</label>
+                <select name="operational_function" class="form-select">
+                    <option value="">Selecione</option>
+                    {% for value, label in functionOptions %}
+                        <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Fase de treinamento</label>
+                <select name="training_phase" class="form-select">
+                    <option value="">Não definido</option>
+                    {% for value, label in trainingOptions %}
+                        <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Status</label>
+                <select name="status" class="form-select">
+                    {% for value, label in statusOptions %}
+                        <option value="{{ value }}" {% if value == 'available' %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Retrato do cão</label>
+                <input type="file" class="form-control" name="avatar" accept="image/jpeg,image/png,image/webp">
+                <div class="form-text">PNG, JPG ou WebP até 10MB. O arquivo é armazenado no diretório interno de uploads.</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Marcas identificadoras</label>
+                <textarea name="identifying_marks" rows="3" class="form-control" placeholder="Cicatrizes, manchas e outras referências visuais."></textarea>
+            </div>
+            <div class="col-12">
+                <label class="form-label fw-semibold">Observações gerais</label>
+                <textarea name="notes" rows="5" class="form-control" placeholder="Histórico do binômio, desempenho e orientações médicas."></textarea>
             </div>
         </div>
-        <div class="card-footer bg-light d-flex flex-column flex-md-row gap-2 justify-content-md-end">
-            <a href="{{ BASE_URL }}admin/dogs" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Cancelar</a>
-            <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Salvar cão</button>
+      <div class="border-top my-4"></div>
+        {# <div class="card-footer bg-light d-flex flex-column flex-md-row gap-2 justify-content-md-end"> #}
+         <div class="action-buttons d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-end py-2">
+            {# <a href="{{ BASE_URL }}admin/dogs" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Cancelar</a> #}
+            <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i> Salvar cão</button>
         </div>
-    </form>
+        </form>
+    </div>
 </div>
 {% endblock %}
 

@@ -7,6 +7,19 @@
         <p class="text-muted mb-0">Cadastre nova categoria de post para o Blog</p>
     </div>
     <hr class="my-4">
+    <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
+            <a href="{{ BASE_URL }}admin/posts" class="btn btn-primary text-white">
+               <i class="bi bi-journal-text"></i> Posts
+            </a>
+
+            <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-primary">
+                <i class="bi bi-tags"></i> Categorias
+            </a>
+
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
+                <i class="bi bi-speedometer2 me-1"></i> Painel
+            </a>
+    </div>
     <form action="{{ BASE_URL }}admin/post-categories/store" method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
         <div class="row g-3">
@@ -23,7 +36,7 @@
                 <input type="text" name="slug" class="form-control text-lowercase" placeholder="ex: operacoes" data-slug-target maxlength="140">
                 <div class="form-text">Link amigável utilizado nas URLs do blog.</div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-5">
                 <label class="form-label fw-bold">Cor do badge</label>
                 <div class="d-flex gap-2 align-items-center color-picker-wrapper" data-color-picker>
                     <input type="color"
@@ -42,15 +55,15 @@
                 </div>
                 <div class="form-text">Selecione ou informe um valor hexadecimal (#RRGGBB).</div>
             </div>
-            <div class="col-12">
+            <div class="col-md-7">
                 <label class="form-label fw-bold">Descrição da categoria</label>
-                <textarea name="descricao" rows="4" class="form-control" placeholder="Descrição breve (opcional)"></textarea>
+                <input type="text" name="descricao" class="form-control" placeholder="Descrição breve (opcional)"></input>
             </div>
         </div>
         <div class="border-top my-4"></div>
         <div class="d-flex flex-column flex-md-row gap-2 justify-content-md-end">
-            <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Voltar</a>
-            <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Salvar</button>
+            <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-danger"><i class="bi bi-x-circle me-1"></i> Cancelar</a>
+            <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i> Salvar</button>
         </div>
     </form>
 </div>

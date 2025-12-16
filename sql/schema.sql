@@ -10,7 +10,10 @@ DROP TABLE IF EXISTS dog_vaccinations;
 DROP TABLE IF EXISTS dogs;
 DROP TABLE IF EXISTS dog_breeds;
 DROP TABLE IF EXISTS livro_ocorrencias;
+DROP TABLE IF EXISTS livro_ocorrencia_tipos;
 DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS gallery_images;
+DROP TABLE IF EXISTS gallery_categories;
 DROP TABLE IF EXISTS pessoal;
 DROP TABLE IF EXISTS equipamentos;
 DROP TABLE IF EXISTS obras;
@@ -170,29 +173,47 @@ CREATE TABLE posts (
     CONSTRAINT fk_posts_categoria FOREIGN KEY (categoria_id) REFERENCES categorias_posts(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela: livro_ocorrencia_tipos
+CREATE TABLE livro_ocorrencia_tipos (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL,
+    slug VARCHAR(180) NOT NULL,
+    descricao VARCHAR(255) NULL,
+    badge_color VARCHAR(10) NULL,
+    ativo TINYINT(1) DEFAULT 1,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_livro_tipos_nome (nome),
+    UNIQUE KEY uq_livro_tipos_slug (slug),
+    KEY idx_livro_tipos_ativo (ativo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Tabela: livro_ocorrencias
 CREATE TABLE livro_ocorrencias (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     protocolo VARCHAR(30) NOT NULL,
     data_ocorrencia DATETIME NOT NULL,
+    closed_at DATETIME NULL,
     municipio_codigo INT UNSIGNED NOT NULL,
     municipio_nome VARCHAR(150) NOT NULL,
     subgrupamento ENUM('1º SGB','2º SGB','3º SGB','4º SGB','5º SGB','6º SGB','7º SGB','8º SGB','9º SGB','10º SGB') NOT NULL,
-    tipo_ocorrencia ENUM('Busca e Salvamento','Resgate Marítimo','Incêndio Estrutural','Incêndio Florestal','Defesa Civil','Suporte Pré-Hospitalar','Outros') NOT NULL,
+    tipo_id INT UNSIGNED NOT NULL,
     descricao LONGTEXT NOT NULL,
     relatorio_conclusao LONGTEXT NULL,
-    status ENUM('aberta','em_andamento','concluida','arquivada') DEFAULT 'aberta',
+    status ENUM('aberta','concluida') DEFAULT 'aberta',
     responsavel_id INT UNSIGNED NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY uq_livro_protocolo (protocolo),
     KEY idx_livro_data (data_ocorrencia),
+    KEY idx_livro_closed_at (closed_at),
     KEY idx_livro_municipio (municipio_codigo),
-    KEY idx_livro_tipo (tipo_ocorrencia),
+    KEY idx_livro_tipo (tipo_id),
     KEY idx_livro_subgrupamento (subgrupamento),
     KEY idx_livro_status (status),
     CONSTRAINT fk_livro_municipio FOREIGN KEY (municipio_codigo) REFERENCES municipios_ibge(codigo),
-    CONSTRAINT fk_livro_responsavel FOREIGN KEY (responsavel_id) REFERENCES users(id) ON DELETE SET NULL
+    CONSTRAINT fk_livro_responsavel FOREIGN KEY (responsavel_id) REFERENCES users(id) ON DELETE SET NULL,
+    CONSTRAINT fk_livro_tipo FOREIGN KEY (tipo_id) REFERENCES livro_ocorrencia_tipos(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabela: dog_breeds
@@ -340,6 +361,30 @@ CREATE TABLE dog_handlers (
     KEY idx_user_handler (user_id),
     CONSTRAINT fk_handlers_dog FOREIGN KEY (dog_id) REFERENCES dogs (id) ON DELETE CASCADE,
     CONSTRAINT fk_handlers_user FOREIGN KEY (user_id) REFERENCES users (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabela: gallery_categories
+CREATE TABLE gallery_categories (
+    id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(64) NOT NULL,
+    slug VARCHAR(128) DEFAULT NULL,
+    color VARCHAR(16) DEFAULT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_gallery_categories_nome (nome),
+    UNIQUE KEY uq_gallery_categories_slug (slug)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabela: gallery_images
+CREATE TABLE gallery_images (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    category_id INT(10) UNSIGNED NOT NULL,
+    titulo VARCHAR(128) NOT NULL,
+    descricao TEXT DEFAULT NULL,
+    url VARCHAR(255) NOT NULL,
+    data_upload DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_gallery_category (category_id),
+    CONSTRAINT fk_gallery_images_category FOREIGN KEY (category_id) REFERENCES gallery_categories (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;

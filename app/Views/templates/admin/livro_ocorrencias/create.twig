@@ -33,28 +33,36 @@
 
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4" data-module="livro-ocorrencias">
-    <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
-        <div>
-            <p class="text-uppercase small text-muted mb-1">Registro oficial</p>
-            <h1 class="h3 fw-bold" style="color: var(--admin-primary, #df6301);">
-                <i class="bi bi-journal-plus me-2"></i>
-                Nova ocorrência
-            </h1>
-        </div>
-        <div class="d-flex gap-2">
-            <a href="{{ BASE_URL }}admin/livro-ocorrencias" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> Voltar
+          
+           <h2 class="text-primary"><i class="bi bi-journal-plus me-2"></i>Nova ocorrência</h2>
+            <p class="lead text-muted">Registro oficial</p>
+         
+    <hr class="mt-4">
+     <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
+            <a href="{{ BASE_URL }}admin/livro-ocorrencias" class="btn btn-primary text-white">
+                <i class="bi bi-journal-check"></i> Livro de ocorrências
             </a>
+            <a href="{{ BASE_URL }}admin/livro-tipos" class="btn btn-outline-primary">
+                <i class="bi bi-ui-checks me-1"></i> Tipos
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
+                <i class="bi bi-speedometer2 me-1"></i> Painel
+            </a>
+      </div>
+
+    <div class="alert alert-warning d-flex align-items-start gap-2" role="alert">
+        <i class="bi bi-info-circle-fill fs-4"></i>
+        <div>
+            <strong>Status automático.</strong> Registros permanecem abertos até que uma data de encerramento seja definida.
         </div>
     </div>
-    <hr class="mt-4">
 
     <form method="post" action="{{ BASE_URL }}admin/livro-ocorrencias/store" class="row g-4" novalidate>
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
         <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
+            {# <div class="card border-0 shadow-sm"> #}
+                {# <div class="card-body p-4"> #}
                     <div class="row g-4">
                         <div class="col-md-3">
                             <label class="form-label text-uppercase small fw-semibold">Protocolo</label>
@@ -85,21 +93,22 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label text-uppercase small fw-semibold">Tipo de ocorrência *</label>
-                            <select name="tipo_ocorrencia" class="form-select" required>
-                                <option value="" disabled {{ old.tipo_ocorrencia is empty ? 'selected' : '' }}>Selecione</option>
+                            <select name="tipo_id" class="form-select" required>
+                                <option value="" disabled {{ old.tipo_id is empty ? 'selected' : '' }}>Selecione</option>
                                 {% for tipo in tipoOptions %}
-                                    <option value="{{ tipo }}" {{ old.tipo_ocorrencia == tipo ? 'selected' : '' }}>{{ tipo }}</option>
+                                    <option value="{{ tipo.id }}" {{ old.tipo_id == tipo.id ? 'selected' : '' }}>{{ tipo.nome }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label text-uppercase small fw-semibold">Status *</label>
-                            <select name="status" class="form-select" required>
-                                <option value="" disabled {{ old.status is empty ? 'selected' : '' }}>Selecione</option>
-                                {% for value, label in statusOptions %}
-                                    <option value="{{ value }}" {{ old.status == value ? 'selected' : '' }}>{{ label }}</option>
-                                {% endfor %}
-                            </select>
+                            <label class="form-label text-uppercase small fw-semibold">Encerramento (opcional)</label>
+                            <input
+                                type="datetime-local"
+                                class="form-control"
+                                name="closed_at"
+                                value="{{ old.closed_at|default('')|e('html_attr') }}"
+                                placeholder="Informe quando a ocorrência foi concluída">
+                            <div class="form-text">Se preenchido, o registro já será salvo como concluído.</div>
                         </div>
                             <div class="col-12">
                                 <label class="form-label text-uppercase small fw-semibold">Descrição operacional *</label>
@@ -128,12 +137,12 @@
                                     placeholder="Opcional — utilize após encerramento">{{ old.relatorio_conclusao|default('')|raw }}</textarea>
                             </div>
                     </div>
-                </div>
-            </div>
+                {# </div> #}
+            {# </div> #}
         </div>
 
         <div class="col-12 d-flex flex-column flex-md-row gap-2 justify-content-end">
-            <a href="{{ BASE_URL }}admin/livro-ocorrencias" class="btn btn-outline-secondary">
+            <a href="{{ BASE_URL }}admin/livro-ocorrencias" class="btn btn-outline-danger">
                 Cancelar
             </a>
             <button type="submit" class="btn btn-success">

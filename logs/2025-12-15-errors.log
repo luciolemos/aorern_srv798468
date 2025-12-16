@@ -1,0 +1,10 @@
+[2025-12-15 15:59:03] PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'foto' in 'field list' in /var/www/mvc/app/Models/PessoalModel.php:84
+Stack trace:
+#0 /var/www/mvc/app/Models/PessoalModel.php(84): PDOStatement->execute()
+#1 /var/www/mvc/app/Controllers/Admin/PessoalController.php(187): App\Models\PessoalModel->atualizar()
+#2 [internal function]: App\Controllers\Admin\PessoalController->atualizar()
+#3 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#4 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#5 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#6 {main}
+

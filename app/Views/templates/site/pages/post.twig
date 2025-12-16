@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block content %}
+    <div id="fb-root"></div>
     <div class="container-xxl py-5">
         <div class="row justify-content-center">
             <div class="col-12 col-xl-10">
@@ -18,21 +19,24 @@
                             <small>
                                 <i class="bi bi-calendar-event"></i> {{ post.criado_em|date('d/m/Y') }}
                                 {% if post.autor %}
-                                    | <i class="bi bi-person"></i> {{ post.autor }}
+                                    <span class="mx-3">•</span> <i class="bi bi-person"></i> {{ post.autor }}
                                 {% endif %}
-                            </small>
+                                <span class="mx-3">•</span>
+                                {% if post.categoria_nome %}
+                                   {% set categoriaCor = post.categoria_cor|default('#df6301') %}
+                                     
+                                         <span class="blog-category-badge blog-category-badge-card" style="background-color: {{ categoriaCor }}; border-color: {{ categoriaCor }}; color: #fff;">
+                                           <i class="bi bi-tag me-1"></i>{{ post.categoria_nome }}
+                                        </span>
+                                    
+                                   {% endif %}
+                            </small>                  
                         </div>
-                        {% if post.categoria_nome %}
-                            {% set categoriaCor = post.categoria_cor|default('#df6301') %}
-                            <div class="mb-2">
-                                <span class="blog-category-badge blog-category-badge-card" style="background-color: {{ categoriaCor }}; border-color: {{ categoriaCor }}; color: #fff;">
-                                    <i class="bi bi-tag me-1"></i>{{ post.categoria_nome }}
-                                </span>
-                            </div>
-                        {% endif %}
+
                     </header>
 
-                    {% set shareUrl = BASE_URL ~ 'blog/' ~ post.slug %}
+                    {% set canonicalPath = current_path ?: ('blog/' ~ post.slug) %}
+                    {% set shareUrl = BASE_URL ~ canonicalPath %}
 
                     {% if post.capa_url %}
                         <figure class="post-cover rounded-4 overflow-hidden shadow-sm mb-4">
@@ -74,63 +78,40 @@
                                 <p class="text-muted text-uppercase small fw-semibold mb-1">Compartilhar</p>
                                 <p class="mb-0 text-muted">Divulgue este conteúdo nas suas redes.</p>
                             </div>
-                            <div class="d-flex flex-wrap gap-2 ms-md-auto">
-                                {% include 'site/components/button.twig' with {
-                                    href: 'https://www.facebook.com/sharer/sharer.php?u=' ~ shareUrl|url_encode,
-                                    label: 'Facebook',
-                                    icon: 'bi-facebook',
-                                    icon_class: 'text-white',
-                                    variant: 'solid',
-                                    size: 'lg',
-                                    button_class: 'share-btn share-btn-facebook',
-                                    target: '_blank',
-                                    rel: 'noopener',
-                                    attrs: {'title': 'Facebook'}
-                                } %}
-                                {% include 'site/components/button.twig' with {
-                                    href: 'https://twitter.com/intent/tweet?url=' ~ shareUrl|url_encode ~ '&text=' ~ post.titulo|url_encode,
-                                    label: 'Twitter',
-                                    icon: 'bi-twitter',
-                                    icon_class: 'text-white',
-                                    variant: 'solid',
-                                    size: 'lg',
-                                    button_class: 'share-btn share-btn-twitter',
-                                    target: '_blank',
-                                    rel: 'noopener',
-                                    attrs: {'title': 'Twitter / X'}
-                                } %}
-                                {% include 'site/components/button.twig' with {
-                                    href: 'https://api.whatsapp.com/send?text=' ~ (post.titulo ~ ' - ' ~ shareUrl)|url_encode,
-                                    label: 'WhatsApp',
-                                    icon: 'bi-whatsapp',
-                                    icon_class: 'text-white',
-                                    variant: 'solid',
-                                    size: 'lg',
-                                    button_class: 'share-btn share-btn-whatsapp',
-                                    target: '_blank',
-                                    rel: 'noopener',
-                                    attrs: {'title': 'WhatsApp'}
-                                } %}
-                                {% include 'site/components/button.twig' with {
-                                    href: 'https://www.linkedin.com/shareArticle?mini=true&url=' ~ shareUrl|url_encode ~ '&title=' ~ post.titulo|url_encode,
-                                    label: 'LinkedIn',
-                                    icon: 'bi-linkedin',
-                                    icon_class: 'text-white',
-                                    variant: 'solid',
-                                    size: 'lg',
-                                    button_class: 'share-btn share-btn-linkedin',
-                                    target: '_blank',
-                                    rel: 'noopener',
-                                    attrs: {'title': 'LinkedIn'}
-                                } %}
+                            <div class="d-flex flex-wrap gap-3 ms-md-auto">
+                                <a class="share-icon" href="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl|url_encode }}" target="_blank" rel="noopener" aria-label="Compartilhar no Facebook">
+                                    <i class="bi bi-facebook"></i>
+                                </a>
+                                <a class="share-icon" href="https://twitter.com/intent/tweet?url={{ shareUrl|url_encode }}&text={{ post.titulo|url_encode }}" target="_blank" rel="noopener" aria-label="Compartilhar no Twitter/X">
+                                    <i class="bi bi-twitter"></i>
+                                </a>
+                                <a class="share-icon" href="https://api.whatsapp.com/send?text={{ (post.titulo ~ ' - ' ~ shareUrl)|url_encode }}" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp">
+                                    <i class="bi bi-whatsapp"></i>
+                                </a>
+                                <a class="share-icon" href="https://www.linkedin.com/shareArticle?mini=true&url={{ shareUrl|url_encode }}&title={{ post.titulo|url_encode }}" target="_blank" rel="noopener" aria-label="Compartilhar no LinkedIn">
+                                    <i class="bi bi-linkedin"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </article>
 
+        
+
                 <section class="mt-5 pt-4 border-top">
                     <h2 class="h5 fw-bold text-primary mb-3">
-                        <i class="bi bi-chat-dots-fill me-2"></i>Comentários
+                        <i class="bi bi-chat-left-text me-2"></i>Comentários (Facebook)
+                    </h2>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="fb-comments" data-href="{{ shareUrl }}" data-width="100%" data-numposts="5" data-order-by="reverse_time"></div>
+                        </div>
+                    </div>
+                </section>
+
+                        <section class="mt-5 pt-4 border-top">
+                    <h2 class="h5 fw-bold text-primary mb-3">
+                        <i class="bi bi-chat-dots-fill me-2"></i>Comentários (GitHub)
                     </h2>
                     <div id="giscus-container" class="bg-light rounded-3 shadow-sm p-3">
                         <script src="https://giscus.app/client.js"
@@ -153,4 +134,9 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v19.0"></script>
 {% endblock %}

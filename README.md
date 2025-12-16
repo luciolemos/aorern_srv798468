@@ -140,7 +140,14 @@ mysql -u root -p
 > CREATE DATABASE luciolemos_mvc;
 > USE luciolemos_mvc;
 > source sql/schema.sql;
-> source sql/seeds.sql;
+> source sql/seeds/001_base_data.sql;
+
+Ou execute diretamente apontando o banco já criado:
+
+```bash
+mysql -u luciolemos -p mvc < sql/schema.sql
+mysql -u luciolemos -p mvc < sql/seeds/001_base_data.sql
+```
 ```
 
 ### 5. **Configurar VirtualHost (Apache)**
@@ -857,10 +864,11 @@ mvc/
 │   └── .htaccess                    # URL rewrite rules
 │
 ├── sql/
-│   ├── schema.sql                   # Estrutura tabelas
-│   ├── seeds.sql                    # Dados iniciais
+│   ├── schema.sql                   # Estrutura tabelas completa
+│   ├── seeds/
+│   │   └── 001_base_data.sql        # Dados iniciais (inclui mapa operacional)
 │   └── migrations/
-│       └── Migration_*.php           # Schema updates
+│       └── Migration_*.php          # Schema updates
 │
 ├── tests/
 │   ├── Controllers/
@@ -905,7 +913,7 @@ mvc/
 3. **Configurar banco**
    ```bash
    mysql -u root -p < sql/schema.sql
-   mysql -u root -p < sql/seeds.sql
+   mysql -u root -p < sql/seeds/001_base_data.sql
    ```
 
 4. **Permissões**

@@ -42,6 +42,7 @@
                                     icon: 'bi-telephone',
                                     variant: 'solid',
                                     size: 'lg',
+                                    button_class: 'fw-bold',
                                    
                                 } %}
                                {#{% include 'site/components/button.twig' with {
@@ -57,8 +58,9 @@
                                     href: 'https://wa.me/5584988389889',
                                     label: 'WhatsApp',
                                     icon: 'bi-whatsapp',
-                                   variant: 'solid',
+                                    variant: 'solid',
                                     size: 'lg',
+                                    button_class: 'fw-bold',
                                 } %}
 
                           {#{% include 'site/components/button.twig' with {
@@ -76,13 +78,93 @@
             </div>
     </section>
 
+    <section class="home-about home-section py-5">
+        <div class="container">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6">
+                    {% include 'site/components/section-header.twig' with {
+                        kicker: 'Serviço essencial',
+                        title: 'Bombeiros militares dedicados à proteção da população',
+                        subtitle: 'Combinar disciplina operacional, tecnologia e presença nas ruas é o que garante respostas rápidas e humanizadas para quem mais precisa.',
+                        align: 'start',
+                        kicker_class: 'text-muted mb-2',
+                        title_class: 'text-primary mb-3',
+                        subtitle_class: 'text-muted mb-4'
+                    } %}
+
+                     <ul class="list-unstyled home-k9-list icon-list mb-4">
+                        <li class="icon-list-item">
+    <span class="icon-circle icon-soft" aria-hidden="true">
+      <i class="bi bi-fire"></i>
+    </span>
+    <span>
+      Guarnições especializadas no combate a incêndios urbanos, florestais e industriais, com atuação preventiva e emergencial.
+    </span>
+  </li>
+
+  <li class="icon-list-item">
+    <span class="icon-circle icon-soft" aria-hidden="true">
+      <i class="bi bi-life-preserver"></i>
+    </span>
+    <span>
+      Equipes treinadas para operações de resgate e salvamento em altura, ambientes aquáticos, áreas alagadas e estruturas colapsadas.
+    </span>
+  </li>
+
+  <li class="icon-list-item">
+    <span class="icon-circle icon-soft" aria-hidden="true">
+      <i class="bi bi-heart-pulse"></i>
+    </span>
+    <span>
+      Atendimento pré-hospitalar e primeiros socorros, com resposta rápida e suporte à preservação da vida em situações de emergência.
+    </span>
+  </li>
+
+  <li class="icon-list-item">
+    <span class="icon-circle icon-soft" aria-hidden="true">
+      <i class="bi bi-shield-check"></i>
+    </span>
+    <span>
+      Atuação em ações de defesa civil, prevenção de riscos e resposta a desastres naturais e tecnológicos.
+    </span>
+  </li>
+
+  <li class="icon-list-item">
+    <span class="icon-circle icon-soft" aria-hidden="true">
+      <i class="bi bi-people"></i>
+    </span>
+    <span>
+      Desenvolvimento de ações educativas, orientações preventivas e iniciativas comunitárias voltadas à promoção da cultura de segurança.
+    </span>
+  </li>
+                    </ul>
+
+                    {# <p class="text-muted mb-0">O 2º SGB/2º GBM integra Defesa Civil, SAMU, polícias e lideranças locais para planejar, prevenir e agir com eficiência em todo o litoral sul potiguar.</p> #}
+                </div>
+                <div class="col-lg-6">
+                    <div class="home-video-wrapper shadow-sm rounded-4 overflow-hidden">
+                        <iframe
+                            src="https://www.youtube.com/embed/qH-5LrMs5T0?rel=0&modestbranding=1"
+                            title="Rotina de operações do Corpo de Bombeiros"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen
+                            loading="lazy"></iframe>
+                    </div>
+                    {# <p class="text-muted small mt-3 mb-0">Vídeo institucional ilustrativo: operações de busca, salvamento e demonstrações públicas.</p> #}
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
     <section class="home-k9 home-section py-5">
         <div class="container">
             <div class="row align-items-center gy-4">
-                <div class="col-lg-6">
+                <div class="col-lg-6 d-none d-lg-block">
                     <img src="{{ BASE_URL }}assets/images/caes/malinois_1600_1600.jpg"
                          alt="Esquadrão com cães farejadores do CBMRN"
-                         class="img-fluid home-k9-image shadow-sm">
+                         class="img-fluid home-k9-image shadow-sm" style="border-radius: 0.55rem;">
                 </div>
                 <div class="col-lg-6">
                     {% include 'site/components/section-header.twig' with {
@@ -96,6 +178,12 @@
                         subtitle_class: 'text-muted',
                         extra_class: 'mb-4'
                     } %}
+
+                    <div class="home-k9-image-inline d-lg-none mb-4">
+                        <img src="{{ BASE_URL }}assets/images/caes/malinois_1600_1600.jpg"
+                             alt="Esquadrão com cães farejadores do CBMRN"
+                             class="img-fluid home-k9-image shadow-sm">
+                    </div>
 
                     <ul class="list-unstyled home-k9-list icon-list mb-4">
                         <li class="icon-list-item">
@@ -123,8 +211,8 @@
                         icon: 'bi-arrow-right',
                         icon_position: 'end',                       
                         variant: 'solid',
-                                    size: 'lg',
-                       
+                        size: 'lg',
+                        button_class: 'fw-bold'
                     } %}
                 </div>
             </div>
@@ -197,6 +285,9 @@
                         <h3 class="h4 fw-bold mb-2">Ocorrências por tipo</h3>
                         <p class="text-muted mb-0">Atualizado a partir do Livro de Ocorrências. Destaque imediato para as frentes com maior demanda.</p> #}
                          <p class="text-muted mb-0">Indicadores de desempenho do 2º Subgrupamento de Bombeiros Militar</p>
+                         {% if ocorrenciasPeriodoDescricao is defined %}
+                             <p class="text-muted small mb-0">{{ ocorrenciasPeriodoDescricao }}</p>
+                         {% endif %}
                     </div>
                     <div class="col-lg-6 text-lg-end">
                         {% include 'site/components/button.twig' with {
@@ -213,7 +304,31 @@
                         } %}
                     </div>
                 </div>
-                {% set cardRows = ocorrenciaCards|batch(4, null) %}
+                {% set civicoRef = 'ação cívico-social'|lower %}
+                {% set civicoCardMatch = null %}
+                {% set outrosCards = [] %}
+                {% for ocorrencia in ocorrenciaCards %}
+                    {% set tipoNome = ocorrencia.tipo|default('') %}
+                    {% set tipoNormalized = tipoNome|lower %}
+                    {% if civicoCardMatch is null and tipoNormalized == civicoRef %}
+                        {% set civicoCardMatch = ocorrencia %}
+                    {% else %}
+                        {% set outrosCards = outrosCards|merge([ocorrencia]) %}
+                    {% endif %}
+                {% endfor %}
+
+                {% set civicoCard = civicoCardMatch ?? {
+                    tipo: 'Ação cívico-social',
+                    total: 0,
+                    meta: 'Projetos educativos e apoio às comunidades'
+                } %}
+
+                {% if civicoCard.meta is not defined or civicoCard.meta is empty %}
+                    {% set civicoCard = civicoCard|merge({ meta: 'Projetos educativos e apoio às comunidades' }) %}
+                {% endif %}
+
+                {% set cardsComCivico = outrosCards|merge([civicoCard]) %}
+                {% set cardRows = cardsComCivico|batch(4, null) %}
                 {% for row in cardRows %}
                     <div class="row g-3 g-md-4 mt-2 mt-md-4">
                         {% for ocorrencia in row %}
@@ -247,6 +362,86 @@
                 </div>
             </div>       
       {% endif %}
+     </section>
+
+     <section class="home-occurrence-map home-section py-5">
+        <div class="container">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-4">
+                    {% include 'site/components/section-header.twig' with {
+                        kicker: 'Mapa operacional',
+                        title: 'Ocorrências por município',
+                        subtitle: 'Visualize onde os atendimentos do 2º Subgrupamento de Bombeiros Militar se concentram e acompanhe o pulso regional em tempo real.',
+                        align: 'start',
+                        kicker_class: 'text-muted text-uppercase small',
+                        title_class: 'text-primary',
+                        subtitle_class: 'text-muted',
+                        extra_class: 'mb-4'
+                    } %}
+                    <div class="occurrence-map-controls d-flex flex-wrap align-items-end gap-3 mb-3">
+                        <div class="occurrence-map-control">
+                            <label for="occurrence-map-year" class="small text-muted mb-1">Ano</label>
+                            <select id="occurrence-map-year" class="form-select form-select-sm" data-map-year-select>
+                                {% for yearOption in mapYearOptions|default([mapYear]) %}
+                                    <option value="{{ yearOption }}" {% if yearOption == mapYear %}selected{% endif %}>{{ yearOption }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% if mapTipoOptions is defined and mapTipoOptions|length > 0 %}
+                            <div class="occurrence-map-control flex-grow-1">
+                                <label for="occurrence-map-type" class="small text-muted mb-1">Tipo</label>
+                                <select id="occurrence-map-type" class="form-select form-select-sm" data-map-type-select>
+                                    <option value="">Todos os tipos</option>
+                                    {% for tipoOption in mapTipoOptions %}
+                                        <option value="{{ tipoOption.id }}">{{ tipoOption.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+                        {% if mapStatusOptions is defined and mapStatusOptions|length > 0 %}
+                            <div class="occurrence-map-control flex-grow-1">
+                                <label for="occurrence-map-status" class="small text-muted mb-1">Status</label>
+                                <select id="occurrence-map-status" class="form-select form-select-sm" data-map-status-select>
+                                    <option value="">Todos os status</option>
+                                    {% for statusValue, statusLabel in mapStatusOptions %}
+                                        <option value="{{ statusValue }}">{{ statusLabel }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="occurrence-map-summary" data-map-summary>
+                        <p class="mb-1 fw-semibold">Carregando painel dinâmico...</p>
+                        <p class="mb-0 text-muted small">Conectando aos registros consolidados do livro.</p>
+                    </div>
+                    <ul class="occurrence-map-top list-unstyled mt-3" data-map-top-list>
+                        <li class="text-muted small">Os municípios com maior volume aparecerão aqui.</li>
+                    </ul>
+                    <p class="occurrence-map-status small text-muted mt-3" data-map-status role="status">Mapa pronto para atualização.</p>
+                </div>
+                <div class="col-lg-8">
+                    <div class="occurrence-map-wrapper">
+                        <div class="occurrence-map-canvas">
+                            <div id="occurrence-map"
+                                 data-endpoint="{{ BASE_URL }}ocorrencias/mapa-municipios"
+                                 data-initial-year="{{ mapYear }}"
+                                   data-maps-enabled="{{ GOOGLE_MAPS_API_KEY ? '1' : '0' }}"
+                                   data-badge-src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png"></div>
+                            <div class="occurrence-map-fallback {{ GOOGLE_MAPS_API_KEY ? 'd-none' : '' }}" data-map-fallback>
+                                <p class="fw-semibold mb-1">Mapa em modo reduzido</p>
+                                <p class="mb-2 small text-muted">Informe a variável <span class="occurrence-map-key">GOOGLE_MAPS_API_KEY</span> no arquivo .env para liberar os marcadores do Google Maps.</p>
+                                <p class="mb-0 text-muted small">Os totais seguem disponíveis na lista lateral.</p>
+                            </div>
+                        </div>
+                        <div class="occurrence-map-legend mt-3 d-flex flex-wrap align-items-center gap-2">
+                            <span class="legend-badge legend-badge-low">Baixa</span>
+                            <span class="legend-badge legend-badge-medium">Moderada</span>
+                            <span class="legend-badge legend-badge-high">Alta</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
      </section>
 
 {#      <section class="home-highlights home-section py-5">
@@ -337,7 +532,7 @@
             {% include 'site/components/section-header.twig' with {
                 kicker: 'Depoimentos',
                 title: 'Quem confia no nosso trabalho',
-                subtitle: 'Autoridades locais, parceiros e cidadãos falam sobre o impacto do 2º SGB/2º GBM no litoral sul potiguar.',
+                subtitle: 'Autoridades públicas, representantes de instituições parceiras e membros da sociedade civil destacam o papel estratégico desempenhado pelo 2º Subgrupamento de Bombeiros Militar na região do litoral sul potiguar. Os depoimentos evidenciam a relevância da atuação operacional, preventiva e educativa da unidade, bem como sua contribuição permanente para a proteção da vida, do patrimônio e para o fortalecimento da segurança pública nos municípios sob sua área de responsabilidade.',
                 align: 'center',
                 kicker_class: 'text-muted',
                 title_class: 'text-primary',
@@ -348,19 +543,19 @@
         {% set testimonials = [
             {
                 name: 'Antonella Paiva',
-                role: 'Prefeita de Goianinha',
+                role: 'Diretora da Agência Aeroespacial -Goianinha/RN',
                 quote: '"A presença da unidade em Goianinha reduziu drasticamente os tempos de resposta. Hoje conseguimos apoiar os municípios vizinhos com muito mais eficiência."',
                 photo: 'assets/images/testimonials/testimonial1.jpg'
             },
             {
                 name: 'Karla Lemos',
-                role: 'Coord. Defesa Civil - Tibau do Sul',
+                role: 'Coord. Defesa Cibernética - Tibau do Sul/RN',
                 quote: '"O suporte do 2º SGB é constante. Trabalhamos juntos em planos de prevenção e nas ocorrências críticas, sempre com comunicação clara. O Subgrupamento está de parabéns!"',
                 photo: 'assets/images/testimonials/testimonial2.jpg'
             },
             {
                 name: 'Marta Morais',
-                role: 'Moradora de Canguaretama',
+                role: 'Moradora de Canguaretama/RN',
                 quote: '"Após um incêndio residencial, fomos atendidos em minutos. A equipe nos orientou, controlou o fogo e deixou toda a vizinhança segura. I love 2º Subgrupamento de Bombeiros!"',
                 photo: 'assets/images/testimonials/testimonial3.jpg'
             }
@@ -420,4 +615,12 @@
             </div>
         </div>
      </section>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script src="{{ BASE_URL }}assets/js/occurrence-map.js" defer></script>
+    {% if GOOGLE_MAPS_API_KEY %}
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&callback=initOccurrenceMap" async defer></script>
+    {% endif %}
 {% endblock %}

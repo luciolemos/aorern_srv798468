@@ -19,15 +19,18 @@
             <h3 class="post-card-title {{ title_class|default('h5 fw-bold mb-2') }}">{{ title }}</h3>
         {% endif %}
         {% if meta_date or meta_author %}
-            <p class="post-card-meta text-muted small mb-3">
+            <div class="post-card-meta-stack mb-3">
                 {% if meta_date %}
-                    <span><i class="bi bi-calendar-event"></i> {{ meta_date }}</span>
+                    <span class="post-card-meta text-muted small">
+                        <i class="bi bi-calendar-event"></i> {{ meta_date }}
+                    </span>
                 {% endif %}
                 {% if meta_author %}
-                    <span class="mx-2">|</span>
-                    <span><i class="bi bi-person"></i> {{ meta_author }}</span>
+                    <span class="post-card-meta text-muted small">
+                        <i class="bi bi-pencil-square"></i> {{ meta_author }}
+                    </span>
                 {% endif %}
-            </p>
+            </div>
         {% endif %}
         {% if excerpt %}
             <p class="post-card-excerpt mb-3">{{ excerpt }}</p>

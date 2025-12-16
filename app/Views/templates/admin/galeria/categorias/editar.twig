@@ -1,0 +1,94 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Editar Categoria - Galeria{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div data-aos="fade-down" class="mb-4">
+        <a href="{{ BASE_URL }}admin/galeria-categorias" class="btn btn-link text-decoration-none px-0 text-muted">
+            <i class="bi bi-arrow-left-circle me-1"></i>Voltar para categorias
+        </a>
+        <h2 class="fw-bold text-primary mb-1"><i class="bi bi-pencil-square me-2"></i>Editar categoria</h2>
+        <p class="text-muted mb-0">Altere o nome, slug ou cor exibida.</p>
+    </div>
+
+    <form method="POST" action="{{ BASE_URL }}admin/galeria-categorias/atualizar/{{ categoria.id|e('html_attr') }}" class="card border-0 shadow-sm" data-aos="fade-up">
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Nome</label>
+                    <input type="text" name="nome" class="form-control" value="{{ categoria.nome|e('html_attr') }}" required>
+                </div>
+                <div class="col-lg-6">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Slug</label>
+                    <input type="text" name="slug" class="form-control" value="{{ categoria.slug|e('html_attr') }}" placeholder="operacoes-aereas">
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Cor do badge</label>
+                    <input type="color" name="color" class="form-control form-control-color" value="{{ categoria.color|default('#df6301')|e('html_attr') }}">
+                </div>
+                <div class="col-lg-8">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Prévia</label>
+                    <div class="d-flex align-items-center gap-3 border rounded p-3 bg-light">
+                        <span class="color-dot" id="colorPreview" style="background-color: {{ categoria.color|default('#df6301')|e('html_attr') }};"></span>
+                        <div>
+                            <div class="badge rounded-pill text-white" id="badgePreview" style="background-color: {{ categoria.color|default('#df6301')|e('html_attr') }};">{{ categoria.nome|e }}</div>
+                            <p class="small text-muted mb-0" id="slugPreview">/{{ categoria.slug|e }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-white d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+            <a href="{{ BASE_URL }}admin/galeria-categorias" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle me-1"></i>Cancelar
+            </a>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check2-circle me-1"></i>Salvar alterações
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block styles %}
+{{ parent() }}
+<style>
+    .color-dot {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const nameInput = document.querySelector('input[name="nome"]');
+        const slugInput = document.querySelector('input[name="slug"]');
+        const colorInput = document.querySelector('input[name="color"]');
+        const badgePreview = document.getElementById('badgePreview');
+        const colorPreview = document.getElementById('colorPreview');
+        const slugPreview = document.getElementById('slugPreview');
+
+        const updatePreview = () => {
+            const nameValue = nameInput.value.trim() || 'Categoria';
+            const slugValue = slugInput.value.trim() || 'categoria';
+            const colorValue = colorInput.value || '#df6301';
+
+            badgePreview.textContent = nameValue;
+            badgePreview.style.backgroundColor = colorValue;
+            colorPreview.style.backgroundColor = colorValue;
+            slugPreview.textContent = '/' + slugValue;
+        };
+
+        [nameInput, slugInput, colorInput].forEach((input) => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        updatePreview();
+    });
+</script>
+{% endblock %}

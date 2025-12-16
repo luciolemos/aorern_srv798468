@@ -31,6 +31,16 @@
     border: 1px solid rgba(223, 99, 1, 0.15) !important;
 }
 
+.bg-gradient-secondary-light {
+    background: linear-gradient(135deg, rgba(108, 117, 125, 0.08) 0%, rgba(108, 117, 125, 0.02) 100%) !important;
+    border: 1px solid rgba(108, 117, 125, 0.15) !important;
+}
+
+.bg-gradient-dark-light {
+    background: linear-gradient(135deg, rgba(33, 37, 41, 0.08) 0%, rgba(33, 37, 41, 0.02) 100%) !important;
+    border: 1px solid rgba(33, 37, 41, 0.15) !important;
+}
+
 /* === ICONBOX === */
 .icon-box {
     width: 60px;
@@ -39,6 +49,18 @@
     align-items: center;
     justify-content: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.icon-box.icon-box-sm {
+    width: 48px;
+    height: 48px;
+    border-radius: 0.75rem;
+}
+
+.icon-box-primary {
+    background: linear-gradient(135deg, var(--cbmrn-orange) 0%, var(--cbmrn-orange-dark) 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 8px 20px rgba(223, 99, 1, 0.25);
 }
 
 .card:hover .icon-box {
@@ -81,6 +103,30 @@
     padding: 0.35rem 0.65rem;
     font-size: 0.75rem;
     letter-spacing: 0.5px;
+}
+
+.badge-soft-primary {
+    color: var(--cbmrn-orange-dark);
+    background-color: rgba(223, 99, 1, 0.15);
+    border: 1px solid rgba(223, 99, 1, 0.2);
+}
+
+.badge-soft-success {
+    color: #0f5132;
+    background-color: rgba(25, 135, 84, 0.15);
+    border: 1px solid rgba(25, 135, 84, 0.2);
+}
+
+.badge-soft-info {
+    color: #055160;
+    background-color: rgba(13, 202, 240, 0.15);
+    border: 1px solid rgba(13, 202, 240, 0.25);
+}
+
+.badge-soft-warning {
+    color: #664d03;
+    background-color: rgba(255, 193, 7, 0.2);
+    border: 1px solid rgba(255, 193, 7, 0.3);
 }
 
 /* === BACKGROUNDS LIGHT === */
@@ -131,6 +177,71 @@
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* === QUICK ACTIONS === */
+.quick-action-grid {
+    margin-top: 0.5rem;
+}
+
+.quick-action-card {
+    display: block;
+    text-decoration: none;
+    border-radius: 1rem;
+    padding: 1.35rem 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), #fff);
+    box-shadow: 0 12px 30px rgba(31, 38, 56, 0.08);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+    color: inherit;
+}
+
+.quick-action-card h5 {
+    color: #152036;
+}
+
+.quick-action-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 35px rgba(31, 38, 56, 0.15);
+    border-color: rgba(223, 99, 1, 0.35);
+}
+
+.quick-action-card .icon-box {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.quick-action-link {
+    font-weight: 600;
+    color: var(--cbmrn-orange);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    font-size: 0.875rem;
+}
+
+.quick-action-link i {
+    font-size: 1.25rem;
+}
+
+.quick-action-primary {
+    background: linear-gradient(135deg, rgba(223, 99, 1, 0.12), rgba(223, 99, 1, 0.02));
+    border-color: rgba(223, 99, 1, 0.2);
+}
+
+.quick-action-success {
+    background: linear-gradient(135deg, rgba(25, 135, 84, 0.12), rgba(25, 135, 84, 0.02));
+    border-color: rgba(25, 135, 84, 0.2);
+}
+
+.quick-action-info {
+    background: linear-gradient(135deg, rgba(13, 202, 240, 0.12), rgba(13, 202, 240, 0.02));
+    border-color: rgba(13, 202, 240, 0.2);
+}
+
+.quick-action-warning {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.18), rgba(255, 255, 255, 0.95));
+    border-color: rgba(255, 193, 7, 0.25);
 }
 
 /* === CARDS ATIVIDADES === */

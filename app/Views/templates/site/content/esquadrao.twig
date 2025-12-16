@@ -8,40 +8,41 @@
 {% endblock %}
 
 {% block content %}
-    {% set esquadraoMetrics %}
-        <div class="esquadrao-metrics-grid">
-            <div>
-                <p class="display-5 fw-bold text-white mb-0">05</p>
-                <small class="text-white-50 text-uppercase">binômios ativos</small>
-            </div>
-            <div>
-                <p class="display-5 fw-bold text-white mb-0">12</p>
-                <small class="text-white-50 text-uppercase">ocorrências 2024</small>
-            </div>
-            <div>
-                <p class="display-5 fw-bold text-white mb-0">30+</p>
-                <small class="text-white-50 text-uppercase">ações educativas</small>
-            </div>
-            <div>
-                <p class="display-5 fw-bold text-white mb-0">100%</p>
-                <small class="text-white-50 text-uppercase">treinamento semanal</small>
-            </div>
-        </div>
-        <p class="hero-panel-footnote text-white-50 mt-4 mb-0">Disponibilidade 24/7 para missões de busca, salvamento e apoio à comunidade.</p>
-    {% endset %}
+    {% set esquadraoIndicators = [
+        {
+            label: 'Binômios ativos',
+            value: '05',
+            meta: 'Equipes completas e homologadas'
+        },
+        {
+            label: 'Ocorrências atendidas em 2024',
+            value: '12',
+            meta: 'Busca, salvamento e apoio'
+        },
+        {
+            label: 'Ações educativas',
+            value: '30+',
+            meta: 'Escolas e eventos comunitários'
+        },
+        {
+            label: 'Treinamentos semanais',
+            value: '100%',
+            meta: 'Calendário em dia'
+        }
+    ] %}
 
     <section class="esquadrao-hero site-hero">
         <div class="site-hero-pattern"></div>
         <div class="container position-relative">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6 hero-content">
+            <div class="row justify-content-center g-5">
+                <div class="hero-content text-lg-start">
                     <p class="section-kicker text-white-50 mb-2">Esquadrão de cães do 2º Subgrupamento de Bombeiros Militar</p>
                     <h1 class="section-title text-white mb-3">Binômios preparados para busca, salvamento e apoio à comunidade</h1>
                     <p class="section-lead text-white-75 mb-4">Os binômios do 2º SGB mantêm disponibilidade para atendimento de ocorrências em 
                     toda a área de atuação sob sua jurisdição, podendo ser mobilizados para buscas de pessoas desaparecidas, apoio em desastres naturais, 
                     avaliação de estruturas colapsadas e suporte emocional em situações de crise. Além das atividades operacionais, o esquadrão 
                     desenvolve ações educativas, palestras e campanhas de prevenção para fortalecer o vínculo com a comunidade.</p>
-                    <div class="d-flex flex-wrap gap-3 about-hero-actions">
+                    <div class="d-flex flex-wrap gap-3 about-hero-actions justify-content-center justify-content-lg-start">
                         {% include 'site/components/button.twig' with {
                             href: 'https://wa.me/5584988389889',
                             label: 'Acionar equipe',
@@ -57,19 +58,9 @@
                             icon: 'bi-envelope',
                             variant: 'solid',
                             size: 'lg',
-                            button_class: 'fw-bold text-dark',
+                            button_class: 'fw-bold',
                         } %}
                     </div>
-                </div>
-                <div class="col-lg-6 hero-panel-col">
-                    {% include 'site/components/hero-panel.twig' with {
-                        eyebrow: 'Indicadores do esquadrão',
-                        title: 'Nossa prontidão anual',
-                        description: 'Acompanhamos os números de missões, treinamentos e ações educativas para garantir resposta rápida em todo o litoral sul.',
-                        theme: 'dark',
-                        panel_class: 'esquadrao-panel',
-                        body_html: esquadraoMetrics
-                    } %}
                 </div>
             </div>
         </div>
@@ -89,7 +80,7 @@
                             kicker: 'Treinamento contínuo',
                             title: 'Protocolo de preparo focado em busca, salvamento e apoio emocional',
                             subtitle: 'Os cães são treinados para responder comandos em ambientes urbanos, rurais, áreas de mata e situações com múltiplas vítimas. Cada binômio segue rotinas de condicionamento físico, olfativo e socialização.',
-                            align: 'feft',
+                            align: 'start',
                             kicker_class: 'text-muted mb-2',
                             title_class: 'section-title text-primary mb-3',
                             subtitle_class: 'section-lead text-muted mb-0',
@@ -136,6 +127,66 @@
                             <span>Treinamento em técnicas de apoio psicossocial para interações com vítimas</span>
                         </li> #}
                     </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="esquadrao-indicators section-spacing">
+        {% set indicatorRows = esquadraoIndicators|batch(4, null) %}
+        <div class="container">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                    {% include 'site/components/section-header.twig' with {
+                        kicker: 'Monitoramento K9',
+                        title: 'Integração entre dados, equipes e binômios',
+                        subtitle: 'Acompanhamos cada fase das missões caninas com dashboards em tempo real, garantindo comunicação entre o centro de operações, condutores e defesas civis.',
+                        align: 'start',
+                        kicker_class: 'text-uppercase small text-white-50 mb-2',
+                        title_class: 'section-title text-white mb-3',
+                        subtitle_class: 'section-lead text-white-75 mb-0',
+                        extra_class: 'mb-3'
+                    } %}
+                    <p class="text-muted mb-0">Indicadores de desempenho do Esquadrão de Cães do 2º SGB/2º GBM</p>
+                </div>
+                <div class="col-lg-5 text-lg-end">
+                    {% include 'site/components/button.twig' with {
+                        href: BASE_URL ~ 'contact',
+                        label: 'Solicitar demonstração',
+                        icon: 'bi-graph-up-arrow',
+                        variant: 'solid',
+                        size: 'lg',
+                        button_class: 'd-none d-lg-inline-flex ms-lg-auto'
+                    } %}
+                </div>
+            </div>
+
+            {% for row in indicatorRows %}
+                <div class="row g-3 g-md-4 mt-2 mt-md-4">
+                    {% for indicador in row %}
+                        {% if indicador %}
+                            <div class="col-12 col-sm-6 col-xl-3">
+                                <article class="esquadrao-indicator-card h-100">
+                                    <p class="esquadrao-indicator-card-label text-uppercase small mb-1">{{ indicador.label }}</p>
+                                    <p class="esquadrao-indicator-card-value mb-0">{{ indicador.value }}</p>
+                                    <p class="esquadrao-indicator-card-meta text-muted mb-0">{{ indicador.meta }}</p>
+                                </article>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <div class="row mt-3 d-lg-none">
+                <div class="col text-center">
+                    {% include 'site/components/button.twig' with {
+                        href: BASE_URL ~ 'contact',
+                        label: 'Solicitar demonstração',
+                        icon: 'bi-graph-up-arrow',
+                        variant: 'solid',
+                        size: 'lg',
+                        button_class: 'fw-bold text-white'
+                    } %}
                 </div>
             </div>
         </div>

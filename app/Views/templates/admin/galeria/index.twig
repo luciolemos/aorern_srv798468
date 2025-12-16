@@ -1,0 +1,244 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+
+{% block title %}Galeria de Imagens - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div data-aos="fade-down">
+        <h2 class="text-primary"><i class="bi bi-images me-2"></i>Galeria institucional</h2>
+        <p class="lead text-muted">Gerencie os álbuns e mantenha o portal sempre atualizado com registros visuais.</p>
+        <hr class="my-4">
+        <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
+            <a href="{{ BASE_URL }}admin/galeria/cadastrar" class="btn btn-primary text-white">
+                <i class="bi bi-plus-circle me-1"></i>Nova imagem
+            </a>
+            <a href="{{ BASE_URL }}admin/galeria-categorias" class="btn btn-outline-primary">
+                <i class="bi bi-tags me-1"></i>Categorias
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
+                <i class="bi bi-speedometer2 me-1"></i>Painel
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4" data-aos="fade-up">
+        {% set hasActiveFilters = filters.q or filters.categoria %}
+        <div class="card-header bg-light border-bottom">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Busca Avançada</strong></h5>
+                {% if hasActiveFilters %}
+                    <a href="{{ BASE_URL }}admin/galeria" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>Limpar filtros
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label small mb-1" for="galeriaSearch"><i class="bi bi-search me-1"></i> <strong>Busca</strong></label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input
+                            type="text"
+                            id="galeriaSearch"
+                            name="q"
+                            class="form-control"
+                            placeholder="Título, descrição ou palavra-chave"
+                            value="{{ filters.q|default('')|e('html_attr') }}"
+                        >
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small mb-1" for="galeriaCategoria"><i class="bi bi-tags me-1"></i> <strong>Categoria</strong></label>
+                    <select id="galeriaCategoria" name="categoria" class="form-select">
+                        <option value="">Todas as categorias</option>
+                        {% for categoria in categorias %}
+                            {% set optionValue = categoria.slug is not empty ? categoria.slug : categoria.id %}
+                            {% set optionValueString = optionValue ~ '' %}
+                            <option value="{{ optionValueString|e('html_attr') }}" {% if filters.categoria|default('') == optionValueString or filters.categoria|default('') == (categoria.id ~ '') %}selected{% endif %}>
+                                {{ categoria.nome|e }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <input type="hidden" name="per_page" value="{{ perPageSelection|default('')|e('html_attr') }}">
+                    {% if filters.q or filters.categoria %}
+                        <a href="{{ BASE_URL }}admin/galeria" class="btn btn-outline-secondary flex-grow-1">
+                            <i class="bi bi-x-circle me-1"></i>Limpar
+                        </a>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary flex-grow-1">
+                        <i class="bi bi-funnel me-1"></i>Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if imagens is empty %}
+        <div class="alert alert-light border shadow-sm" data-aos="fade-up">
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-secondary-subtle text-secondary rounded-pill">0</span>
+                <div>
+                    <strong>Nenhuma imagem encontrada.</strong>
+                    <p class="mb-0 text-muted">Ajuste os filtros ou cadastre um novo item.</p>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="table-responsive" data-aos="fade-up">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr class="text-uppercase small text-muted fw-semibold">
+                        <th style="width: 72px;">CAPA</th>
+                        <th>TÍTULO</th>
+                        <th style="width: 220px;">CATEGORIA</th>
+                        <th style="width: 160px;">UPLOAD</th>
+                        <th class="text-center" style="width: 80px;">AÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for imagem in imagens %}
+                        <tr>
+                            <td>
+                                <div class="ratio ratio-1x1 rounded overflow-hidden shadow-sm" style="width: 60px;">
+                                    <img src="{{ imagem.url|e('html_attr') }}" alt="{{ imagem.titulo|e('html_attr') }}" class="object-fit-cover">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-body">{{ imagem.titulo|e }}</div>
+                                {% if imagem.descricao %}
+                                    {% set descricaoReducida = imagem.descricao|default('') %}
+                                    {% if descricaoReducida|length > 90 %}
+                                        {% set descricaoReducida = descricaoReducida|slice(0, 90) ~ '…' %}
+                                    {% endif %}
+                                    <p class="text-muted small mb-0 text-truncate" style="max-width: 360px;">{{ descricaoReducida }}</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge rounded-pill" style="background-color: {{ imagem.categoria_color|default('#edf2ff')|e('html_attr') }}; color: #1f2a37;">
+                                    <i class="bi bi-tag me-1"></i>{{ imagem.categoria_nome|default('Sem categoria')|e }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span>{{ imagem.data_upload|date('d/m/Y') }}</span>
+                                    <span class="text-muted small">{{ imagem.data_upload|date('H:i') }}</span>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-secondary p-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                        <li>
+                                            <a class="dropdown-item" href="{{ imagem.url|e('html_attr') }}" target="_blank">
+                                                <i class="bi bi-eye me-2"></i>Visualizar
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ BASE_URL }}admin/galeria/editar/{{ imagem.id }}">
+                                                <i class="bi bi-pencil-square me-2"></i>Editar
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="{{ BASE_URL }}admin/galeria/deletar/{{ imagem.id }}" onclick="return confirm('Tem certeza que deseja remover esta imagem?');">
+                                                <i class="bi bi-trash me-2"></i>Excluir
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if pagination and pagination.total > 0 %}
+            {% set current = pagination.current_page|default(1) %}
+            {% set last = pagination.last_page|default(1) %}
+            {% set range = 2 %}
+            {% set start = max(1, current - range) %}
+            {% set end = min(last, current + range) %}
+            {% set queryPairs = [] %}
+            {% for key, value in pagination.query|default({}) %}
+                {% set queryPairs = queryPairs|merge([key ~ '=' ~ value|url_encode]) %}
+            {% endfor %}
+            {% set baseQueryString = queryPairs ? queryPairs|join('&') ~ '&' : '' %}
+
+            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3 mt-4" data-aos="fade-up">
+                <p class="text-muted mb-0 small">
+                    Exibindo {{ pagination.from|default(0) }}-{{ pagination.to|default(0) }} de {{ pagination.total|default(0) }} imagens
+                </p>
+                <form method="GET" class="d-flex align-items-center gap-2">
+                    <input type="hidden" name="page" value="1">
+                    {% for key, value in pagination.query|default({}) %}
+                        {% if key != 'per_page' %}
+                            <input type="hidden" name="{{ key }}" value="{{ value|e('html_attr') }}">
+                        {% endif %}
+                    {% endfor %}
+                    <label class="text-muted small mb-0">Registros por página</label>
+                    <select name="per_page" class="form-select form-select-sm" onchange="this.form.submit()">
+                        {% for option in perPageOptions %}
+                            <option value="{{ option.value }}" {% if option.value == perPageSelection %}selected{% endif %}>{{ option.label }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <nav aria-label="Paginação" class="mt-3" data-aos="fade-up">
+                <ul class="pagination justify-content-center mb-0">
+                    <li class="page-item {% if current <= 1 %}disabled{% endif %}">
+                        <a class="page-link" href="{% if current <= 1 %}#{% else %}{{ pagination.path }}?{{ baseQueryString }}page={{ current - 1 }}{% endif %}">&laquo;</a>
+                    </li>
+                    {% if start > 1 %}
+                        <li class="page-item"><a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page=1">1</a></li>
+                        {% if start > 2 %}
+                            <li class="page-item disabled"><span class="page-link">…</span></li>
+                        {% endif %}
+                    {% endif %}
+                    {% for page in start..end %}
+                        <li class="page-item {% if page == current %}active{% endif %}">
+                            {% if page == current %}
+                                <span class="page-link">{{ page }}</span>
+                            {% else %}
+                                <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ page }}">{{ page }}</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                    {% if end < last %}
+                        {% if end < last - 1 %}
+                            <li class="page-item disabled"><span class="page-link">…</span></li>
+                        {% endif %}
+                        <li class="page-item"><a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ last }}">{{ last }}</a></li>
+                    {% endif %}
+                    <li class="page-item {% if current >= last %}disabled{% endif %}">
+                        <a class="page-link" href="{% if current >= last %}#{% else %}{{ pagination.path }}?{{ baseQueryString }}page={{ current + 1 }}{% endif %}">&raquo;</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ratioImages = document.querySelectorAll('.ratio img');
+        ratioImages.forEach(img => {
+            img.addEventListener('error', () => {
+                img.src = 'https://via.placeholder.com/120x120?text=Sem+Imagem';
+            });
+        });
+    });
+</script>
+{% endblock %}

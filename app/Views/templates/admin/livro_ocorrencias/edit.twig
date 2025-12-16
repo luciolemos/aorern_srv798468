@@ -55,6 +55,18 @@
     {% else %}
         {% set dataInputValue = registro.data_ocorrencia_formatted|default('') %}
     {% endif %}
+    {% if old is not null and old.closed_at is defined %}
+        {% set closedInputValue = old.closed_at %}
+    {% else %}
+        {% set closedInputValue = registro.closed_at_formatted|default('') %}
+    {% endif %}
+
+    <div class="alert alert-warning d-flex align-items-start gap-2" role="alert">
+        <i class="bi bi-info-circle-fill fs-4"></i>
+        <div>
+            O status é calculado automaticamente: permanece aberto até que uma data de encerramento seja definida.
+        </div>
+    </div>
 
     <form method="post" action="{{ BASE_URL }}admin/livro-ocorrencias/update/{{ registro.id }}" class="row g-4" novalidate>
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -90,19 +102,34 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label text-uppercase small fw-semibold">Tipo de ocorrência *</label>
-                            <select name="tipo_ocorrencia" class="form-select" required>
+                            {% set selectedTipoId = formData.tipo_id|default(registro.tipo_id) %}
+                            <select name="tipo_id" class="form-select" required>
                                 {% for tipo in tipoOptions %}
-                                    <option value="{{ tipo }}" {{ formData.tipo_ocorrencia|default(registro.tipo_ocorrencia) == tipo ? 'selected' : '' }}>{{ tipo }}</option>
+                                    <option value="{{ tipo.id }}" {{ selectedTipoId == tipo.id ? 'selected' : '' }}>
+                                        {{ tipo.nome }}{% if tipo.ativo is defined and not tipo.ativo %} (inativo){% endif %}
+                                    </option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label text-uppercase small fw-semibold">Status *</label>
-                            <select name="status" class="form-select" required>
-                                {% for value, label in statusOptions %}
-                                    <option value="{{ value }}" {{ formData.status|default(registro.status) == value ? 'selected' : '' }}>{{ label }}</option>
-                                {% endfor %}
-                            </select>
+                            <label class="form-label text-uppercase small fw-semibold">Encerramento (opcional)</label>
+                            <input
+                                type="datetime-local"
+                                class="form-control"
+                                name="closed_at"
+                                value="{{ closedInputValue|default('')|e('html_attr') }}">
+                            <div class="form-text">Defina para marcar a ocorrência como concluída.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase small fw-semibold">Status atual</label>
+                            <div class="border rounded px-3 py-2 bg-light d-flex align-items-center gap-2">
+                                <span class="badge {{ registro.status == 'concluida' ? 'bg-success' : 'bg-warning text-dark' }} text-uppercase">{{ registro.status_label }}</span>
+                                {% if registro.closed_at %}
+                                    <small class="text-muted">Encerrado em {{ registro.closed_at|date('d/m/Y H\hi') }}</small>
+                                {% else %}
+                                    <small class="text-muted">Aberto desde {{ registro.data_ocorrencia|date('d/m/Y H\hi') }}</small>
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="col-12">
                             <label class="form-label text-uppercase small fw-semibold">Descrição operacional *</label>

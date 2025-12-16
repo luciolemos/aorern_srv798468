@@ -11,9 +11,12 @@
 
         <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
             <a href="{{ BASE_URL }}admin/posts/create" class="btn btn-primary text-white">
-                <i class="bi bi-plus-circle me-1"></i> Novo Post
+                <i class="bi bi-plus-circle me-1"></i> Novo post
             </a>
-            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary ms-md-auto">
+            <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-primary">
+                <i class="bi bi-tags me-1"></i> Categorias
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
                 <i class="bi bi-speedometer2 me-1"></i> Painel
             </a>
         </div>
@@ -23,7 +26,7 @@
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-light border-bottom">
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Filtros Avançados</strong></h5>
+                <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Busca Avançada</strong></h5>
                 {% set hasActiveFilters = q or status or category or author or visibility %}
                 {% if hasActiveFilters %}
                     <a href="{{ BASE_URL }}admin/posts" class="btn btn-sm btn-outline-danger">
@@ -36,7 +39,7 @@
             <form method="GET" class="row g-3 g-xl-4 align-items-end">
                 <input type="hidden" name="per_page" value="{{ perPageSelection|default('')|e('html_attr') }}">
                 <!-- Busca por Título -->
-                <div class="col-12 col-md-6 col-xl-3">
+                <div class="col-12 col-md-6 col-xl-2">
                     <label class="form-label small mb-1" for="search"><i class="bi bi-search me-1"></i> <strong>Busca</strong></label>
                     <input
                         type="text"
@@ -99,7 +102,7 @@
                 </div>
 
                 <!-- Botão de Busca -->
-                <div class="col-12 col-md-6 col-xl-2 d-grid">
+                <div class="col-12 col-md-6 col-xl-2">
                     <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center w-100">
                         <i class="bi bi-search me-1"></i> Buscar
                     </button>
@@ -117,7 +120,6 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th class="text-center" style="width: 60px;">#</th>
                         <th>TÍTULO</th>
                         <th class="d-none d-sm-table-cell" style="width: 120px;">STATUS</th>
                         <th class="d-none d-md-table-cell" style="width: 100px;">CATEGORIA</th>
@@ -129,10 +131,9 @@
                 <tbody>
                     {% for post in posts %}
                     <tr>
-                        <td class="text-center">{{ post.id }}</td>
                         <td>
                             <i class="bi bi-file-earmark-text text-primary me-1"></i>
-                            <strong>{{ post.titulo|e }}</strong>
+                            {{ post.titulo|upper|e }}
                         </td>
                         <td class="d-none d-sm-table-cell">
                             {% set statusBadgeClass = {
@@ -189,7 +190,7 @@
 
                             {% if hasActions %}
                                 <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                    <button class="btn btn-link text-secondary p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">

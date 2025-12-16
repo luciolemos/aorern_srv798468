@@ -1,0 +1,90 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Nova Imagem - Galeria{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div data-aos="fade-down" class="mb-4">
+        <a href="{{ BASE_URL }}admin/galeria" class="btn btn-link text-decoration-none px-0 text-muted">
+            <i class="bi bi-arrow-left-circle me-1"></i>Voltar para a galeria
+        </a>
+        <h2 class="fw-bold text-primary mb-1"><i class="bi bi-image me-2"></i>Adicionar imagem</h2>
+        <p class="text-muted mb-0">Preencha os campos abaixo para cadastrar um novo registro.</p>
+    </div>
+
+    <form method="POST" action="{{ BASE_URL }}admin/galeria/salvar" class="card border-0 shadow-sm" data-aos="fade-up">
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Categoria</label>
+                    <select name="categoria_id" class="form-select" required>
+                        <option value="" disabled selected>Selecione...</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id|e('html_attr') }}">{{ categoria.nome|e }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-8">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Título</label>
+                    <input type="text" name="titulo" class="form-control" placeholder="Ex: Operação de resgate no litoral" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Descrição</label>
+                    <textarea name="descricao" rows="4" class="form-control" placeholder="Resumo curto sobre o contexto da foto"></textarea>
+                </div>
+                <div class="col-lg-8">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">URL da imagem</label>
+                    <input type="url" name="url" class="form-control" placeholder="https://" required id="imageUrlInput">
+                    <small class="text-muted">Use um endereço acessível publicamente. Arquivos enviados ao portal entram em <strong>public/uploads/gallery</strong>.</small>
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Pré-visualização</label>
+                    <div class="ratio ratio-4x3 border rounded position-relative shadow-sm overflow-hidden">
+                        <img src="https://via.placeholder.com/640x480?text=Prévia" alt="Pré-visualização" id="imagePreview" class="object-fit-cover">
+                        <div class="position-absolute bottom-0 start-0 end-0 p-2 bg-dark bg-opacity-50 text-white small">
+                            Carregada em tempo real
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-white d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+            <a href="{{ BASE_URL }}admin/galeria" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle me-1"></i>Cancelar
+            </a>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check2-circle me-1"></i>Salvar registro
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('imageUrlInput');
+        const preview = document.getElementById('imagePreview');
+        if (!input || !preview) return;
+
+        const updatePreview = () => {
+            const value = input.value.trim();
+            if (!value) {
+                preview.src = 'https://via.placeholder.com/640x480?text=Prévia';
+                return;
+            }
+            preview.src = value;
+        };
+
+        input.addEventListener('change', updatePreview);
+        input.addEventListener('keyup', () => {
+            clearTimeout(input._previewTimer);
+            input._previewTimer = setTimeout(updatePreview, 400);
+        });
+
+        preview.addEventListener('error', () => {
+            preview.src = 'https://via.placeholder.com/640x480?text=Imagem+Inválida';
+        });
+    });
+</script>
+{% endblock %}

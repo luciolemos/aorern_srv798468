@@ -17,7 +17,7 @@ use App\Models\ObraModel;
 class PessoalController extends Controller {
 
     private PessoalModel $model;
-    private const PESSOAL_AVATAR_DIR = 'uploads/pessoal/';
+    private const PESSOAL_FOTO_DIR = 'uploads/pessoal/';
     private const STATUS_OPTIONS = ['Ativo', 'Afastado', 'Férias', 'Demitido'];
 
     public function __construct() {
@@ -117,7 +117,7 @@ class PessoalController extends Controller {
         
         // Processa foto se enviada
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-            $foto = $this->processarAvatarBombeiro($_FILES['foto']);
+            $foto = $this->processarFotoBombeiro($_FILES['foto']);
             if ($foto) {
                 $dados['foto'] = $foto;
             }
@@ -171,13 +171,13 @@ class PessoalController extends Controller {
         
         // Processa foto se enviada
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-            $foto = $this->processarAvatarBombeiro($_FILES['foto']);
+            $foto = $this->processarFotoBombeiro($_FILES['foto']);
             if ($foto) {
                 // Remove foto antiga se existir
                 if (!empty($registro['foto'])) {
-                    $old_foto = $_SERVER['DOCUMENT_ROOT'] . '/' . $registro['foto'];
-                    if (file_exists($old_foto)) {
-                        @unlink($old_foto);
+                    $oldFoto = $_SERVER['DOCUMENT_ROOT'] . '/' . $registro['foto'];
+                    if (file_exists($oldFoto)) {
+                        @unlink($oldFoto);
                     }
                 }
                 $dados['foto'] = $foto;
@@ -217,9 +217,9 @@ class PessoalController extends Controller {
     }
 
     /**
-     * Processa upload de avatar de bombeiro
+     * Processa upload de foto de bombeiro
      */
-    private function processarAvatarBombeiro(array $file): ?string
+    private function processarFotoBombeiro(array $file): ?string
     {
         // Validações básicas
         if (!isset($file['tmp_name']) || empty($file['tmp_name'])) {
@@ -253,7 +253,7 @@ class PessoalController extends Controller {
 
         // Caminho absoluto
         $publicRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? (dirname(__DIR__, 3) . '/public'), '/');
-        $upload_dir = $publicRoot . '/' . self::PESSOAL_AVATAR_DIR;
+        $upload_dir = $publicRoot . '/' . self::PESSOAL_FOTO_DIR;
 
         // Garante que o diretório existe
         if (!is_dir($upload_dir)) {
@@ -277,7 +277,7 @@ class PessoalController extends Controller {
         }
 
         // Nome único do arquivo
-        $filename = 'avatar_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+        $filename = 'foto_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
         $filepath = $upload_dir . $filename;
 
         // Move o arquivo
@@ -288,7 +288,7 @@ class PessoalController extends Controller {
         // Ajusta permissões do arquivo
         @chmod($filepath, 0644);
 
-        return self::PESSOAL_AVATAR_DIR . $filename;
+        return self::PESSOAL_FOTO_DIR . $filename;
     }
 
     private function sanitizeInteger(?string $value): ?int

@@ -1,0 +1,103 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Nova Categoria - Galeria{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div data-aos="fade-down" class="mb-4">
+        <a href="{{ BASE_URL }}admin/galeria-categorias" class="btn btn-link text-decoration-none px-0 text-muted">
+            <i class="bi bi-arrow-left-circle me-1"></i>Voltar para categorias
+        </a>
+        <h2 class="fw-bold text-primary mb-1"><i class="bi bi-tag me-2"></i>Cadastrar categoria</h2>
+        <p class="text-muted mb-0">Defina o nome, slug amigável e a cor exibida nos cards.</p>
+    </div>
+
+    <form method="POST" action="{{ BASE_URL }}admin/galeria-categorias/salvar" class="card border-0 shadow-sm" data-aos="fade-up">
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Nome</label>
+                    <input type="text" name="nome" class="form-control" placeholder="Ex: Operações Aéreas" required>
+                </div>
+                <div class="col-lg-6">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Slug</label>
+                    <input type="text" name="slug" class="form-control" placeholder="operacoes-aereas">
+                    <small class="text-muted">Deixe vazio para gerar automaticamente a partir do nome.</small>
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Cor do badge</label>
+                    <input type="color" name="color" class="form-control form-control-color" value="#df6301">
+                    <small class="text-muted">Utilizada no badge da listagem administrativa e pública.</small>
+                </div>
+                <div class="col-lg-8">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Prévia</label>
+                    <div class="d-flex align-items-center gap-3 border rounded p-3 bg-light">
+                        <span class="color-dot" id="colorPreview" style="background-color: #df6301;"></span>
+                        <div>
+                            <div class="badge rounded-pill text-white" id="badgePreview" style="background-color: #df6301;">Operações Aéreas</div>
+                            <p class="small text-muted mb-0" id="slugPreview">/operacoes-aereas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-white d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+            <a href="{{ BASE_URL }}admin/galeria-categorias" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle me-1"></i>Cancelar
+            </a>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check2-circle me-1"></i>Salvar categoria
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block styles %}
+{{ parent() }}
+<style>
+    .color-dot {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const nameInput = document.querySelector('input[name="nome"]');
+        const slugInput = document.querySelector('input[name="slug"]');
+        const colorInput = document.querySelector('input[name="color"]');
+        const badgePreview = document.getElementById('badgePreview');
+        const colorPreview = document.getElementById('colorPreview');
+        const slugPreview = document.getElementById('slugPreview');
+
+        const slugify = (value) => {
+            return value.toLowerCase()
+                .normalize('NFD').replace(/[^\w\s-]/g, '')
+                .trim().replace(/\s+/g, '-')
+                .replace(/-+/g, '-');
+        };
+
+        const updatePreview = () => {
+            const nameValue = nameInput.value.trim() || 'Nova categoria';
+            const slugValue = (slugInput.value.trim() || slugify(nameValue) || 'categoria');
+            const colorValue = colorInput.value || '#df6301';
+
+            badgePreview.textContent = nameValue;
+            badgePreview.style.backgroundColor = colorValue;
+            colorPreview.style.backgroundColor = colorValue;
+            slugPreview.textContent = '/' + slugValue;
+        };
+
+        [nameInput, slugInput, colorInput].forEach((input) => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        updatePreview();
+    });
+</script>
+{% endblock %}

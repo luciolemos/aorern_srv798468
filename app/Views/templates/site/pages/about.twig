@@ -11,10 +11,10 @@
     <section class="about-hero site-hero">
         <div class="site-hero-pattern"></div>
         <div class="container position-relative">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-7 hero-content">
+             <div class="row justify-content-center g-5">
+                <div class="hero-content text-lg-start">
                     <p class="section-kicker text-white-50 mb-2">Quem somos</p>
-                    <h1 class="section-title text-white mb-3">2º SUBGRUPAMENTO DE BOMBEIROS MILITAR (2º SGB)</h1>
+                    <h1 class="section-title text-white mb-3">2º Subgrupamento de Bombeiros Militar (2º SGB)</h1>
                     <p class="section-lead text-white-75 mb-4">
                         A atuação do <strong>2º SGB</strong> apoia-se em uma 
                         doutrina moderna, treinamento permanente e integração com forças parceiras, 
@@ -23,10 +23,13 @@
                         Bombeiros Militar do RN no Litoral Sul e Região Agreste do estado, encurtando o tempo de resposta e levando 
                         segurança especializada para 25 municípios potiguares.
                     </p>
+                    <p class="section-lead text-white-75 mb-4">
+                       Instalado na Rua Presidente Kennedy, nº 168, em Goianinha/RN, o 2º Subgrupamento de Bombeiros Militar exerce papel estratégico no atendimento às demandas emergenciais do interior do estado. Suas atribuições incluem o combate a incêndios, operações de resgate e salvamento e ações de defesa civil, assegurando a proteção da vida e do patrimônio e promovendo maior segurança e tranquilidade às comunidades sob sua responsabilidade.
                     <div class="d-flex flex-wrap gap-3 about-hero-actions">
                         {% include 'site/components/button.twig' with {
                             href: BASE_URL ~ 'contact',
-                            label: 'Conheça nossa atuação',
+                            label: 'Entre em contato',
+                            icon: 'bi-chat-left-text',
                             variant: 'solid',
                             size: 'lg',
                             button_class: 'fw-bold'
@@ -34,13 +37,14 @@
                         {% include 'site/components/button.twig' with {
                             href: '#nossos-pilares',
                             label: 'Missão & valores',
+                            icon: 'bi-gem',
                             variant: 'solid',
                             size: 'lg',
-                            button_class: 'fw-bold text-dark'
+                            button_class: 'fw-bold'
                         } %}
                     </div>
                 </div>
-                <div class="col-lg-5 hero-panel-col">
+      {#           <div class="col-lg-5 hero-panel-col">
                     {% include 'site/components/hero-panel.twig' with {
                         eyebrow: 'Marcos recentes',
                         title: 'Nossa trajetória',
@@ -66,7 +70,7 @@
                             }
                         ]
                     } %}
-                </div>
+                </div> #}
             </div>
         </div>
     </section>

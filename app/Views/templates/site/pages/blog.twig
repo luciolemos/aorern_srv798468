@@ -8,30 +8,24 @@
 {% endblock %}
 
 {% block content %}
-    {% set has_posts = posts is defined and posts|length > 0 %}
+    {% set card_list = card_posts|default([]) %}
+    {% set show_featured = featured_post is defined and featured_post %}
+    {% set has_posts = show_featured or (card_list|length > 0) %}
 
     {% if has_posts %}
-        {% set featured_post = posts|first %}
-        {% set other_posts = posts|slice(1) %}
-
+        {% if show_featured %}
         <section class="blog-feature-section site-hero">
             <div class="site-hero-pattern"></div>
             <div class="container position-relative">
-                <div class="row align-items-center g-5">
+                <div class="row justify-content-center g-5">
                     <div class="col-lg-7 hero-content">
                         {% if featured_post.capa_url %}
                             <figure class="blog-feature-cover rounded-4 overflow-hidden mb-4">
                                 <img src="{{ featured_post.capa_url }}" alt="Imagem de capa de {{ featured_post.titulo }}" loading="lazy">
                             </figure>
                         {% endif %}
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                             <p class="section-kicker text-white-50 mb-0">Artigo em destaque</p>
-                            {% if featured_post.categoria_nome %}
-                                {% set categoriaCor = featured_post.categoria_cor|default('#df6301') %}
-                                <span class="blog-category-badge blog-category-badge-hero" style="background-color: {{ categoriaCor }}; border-color: {{ categoriaCor }}; color: #fff;">
-                                    {{ featured_post.categoria_nome }}
-                                </span>
-                            {% endif %}
                         </div>
                         <h1 class="section-title text-white mb-3">{{ featured_post.titulo }}</h1>
                         <p class="blog-feature-meta mb-4">
@@ -40,8 +34,15 @@
                                 <span class="mx-3">•</span>
                                 <span><i class="bi bi-person me-2"></i>{{ featured_post.autor }}</span>
                             {% endif %}
+                            <span class="mx-3">•</span>
+                            {% if featured_post.categoria_nome %}
+                                {% set categoriaCor = featured_post.categoria_cor|default('#df6301') %}
+                                <span class="blog-category-badge blog-category-badge-hero" style="background-color: {{ categoriaCor }}; border-color: {{ categoriaCor }}; color: #fff;">
+                                    {{ featured_post.categoria_nome }}
+                                </span>
+                            {% endif %}
                         </p>
-                        <p class="section-lead text-white-75 mb-4">{{ featured_post.conteudo|striptags|excerpt(260) }}</p>
+                        <p class="section-lead text-white-75 mb-4">{{ featured_post.conteudo|first_paragraph(260) }}</p>
                         <div class="d-flex flex-wrap gap-3 blog-feature-actions">
                             {% include 'site/components/button.twig' with {
                                 href: BASE_URL ~ 'blog/' ~ featured_post.slug,
@@ -58,16 +59,18 @@
                             {% include 'site/components/button.twig' with {
                                 href: '#ultimos-posts',
                                 label: 'Ver mais artigos',
+                                icon: 'bi-list-columns-reverse',
+                                icon_position: 'end',
                                 variant: 'solid',
                                 size: 'lg',
-                                button_class: 'fw-bold text-dark',
+                                button_class: 'fw-bold',
                                 attrs: { 'aria-label': 'Ver mais artigos no blog' }
                             } %}
                         </div>
                     </div>
                     <div class="col-lg-5 hero-panel-col">
                         {% set feature_items = [] %}
-                        {% for post in posts|slice(0,4) %}
+                        {% for post in hero_recent_posts|default([]) %}
                             {% set feature_items = feature_items|merge([
                                 {
                                     title: post.titulo,
@@ -88,6 +91,7 @@
                 </div>
             </div>
         </section>
+        {% endif %}
 
         <section id="ultimos-posts" class="blog-list-section py-5">
             <div class="container-xxl">
@@ -102,14 +106,18 @@
                     extra_class: 'mb-5'
                 } %}
 
+                {% set hasSearch = filters.q|default('')|trim != '' %}
+                {% set hasCategory = filters.categoria|default(null) is not empty %}
+                {% set filtersActive = hasSearch or hasCategory %}
+
                 <div class="blog-filters-wrapper mb-5">
-                    <form action="{{ BASE_URL }}blog" method="get" class="blog-filters row g-3 align-items-end">
-                        <div class="col-12 col-md-6 col-lg-6">
+                    <form action="{{ BASE_URL }}blog" method="get" class="blog-filters row gy-3 gx-4 align-items-end">
+                        <div class="col-12 col-md-5 col-lg-5 col-xl-6">
                             <label for="blog-search" class="form-label text-muted text-uppercase small fw-semibold">Buscar no blog</label>
                             <input type="search" id="blog-search" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Digite palavras-chave"
                                    aria-label="Buscar artigos" />
                         </div>
-                        <div class="col-12 col-md-4 col-lg-4">
+                        <div class="col-12 col-md-4 col-lg-4 col-xl-3">
                             <label for="blog-category" class="form-label text-muted text-uppercase small fw-semibold">Categoria</label>
                             <select id="blog-category" name="categoria" class="form-select" aria-label="Filtrar por categoria">
                                 <option value="">Todas as categorias</option>
@@ -118,30 +126,30 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="col-12 col-md-2 col-lg-2 d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+                        <div class="col-12 col-md-3 col-lg-3 col-xl-3 blog-filters-actions">
                             {% include 'site/components/button.twig' with {
                                 label: 'Aplicar filtros',
                                 variant: 'solid',
-                                size: 'lg',
+                                size: 'md',
                                 type: 'submit',
-                                button_class: 'fw-bold w-100 w-md-auto'
+                                button_class: 'fw-semibold px-4'
                             } %}
-                            {% if filters.q|default('') or filters.categoria|default(null) %}
+                            {% if filtersActive %}
                                 {% include 'site/components/button.twig' with {
                                     href: BASE_URL ~ 'blog',
                                     label: 'Limpar',
                                     variant: 'neutral-outline',
-                                    size: 'lg',
-                                    button_class: 'fw-bold w-100 w-md-auto'
+                                    size: 'md',
+                                    button_class: 'fw-semibold px-4'
                                 } %}
                             {% endif %}
                         </div>
                     </form>
                 </div>
 
-                {% if other_posts|length > 0 %}
+                {% if card_list|length > 0 %}
                     <div class="row g-4">
-                        {% for post in other_posts %}
+                        {% for post in card_list %}
                             <div class="col-md-6 col-xl-4">
                                 {% include 'site/components/post-card.twig' with {
                                     cover_url: post.capa_url,
@@ -152,7 +160,7 @@
                                     title: post.titulo,
                                     meta_date: post.criado_em|date('d/m/Y'),
                                     meta_author: post.autor,
-                                    excerpt: post.conteudo|striptags|excerpt(160),
+                                    excerpt: post.conteudo|first_paragraph(160),
                                     url: BASE_URL ~ 'blog/' ~ post.slug,
                                     cta_aria: 'Ler mais sobre ' ~ post.titulo,
                                     card_class: 'h-100 shadow-sm'
@@ -160,47 +168,61 @@
                             </div>
                         {% endfor %}
                     </div>
+                    {% if pagination.last_page|default(1) > 1 %}
+                        {% set currentPage = pagination.current_page|default(1) %}
+                        {% set totalPages = pagination.last_page|default(1) %}
+                        {% set windowSize = 5 %}
+                        {% set halfWindow = 2 %}
+                        {% set startPage = currentPage - halfWindow %}
+                        {% if startPage < 1 %}
+                            {% set startPage = 1 %}
+                        {% endif %}
+                        {% set endPage = startPage + windowSize - 1 %}
+                        {% if endPage > totalPages %}
+                            {% set endPage = totalPages %}
+                            {% set startPage = totalPages - windowSize + 1 %}
+                            {% if startPage < 1 %}
+                                {% set startPage = 1 %}
+                            {% endif %}
+                        {% endif %}
+                        {% set queryPrefix = baseQueryString ? baseQueryString ~ '&' : '' %}
+
+                        <nav class="blog-pagination mt-5" aria-label="Paginação de artigos">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                                    {% if pagination.has_prev %}
+                                        <a class="page-link" href="{{ BASE_URL }}blog?{{ queryPrefix }}page={{ currentPage - 1 }}" aria-label="Página anterior">&laquo;</a>
+                                    {% else %}
+                                        <span class="page-link" aria-hidden="true">&laquo;</span>
+                                    {% endif %}
+                                </li>
+
+                                {% for pageNumber in startPage..endPage %}
+                                    <li class="page-item {% if pageNumber == currentPage %}active{% endif %}">
+                                        {% if pageNumber == currentPage %}
+                                            <span class="page-link">{{ pageNumber }}</span>
+                                        {% else %}
+                                            <a class="page-link" href="{{ BASE_URL }}blog?{{ queryPrefix }}page={{ pageNumber }}">
+                                                {{ pageNumber }}
+                                            </a>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+
+                                <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                                    {% if pagination.has_next %}
+                                        <a class="page-link" href="{{ BASE_URL }}blog?{{ queryPrefix }}page={{ currentPage + 1 }}" aria-label="Próxima página">&raquo;</a>
+                                    {% else %}
+                                        <span class="page-link" aria-hidden="true">&raquo;</span>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </nav>
+                    {% endif %}
                 {% else %}
                     <div class="alert alert-info blog-empty-state">
                         <i class="bi bi-info-circle me-2"></i> Publique mais artigos para preencher os cards inferiores.
                     </div>
-                {% endif %}
-
-                {% if pagination.last_page|default(1) > 1 %}
-                    {% set queryPrefix = baseQueryString ? baseQueryString ~ '&' : '' %}
-                    <nav class="blog-pagination mt-5" aria-label="Paginação de artigos">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
-                                {% if pagination.has_prev %}
-                                    <a class="page-link" href="{{ BASE_URL }}blog?{{ queryPrefix }}page={{ pagination.current_page - 1 }}" aria-label="Página anterior">
-                                        &laquo;
-                                    </a>
-                                {% else %}
-                                    <span class="page-link" aria-hidden="true">&laquo;</span>
-                                {% endif %}
-                            </li>
-
-                            {% for pageNumber in 1..pagination.last_page %}
-                                <li class="page-item {% if pageNumber == pagination.current_page %}active{% endif %}">
-                                    {% if pageNumber == pagination.current_page %}
-                                        <span class="page-link">{{ pageNumber }}</span>
-                                    {% else %}
-                                        <a class="page-link" href="{{ BASE_URL }}blog?{{ queryPrefix }}page={{ pageNumber }}">{{ pageNumber }}</a>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-
-                            <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
-                                {% if pagination.has_next %}
-                                    <a class="page-link" href="{{ BASE_URL }}blog?{{ queryPrefix }}page={{ pagination.current_page + 1 }}" aria-label="Próxima página">
-                                        &raquo;
-                                    </a>
-                                {% else %}
-                                    <span class="page-link" aria-hidden="true">&raquo;</span>
-                                {% endif %}
-                            </li>
-                        </ul>
-                    </nav>
                 {% endif %}
             </div>
         </section>

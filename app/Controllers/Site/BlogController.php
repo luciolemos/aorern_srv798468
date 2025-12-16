@@ -19,7 +19,21 @@ class BlogController extends Controller {
         }
 
         $perPage = 7;
-        $result = $postModel->listarPublico($searchTerm !== '' ? $searchTerm : null, $categoryId, $page, $perPage);
+        $filtersBusca = $searchTerm !== '' ? $searchTerm : null;
+        $filtersActive = ($searchTerm !== '' || $categoryId !== null);
+        $result = $postModel->listarPublico($filtersBusca, $categoryId, $page, $perPage);
+
+        // Hero e painel devem sempre refletir a primeira página filtrada
+        $heroResult = $postModel->listarPublico($filtersBusca, $categoryId, 1, $perPage);
+        $featuredPost = $heroResult['data'][0] ?? null;
+        $heroRecentPosts = array_slice($heroResult['data'], 0, 4);
+
+        $cardPosts = $result['data'];
+        if (!$filtersActive && $page === 1 && $featuredPost) {
+            $cardPosts = array_values(array_filter($cardPosts, function ($post) use ($featuredPost) {
+                return ($post['id'] ?? null) !== ($featuredPost['id'] ?? null);
+            }));
+        }
 
         $queryParams = [];
         if ($searchTerm !== '') {
@@ -30,7 +44,9 @@ class BlogController extends Controller {
         }
 
         $this->renderTwig('site/pages/blog', [
-            'posts' => $result['data'],
+            'card_posts' => $cardPosts,
+            'featured_post' => $featuredPost,
+            'hero_recent_posts' => $heroRecentPosts,
             'pagination' => $result['meta'],
             'categories' => $categoryModel->listar(),
             'filters' => [
@@ -55,8 +71,11 @@ class BlogController extends Controller {
             return;
         }
 
-        $previousPost = $postModel->encontrarAnterior($post['criado_em']);
-        $nextPost = $postModel->encontrarProximo($post['criado_em']);
+        $referenceDate = $post['published_at'] ?? $post['criado_em'];
+        $postId = (int) ($post['id'] ?? 0);
+
+        $previousPost = $postModel->encontrarAnterior($referenceDate, $postId);
+        $nextPost = $postModel->encontrarProximo($referenceDate, $postId);
 
         $this->renderTwig('site/pages/post', [
             'post' => $post,

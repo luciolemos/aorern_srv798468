@@ -1,0 +1,279 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Galeria de Imagens - CBMRN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/gallery.css">
+{% endblock %}
+
+{% block content %}
+    {% set perPage = perPage|default(8) %}
+    {% set totalImagens = pagination.total|default(imagens|length) %}
+    {% set totalCategorias = categorias|length %}
+    {% set filters = filters|default({}) %}
+    {% set categoryFilter = filters.categoria|default('') %}
+
+    <section class="gallery-hero site-hero">
+     <div class="site-hero-pattern"></div>
+         <div class="container position-relative">
+             <div class="row justify-content-center g-5">
+                <div class="col-lg-8 hero-content">
+                   <p class="section-kicker text-white-50 mb-2">
+  Acervo institucional do 2º Subgrupamento de Bombeiros Militar
+</p>
+
+<h1 class="section-title text-white mb-3">
+  Galeria de Imagens
+</h1>
+
+<p class="section-lead text-white-75 mb-0">
+  Registro visual das atividades operacionais, treinamentos, ações preventivas e educativas desenvolvidas pelo 2º Subgrupamento do Corpo de Bombeiros Militar do Rio Grande do Norte, evidenciando o compromisso permanente com a proteção da vida, do patrimônio e do meio ambiente.
+</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <div class="gallery-active-context">
+                        {% if categoriaSelecionada %}
+                            <p class="text-uppercase small text-white-50 mb-1">Categoria em foco</p>
+                            <div class="badge rounded-pill px-3 py-2" style="background-color: {{ categoriaSelecionada.color|default('#df6301')|e('html_attr') }}; color: #0b1a2b;">
+                                <i class="bi bi-tag me-1"></i>{{ categoriaSelecionada.nome|e }}
+                            </div>
+                        {% else %}
+                            <p class="text-uppercase small text-white-50 mb-1">Tudo pronto para explorar</p>
+                            <div class="badge rounded-pill px-3 py-2 text-bg-light text-dark">
+                                <i class="bi bi-layers me-1"></i>Todas as categorias
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        
+            <div class="gallery-hero-stats">
+                <article class="gallery-stat-card">
+                    <p class="gallery-stat-label mb-2">Imagens publicadas</p>
+                    <p class="gallery-stat-value mb-1">{{ totalImagens }}</p>
+                    <p class="small mb-0">Atualizadas continuamente pelas equipes oficiais.</p>
+                </article>
+                <article class="gallery-stat-card">
+                    <p class="gallery-stat-label mb-2">Categorias mapeadas</p>
+                    <p class="gallery-stat-value mb-1">{{ totalCategorias }}</p>
+                    <p class="small mb-0">Grupos temáticos para filtrar operações.</p>
+                </article>
+                <article class="gallery-stat-card">
+                    <p class="gallery-stat-label mb-2">Itens por página</p>
+                    <p class="gallery-stat-value mb-1">{{ perPage }}</p>
+                    <p class="small mb-0">Grid 4x2 otimizado para leitura visual.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery-grid-section py-5">
+        
+        <div class="container-xxl">
+            
+{#             <header class="section-header text-center" data-aos="fade-up">
+                <p class="text-uppercase text-muted small fw-semibold mb-2">GALERIA DE EVENTOS</p>
+                <h2 class="text-primary">2º Subgrupamento de Bombeiros - Coleção institucional</h2>
+                <p class="text-muted mb-0">Clique em um cartão para abrir o lightbox, navegar entre as fotos e copiar o link original.</p>
+            </header> #}
+            <div class="container mt-4 mb-5" data-aos="fade-up">
+                {# <div class="gallery-responsive-filter"> #}
+                    <form class="gallery-filter-mobile" method="get" action="{{ BASE_URL }}galeria">
+                        <label class="gallery-filter-label" for="galleryFilterSelect">Filtrar por categoria</label>
+                        <select id="galleryFilterSelect"
+                                class="form-select"
+                                name="categoria">
+                            <option value="" {% if categoryFilter == '' %}selected{% endif %}>Todas as categorias</option>
+                            {% for categoria in categorias %}
+                                {% set optionValue = categoria.slug is not empty ? categoria.slug : categoria.id %}
+                                {% set optionValueString = optionValue ~ '' %}
+                                {% set isActive = categoryFilter == optionValueString or categoryFilter == (categoria.id ~ '') %}
+                                <option value="{{ optionValueString|e('html_attr') }}" {% if isActive %}selected{% endif %}>{{ categoria.nome|e }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="gallery-filter-mobile-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-funnel me-1"></i>Filtrar
+                            </button>
+                            <a href="{{ BASE_URL }}galeria" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i>Limpar
+                            </a>
+                        </div>
+                    </form>
+                    {# <div class="gallery-filter-toolbar"> #}
+                        <div class="gallery-filter-toolbar-row">
+                            <div>
+                                <span class="gallery-filter-label">Categorias em destaque</span>
+                                <p class="gallery-filter-hint mb-0">Escolha uma coleção temática para refinar o grid.</p>
+                            </div>
+                            <div class="gallery-filter-toolbar-actions">
+                                <a href="{{ BASE_URL }}galeria" class="gallery-pill gallery-pill-reset{% if categoryFilter == '' %} disabled{% endif %}" {% if categoryFilter == '' %}aria-disabled="true"{% endif %}>
+                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                    <span>Limpar filtros</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="gallery-filter-scroll" role="tablist">
+                            <a href="{{ BASE_URL }}galeria" class="gallery-pill gallery-pill-control{% if categoryFilter == '' %} active{% endif %}">
+                                <i class="bi bi-stars"></i>
+                                <span>Todas</span>
+                            </a>
+                            {% for categoria in categorias %}
+                                {% set optionValue = categoria.slug is not empty ? categoria.slug : categoria.id %}
+                                {% set optionValueString = optionValue ~ '' %}
+                                {% set isActive = categoryFilter == optionValueString or categoryFilter == (categoria.id ~ '') %}
+                                <a href="{{ BASE_URL }}galeria?categoria={{ optionValueString|url_encode }}" class="gallery-pill{% if isActive %} active{% endif %}">
+                                    <span class="dot" style="background-color: {{ categoria.color|default('#df6301')|e('html_attr') }};"></span>
+                                    {{ categoria.nome|e }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {# </div> #}
+                {# </div> #}
+            </div>
+
+            {% if imagens is empty %}
+                <div class="gallery-empty-state" data-aos="fade-up">
+                    <i class="bi bi-info-circle me-2"></i>Nenhuma imagem encontrada com os filtros atuais. Ajuste a busca ou selecione outra categoria.
+                </div>
+            {% else %}
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4" data-aos="fade-up">
+                    {% for imagem in imagens %}
+                        {% set descricaoReducida = imagem.descricao|default('') %}
+                        {% if descricaoReducida|length > 100 %}
+                            {% set descricaoReducida = descricaoReducida|slice(0, 100) ~ '…' %}
+                        {% endif %}
+                        <article class="col">
+                            <div class="gallery-card" role="button" tabindex="0" aria-label="Visualizar {{ imagem.titulo|e('html_attr') }}" data-gallery-index="{{ loop.index0 }}">
+                                <div class="gallery-card-media" style="background-image: url('{{ imagem.url|e('html_attr') }}');"></div>
+                                <div class="gallery-card-info">
+                                    <div class="gallery-card-category" style="color: {{ imagem.categoria_color|default('#f1c40f')|e('html_attr') }};">
+                                        <i class="bi bi-record-circle"></i>
+                                        {{ imagem.categoria_nome|default('Sem categoria')|e }}
+                                    </div>
+                                    <p class="gallery-card-title mb-0">{{ imagem.titulo|e }}</p>
+                                    {% if descricaoReducida %}
+                                        <p class="gallery-card-description mb-0">{{ descricaoReducida }}</p>
+                                    {% endif %}
+                                    <div class="gallery-card-meta">
+                                        <span><i class="bi bi-calendar-event me-1"></i>{{ imagem.data_upload|date('d/m/Y') }}</span>
+                                        <span class="text-uppercase small">Ver detalhes</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+
+                {% if pagination and pagination.total > perPage %}
+                    {% set current = pagination.current_page|default(1) %}
+                    {% set last = pagination.last_page|default(1) %}
+                    {% set range = 2 %}
+                    {% set start = max(1, current - range) %}
+                    {% set end = min(last, current + range) %}
+                    {% set queryPairs = [] %}
+                    {% for key, value in pagination.query|default({}) %}
+                        {% if value is not null and value != '' %}
+                            {% set queryPairs = queryPairs|merge([key ~ '=' ~ value|url_encode]) %}
+                        {% endif %}
+                    {% endfor %}
+                    {% set baseQueryString = queryPairs ? queryPairs|join('&') ~ '&' : '' %}
+
+                    <div class="gallery-pagination-wrapper mt-4" data-aos="fade-up">
+                        <nav class="gallery-pagination" aria-label="Paginação da galeria">
+                            <ul class="pagination justify-content-center mb-0">
+                                <li class="page-item {% if current <= 1 %}disabled{% endif %}">
+                                    {% if current <= 1 %}
+                                        <span class="page-link" aria-hidden="true">&laquo;</span>
+                                    {% else %}
+                                        <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ current - 1 }}" aria-label="Página anterior">&laquo;</a>
+                                    {% endif %}
+                                </li>
+
+                                {% if start > 1 %}
+                                    <li class="page-item"><a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page=1">1</a></li>
+                                    {% if start > 2 %}
+                                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% for page in start..end %}
+                                    <li class="page-item {% if page == current %}active{% endif %}">
+                                        {% if page == current %}
+                                            <span class="page-link">{{ page }}</span>
+                                        {% else %}
+                                            <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ page }}">{{ page }}</a>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+
+                                {% if end < last %}
+                                    {% if end < last - 1 %}
+                                        <li class="page-item disabled"><span class="page-link">…</span></li>
+                                    {% endif %}
+                                    <li class="page-item"><a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ last }}">{{ last }}</a></li>
+                                {% endif %}
+
+                                <li class="page-item {% if current >= last %}disabled{% endif %}">
+                                    {% if current >= last %}
+                                        <span class="page-link" aria-hidden="true">&raquo;</span>
+                                    {% else %}
+                                        <a class="page-link" href="{{ pagination.path }}?{{ baseQueryString }}page={{ current + 1 }}" aria-label="Próxima página">&raquo;</a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </section>
+
+    <div class="gallery-lightbox" id="galleryLightbox" hidden tabindex="-1">
+        <div class="gallery-lightbox-overlay" data-gallery-close></div>
+        <div class="gallery-lightbox-content">
+            <div class="gallery-lightbox-media">
+                <img src="" alt="" data-gallery-image>
+                <div class="gallery-lightbox-nav">
+                    <button type="button" data-gallery-nav="prev" aria-label="Imagem anterior"><i class="bi bi-chevron-left"></i></button>
+                    <button type="button" data-gallery-nav="next" aria-label="Próxima imagem"><i class="bi bi-chevron-right"></i></button>
+                </div>
+                <div class="gallery-lightbox-actions">
+                    <a href="#" target="_blank" rel="noopener" class="btn btn-sm btn-outline-light" data-gallery-view-original>
+                        <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                    <button type="button" data-gallery-close aria-label="Fechar visualização"><i class="bi bi-x-lg"></i></button>
+                </div>
+            </div>
+            <div class="gallery-lightbox-info">
+                <div class="gallery-lightbox-title mb-2" data-gallery-title></div>
+                <p class="gallery-lightbox-description" data-gallery-description></p>
+                <div class="gallery-lightbox-meta">
+                    <span data-gallery-category></span>
+                    <span data-gallery-date></span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    {% set galleryPayload = [] %}
+    {% for imagem in imagens %}
+        {% set galleryPayload = galleryPayload|merge([{
+            'id': imagem.id,
+            'title': imagem.titulo,
+            'description': imagem.descricao|default(''),
+            'url': imagem.url,
+            'category': imagem.categoria_nome|default('Sem categoria'),
+            'category_color': imagem.categoria_color|default('#df6301'),
+            'uploaded_at': imagem.data_upload|date('c'),
+            'uploaded_label': imagem.data_upload|date('d/m/Y \à\s H\hi')
+        }]) %}
+    {% endfor %}
+    <script type="application/json" id="gallery-data">{{ galleryPayload|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}</script>
+    <script src="{{ BASE_URL }}assets/js/gallery.js" defer></script>
+{% endblock %}

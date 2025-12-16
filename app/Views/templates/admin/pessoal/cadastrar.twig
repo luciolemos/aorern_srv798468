@@ -13,7 +13,7 @@
     <form method="post" action="{{ BASE_URL }}admin/pessoal/salvar" enctype="multipart/form-data">
         <div class="row">
             <!-- Coluna Principal -->
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <!-- Card Dados Pessoais -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
@@ -55,14 +55,14 @@
                                 <label class="form-label fw-bold">
                                     <i class="bi bi-image me-1"></i>Foto do Bombeiro
                                 </label>
-                                <input type="file" class="form-control" name="foto" 
+                                <input type="file" class="form-control" name="foto"
                                        accept="image/jpeg,image/png,image/webp" 
-                                       onchange="previewAvatar(this)">
+                                    onchange="previewFoto(this)">
                                 <small class="text-muted">JPG, PNG ou WebP • Máximo 50MB (opcional)</small>
                                 
                                 <!-- Preview -->
-                                <div class="mt-2" id="avatarPreviewContainer" style="display: none;">
-                                    <img id="avatarPreview" src="" alt="Preview" 
+                                <div class="mt-2" id="fotoPreviewContainer" style="display: none;">
+                                    <img id="fotoPreview" src="" alt="Preview"
                                          class="rounded shadow-sm" 
                                          style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #df6301;">
                                 </div>
@@ -154,7 +154,7 @@
                 </div>
             </div>
         </div>            <!-- Sidebar Informações -->
-            <div class="col-lg-4">
+{#             <div class="col-lg-4">
                 <!-- Card de Ajuda -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
@@ -181,15 +181,15 @@
                         </p>
                     </div>
                 </div>
-            </div>
+            </div> #}
         </div>
     </form>
 </div>
 
 <script>
-function previewAvatar(input) {
-    const preview = document.getElementById('avatarPreview');
-    const container = document.getElementById('avatarPreviewContainer');
+function previewFoto(input) {
+    const preview = document.getElementById('fotoPreview');
+    const container = document.getElementById('fotoPreviewContainer');
     
     if (input.files && input.files[0]) {
         const reader = new FileReader();

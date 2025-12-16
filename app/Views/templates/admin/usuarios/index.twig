@@ -10,10 +10,10 @@
         <hr class="my-4">
 
         <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
-            <a href="{{ BASE_URL }}admin/auth/register" class="btn btn-primary text-white">
+{#             <a href="{{ BASE_URL }}admin/auth/register" class="btn btn-primary text-white">
                 <i class="bi bi-plus-circle me-1"></i> Novo Usuário
-            </a>
-            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary ms-md-auto">
+            </a> #}
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
                 <i class="bi bi-speedometer2 me-1"></i> Painel
             </a>
         </div>
@@ -23,7 +23,7 @@
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-light border-bottom">
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Filtros Avançados</strong></h5>
+                <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Busca Avançada</strong></h5>
                 {% set hasActiveFilters = q or role or status %}
                 {% if hasActiveFilters %}
                     <a href="{{ BASE_URL }}admin/usuarios" class="btn btn-sm btn-outline-danger">
@@ -90,20 +90,18 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th class="text-center" style="width: 50px;">ID</th>
-                        <th>Usuário</th>
-                        <th class="d-none d-lg-table-cell">Email</th>
-                        <th class="d-none d-xxl-table-cell" style="width: 80px;">Role</th>
-                        <th class="d-none d-md-table-cell" style="width: 80px;">Status</th>
-                        <th class="d-none d-xxl-table-cell" style="width: 100px;">Último Login</th>
-                        <th class="d-none d-xxl-table-cell" style="width: 100px;">Cadastrado</th>
-                        <th class="text-center" style="width: 50px;">Ações</th>
+                        <th>USUÁRIO</th>
+                        <th class="d-none d-lg-table-cell">EMAIL</th>
+                        <th class="d-none d-xxl-table-cell" style="width: 80px;">ROLE</th>
+                        <th class="d-none d-md-table-cell" style="width: 80px;">STATUS</th>
+                        <th class="d-none d-xxl-table-cell" style="width: 120px;">ÚLTIMO LOGIN</th>
+                        <th class="d-none d-xxl-table-cell" style="width: 100px;">CADASTRADO</th>
+                        <th class="text-center" style="width: 50px;">AÇÕES</th>
                     </tr>
                     </thead>
                     <tbody>
                         {% for usuario in usuarios %}
                         <tr>
-                            <td class="text-center">{{ usuario.id }}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     {% if usuario.avatar %}
@@ -113,7 +111,7 @@
                                             {{ usuario.username[0]|upper }}
                                         </div>
                                     {% endif %}
-                                    <span class="fw-semibold">{{ usuario.username }}</span>
+                                    <span class="text-body">{{ usuario.username }}</span>
                                 </div>
                             </td>
                             <td class="d-none d-lg-table-cell"><small>{{ usuario.email }}</small></td>
@@ -132,7 +130,7 @@
                             <td class="text-muted small d-none d-xxl-table-cell">{{ usuario.created_at|date('d/m/Y') }}</td>
                             <td class="text-center">
                                 <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                    <button class="btn btn-link text-secondary p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">

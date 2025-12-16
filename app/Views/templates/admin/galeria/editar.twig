@@ -1,0 +1,92 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Editar Imagem - Galeria{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div data-aos="fade-down" class="mb-4">
+        <a href="{{ BASE_URL }}admin/galeria" class="btn btn-link text-decoration-none px-0 text-muted">
+            <i class="bi bi-arrow-left-circle me-1"></i>Voltar para a galeria
+        </a>
+        <h2 class="fw-bold text-primary mb-1"><i class="bi bi-brush me-2"></i>Editar imagem</h2>
+        <p class="text-muted mb-0">Atualize os metadados da imagem selecionada.</p>
+    </div>
+
+    <form method="POST" action="{{ BASE_URL }}admin/galeria/atualizar/{{ imagem.id }}" class="card border-0 shadow-sm" data-aos="fade-up">
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Categoria</label>
+                    <select name="categoria_id" class="form-select" required>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id|e('html_attr') }}" {% if categoria.id == imagem.category_id %}selected{% endif %}>{{ categoria.nome|e }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-8">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Título</label>
+                    <input type="text" name="titulo" class="form-control" value="{{ imagem.titulo|e('html_attr') }}" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Descrição</label>
+                    <textarea name="descricao" rows="4" class="form-control" placeholder="Resumo curto">{{ imagem.descricao|default('')|e }}</textarea>
+                </div>
+                <div class="col-lg-8">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">URL da imagem</label>
+                    <input type="url" name="url" class="form-control" value="{{ imagem.url|e('html_attr') }}" required id="imageUrlInput">
+                    <small class="text-muted">Caso atualize a mídia, certifique-se de que a URL esteja acessível publicamente.</small>
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-semibold text-uppercase small text-muted">Pré-visualização</label>
+                    <div class="ratio ratio-4x3 border rounded position-relative shadow-sm overflow-hidden">
+                        <img src="{{ imagem.url|e('html_attr') }}" alt="Pré-visualização" id="imagePreview" class="object-fit-cover">
+                        <div class="position-absolute bottom-0 start-0 end-0 p-2 bg-dark bg-opacity-50 text-white small">
+                            Atualiza conforme a URL
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-white d-flex flex-column flex-md-row gap-2 justify-content-md-between">
+            <div class="text-muted small d-flex align-items-center gap-2">
+                <i class="bi bi-clock-history"></i>
+                <span>Upload em {{ imagem.data_upload|date('d/m/Y H:i') }}</span>
+            </div>
+            <div class="d-flex flex-column flex-md-row gap-2">
+                <a href="{{ BASE_URL }}admin/galeria" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-1"></i>Cancelar
+                </a>
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check2-circle me-1"></i>Atualizar
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fallbackUrl = {{ imagem.url|json_encode|raw }};
+        const input = document.getElementById('imageUrlInput');
+        const preview = document.getElementById('imagePreview');
+        if (!input || !preview) return;
+
+        const updatePreview = () => {
+            const value = input.value.trim();
+            preview.src = value || fallbackUrl;
+        };
+
+        input.addEventListener('change', updatePreview);
+        input.addEventListener('keyup', () => {
+            clearTimeout(input._previewTimer);
+            input._previewTimer = setTimeout(updatePreview, 400);
+        });
+
+        preview.addEventListener('error', () => {
+            preview.src = 'https://via.placeholder.com/640x480?text=Imagem+Inválida';
+        });
+    });
+</script>
+{% endblock %}

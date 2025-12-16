@@ -3,11 +3,22 @@
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
     <div class="mb-4">
-        <a href="{{ BASE_URL }}admin/dog-breeds" class="btn btn-link text-decoration-none px-0 text-muted">
-            <i class="bi bi-arrow-left"></i> Voltar para raças
-        </a>
-        <h2 class="fw-bold mt-2 text-primary"><i class="bi bi-plus-circle me-2"></i>Cadastro de raça K9</h2>
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-pencil-square me-2"></i>Cadastro de raça K9</h2>
         <p class="text-muted mb-0">Defina os dados básicos para disponibilizar uma nova raça no catálogo do canil.</p>
+    </div>
+        <hr class="my-4">
+        <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
+            <a href="{{ BASE_URL }}admin/posts" class="btn btn-primary text-white">
+               <i class="bi bi-journal-text"></i> Posts
+            </a>
+
+            <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-primary">
+                <i class="bi bi-tags"></i> Categorias
+            </a>
+
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
+                <i class="bi bi-speedometer2 me-1"></i> Painel
+            </a>
     </div>
 
     <form action="{{ BASE_URL }}admin/dog-breeds/store" method="post" class="card border-0 shadow-sm" enctype="multipart/form-data">

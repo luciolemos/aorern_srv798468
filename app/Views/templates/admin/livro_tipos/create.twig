@@ -1,0 +1,163 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Novo tipo de ocorrência{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4" data-module="livro-tipos">
+        <div class="mb-4">               
+            <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-pencil-square me-2"></i>Novo tipo de ocorrência</h2>
+            <p class="text-muted mb-0">Catálogo do livro</p>
+        </div>
+        <hr class="my-4">
+        <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
+            <a href="{{ BASE_URL }}admin/livro-tipos" class="btn btn-primary text-white">
+                <i class="bi bi-ui-checks"></i>Tipos
+            </a>
+{#             <a href="{{ BASE_URL }}admin/posts" class="btn btn-primary text-white">
+               <i class="bi bi-journal-text"></i> Posts
+            </a> #}
+            <a href="{{ BASE_URL }}admin/livro-ocorrencias" class="btn btn-outline-primary">
+                <i class="bi bi-journal-text me-1"></i> Livro de ocorrências
+            </a>
+{# 
+            <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-primprary">
+                <i class="bi bi-tags"></i> Categorias
+            </a> #}
+
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
+                <i class="bi bi-speedometer2 me-1"></i> Painel
+            </a>
+        </div>
+    </div>
+    {# <hr class="mt-4"> #}
+
+    {% set form = old ?? {} %}
+    <div>
+    <form method="post" action="{{ BASE_URL }}admin/livro-tipos/store" class="post-form" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="row g-3">
+            {# <div class="card border-0 shadow-sm"> #}
+                {# <div class="card-body p-4"> #}
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase small fw-semibold">Nome *</label>
+                            <input type="text" name="nome" class="form-control" value="{{ form.nome|default('')|e('html_attr') }}" required>
+                            <div class="form-text">Nome exibido no filtro e nos registros do livro.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-uppercase small fw-semibold">Slug</label>
+                            <input type="text" name="slug" class="form-control" value="{{ form.slug|default('')|e('html_attr') }}" placeholder="ex: busca-e-salvamento" data-slug-field>
+                            <div class="form-text">Gerado automaticamente a partir do nome, mas você pode ajustar.</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-uppercase small fw-semibold">Descrição</label>
+                            <textarea name="descricao" rows="3" class="form-control" placeholder="Breve orientação sobre quando usar este tipo.">{{ form.descricao|default('')|e('html') }}</textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase small fw-semibold">Cor do badge</label>
+                            <div class="input-group">
+                                <span class="input-group-text p-0">
+                                    <span class="d-inline-flex w-100 h-100" style="width: 38px;" data-color-preview></span>
+                                </span>
+                                <input type="text" name="badge_color" class="form-control" value="{{ form.badge_color|default('#df6301')|e('html_attr') }}" placeholder="#F97316" data-color-input>
+                                <input type="color" class="form-control form-control-color" value="{{ form.badge_color|default('#df6301')|e('html_attr') }}" title="Selecionar cor" data-color-picker>
+                            </div>
+                            <div class="form-text">Use o seletor ou um valor hexadecimal (#RRGGBB). Opcional.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase small fw-semibold">Status</label>
+                            <select name="ativo" class="form-select">
+                                <option value="1" {{ form.ativo is not defined or form.ativo != '0' ? 'selected' : '' }}>Ativo</option>
+                                <option value="0" {{ form.ativo is defined and form.ativo == '0' ? 'selected' : '' }}>Inativo</option>
+                            </select>
+                            <div class="form-text">Tipos inativos deixam de aparecer nas telas do livro.</div>
+                        </div>
+                    </div>
+                {# </div> #}
+            {# </div> #}
+        </div>
+        <div class="border-top my-4"></div>
+        <div class="col-12 d-flex flex-column flex-md-row gap-2 justify-content-end">
+            {# <a href="{{ BASE_URL }}admin/livro-tipos" class="btn btn-outline-secondary">Cancelar</a> #}
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-circle me-1"></i>
+                Salvar tipo
+            </button>
+        </div>
+    </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const root = document.querySelector('[data-module="livro-tipos"]');
+        if (!root) return;
+
+        const nameInput = root.querySelector('input[name="nome"]');
+        const slugInput = root.querySelector('[data-slug-field]');
+        const colorInput = root.querySelector('[data-color-input]');
+        const preview = root.querySelector('[data-color-preview]');
+            const colorPicker = root.querySelector('[data-color-picker]');
+
+        const slugify = (value) => {
+            return value
+                .normalize('NFD')
+                .replace(/[^\w\s-]/g, '')
+                .trim()
+                .toLowerCase()
+                .replace(/[\s_-]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        };
+
+        if (nameInput && slugInput) {
+            nameInput.addEventListener('input', () => {
+                if (slugInput.value.trim() === '') {
+                    slugInput.value = slugify(nameInput.value);
+                }
+            });
+        }
+
+            const normalizeHex = (value) => {
+                if (!value) return '';
+                const match = value.trim().match(/^#?([0-9a-fA-F]{6})$/);
+                return match ? `#${match[1].toUpperCase()}` : '';
+            };
+
+            const applyPreview = (hex) => {
+                if (!preview) return;
+                const color = hex || '#ffffff';
+                preview.style.background = color;
+                preview.style.minWidth = '38px';
+                preview.style.borderRadius = '.35rem';
+            };
+
+            const syncFromText = () => {
+                if (!colorInput) return;
+                const normalized = normalizeHex(colorInput.value);
+                if (normalized) {
+                    colorInput.value = normalized;
+                    if (colorPicker) {
+                        colorPicker.value = normalized;
+                    }
+                }
+                applyPreview(normalized);
+            };
+
+            if (colorInput) {
+                colorInput.addEventListener('input', syncFromText);
+                syncFromText();
+            }
+
+            if (colorPicker) {
+                colorPicker.addEventListener('input', () => {
+                    const normalized = normalizeHex(colorPicker.value) || '#DF6301';
+                    if (colorInput) {
+                        colorInput.value = normalized;
+                    }
+                    applyPreview(normalized);
+                });
+            }
+    });
+</script>
+{% endblock %}

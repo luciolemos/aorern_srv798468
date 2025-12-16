@@ -12,7 +12,7 @@ class Migration_2025_12_05_000002_add_funcao_fk_to_pessoal extends Migration
 
         if (!$this->columnExists('pessoal', 'funcao_id')) {
             $after = $hadLegacyColumn ? 'funcao' : 'obra_id';
-            $this->execute("ALTER TABLE pessoal ADD COLUMN funcao_id INT NULL AFTER {$after}");
+            $this->execute("ALTER TABLE pessoal ADD COLUMN funcao_id INT UNSIGNED NULL AFTER {$after}");
         }
 
         if ($hadLegacyColumn) {
@@ -46,9 +46,12 @@ class Migration_2025_12_05_000002_add_funcao_fk_to_pessoal extends Migration
             $this->execute("ALTER TABLE pessoal DROP COLUMN funcao");
         }
 
-        $this->execute("ALTER TABLE pessoal MODIFY funcao_id INT NOT NULL");
+        $this->execute("ALTER TABLE pessoal MODIFY funcao_id INT UNSIGNED NOT NULL");
 
-        if ($this->hasReferencePrivilege()) {
+        // Garante compatibilidade de tipo com a PK referência
+        $this->execute("ALTER TABLE funcoes MODIFY id INT UNSIGNED NOT NULL AUTO_INCREMENT");
+
+        if ($this->hasReferencePrivilege() && !$this->fkExists()) {
             $this->execute("ALTER TABLE pessoal ADD CONSTRAINT fk_pessoal_funcao FOREIGN KEY (funcao_id) REFERENCES funcoes(id)");
         }
     }

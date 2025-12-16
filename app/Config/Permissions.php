@@ -88,6 +88,12 @@ class Permissions
         'livro_ocorrencias:edit' => ['admin', 'gerente'],
         'livro_ocorrencias:delete' => ['admin'],
 
+        // ====== TIPOS DO LIVRO ======
+        'livro_tipos:list' => ['admin', 'gerente'],
+        'livro_tipos:create' => ['admin', 'gerente'],
+        'livro_tipos:edit' => ['admin', 'gerente'],
+        'livro_tipos:delete' => ['admin'],
+
         // ====== GESTÃO K9 ======
         'dog_breeds:list' => ['admin', 'gerente', 'operador'],
         'dog_breeds:create' => ['admin', 'gerente'],
@@ -97,6 +103,16 @@ class Permissions
         'dogs:create' => ['admin', 'gerente'],
         'dogs:edit' => ['admin', 'gerente'],
         'dogs:delete' => ['admin'],
+
+        // ====== GALERIA ======
+        'gallery:list' => ['admin', 'gerente', 'operador'],
+        'gallery:create' => ['admin', 'gerente'],
+        'gallery:edit' => ['admin', 'gerente'],
+        'gallery:delete' => ['admin'],
+        'gallery_categories:list' => ['admin', 'gerente', 'operador'],
+        'gallery_categories:create' => ['admin', 'gerente'],
+        'gallery_categories:edit' => ['admin', 'gerente'],
+        'gallery_categories:delete' => ['admin'],
     ];
 
     /**

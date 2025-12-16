@@ -355,6 +355,8 @@ body {
 .testimonial-card-avatar {
     width: 48px;
     height: 48px;
+    flex-shrink: 0;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid rgba(223, 99, 1, 0.35);
@@ -635,9 +637,23 @@ body {
     flex: 1;
 }
 
+.post-card-meta-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+}
+
+.post-card-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #6c757d;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
 .post-card-meta i {
     color: var(--color-primary);
-    margin-right: 0.35rem;
 }
 
 .post-card-excerpt {

@@ -27,8 +27,8 @@ Este documento lista cada tabela necessária segundo os Models, indicando coluna
 - **Situação atual:** `schema.sql` não possui `staff_id`; `sql/schemas/funcoes.sql` possui. Models exigem `staff_id`. Ajustar.
 
 ## 7. pessoal
-- **Campos usados:** id, staff_id, nome, cpf, nascimento, telefone, avatar (antes foto), funcao_id, obra_id, data_admissao, status (enum), jornada, observacoes, criado_em.
-- **Situação atual:** `schema.sql` possui versão simplificada (sem cpf, avatar, obra_id, enum, etc.). `sql/schemas/pessoal.sql` mais completa, mas falta FK obra_id (usada em PessoalModel). Ajustar e garantir referência para `funcoes` e `obras`.
+- **Campos usados:** id, staff_id, nome, cpf, nascimento, telefone, foto, funcao_id, obra_id, data_admissao, status (enum), jornada, observacoes, criado_em.
+- **Situação atual:** `schema.sql` e `sql/schemas/pessoal.sql` agora trazem a coluna `foto` e as FKs exigidas pelo model; manter essa nomenclatura alinhada com uploads de pessoal e reservar `avatar` apenas para `users`.
 
 ## 8. obras
 - **Campos:** id, numero_obra, natureza_obra, descricao, endereco, cep, data_inicio, data_termino, status, prioridade, valor_estimado, observacoes, criado_em.

@@ -10,9 +10,12 @@
         <hr class="my-4">
         <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
             <a href="{{ BASE_URL }}admin/pessoal/cadastrar" class="btn btn-primary text-white">
-                <i class="bi bi-plus-circle me-1"></i> Novo registro
+                <i class="bi bi-plus-circle me-1"></i> Novo bombeiro
             </a>
-            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary ms-md-auto">
+            <a href="{{ BASE_URL }}admin/funcoes" class="btn btn-outline-primary">
+                <i class="bi bi-diagram-3 me-1"></i> Funções
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
                 <i class="bi bi-speedometer2 me-1"></i> Painel
             </a>
         </div>
@@ -139,7 +142,7 @@
                                          class="rounded shadow-sm"
                                          style="width: 48px; height: 48px; object-fit: cover; border-radius: .25rem;">
                                 {% else %}
-                                    <span class="avatar-fallback rounded d-inline-flex align-items-center justify-content-center bg-primary text-white fw-bold"
+                                    <span class="foto-fallback rounded d-inline-flex align-items-center justify-content-center bg-primary text-white fw-bold"
                                           style="width: 48px; height: 48px; font-size: 18px; border-radius: .25rem;">
                                         {{ (p.nome|default('?'))[0:1]|upper }}
                                     </span>
@@ -153,7 +156,7 @@
                             <td style="vertical-align: middle;"><span class="badge {{ badgeClass }}">{{ status }}</span></td>
                             <td class="text-center" style="vertical-align: middle;">
                                 <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                    <button class="btn btn-link text-secondary p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">

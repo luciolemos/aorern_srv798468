@@ -18,13 +18,13 @@ class Post extends Database {
     }
 
     public function encontrarPorId(int $id): ?array {
-        $stmt = $this->connect()->prepare("SELECT p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id WHERE p.id = ?");
+        $stmt = $this->connect()->prepare("SELECT p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor, COALESCE(u.username, 'CBMRN') AS autor FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id LEFT JOIN users u ON u.id = p.user_id WHERE p.id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function encontrarPorSlug(string $slug): ?array {
-        $stmt = $this->connect()->prepare("SELECT p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id WHERE p.slug = ? AND p.status = 'published' AND COALESCE(p.is_hidden, 0) = 0");
+        $stmt = $this->connect()->prepare("SELECT p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor, COALESCE(u.username, 'CBMRN') AS autor FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id LEFT JOIN users u ON u.id = p.user_id WHERE p.slug = ? AND p.status = 'published' AND COALESCE(p.is_hidden, 0) = 0");
         $stmt->execute([$slug]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
@@ -41,17 +41,31 @@ class Post extends Database {
         return $this->delete($this->table, $id);
     }
 
-    public function encontrarAnterior(string $criadoEm): ?array {
-        $sql = "SELECT slug, titulo FROM {$this->table} WHERE criado_em < :criado_em AND status = 'published' AND COALESCE(is_hidden, 0) = 0 ORDER BY criado_em DESC LIMIT 1";
+    public function encontrarAnterior(string $referenceDate, int $currentId): ?array {
+        $sql = "SELECT slug, titulo FROM {$this->table} p "
+             . "WHERE p.status = 'published' AND COALESCE(p.is_hidden, 0) = 0 "
+             . "AND ((COALESCE(p.published_at, p.criado_em) < :reference_date) "
+             . "     OR (COALESCE(p.published_at, p.criado_em) = :reference_date AND p.id < :current_id)) "
+             . "ORDER BY COALESCE(p.published_at, p.criado_em) DESC, p.id DESC LIMIT 1";
         $stmt = $this->connect()->prepare($sql);
-        $stmt->execute([':criado_em' => $criadoEm]);
+        $stmt->execute([
+            ':reference_date' => $referenceDate,
+            ':current_id' => $currentId,
+        ]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
-    public function encontrarProximo(string $criadoEm): ?array {
-        $sql = "SELECT slug, titulo FROM {$this->table} WHERE criado_em > :criado_em AND status = 'published' AND COALESCE(is_hidden, 0) = 0 ORDER BY criado_em ASC LIMIT 1";
+    public function encontrarProximo(string $referenceDate, int $currentId): ?array {
+        $sql = "SELECT slug, titulo FROM {$this->table} p "
+             . "WHERE p.status = 'published' AND COALESCE(p.is_hidden, 0) = 0 "
+             . "AND ((COALESCE(p.published_at, p.criado_em) > :reference_date) "
+             . "     OR (COALESCE(p.published_at, p.criado_em) = :reference_date AND p.id > :current_id)) "
+             . "ORDER BY COALESCE(p.published_at, p.criado_em) ASC, p.id ASC LIMIT 1";
         $stmt = $this->connect()->prepare($sql);
-        $stmt->execute([':criado_em' => $criadoEm]);
+        $stmt->execute([
+            ':reference_date' => $referenceDate,
+            ':current_id' => $currentId,
+        ]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -63,8 +77,8 @@ class Post extends Database {
 
     public function paginar(int $page = 1, ?int $perPage = 10, ?string $busca = null): array
     {
-        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";
-        $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id";
+        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor, u.username AS autor";
+        $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id LEFT JOIN users u ON u.id = p.user_id";
         $where = '';
         $params = [];
 
@@ -87,8 +101,8 @@ class Post extends Database {
 
     public function paginarPorAutor(?int $userId, int $page = 1, ?int $perPage = 10, ?string $busca = null, ?string $status = null, ?string $category = null, ?string $visibility = null): array
     {
-        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";
-        $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id";
+        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor, COALESCE(u.username, 'CBMRN') AS autor";
+        $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id LEFT JOIN users u ON u.id = p.user_id";
         $conditions = [];
         $params = [];
 
@@ -136,8 +150,8 @@ class Post extends Database {
 
     public function paginarPorStatus(array $statuses, int $page = 1, ?int $perPage = 10, ?string $busca = null): array
     {
-        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";
-        $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id";
+        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor, COALESCE(u.username, 'CBMRN') AS autor";
+        $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id LEFT JOIN users u ON u.id = p.user_id";
         $conditions = [];
         $params = [];
 
@@ -173,8 +187,8 @@ class Post extends Database {
 
     public function listarPublico(?string $busca, ?int $categoriaId, int $page = 1, ?int $perPage = 7): array
     {
-        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor";
-        $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id";
+        $select = "p.*, cp.nome AS categoria_nome, cp.badge_color AS categoria_cor, COALESCE(u.username, 'CBMRN') AS autor";
+        $from = "FROM {$this->table} p LEFT JOIN categorias_posts cp ON cp.id = p.categoria_id LEFT JOIN users u ON u.id = p.user_id";
 
         $conditions = [];
         $params = [];

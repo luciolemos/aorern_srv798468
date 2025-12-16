@@ -26,9 +26,11 @@ class Migration_2025_12_05_000003_add_post_categories extends Migration
             $this->execute("ALTER TABLE posts ADD COLUMN categoria_id INT NULL AFTER autor");
         }
 
-        $this->execute("ALTER TABLE posts ADD INDEX idx_posts_categoria (categoria_id)");
+        if (!$this->indexExists('posts', 'idx_posts_categoria')) {
+            $this->execute("ALTER TABLE posts ADD INDEX idx_posts_categoria (categoria_id)");
+        }
 
-        if ($this->hasReferencePrivilege()) {
+        if ($this->hasReferencePrivilege() && !$this->fkExists()) {
             $this->execute("ALTER TABLE posts ADD CONSTRAINT fk_posts_categoria FOREIGN KEY (categoria_id) REFERENCES categorias_posts(id)");
         }
     }
@@ -37,6 +39,10 @@ class Migration_2025_12_05_000003_add_post_categories extends Migration
     {
         if ($this->hasReferencePrivilege() && $this->fkExists()) {
             $this->execute("ALTER TABLE posts DROP FOREIGN KEY fk_posts_categoria");
+        }
+
+        if ($this->indexExists('posts', 'idx_posts_categoria')) {
+            $this->execute("ALTER TABLE posts DROP INDEX idx_posts_categoria");
         }
 
         if ($this->columnExists('posts', 'categoria_id')) {

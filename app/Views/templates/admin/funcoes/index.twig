@@ -12,7 +12,10 @@
             <a href="{{ BASE_URL }}admin/funcoes/cadastrar" class="btn btn-primary text-white">
                 <i class="bi bi-plus-circle"></i> Nova função
             </a>
-            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary ms-md-auto">
+            <a href="{{ BASE_URL }}admin/pessoal" class="btn btn-outline-primary">
+                <i class="bi bi-people me-1"></i> Bombeiros
+            </a>
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
                 <i class="bi bi-speedometer2 me-1"></i> Painel
             </a>
         </div>
@@ -51,7 +54,6 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th class="text-center">#</th>
                         <th>CÓD DA FUNÇÃO</th>
                         <th>DESCRIÇÃO</th>
                         <th class="text-center">AÇÕES</th>
@@ -60,12 +62,11 @@
                 <tbody>
                     {% for f in funcoes %}
                         <tr>
-                            <td class="text-center"><i class="bi bi-tags text-primary"></i></td>
                             <td>{{ f.staff_id|e }}</td>
                             <td>{{ f.nome|e }}</td>
                             <td class="text-center">
                                 <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                    <button class="btn btn-link text-secondary p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">

@@ -70,6 +70,42 @@
     gap: 1rem;
 }
 
+.home-about {
+    background: linear-gradient(180deg, #ffffff 0%, #f7f7f9 100%);
+}
+
+.home-about-list .icon-circle {
+    font-size: 1.1rem;
+}
+
+.home-about-list .icon-circle i {
+    color: var(--bombeiros-orange, #df6301);
+}
+
+.home-video-wrapper {
+    position: relative;
+    padding-top: 56.25%;
+    background: #000;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 45px rgba(15, 31, 68, 0.25);
+}
+
+.home-video-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: inherit;
+}
+
+@media (max-width: 576px) {
+    .home-video-wrapper {
+        padding-top: 62%;
+        border-radius: 1rem;
+    }
+}
+
 .home-occurrence-metrics {
     background: linear-gradient(135deg, #0f1f2d 0%, #172c41 100%);
     color: #f8fafd;
@@ -114,6 +150,158 @@
 .occurrence-card-meta {
     font-size: 0.95rem;
     color: rgba(255, 255, 255, 0.65);
+}
+
+.home-occurrence-map {
+    background: linear-gradient(180deg, #ffffff 0%, #f5f7fb 100%);
+}
+
+.occurrence-map-wrapper {
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 1.25rem;
+    box-shadow: 0 25px 40px rgba(13, 38, 59, 0.08);
+}
+
+.occurrence-map-canvas {
+    position: relative;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    border: 1px solid rgba(15, 31, 68, 0.08);
+}
+
+#occurrence-map {
+    width: 100%;
+    min-height: 420px;
+}
+
+.occurrence-map-fallback {
+    position: absolute;
+    inset: 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(223, 99, 1, 0.08), rgba(181, 79, 1, 0.08));
+    border: 1px dashed rgba(223, 99, 1, 0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.occurrence-map-summary {
+    background: rgba(15, 31, 68, 0.04);
+    border: 1px solid rgba(15, 31, 68, 0.08);
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+}
+
+.occurrence-map-control {
+    min-width: 140px;
+    flex: 1 1 140px;
+}
+
+.occurrence-map-control .form-select {
+    min-width: 150px;
+}
+
+.occurrence-map-top li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0.4rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-size: 0.95rem;
+}
+
+.occurrence-map-top li:last-child {
+    border-bottom: 0;
+}
+
+.occurrence-map-top-item--interactive {
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.occurrence-map-top-item--interactive:hover,
+.occurrence-map-top-item--interactive:focus {
+    background: rgba(15, 31, 68, 0.05);
+}
+
+.occurrence-map-status {
+    font-variant-numeric: tabular-nums;
+}
+
+.occurrence-map-badge,
+.legend-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.15rem 0.6rem;
+    color: #fff;
+}
+
+.legend-badge {
+    text-transform: uppercase;
+    font-size: 0.68rem;
+}
+
+.legend-badge-low,
+.occurrence-map-badge-low {
+    background: linear-gradient(135deg, #05b1fb, #05b1fb);
+}
+
+.legend-badge-medium,
+.occurrence-map-badge-medium {
+    background: linear-gradient(135deg, #fe7905ff, #fe7905ff);
+}
+
+.legend-badge-high,
+.occurrence-map-badge-high {
+    background: linear-gradient(135deg, #e81207, #e81207);
+}
+
+.occurrence-map-infowindow {
+    min-width: 0;
+    max-width: 280px;
+    text-align: center;
+    padding: 0.35rem 0.5rem;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+.occurrence-map-infowindow-header {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #64748b;
+    margin-bottom: 0.25rem;
+}
+
+.occurrence-map-infowindow-badge {
+    width: 44px;
+    height: auto;
+    display: block;
+    margin: 0 auto 0.35rem;
+}
+
+.occurrence-map-key {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.35rem;
+    background: rgba(15, 31, 68, 0.08);
+    font-family: 'Roboto Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+}
+
+@media (max-width: 768px) {
+    #occurrence-map {
+        min-height: 320px;
+    }
+
+    .occurrence-map-wrapper {
+        padding: 1rem;
+    }
 }
 
 .btn-fire {
@@ -205,6 +393,10 @@
     object-fit: cover;
     min-height: 320px;
 }
+    .home-k9-image-inline img {
+        width: 100%;
+        border-radius: 1.25rem;
+    }
 
 .home-k9-list li {
     display: flex;

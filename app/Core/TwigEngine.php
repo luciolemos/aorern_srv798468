@@ -27,6 +27,7 @@ class TwigEngine {
         $this->twig->addGlobal('BASE_URL', BASE_URL);
         $this->twig->addGlobal('APP_ENV', $_ENV['APP_ENV'] ?? 'prod');
         $this->twig->addGlobal('TINYMCE_API_KEY', TINYMCE_API_KEY ?? 'no-api-key');
+        $this->twig->addGlobal('GOOGLE_MAPS_API_KEY', GOOGLE_MAPS_API_KEY ?? '');
         $this->twig->addGlobal('toast_html', Toast::render());
         
         // Adicionar dados da sessão para acesso global nos templates
@@ -44,6 +45,14 @@ class TwigEngine {
 
         $this->twig->addFilter(new TwigFilter('excerpt', function (?string $content, int $limit = 160) {
             return TextHelper::excerpt($content, $limit);
+        }));
+
+        $this->twig->addFilter(new TwigFilter('strip_heading', function (?string $content) {
+            return TextHelper::stripLeadingHeading($content);
+        }));
+
+        $this->twig->addFilter(new TwigFilter('first_paragraph', function (?string $content, int $limit = 160) {
+            return TextHelper::firstParagraphExcerpt($content, $limit);
         }));
     }
 

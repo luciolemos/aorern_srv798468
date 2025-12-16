@@ -1,0 +1,11 @@
+[2025-12-16 12:57:24] ErrorException: Undefined variable $subgrupamento in /var/www/mvc/app/Models/LivroOcorrenciaModel.php:311
+Stack trace:
+#0 /var/www/mvc/app/Models/LivroOcorrenciaModel.php(311): App\Core\ExceptionHandler::handleError()
+#1 /var/www/mvc/app/Models/LivroOcorrenciaModel.php(76): App\Models\LivroOcorrenciaModel->syncStatusWithClosedAt()
+#2 /var/www/mvc/app/Controllers/Admin/LivroOcorrenciasController.php(350): App\Models\LivroOcorrenciaModel->atualizar()
+#3 [internal function]: App\Controllers\Admin\LivroOcorrenciasController->update()
+#4 /var/www/mvc/app/Core/App.php(112): call_user_func_array()
+#5 /var/www/mvc/app/Core/App.php(16): App\Core\App->execute()
+#6 /var/www/mvc/public/index.php(35): App\Core\App->__construct()
+#7 {main}
+

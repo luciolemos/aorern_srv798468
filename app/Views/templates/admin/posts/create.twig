@@ -2,13 +2,26 @@
 {% block title %}Novo Post - Admin{% endblock %}
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
-    <div data-aos="fade-down" class="mb-4">
+    <div class="mb-4">
         <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-pencil-square me-2"></i>Novo post</h2>
         <p class="text-muted mb-0">Crie conteúdo para o Blog</p>
     </div>
     <hr class="my-4">
+    <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
+            <a href="{{ BASE_URL }}admin/posts" class="btn btn-primary text-white">
+               <i class="bi bi-journal-text"></i> Posts
+            </a>
 
-    <div data-aos="fade-up">
+            <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-primary">
+                <i class="bi bi-tags"></i> Categorias
+            </a>
+
+            <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
+                <i class="bi bi-speedometer2 me-1"></i> Painel
+            </a>
+    </div>
+
+    <div>
         <form action="{{ BASE_URL }}admin/posts/store" method="post" class="post-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
             <div class="row g-3">
