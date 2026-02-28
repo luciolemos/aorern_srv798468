@@ -8,9 +8,13 @@
 {% endblock %}
 
 {% block content %}
+    {% set filters = filters|default({}) %}
     {% set card_list = card_posts|default([]) %}
     {% set show_featured = featured_post is defined and featured_post %}
     {% set has_posts = show_featured or (card_list|length > 0) %}
+    {% set hasSearch = filters.q|default('')|trim != '' %}
+    {% set hasCategory = filters.categoria|default(null) is not empty %}
+    {% set filtersActive = hasSearch or hasCategory %}
 
     {% if has_posts %}
         {% if show_featured %}
@@ -111,40 +115,43 @@
                 {% set filtersActive = hasSearch or hasCategory %}
 
                 <div class="blog-filters-wrapper mb-5">
-                    <form action="{{ BASE_URL }}blog" method="get" class="blog-filters row gy-3 gx-4 align-items-end">
-                        <div class="col-12 col-md-5 col-lg-5 col-xl-6">
-                            <label for="blog-search" class="form-label text-muted text-uppercase small fw-semibold">Buscar no blog</label>
-                            <input type="search" id="blog-search" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Digite palavras-chave"
-                                   aria-label="Buscar artigos" />
+                    <div class="blog-filters">
+                        <div class="blog-filters-header">
+                            <div>
+                                <p class="blog-filters-eyebrow">Filtro rápido</p>
+                                <h3 class="blog-filters-title mb-0">Personalize sua leitura</h3>
+                            </div>
                         </div>
-                        <div class="col-12 col-md-4 col-lg-4 col-xl-3">
-                            <label for="blog-category" class="form-label text-muted text-uppercase small fw-semibold">Categoria</label>
-                            <select id="blog-category" name="categoria" class="form-select" aria-label="Filtrar por categoria">
-                                <option value="">Todas as categorias</option>
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}" {% if filters.categoria|default(null) == category.id %}selected{% endif %}>{{ category.nome }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-3 col-lg-3 col-xl-3 blog-filters-actions">
-                            {% include 'site/components/button.twig' with {
-                                label: 'Aplicar filtros',
-                                variant: 'solid',
-                                size: 'md',
-                                type: 'submit',
-                                button_class: 'fw-semibold px-4'
-                            } %}
-                            {% if filtersActive %}
-                                {% include 'site/components/button.twig' with {
-                                    href: BASE_URL ~ 'blog',
-                                    label: 'Limpar',
-                                    variant: 'neutral-outline',
-                                    size: 'md',
-                                    button_class: 'fw-semibold px-4'
-                                } %}
-                            {% endif %}
-                        </div>
-                    </form>
+                        <form action="{{ BASE_URL }}blog" method="get" class="row gy-3 gx-4 align-items-end" id="blog-filter-form">
+                            <div class="col-12 col-md-5 col-lg-5 col-xl-6">
+                                <label for="blog-search" class="form-label text-muted text-uppercase small fw-semibold">Buscar no blog</label>
+                                <input type="search" id="blog-search" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Digite palavras-chave"
+                                       aria-label="Buscar artigos" />
+                            </div>
+                            <div class="col-12 col-md-4 col-lg-4 col-xl-3">
+                                <label for="blog-category" class="form-label text-muted text-uppercase small fw-semibold">Categoria</label>
+                                <select id="blog-category" name="categoria" class="form-select" aria-label="Filtrar por categoria">
+                                    <option value="">Todas as categorias</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}" {% if filters.categoria|default(null) == category.id %}selected{% endif %}>{{ category.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-12 col-lg-3 col-xl-3">
+                                <div class="blog-filters-actions">
+                                    <div class="filter-action">
+                                        {% include 'site/components/button.twig' with {
+                                            label: 'Aplicar filtros',
+                                            variant: 'solid',
+                                            size: 'md',
+                                            type: 'submit',
+                                            button_class: 'fw-semibold px-4 w-100 w-md-auto'
+                                        } %}
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
                 {% if card_list|length > 0 %}
@@ -221,7 +228,12 @@
                     {% endif %}
                 {% else %}
                     <div class="alert alert-info blog-empty-state">
-                        <i class="bi bi-info-circle me-2"></i> Publique mais artigos para preencher os cards inferiores.
+                        <i class="bi bi-info-circle me-2"></i>
+                        {% if filtersActive %}
+                            Nenhum artigo encontrado com os filtros selecionados. <a href="{{ BASE_URL }}blog" class="alert-link">Limpar filtros</a> ou ajuste os critérios de busca.
+                        {% else %}
+                            Publique mais artigos para preencher os cards inferiores.
+                        {% endif %}
                     </div>
                 {% endif %}
             </div>
@@ -229,43 +241,51 @@
     {% else %}
         <div class="container py-5">
             <div class="alert alert-info blog-empty-state">
-                <i class="bi bi-info-circle me-2"></i> Nenhum post publicado ainda. Volte em breve!
+                <i class="bi bi-info-circle me-2"></i>
+                {% if filtersActive %}
+                    Nenhum artigo encontrado com os filtros selecionados. <a href="{{ BASE_URL }}blog" class="alert-link">Limpar filtros</a> ou ajuste os critérios de busca.
+                {% else %}
+                    Nenhum post publicado ainda. Volte em breve!
+                {% endif %}
             </div>
             <div class="blog-filters-wrapper mt-4">
-                <form action="{{ BASE_URL }}blog" method="get" class="blog-filters row g-3 align-items-end">
-                    <div class="col-12 col-md-6 col-lg-6">
-                        <label for="blog-search-empty" class="form-label text-muted text-uppercase small fw-semibold">Buscar no blog</label>
-                        <input type="search" id="blog-search-empty" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Digite palavras-chave"
-                               aria-label="Buscar artigos" />
+                <div class="blog-filters">
+                    <div class="blog-filters-header">
+                        <div>
+                            <p class="blog-filters-eyebrow">Filtrar artigos</p>
+                            <h3 class="blog-filters-title mb-0">Encontre publicações específicas</h3>
+                        </div>
                     </div>
-                    <div class="col-12 col-md-4 col-lg-4">
-                        <label for="blog-category-empty" class="form-label text-muted text-uppercase small fw-semibold">Categoria</label>
-                        <select id="blog-category-empty" name="categoria" class="form-select" aria-label="Filtrar por categoria">
-                            <option value="">Todas as categorias</option>
-                            {% for category in categories %}
-                                <option value="{{ category.id }}" {% if filters.categoria|default(null) == category.id %}selected{% endif %}>{{ category.nome }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-12 col-md-2 col-lg-2 d-flex flex-column flex-md-row gap-2 justify-content-md-end">
-                        {% include 'site/components/button.twig' with {
-                            label: 'Aplicar filtros',
-                            variant: 'solid',
-                            size: 'lg',
-                            type: 'submit',
-                            button_class: 'fw-bold w-100 w-md-auto'
-                        } %}
-                        {% if filters.q|default('') or filters.categoria|default(null) %}
-                            {% include 'site/components/button.twig' with {
-                                href: BASE_URL ~ 'blog',
-                                label: 'Limpar',
-                                variant: 'neutral-outline',
-                                size: 'lg',
-                                button_class: 'fw-bold w-100 w-md-auto'
-                            } %}
-                        {% endif %}
-                    </div>
-                </form>
+                    <form action="{{ BASE_URL }}blog" method="get" class="row gy-3 gx-4 align-items-end">
+                        <div class="col-12 col-md-6 col-lg-6">
+                            <label for="blog-search-empty" class="form-label text-muted text-uppercase small fw-semibold">Buscar no blog</label>
+                            <input type="search" id="blog-search-empty" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Digite palavras-chave"
+                                   aria-label="Buscar artigos" />
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-4">
+                            <label for="blog-category-empty" class="form-label text-muted text-uppercase small fw-semibold">Categoria</label>
+                            <select id="blog-category-empty" name="categoria" class="form-select" aria-label="Filtrar por categoria">
+                                <option value="">Todas as categorias</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if filters.categoria|default(null) == category.id %}selected{% endif %}>{{ category.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-12 col-lg-2">
+                            <div class="blog-filters-actions">
+                                <div class="filter-action">
+                                    {% include 'site/components/button.twig' with {
+                                        label: 'Aplicar filtros',
+                                        variant: 'solid',
+                                        size: 'md',
+                                        type: 'submit',
+                                        button_class: 'fw-semibold px-4 w-100 w-md-auto'
+                                    } %}
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     {% endif %}

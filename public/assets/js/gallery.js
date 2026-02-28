@@ -12,11 +12,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const lightbox = document.getElementById('galleryLightbox');
-    const cards = document.querySelectorAll('[data-gallery-index]');
+    const cards = document.querySelectorAll('[data-gallery-id]');
 
     if (!lightbox || cards.length === 0 || dataset.length === 0) {
         return;
     }
+
+    const datasetIndexById = new Map();
+    dataset.forEach((item, index) => {
+        if (item && typeof item.id !== 'undefined') {
+            datasetIndexById.set(String(item.id), index);
+        }
+    });
 
     const mediaImage = lightbox.querySelector('[data-gallery-image]');
     const titleNode = lightbox.querySelector('[data-gallery-title]');
@@ -41,9 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         titleNode.textContent = item.title || 'Imagem sem título';
         descriptionNode.textContent = item.description || 'Sem descrição registrada.';
         categoryNode.textContent = item.category ? `Categoria: ${item.category}` : '';
-        if (item.category_color) {
-            categoryNode.style.color = item.category_color;
-        }
+        categoryNode.style.color = item.category_color || '';
         dateNode.textContent = item.uploaded_label ? `Registrada em ${item.uploaded_label}` : '';
         if (originalLink) {
             originalLink.href = item.url;
@@ -73,16 +78,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     cards.forEach((card) => {
+        const resolveIndex = () => {
+            const id = card.getAttribute('data-gallery-id');
+            if (id && datasetIndexById.has(id)) {
+                return datasetIndexById.get(id);
+            }
+            return 0;
+        };
+
         card.addEventListener('click', () => {
-            const index = Number(card.dataset.galleryIndex || 0);
-            openLightbox(index);
+            openLightbox(resolveIndex());
         });
 
         card.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
-                const index = Number(card.dataset.galleryIndex || 0);
-                openLightbox(index);
+                openLightbox(resolveIndex());
             }
         });
     });

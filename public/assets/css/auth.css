@@ -66,7 +66,7 @@
     border-radius: 1rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991.98px) {
     .auth-hero {
         min-height: auto;
         padding: 3rem 0;
@@ -82,5 +82,14 @@
 
     .auth-hero .btn {
         width: 100%;
+    }
+
+    .login-hero .hero-panel-col {
+        margin-left: 0;
+    }
+
+    .login-hero .auth-card {
+        max-width: 520px;
+        margin: 0 auto;
     }
 }
