@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /mvc/
+    RewriteBase /cbmrn/
 
     RewriteRule ^(clear-cache\.php|debug-avatar\.php|test-avatar\.php|test-upload\.html)$ - [R=404,L]
     RewriteRule ^uploads/.*\.(php|phtml|phar|php[0-9]*)$ - [F,L,NC]

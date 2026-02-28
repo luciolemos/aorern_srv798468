@@ -83,7 +83,7 @@ Formulários protegidos com tokens CSRF:
 
 #### ✅ Diretório de Logs
 ```bash
-/var/www/mvc/logs/
+/var/www/cbmrn/logs/
 ```
 - Criado com permissões 755
 - ExceptionHandler registrará erros em `YYYY-MM-DD-errors.log`
@@ -167,7 +167,7 @@ Pass: 1234
 
 ### Verificar Logs
 ```bash
-tail -f /var/www/mvc/logs/$(date +%Y-%m-%d)-errors.log
+tail -f /var/www/cbmrn/logs/$(date +%Y-%m-%d)-errors.log
 ```
 
 ---

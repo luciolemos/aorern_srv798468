@@ -129,8 +129,8 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 
 // URLs
-define('BASE_URL', 'http://localhost/mvc/');
-define('SITE_URL', 'http://localhost/mvc/');
+define('BASE_URL', 'http://localhost/cbmrn/');
+define('SITE_URL', 'http://localhost/cbmrn/');
 ```
 
 ### 4. **Criar Banco de Dados**
@@ -153,11 +153,11 @@ mysql -u luciolemos -p mvc < sql/seeds/001_base_data.sql
 ### 5. **Configurar VirtualHost (Apache)**
 ```apache
 <VirtualHost *:80>
-    ServerName mvc.local
-    ServerAlias www.mvc.local
-    DocumentRoot /var/www/mvc/public
+    ServerName cbmrn.local
+    ServerAlias www.cbmrn.local
+    DocumentRoot /var/www/cbmrn/public
     
-    <Directory /var/www/mvc/public>
+    <Directory /var/www/cbmrn/public>
         AllowOverride All
         Order Allow,Deny
         Allow from all
@@ -177,7 +177,7 @@ mysql -u luciolemos -p mvc < sql/seeds/001_base_data.sql
 # Desenvolvimento
 php -S localhost:8000 -t public
 
-# Ou navegar para http://mvc.local
+# Ou navegar para http://cbmrn.local
 ```
 
 ---
@@ -900,8 +900,8 @@ mvc/
 
 1. **Clonar em `/var/www/`**
    ```bash
-   git clone https://github.com/luciolemos/cbmrn_srv798468.git /var/www/mvc
-   cd /var/www/mvc
+   git clone https://github.com/luciolemos/cbmrn_srv798468.git /var/www/cbmrn
+   cd /var/www/cbmrn
    ```
 
 2. **Instalar dependências**
@@ -918,9 +918,9 @@ mvc/
 
 4. **Permissões**
    ```bash
-   chown -R www-data:www-data /var/www/mvc
-   chmod -R 755 /var/www/mvc/public
-   chmod -R 775 /var/www/mvc/app/Views
+   chown -R www-data:www-data /var/www/cbmrn
+   chmod -R 755 /var/www/cbmrn/public
+   chmod -R 775 /var/www/cbmrn/app/Views
    ```
 
 5. **SSL (Let's Encrypt)**

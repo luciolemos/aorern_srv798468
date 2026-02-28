@@ -12,7 +12,7 @@
 ### 1. Backup
 ```bash
 # Fazer backup antes de deploy
-cp -r /var/www/mvc /var/www/mvc.backup.$(date +%Y%m%d)
+cp -r /var/www/cbmrn /var/www/cbmrn.backup.$(date +%Y%m%d)
 ```
 
 ### 2. Validação Final
@@ -48,9 +48,9 @@ php -r "opcache_reset();" 2>/dev/null
 ### 5. Testes
 ```bash
 # Testar endpoints principais
-curl -I http://mvc.local/home
-curl -I http://mvc.local/admin/dashboard
-curl -I http://mvc.local/blog
+curl -I http://cbmrn.local/home
+curl -I http://cbmrn.local/admin/dashboard
+curl -I http://cbmrn.local/blog
 ```
 
 ### 6. Monitoramento
@@ -64,8 +64,8 @@ Se algo der errado:
 
 ```bash
 # Reverter para backup
-rm -rf /var/www/mvc
-cp -r /var/www/mvc.backup.YYYYMMDD /var/www/mvc
+rm -rf /var/www/cbmrn
+cp -r /var/www/cbmrn.backup.YYYYMMDD /var/www/cbmrn
 
 # Reiniciar serviços
 sudo systemctl restart apache2 php-fpm

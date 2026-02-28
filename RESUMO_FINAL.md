@@ -90,7 +90,7 @@
 ### Para Desenvolvedores
 1. Leia: `EXEMPLOS_USO.md`
 2. Explore: `/app/Views/components/`
-3. Teste no navegador: `http://mvc.local`
+3. Teste no navegador: `http://cbmrn.local`
 
 ### Para QA
 1. Siga: `VALIDATION_CHECKLIST.md`

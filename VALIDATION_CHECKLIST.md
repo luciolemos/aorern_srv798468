@@ -108,29 +108,29 @@ Economia: ~328 linhas removidas
 
 ### Site Público
 ```
-URL: http://mvc.local/home
+URL: http://cbmrn.local/home
 ✓ Navbar visível
 ✓ Logo CBMRN presente
 ✓ Menu responsivo
 ✓ Footer com informações
 ✓ Links funcionam
 
-URL: http://mvc.local/about
+URL: http://cbmrn.local/about
 ✓ Navbar e footer presentes
 ✓ Conteúdo renderizado
 
-URL: http://mvc.local/blog
+URL: http://cbmrn.local/blog
 ✓ Navbar e footer presentes
 ✓ Posts listados
 
-URL: http://mvc.local/contact
+URL: http://cbmrn.local/contact
 ✓ Navbar e footer presentes
 ✓ Formulário visível
 ```
 
 ### Admin Dashboard
 ```
-URL: http://mvc.local/admin/dashboard
+URL: http://cbmrn.local/admin/dashboard
 ✓ Navbar com "Sair"
 ✓ Sidebar com menu
 ✓ Hamburger em mobile

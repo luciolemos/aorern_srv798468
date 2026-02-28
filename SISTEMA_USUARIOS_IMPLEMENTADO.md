@@ -476,7 +476,7 @@ SELECT id, username, email, role, ativo, ultimo_login, created_at FROM users;
 
 ```bash
 # Verificar arquivos salvos
-ls -la /var/www/mvc/public/assets/avatars/
+ls -la /var/www/cbmrn/public/assets/avatars/
 ```
 
 ---

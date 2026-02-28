@@ -170,7 +170,7 @@
 ## 📂 Estrutura de Arquivos Documentados
 
 ```
-/var/www/mvc/
+/var/www/cbmrn/
 ├── 📚 COMPONENTES.md              ← Guia de componentes
 ├── 💡 EXEMPLOS_USO.md             ← Exemplos práticos
 ├── ✅ REFACTORING_SUMMARY.md      ← Resumo executivo

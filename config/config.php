@@ -11,7 +11,14 @@ $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
 $protocol = $https ? 'https://' : 'http://';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $requestPath = (string) (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/');
-$basePath = str_starts_with($requestPath, '/mvc') ? '/mvc/' : '/';
+$basePath = '/';
+
+foreach (['/cbmrn', '/mvc'] as $prefix) {
+    if (str_starts_with($requestPath, $prefix)) {
+        $basePath = $prefix . '/';
+        break;
+    }
+}
 
 if (!defined('APP_ENV')) {
     define('APP_ENV', $appEnv);

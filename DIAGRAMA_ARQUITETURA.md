@@ -7,7 +7,7 @@
 │                    SITE PÚBLICO                              │
 └─────────────────────────────────────────────────────────────┘
 
-   URL: http://mvc.local/home
+   URL: http://cbmrn.local/home
         ↓
    ┌────────────────────────────┐
    │  public/index.php          │
@@ -74,7 +74,7 @@
 │                    ADMIN DASHBOARD                           │
 └─────────────────────────────────────────────────────────────┘
 
-   URL: http://mvc.local/admin/dashboard
+   URL: http://cbmrn.local/admin/dashboard
         ↓
    ┌────────────────────────────┐
    │  public/index.php          │

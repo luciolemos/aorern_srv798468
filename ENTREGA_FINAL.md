@@ -234,7 +234,7 @@ Melhoria: 87% mais rápido
 ## 🗂️ Estrutura Final
 
 ```
-/var/www/mvc/
+/var/www/cbmrn/
 │
 ├── 📂 app/Views/
 │   ├── 📂 components/                    ← NOVO: Centralizados
