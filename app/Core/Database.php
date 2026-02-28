@@ -5,6 +5,7 @@ namespace App\Core;
 use PDO;
 use PDOException;
 use Dotenv\Dotenv;
+use RuntimeException;
 
 class Database {
     private static $instance;
@@ -30,11 +31,31 @@ class Database {
                 self::$instance = new PDO($dsn, $user, $pass);
                 self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
-                die('Erro de conexão com o banco de dados: ' . $e->getMessage());
+                self::logConnectionError($e, $host, $dbname);
+                throw new RuntimeException('Falha ao conectar ao banco de dados.', 0, $e);
             }
         }
 
         return self::$instance;
+    }
+
+    private static function logConnectionError(PDOException $e, string $host, string $dbname): void
+    {
+        $logDir = __DIR__ . '/../../logs';
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0755, true);
+        }
+
+        $logFile = $logDir . '/' . date('Y-m-d') . '-errors.log';
+        $message = sprintf(
+            "[%s] Database connection failed [%s/%s]: %s\n",
+            date('Y-m-d H:i:s'),
+            $host,
+            $dbname,
+            $e->getMessage()
+        );
+
+        error_log($message, 3, $logFile);
     }
 
     // 🔁 Reutilizáveis CRUD

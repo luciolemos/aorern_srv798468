@@ -1,5 +1,14 @@
 <?php
-// Debug avatar upload
+require_once __DIR__ . '/../config/config.php';
+
+$allowedIps = ['127.0.0.1', '::1'];
+$remoteAddr = $_SERVER['REMOTE_ADDR'] ?? '';
+
+if (!in_array($remoteAddr, $allowedIps, true)) {
+    http_response_code(404);
+    exit;
+}
+
 header('Content-Type: text/plain; charset=utf-8');
 
 error_log('[DEBUG] ========== TESTANDO UPLOAD DE AVATAR ==========');

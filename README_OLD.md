@@ -177,7 +177,7 @@ try {
                         </a>
 
 
-                        <a href="<?= BASE_URL ?>coverage/html/index.html" target="_blank" class="btn btn-outline-success">
+                        <a href="coverage/html/index.html" target="_blank" class="btn btn-outline-success">
                             <i class="bi bi-bar-chart-line me-1"></i> Ver Cobertura de Testes
                         </a>
                     </div>

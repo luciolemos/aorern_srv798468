@@ -1,9 +1,16 @@
 <?php
-// Script para testar upload de avatar
 session_start();
 
-require 'vendor/autoload.php';
-require 'config/config.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../config/config.php';
+
+$allowedIps = ['127.0.0.1', '::1'];
+$remoteAddr = $_SERVER['REMOTE_ADDR'] ?? '';
+
+if (!in_array($remoteAddr, $allowedIps, true)) {
+    http_response_code(404);
+    exit;
+}
 
 // Simular um arquivo de teste
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['test_avatar'])) {

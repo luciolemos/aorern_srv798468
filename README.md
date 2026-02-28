@@ -734,7 +734,7 @@ php run-tests.sh
 ### **Relatório de Cobertura**
 ```bash
 ./vendor/bin/phpunit --coverage-html coverage/html
-# Acesse: /coverage/html/index.html
+# Abra localmente: coverage/html/index.html
 ```
 
 ### **Testes Principais**

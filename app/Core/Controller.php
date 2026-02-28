@@ -14,9 +14,7 @@ class Controller {
             // Renderiza layout correto
             require_once "../app/Views/layouts/{$layout}.php";
         } else {
-            http_response_code(500);
-            die("❌ View '$view' não encontrada em {$viewPath}");
-
+            throw new \RuntimeException($this->buildMissingViewMessage((string) $view, $viewPath));
         }
     }
 
@@ -31,5 +29,14 @@ class Controller {
     protected function model($model) {
         $modelClass = "\\App\\Models\\$model";
         return new $modelClass();
+    }
+
+    private function buildMissingViewMessage(string $view, string $viewPath): string
+    {
+        if (defined('APP_DEBUG') && APP_DEBUG === true) {
+            return "View '{$view}' não encontrada em {$viewPath}";
+        }
+
+        return 'Falha ao renderizar a página solicitada.';
     }
 }

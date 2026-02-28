@@ -30,7 +30,7 @@ Preencher: username, email, senha, foto (opcional)
 RegisterController::store()
   ├─ Validações (email único, username único, senha 6+ chars)
   ├─ Hash password (bcrypt)
-  ├─ Salva avatar em /public/uploads/avatars/
+  ├─ Salva avatar em /public/uploads/users/
   ├─ Cria usuário com status='pendente', ativo=0, role='usuario'
   └─ Redireciona → /login/admin?success=account_created
 ```
@@ -92,7 +92,7 @@ class RegisterController extends Controller {
     // Processa registro (cria nova conta com status=pendente)
     public function store()
     
-    // Salva avatar em /public/uploads/avatars/
+    // Salva avatar em /public/uploads/users/
     private function processAvatar()
 }
 ```
@@ -262,6 +262,5 @@ public function dashboard() {
 ✅ `app/Views/templates/auth/admin-login.twig` - Link de registro adicionado
 ✅ `app/Views/templates/components/navbar.twig` - Apenas link ADMIN visível
 ✅ `app/Core/TwigEngine.php` - Sessão global adicionada
-✅ `app/Views/templates/auth/login.twig` - Removido (arquivado em backup_orfaos/)
-
+✅ `app/Views/templates/auth/login.twig` - Removido do fluxo ativo
 

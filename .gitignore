@@ -2,3 +2,11 @@
 /.env
 /.env.*
 /coverage/
+/backup_orfaos/
+/logs/*.log
+/logs/route-debug.log
+/public/coverage/
+/public/uploads/
+/public/assets/avatars/
+/public/assets/funcionarios/avatars/
+/.phpunit.result.cache

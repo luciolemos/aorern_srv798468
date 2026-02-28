@@ -50,7 +50,11 @@ class ObrasController extends Controller {
     public function editar(int $id): void {
         PermissionMiddleware::authorize('obras:edit');
         $obra = $this->model->buscar($id);
-        if (!$obra) die("Obra não encontrada.");
+        if (!$obra) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Obra não encontrada.'];
+            header('Location: ' . BASE_URL . 'admin/obras');
+            exit;
+        }
 
         $this->renderTwig('admin/obras/editar', array_merge(compact('obra'), AdminHelper::getUserData('obras')));
     }

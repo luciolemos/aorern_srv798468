@@ -9,8 +9,7 @@ class App {
 
     public function __construct() {
         $url = Router::parseUrl();
-        // Debug temporário de roteamento
-        file_put_contents('/tmp/route_debug.log', date('H:i:s') . " URL: " . json_encode($url) . "\n", FILE_APPEND);
+        $this->debugLog(date('H:i:s') . " URL: " . json_encode($url));
 
         $this->resolveController($url);
         $this->execute();
@@ -39,7 +38,7 @@ class App {
                 $nextSanitized = $this->sanitizeMethod($nextRaw);
                 $this->method = in_array($nextSanitized, $allowed, true) ? $nextSanitized : 'index';
                 $url = []; // evita passar lixo como params
-                file_put_contents('/tmp/route_debug.log', "  Ajuste: redirecionando rota quebrada para auth/{$this->method}\n", FILE_APPEND);
+                $this->debugLog("  Ajuste: redirecionando rota quebrada para auth/{$this->method}");
             }
 
             // Se o controller for auth e o método for inválido, cai em index
@@ -48,13 +47,13 @@ class App {
                 if (!in_array($this->method, $allowed, true)) {
                     $this->method = 'index';
                     $url = [];
-                    file_put_contents('/tmp/route_debug.log', "  Ajuste: método auth inválido -> index\n", FILE_APPEND);
+                    $this->debugLog('  Ajuste: método auth inválido -> index');
                 }
             }
 
             $this->params = array_map('htmlspecialchars', $url);
 
-            file_put_contents('/tmp/route_debug.log', "  Controller: $controllerPart | Method raw: $methodRaw | Method final: {$this->method}\n", FILE_APPEND);
+            $this->debugLog("  Controller: $controllerPart | Method raw: $methodRaw | Method final: {$this->method}");
 
             $controllerClass = $this->buildControllerClass($controllerPart, 'Admin');
         } else {
@@ -70,7 +69,7 @@ class App {
             $controllerClass = "\\App\\Controllers\\Site\\" . ucfirst($controllerPart) . "Controller";
         }
 
-        file_put_contents('/tmp/route_debug.log', "  Class: $controllerClass | Method: {$this->method}\n", FILE_APPEND);
+        $this->debugLog("  Class: $controllerClass | Method: {$this->method}");
 
         if (!class_exists($controllerClass)) {
             $this->notFound("Controller não encontrado: $controllerClass");
@@ -108,12 +107,26 @@ class App {
     }
 
     private function execute(): void {
-        file_put_contents('/tmp/route_debug.log', date('H:i:s') . " Executando: " . get_class($this->controller) . "::{$this->method}()\n", FILE_APPEND);
+        $this->debugLog(date('H:i:s') . " Executando: " . get_class($this->controller) . "::{$this->method}()");
         call_user_func_array([$this->controller, $this->method], $this->params);
     }
 
     private function notFound(string $message): void {
         http_response_code(404);
-        die("❌ 404 - $message");
+
+        if (defined('APP_DEBUG') && APP_DEBUG === true) {
+            die("404 - {$message}");
+        }
+
+        die('Página não encontrada.');
+    }
+
+    private function debugLog(string $message): void {
+        if (!defined('APP_DEBUG') || APP_DEBUG !== true) {
+            return;
+        }
+
+        $logPath = __DIR__ . '/../../logs/route-debug.log';
+        file_put_contents($logPath, $message . PHP_EOL, FILE_APPEND);
     }
 }

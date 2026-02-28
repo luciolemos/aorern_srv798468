@@ -109,7 +109,7 @@ class CsrfHelper
 
         if (!self::validateToken($token)) {
             http_response_code(403);
-            die('❌ Erro 403: Token CSRF inválido ou expirado.');
+            die('Requisição inválida.');
         }
     }
 }

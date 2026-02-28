@@ -56,7 +56,7 @@ class AuthMiddleware
 
         if (!self::isAdmin()) {
             http_response_code(403);
-            die('❌ Acesso negado: Você não tem permissão para acessar esta página.');
+            die('Acesso negado.');
         }
     }
 

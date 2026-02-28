@@ -134,7 +134,9 @@ class PessoalController extends Controller {
         PermissionMiddleware::authorize('pessoal:edit');
         $registro = $this->model->buscar($id);
         if (!$registro) {
-            die("Bombeiro não encontrado.");
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Bombeiro não encontrado.'];
+            header('Location: ' . BASE_URL . 'admin/pessoal');
+            exit;
         }
 
         $obras   = (new ObraModel())->listarObrasSimples();

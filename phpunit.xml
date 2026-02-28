@@ -22,10 +22,11 @@
 
   <php>
     <env name="SESSION_TIMEOUT" value="600"/>
-    <env name="DB_HOST" value="localhost"/>
-    <env name="DB_NAME" value="gpt_project"/>
-    <env name="DB_USER" value="luciolemos"/>
-    <env name="DB_PASS" value="Diferent@1968#"/>
+    <env name="APP_ENV" value="test"/>
+    <env name="DB_HOST" value="127.0.0.1"/>
+    <env name="DB_NAME" value="test_database"/>
+    <env name="DB_USER" value="test_user"/>
+    <env name="DB_PASS" value="test_password"/>
   </php>
 
 </phpunit>
