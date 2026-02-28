@@ -109,8 +109,8 @@ Sistema MVC moderno construído em **PHP puro** (sem frameworks) com arquitetura
 
 ### 1. **Clonar Repositório**
 ```bash
-git clone https://github.com/luciolemos/srv798468.git
-cd srv798468
+git clone https://github.com/luciolemos/cbmrn_srv798468.git
+cd cbmrn_srv798468
 ```
 
 ### 2. **Instalar Dependências**
@@ -900,7 +900,7 @@ mvc/
 
 1. **Clonar em `/var/www/`**
    ```bash
-   git clone https://github.com/luciolemos/srv798468.git /var/www/mvc
+   git clone https://github.com/luciolemos/cbmrn_srv798468.git /var/www/mvc
    cd /var/www/mvc
    ```
 
@@ -932,7 +932,7 @@ mvc/
 
 ## 📞 Suporte
 
-- **GitHub Issues:** [Reportar bugs](https://github.com/luciolemos/srv798468/issues)
+- **GitHub Issues:** [Reportar bugs](https://github.com/luciolemos/cbmrn_srv798468/issues)
 - **Email:** lucio@example.com
 - **Docs:** [Veja POST_WORKFLOW.md](./POST_WORKFLOW.md)
 
