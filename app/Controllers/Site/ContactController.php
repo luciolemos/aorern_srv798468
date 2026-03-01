@@ -54,7 +54,7 @@ class ContactController extends Controller {
             $mail->addCustomHeader('X-Originating-IP', $_SERVER['REMOTE_ADDR'] ?? 'localhost');
 
             $mail->setFrom(SMTP_FROM, SMTP_FROM_NAME);
-            $mail->addAddress(SMTP_FROM);
+            $mail->addAddress(INSTITUTIONAL_EMAIL_PRIMARY ?: SMTP_FROM);
             $mail->addReplyTo($email, $nome);
 
             $mail->Subject = "📩 Mensagem de $nome via formulário do site";

@@ -28,6 +28,8 @@ class TwigEngine {
         $this->twig->addGlobal('APP_ENV', $_ENV['APP_ENV'] ?? 'prod');
         $this->twig->addGlobal('TINYMCE_API_KEY', TINYMCE_API_KEY ?? 'no-api-key');
         $this->twig->addGlobal('GOOGLE_MAPS_API_KEY', GOOGLE_MAPS_API_KEY ?? '');
+        $this->twig->addGlobal('institutional_contact', $this->buildInstitutionalContactConfig());
+        $this->twig->addGlobal('whatsapp', $this->buildWhatsappConfig());
         $this->twig->addGlobal('toast_html', Toast::render());
         
         // Adicionar dados da sessão para acesso global nos templates
@@ -69,5 +71,56 @@ class TwigEngine {
 
     public function getTwig() {
         return $this->twig;
+    }
+
+    private function buildWhatsappConfig(): array
+    {
+        $number = WHATSAPP_PHONE_E164 ?? '';
+        $messages = WHATSAPP_MESSAGES ?? [];
+        $links = [];
+
+        foreach ($messages as $key => $message) {
+            $links[$key] = $number !== ''
+                ? sprintf('https://wa.me/%s?text=%s', $number, rawurlencode((string) $message))
+                : '';
+        }
+
+        return [
+            'number' => $number,
+            'display' => WHATSAPP_PHONE_DISPLAY ?? '',
+            'messages' => $messages,
+            'links' => $links,
+        ];
+    }
+
+    private function buildInstitutionalContactConfig(): array
+    {
+        $emails = array_values(array_filter([
+            INSTITUTIONAL_EMAIL_PRIMARY ?? '',
+            INSTITUTIONAL_EMAIL_SECONDARY ?? '',
+        ]));
+
+        return [
+            'emergency' => [
+                'dial' => EMERGENCY_PHONE_DIAL ?? '',
+                'display' => EMERGENCY_PHONE_DISPLAY ?? '',
+                'tel' => 'tel:' . (EMERGENCY_PHONE_DIAL ?? ''),
+            ],
+            'phone' => [
+                'dial' => INSTITUTIONAL_PHONE_DIAL ?? '',
+                'display' => INSTITUTIONAL_PHONE_DISPLAY ?? '',
+                'tel' => 'tel:' . (INSTITUTIONAL_PHONE_DIAL ?? ''),
+            ],
+            'emails' => [
+                'primary' => INSTITUTIONAL_EMAIL_PRIMARY ?? '',
+                'secondary' => INSTITUTIONAL_EMAIL_SECONDARY ?? '',
+                'all' => $emails,
+                'mailto_primary' => 'mailto:' . (INSTITUTIONAL_EMAIL_PRIMARY ?? ''),
+            ],
+            'address' => [
+                'line_1' => INSTITUTIONAL_ADDRESS_LINE_1 ?? '',
+                'line_2' => INSTITUTIONAL_ADDRESS_LINE_2 ?? '',
+            ],
+        ];
     }
 }

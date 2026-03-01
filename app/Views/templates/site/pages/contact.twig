@@ -1,6 +1,32 @@
 {% extends "layouts/base.twig" %}
 
 {% block title %}Contato - CBMRN{% endblock %}
+{% set whatsappChannels = [
+    {
+        label: 'Emergencia',
+        icon: 'bi bi-exclamation-triangle-fill',
+        href: whatsapp.links.emergency,
+        description: 'Contato inicial para ocorrencias com necessidade de resposta imediata.'
+    },
+    {
+        label: 'Visita tecnica',
+        icon: 'bi bi-building-check',
+        href: whatsapp.links.technical_visit,
+        description: 'Solicitacoes de agenda institucional, vistoria orientativa e apoio tecnico.'
+    },
+    {
+        label: 'Imprensa',
+        icon: 'bi bi-megaphone-fill',
+        href: whatsapp.links.press,
+        description: 'Demandas jornalisticas, entrevistas, notas e confirmacao de informacoes.'
+    },
+    {
+        label: 'Orientacao preventiva',
+        icon: 'bi bi-shield-check',
+        href: whatsapp.links.prevention,
+        description: 'Duvidas sobre prevencao, seguranca e boas praticas para a comunidade.'
+    }
+] %}
 
 {% block styles %}
     {{ parent() }}
@@ -40,6 +66,48 @@
             .contact-social__link[data-network="instagram"] { background: linear-gradient(120deg, rgba(225,48,108,0.2), rgba(255,196,0,0.12)); }
             .contact-social__link[data-network="facebook"] { background: linear-gradient(120deg, rgba(59,89,152,0.18), rgba(59,89,152,0.05)); }
             .contact-social__link[data-network="whatsapp"] { background: linear-gradient(120deg, rgba(37,211,102,0.2), rgba(7,94,84,0.08)); }
+            .contact-whatsapp-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 0.85rem;
+            }
+            .contact-whatsapp-card {
+                display: block;
+                padding: 1rem 1.1rem;
+                border-radius: 1rem;
+                border: 1px solid rgba(15, 23, 42, 0.08);
+                background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(243,244,246,0.92));
+                color: #0f172a;
+                text-decoration: none;
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+                transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+            }
+            .contact-whatsapp-card:hover {
+                transform: translateY(-2px);
+                border-color: rgba(37, 211, 102, 0.35);
+                box-shadow: 0 16px 28px rgba(15, 23, 42, 0.12);
+            }
+            .contact-whatsapp-card__icon {
+                width: 2.6rem;
+                height: 2.6rem;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(135deg, rgba(37,211,102,0.18), rgba(7,94,84,0.12));
+                color: #128c7e;
+                margin-bottom: 0.75rem;
+            }
+            .contact-whatsapp-card__title {
+                font-size: 0.98rem;
+                font-weight: 700;
+                margin-bottom: 0.35rem;
+            }
+            .contact-whatsapp-card__description {
+                font-size: 0.86rem;
+                color: #475569;
+                margin-bottom: 0;
+            }
         </style>
 {% endblock %}
 
@@ -54,8 +122,8 @@
                     <p class="section-lead text-white-75 mb-4">O 2º Subgrupamento de Bombeiros Militar atua de forma ininterrupta (24/7), com base em protocolos operacionais claros, integração com demais forças de segurança e uso de tecnologia, visando à redução do tempo de resposta e à ampliação da segurança da população. Este canal está disponível para atendimento a demandas institucionais, solicitações de imprensa, visitas técnicas e orientações preventivas à sociedade.</p>
                     <div class="d-flex flex-wrap gap-3">
                         {% include 'site/components/button.twig' with {
-                            href: 'tel:193',
-                            label: 'Ligue 193',
+                            href: institutional_contact.emergency.tel,
+                            label: 'Ligue ' ~ institutional_contact.emergency.display,
                             icon: 'bi-telephone',
                             variant: 'solid',
                             size: 'lg',
@@ -80,22 +148,22 @@
                             {
                                 icon: 'bi bi-geo-alt-fill',
                                 icon_inner_class: 'text-primary fs-5',
-                                title: 'Rua Presidente Kenedy nº 168, Centro – Goianinha/RN',
-                                meta: 'CEP 59173-000',
+                                title: institutional_contact.address.line_1,
+                                meta: institutional_contact.address.line_2,
                                 item_class: 'py-2'
                             },
                             {
                                 icon: 'bi bi-whatsapp',
                                 icon_inner_class: 'text-success fs-5',
-                                title: '(84) 98838-9889',
+                                title: whatsapp.display,
                                 meta: 'WhatsApp institucional',
                                 item_class: 'py-2'
                             },
                             {
                                 icon: 'bi bi-envelope-fill',
                                 icon_inner_class: 'text-danger fs-5',
-                                title: 'suporte@2sgb2gbm.org',
-                                description_html: '<small class="text-white-50">2sgb2gbm@2sgb2gbm.org</small>',
+                                title: institutional_contact.emails.primary,
+                                description_html: '<small class="text-white-50">' ~ institutional_contact.emails.secondary ~ '</small>',
                                 item_class: 'py-2'
                             }
                         ]
@@ -138,6 +206,24 @@
                                 } %}
                             </div>
                         {% endfor %}
+                    </div>
+
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body p-4">
+                            <h2 class="section-title h5 fw-bold mb-2">Atendimento por WhatsApp</h2>
+                            <p class="text-muted small mb-4">Selecione o assunto para abrir uma mensagem institucional predefinida e agilizar o encaminhamento adequado.</p>
+                            <div class="contact-whatsapp-grid">
+                                {% for channel in whatsappChannels %}
+                                    <a href="{{ channel.href }}" class="contact-whatsapp-card" target="_blank" rel="noopener noreferrer">
+                                        <span class="contact-whatsapp-card__icon">
+                                            <i class="{{ channel.icon }}"></i>
+                                        </span>
+                                        <p class="contact-whatsapp-card__title">{{ channel.label }}</p>
+                                        <p class="contact-whatsapp-card__description">{{ channel.description }}</p>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
 
                     <div class="contact-form-panel auth-card hero-panel hero-panel--dark">
@@ -183,28 +269,28 @@
                                 <i class="bi bi-geo-alt-fill contact-direct-icon text-primary"></i>
                                 <div>
                                     <h3 class="h6 fw-semibold mb-1">Endereço</h3>
-                                    <p class="mb-0 small text-muted">Rua Presidente Kenedy nº 168, Centro<br>Goianinha/RN – CEP 59173-000</p>
+                                    <p class="mb-0 small text-muted">{{ institutional_contact.address.line_1 }}<br>{{ institutional_contact.address.line_2 }}</p>
                                 </div>
                             </div>
                             <div class="d-flex align-items-start gap-3 mb-4">
                                 <i class="bi bi-telephone-fill contact-direct-icon text-success"></i>
                                 <div>
                                     <h3 class="h6 fw-semibold mb-1">Telefone</h3>
-                                    <p class="mb-0 small">(84) 98838-9889</p>
+                                    <p class="mb-0 small">{{ institutional_contact.phone.display }}</p>
                                 </div>
                             </div>
                             <div class="d-flex align-items-start gap-3 mb-4">
                                 <i class="bi bi-whatsapp contact-direct-icon text-success"></i>
                                 <div>
                                     <h3 class="h6 fw-semibold mb-1">WhatsApp</h3>
-                                    <p class="mb-0 small">(84) 98838-9889</p>
+                                    <p class="mb-0 small">{{ whatsapp.display }}</p>
                                 </div>
                             </div>
                             <div class="d-flex align-items-start gap-3 mb-4">
                                 <i class="bi bi-envelope-fill contact-direct-icon text-danger"></i>
                                 <div>
                                     <h3 class="h6 fw-semibold mb-1">E-mail</h3>
-                                    <p class="mb-0 small">suporte@2sgb2gbm.org<br>2sgb2gbm@2sgb2gbm.org</p>
+                                    <p class="mb-0 small">{{ institutional_contact.emails.primary }}<br>{{ institutional_contact.emails.secondary }}</p>
                                 </div>
                             </div>
                             <hr class="my-4">
@@ -231,7 +317,7 @@
                                         <i class="bi bi-facebook"></i>
                                         <span>Facebook</span>
                                     </a>
-                                    <a href="https://wa.me/5584988389889" class="contact-social__link" data-network="whatsapp" target="_blank" title="WhatsApp">
+                                    <a href="{{ whatsappChannels[3].href }}" class="contact-social__link" data-network="whatsapp" target="_blank" title="WhatsApp">
                                         <i class="bi bi-whatsapp"></i>
                                         <span>WhatsApp</span>
                                     </a>

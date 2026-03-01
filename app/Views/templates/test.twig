@@ -74,7 +74,7 @@
                         <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: #df6301;"></i>Equipamentos certificados e revisados</li>
                     </ul>
                     <div class="d-flex gap-3">
-                        <a href="tel:193" class="btn btn-lg text-white" style="background-color: #df6301; border: none;">Acionar emergência</a>
+                        <a href="{{ institutional_contact.emergency.tel }}" class="btn btn-lg text-white" style="background-color: #df6301; border: none;">Acionar emergência</a>
                         <a href="{{ BASE_URL }}contact" class="btn btn-lg btn-outline-dark">Falar com a equipe</a>
                     </div>
                 </div>
@@ -147,11 +147,11 @@
         <div class="container">
             <div class="row align-items-center text-white g-3">
                 <div class="col-lg-8" data-aos="fade-right">
-                    <h3 class="fw-bold mb-2">193 - Linha direta de emergência</h3>
+                    <h3 class="fw-bold mb-2">{{ institutional_contact.emergency.display }} - Linha direta de emergência</h3>
                     <p class="mb-0" style="opacity: 0.9;">Acionamento imediato para incêndios, resgates e ocorrências críticas. Informe localização e natureza do incidente.</p>
                 </div>
                 <div class="col-lg-4 text-lg-end" data-aos="fade-left">
-                    <a href="tel:193" class="btn btn-light btn-lg fw-bold text-dark"><i class="bi bi-telephone me-2"></i> Ligar agora</a>
+                    <a href="{{ institutional_contact.emergency.tel }}" class="btn btn-light btn-lg fw-bold text-dark"><i class="bi bi-telephone me-2"></i> Ligar agora</a>
                     
                 </div>
             </div>

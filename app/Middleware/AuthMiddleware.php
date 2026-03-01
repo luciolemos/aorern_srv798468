@@ -2,6 +2,8 @@
 
 namespace App\Middleware;
 
+use App\Core\TwigEngine;
+
 class AuthMiddleware
 {
     /**
@@ -56,7 +58,7 @@ class AuthMiddleware
 
         if (!self::isAdmin()) {
             http_response_code(403);
-            die('Acesso negado.');
+            self::renderForbiddenPage();
         }
     }
 
@@ -195,5 +197,22 @@ class AuthMiddleware
         }
 
         return true;
+    }
+
+    private static function renderForbiddenPage(): void
+    {
+        try {
+            echo TwigEngine::getInstance()->render(self::isAdminRequest() ? 'admin/pages/403' : 'site/pages/403');
+        } catch (\Throwable $exception) {
+            die('Acesso negado.');
+        }
+
+        exit;
+    }
+
+    private static function isAdminRequest(): bool
+    {
+        $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
+        return preg_match('#/(cbmrn/)?admin(?:/|$)#', (string) $path) === 1;
     }
 }

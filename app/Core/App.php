@@ -6,6 +6,7 @@ class App {
     protected $controller;
     protected $method = 'index';
     protected $params = [];
+    protected string $area = 'site';
 
     public function __construct() {
         $url = Router::parseUrl();
@@ -19,6 +20,7 @@ class App {
         $mainRoute = $url[0] ?? 'home';
 
         if ($mainRoute === 'admin') {
+            $this->area = 'admin';
             array_shift($url); // remove 'admin'
 
             $controllerPart = array_shift($url) ?? 'dashboard';
@@ -57,6 +59,7 @@ class App {
 
             $controllerClass = $this->buildControllerClass($controllerPart, 'Admin');
         } else {
+            $this->area = 'site';
             $controllerPart = $mainRoute;
             if ($controllerPart === 'blog' && !empty($url[1])) {
                 $this->method = 'post';
@@ -114,11 +117,19 @@ class App {
     private function notFound(string $message): void {
         http_response_code(404);
 
-        if (defined('APP_DEBUG') && APP_DEBUG === true) {
-            die("404 - {$message}");
-        }
+        try {
+            $template = $this->area === 'admin' ? 'admin/pages/404' : 'site/pages/404';
+            echo TwigEngine::getInstance()->render($template, [
+                'error_message' => (defined('APP_DEBUG') && APP_DEBUG === true) ? $message : null,
+            ]);
+        } catch (\Throwable $exception) {
+            if (defined('APP_DEBUG') && APP_DEBUG === true) {
+                die("404 - {$message}");
+            }
 
-        die('Página não encontrada.');
+            die('Página não encontrada.');
+        }
+        exit;
     }
 
     private function debugLog(string $message): void {

@@ -14,8 +14,8 @@
                 <p class="text-white mb-4" style="font-size: 1.1rem; line-height: 1.7; max-width: 600px; opacity: 0.92; margin: 0 auto;"><i>"Alienam vitam et bona salvare"</i></p>
                 
                 <div class="d-flex flex-wrap justify-content-center gap-3 cta-actions">
-                    <a href="tel:193" class="btn btn-outline-light btn-lg fw-bold">
-                        <i class="bi bi-telephone me-2"></i>Ligue 193
+                    <a href="{{ institutional_contact.emergency.tel }}" class="btn btn-outline-light btn-lg fw-bold">
+                        <i class="bi bi-telephone me-2"></i>Ligue {{ institutional_contact.emergency.display }}
                     </a>
 {#                     <a href="{{ BASE_URL }}contact" class="btn btn-outline-light btn-lg fw-bold">
                         <i class="bi bi-envelope me-2"></i>Envie uma Mensagem

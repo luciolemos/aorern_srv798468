@@ -1,0 +1,48 @@
+{% extends "admin/layouts/error_admin.twig" %}
+
+{% block title %}Erro interno - Admin CBMRN{% endblock %}
+
+{% block content %}
+    <section class="admin-error-shell">
+        <div class="container admin-error-frame">
+            <div class="admin-error-panel w-100">
+                <div class="admin-error-body">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-7">
+                            <div class="admin-error-kicker">
+                                <i class="bi bi-exclamation-diamond-fill"></i>
+                                <span>Erro 500</span>
+                            </div>
+                            <h1 class="admin-error-title">Falha interna no ambiente administrativo</h1>
+                            <p class="admin-error-text">
+                                O painel encontrou uma falha inesperada durante o processamento da requisicao. O evento foi registrado para analise tecnica.
+                            </p>
+                            <div class="admin-error-grid">
+                                <div class="admin-error-card">
+                                    <i class="bi bi-cpu-fill"></i>
+                                    <span>Servico administrativo temporariamente indisponivel</span>
+                                </div>
+                                <div class="admin-error-card">
+                                    <i class="bi bi-telephone-fill"></i>
+                                    <span>Canal emergencial: {{ institutional_contact.emergency.display }}</span>
+                                </div>
+                            </div>
+                            <div class="admin-error-actions">
+                                <a href="{{ BASE_URL }}admin/dashboard" class="btn btn-theme btn-lg fw-bold">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Tentar novamente
+                                </a>
+                                <a href="{{ BASE_URL }}contact" class="btn btn-outline-light btn-lg fw-bold">
+                                    <i class="bi bi-envelope me-2"></i>Falar com a equipe
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 text-center">
+                            <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="Brasao institucional do CBMRN" class="admin-error-badge">
+                            <p class="admin-error-note">Admin CBMRN · Continuidade operacional e controle interno</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

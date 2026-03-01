@@ -1,6 +1,6 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}Página não encontrada - CBMRN{% endblock %}
+{% block title %}Acesso negado - CBMRN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
@@ -15,21 +15,21 @@
                     <div class="row align-items-center g-4">
                         <div class="col-lg-7">
                             <div class="error-code">
-                                <i class="bi bi-signpost-2-fill"></i>
-                                <span>Erro 404</span>
+                                <i class="bi bi-shield-lock-fill"></i>
+                                <span>Erro 403</span>
                             </div>
-                            <h1 class="error-title">A rota informada nao foi localizada</h1>
+                            <h1 class="error-title">Acesso restrito ao ambiente solicitado</h1>
                             <p class="error-lead">
-                                O endereco solicitado nao corresponde a uma pagina ativa do portal institucional. Verifique o link informado ou retorne ao ponto inicial de navegacao.
+                                A requisicao foi recebida, mas nao ha permissao suficiente para acessar este conteudo. Caso a operacao seja institucionalmente necessaria, contate o comando ou a administracao do sistema.
                             </p>
                             <div class="error-meta">
                                 <div class="error-meta__item">
-                                    <i class="bi bi-compass"></i>
-                                    <span>Conteudo removido, URL invalida ou digitacao incorreta</span>
+                                    <i class="bi bi-person-badge"></i>
+                                    <span>Permissao insuficiente ou sessao sem privilegios</span>
                                 </div>
                                 <div class="error-meta__item">
-                                    <i class="bi bi-envelope"></i>
-                                    <span>{{ institutional_contact.emails.primary }}</span>
+                                    <i class="bi bi-whatsapp"></i>
+                                    <span>Suporte institucional: {{ whatsapp.display }}</span>
                                 </div>
                             </div>
                             <div class="error-actions">
@@ -42,9 +42,9 @@
                                     button_class: 'fw-bold'
                                 } %}
                                 {% include 'site/components/button.twig' with {
-                                    href: BASE_URL ~ 'contact',
-                                    label: 'Ir para contato',
-                                    icon: 'bi-envelope',
+                                    href: BASE_URL ~ 'login/admin',
+                                    label: 'Acessar login',
+                                    icon: 'bi-box-arrow-in-right',
                                     variant: 'outline',
                                     size: 'lg',
                                     button_class: 'fw-bold'
@@ -54,7 +54,7 @@
                         <div class="col-lg-5">
                             <div class="error-visual text-center">
                                 <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="Brasao institucional do CBMRN" class="error-badge">
-                                <p class="error-note">Portal institucional do 2º Subgrupamento de Bombeiros Militar</p>
+                                <p class="error-note">2º Subgrupamento de Bombeiros Militar · Controle de acesso institucional</p>
                             </div>
                         </div>
                     </div>

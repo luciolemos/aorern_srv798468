@@ -1,6 +1,6 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}Página não encontrada - CBMRN{% endblock %}
+{% block title %}Erro interno - CBMRN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
@@ -15,27 +15,27 @@
                     <div class="row align-items-center g-4">
                         <div class="col-lg-7">
                             <div class="error-code">
-                                <i class="bi bi-signpost-2-fill"></i>
-                                <span>Erro 404</span>
+                                <i class="bi bi-exclamation-octagon-fill"></i>
+                                <span>Erro 500</span>
                             </div>
-                            <h1 class="error-title">A rota informada nao foi localizada</h1>
+                            <h1 class="error-title">Falha interna no processamento da requisicao</h1>
                             <p class="error-lead">
-                                O endereco solicitado nao corresponde a uma pagina ativa do portal institucional. Verifique o link informado ou retorne ao ponto inicial de navegacao.
+                                O sistema encontrou uma condicao inesperada e nao conseguiu concluir a operacao. O evento foi registrado para analise tecnica. Tente novamente em instantes.
                             </p>
                             <div class="error-meta">
                                 <div class="error-meta__item">
-                                    <i class="bi bi-compass"></i>
-                                    <span>Conteudo removido, URL invalida ou digitacao incorreta</span>
+                                    <i class="bi bi-cpu"></i>
+                                    <span>Servico temporariamente indisponivel</span>
                                 </div>
                                 <div class="error-meta__item">
-                                    <i class="bi bi-envelope"></i>
-                                    <span>{{ institutional_contact.emails.primary }}</span>
+                                    <i class="bi bi-telephone"></i>
+                                    <span>Canal emergencial: {{ institutional_contact.emergency.display }}</span>
                                 </div>
                             </div>
                             <div class="error-actions">
                                 {% include 'site/components/button.twig' with {
                                     href: BASE_URL,
-                                    label: 'Voltar ao portal',
+                                    label: 'Retornar ao inicio',
                                     icon: 'bi-house-door',
                                     variant: 'solid',
                                     size: 'lg',
@@ -43,7 +43,7 @@
                                 } %}
                                 {% include 'site/components/button.twig' with {
                                     href: BASE_URL ~ 'contact',
-                                    label: 'Ir para contato',
+                                    label: 'Falar com a equipe',
                                     icon: 'bi-envelope',
                                     variant: 'outline',
                                     size: 'lg',
@@ -54,7 +54,7 @@
                         <div class="col-lg-5">
                             <div class="error-visual text-center">
                                 <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="Brasao institucional do CBMRN" class="error-badge">
-                                <p class="error-note">Portal institucional do 2º Subgrupamento de Bombeiros Militar</p>
+                                <p class="error-note">CBMRN · Integridade operacional e continuidade de servico</p>
                             </div>
                         </div>
                     </div>

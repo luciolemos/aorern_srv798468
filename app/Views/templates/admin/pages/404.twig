@@ -1,0 +1,48 @@
+{% extends "admin/layouts/error_admin.twig" %}
+
+{% block title %}Pagina nao encontrada - Admin CBMRN{% endblock %}
+
+{% block content %}
+    <section class="admin-error-shell">
+        <div class="container admin-error-frame">
+            <div class="admin-error-panel w-100">
+                <div class="admin-error-body">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-7">
+                            <div class="admin-error-kicker">
+                                <i class="bi bi-signpost-split-fill"></i>
+                                <span>Erro 404</span>
+                            </div>
+                            <h1 class="admin-error-title">Rota administrativa nao localizada</h1>
+                            <p class="admin-error-text">
+                                O endereco informado nao corresponde a uma funcionalidade ativa do painel administrativo. Verifique a URL ou retorne ao painel principal.
+                            </p>
+                            <div class="admin-error-grid">
+                                <div class="admin-error-card">
+                                    <i class="bi bi-diagram-3"></i>
+                                    <span>Controlador, metodo ou rota administrativa inexistente</span>
+                                </div>
+                                <div class="admin-error-card">
+                                    <i class="bi bi-envelope"></i>
+                                    <span>{{ institutional_contact.emails.primary }}</span>
+                                </div>
+                            </div>
+                            <div class="admin-error-actions">
+                                <a href="{{ BASE_URL }}admin/dashboard" class="btn btn-theme btn-lg fw-bold">
+                                    <i class="bi bi-speedometer2 me-2"></i>Voltar ao painel
+                                </a>
+                                <a href="{{ BASE_URL }}" class="btn btn-outline-light btn-lg fw-bold">
+                                    <i class="bi bi-house-door me-2"></i>Portal institucional
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 text-center">
+                            <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="Brasao institucional do CBMRN" class="admin-error-badge">
+                            <p class="admin-error-note">Admin CBMRN · Navegacao institucional segura</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

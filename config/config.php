@@ -88,6 +88,57 @@ if (!defined('GOOGLE_MAPS_API_KEY')) {
     define('GOOGLE_MAPS_API_KEY', (string) ($_ENV['GOOGLE_MAPS_API_KEY'] ?? ''));
 }
 
+if (!defined('EMERGENCY_PHONE_DIAL')) {
+    define('EMERGENCY_PHONE_DIAL', preg_replace('/\D+/', '', (string) ($_ENV['EMERGENCY_PHONE_DIAL'] ?? '')));
+}
+
+if (!defined('EMERGENCY_PHONE_DISPLAY')) {
+    define('EMERGENCY_PHONE_DISPLAY', (string) ($_ENV['EMERGENCY_PHONE_DISPLAY'] ?? ''));
+}
+
+if (!defined('INSTITUTIONAL_PHONE_DIAL')) {
+    define('INSTITUTIONAL_PHONE_DIAL', preg_replace('/\D+/', '', (string) ($_ENV['INSTITUTIONAL_PHONE_DIAL'] ?? '')));
+}
+
+if (!defined('INSTITUTIONAL_PHONE_DISPLAY')) {
+    define('INSTITUTIONAL_PHONE_DISPLAY', (string) ($_ENV['INSTITUTIONAL_PHONE_DISPLAY'] ?? ''));
+}
+
+if (!defined('INSTITUTIONAL_EMAIL_PRIMARY')) {
+    define('INSTITUTIONAL_EMAIL_PRIMARY', (string) ($_ENV['INSTITUTIONAL_EMAIL_PRIMARY'] ?? ''));
+}
+
+if (!defined('INSTITUTIONAL_EMAIL_SECONDARY')) {
+    define('INSTITUTIONAL_EMAIL_SECONDARY', (string) ($_ENV['INSTITUTIONAL_EMAIL_SECONDARY'] ?? ''));
+}
+
+if (!defined('INSTITUTIONAL_ADDRESS_LINE_1')) {
+    define('INSTITUTIONAL_ADDRESS_LINE_1', (string) ($_ENV['INSTITUTIONAL_ADDRESS_LINE_1'] ?? ''));
+}
+
+if (!defined('INSTITUTIONAL_ADDRESS_LINE_2')) {
+    define('INSTITUTIONAL_ADDRESS_LINE_2', (string) ($_ENV['INSTITUTIONAL_ADDRESS_LINE_2'] ?? ''));
+}
+
+if (!defined('WHATSAPP_PHONE_E164')) {
+    define('WHATSAPP_PHONE_E164', preg_replace('/\D+/', '', (string) ($_ENV['WHATSAPP_PHONE_E164'] ?? '')));
+}
+
+if (!defined('WHATSAPP_PHONE_DISPLAY')) {
+    define('WHATSAPP_PHONE_DISPLAY', (string) ($_ENV['WHATSAPP_PHONE_DISPLAY'] ?? ''));
+}
+
+if (!defined('WHATSAPP_MESSAGES')) {
+    define('WHATSAPP_MESSAGES', [
+        'general' => (string) ($_ENV['WHATSAPP_MESSAGE_GENERAL'] ?? ''),
+        'emergency' => (string) ($_ENV['WHATSAPP_MESSAGE_EMERGENCY'] ?? ''),
+        'technical_visit' => (string) ($_ENV['WHATSAPP_MESSAGE_TECHNICAL_VISIT'] ?? ''),
+        'press' => (string) ($_ENV['WHATSAPP_MESSAGE_PRESS'] ?? ''),
+        'prevention' => (string) ($_ENV['WHATSAPP_MESSAGE_PREVENTION'] ?? ''),
+        'k9' => (string) ($_ENV['WHATSAPP_MESSAGE_K9'] ?? ''),
+    ]);
+}
+
 return [
     'app' => [
         'env' => APP_ENV,

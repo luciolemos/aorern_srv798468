@@ -1,0 +1,48 @@
+{% extends "admin/layouts/error_admin.twig" %}
+
+{% block title %}Acesso negado - Admin CBMRN{% endblock %}
+
+{% block content %}
+    <section class="admin-error-shell">
+        <div class="container admin-error-frame">
+            <div class="admin-error-panel w-100">
+                <div class="admin-error-body">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-7">
+                            <div class="admin-error-kicker">
+                                <i class="bi bi-shield-lock-fill"></i>
+                                <span>Erro 403</span>
+                            </div>
+                            <h1 class="admin-error-title">Permissao insuficiente para a area administrativa</h1>
+                            <p class="admin-error-text">
+                                O acesso solicitado foi bloqueado porque o perfil atual nao possui privilegios compativeis com este recurso administrativo.
+                            </p>
+                            <div class="admin-error-grid">
+                                <div class="admin-error-card">
+                                    <i class="bi bi-person-badge"></i>
+                                    <span>Perfil autenticado sem a permissao necessaria</span>
+                                </div>
+                                <div class="admin-error-card">
+                                    <i class="bi bi-whatsapp"></i>
+                                    <span>Suporte institucional: {{ whatsapp.display }}</span>
+                                </div>
+                            </div>
+                            <div class="admin-error-actions">
+                                <a href="{{ BASE_URL }}admin/dashboard" class="btn btn-theme btn-lg fw-bold">
+                                    <i class="bi bi-speedometer2 me-2"></i>Painel admin
+                                </a>
+                                <a href="{{ BASE_URL }}login/admin" class="btn btn-outline-light btn-lg fw-bold">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>Ir para login
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 text-center">
+                            <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="Brasao institucional do CBMRN" class="admin-error-badge">
+                            <p class="admin-error-note">Ambiente administrativo do 2º Subgrupamento de Bombeiros Militar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -317,53 +317,56 @@ class ExceptionHandler
      */
     private static function renderProductionError(): void
     {
-        ?>
-        <!DOCTYPE html>
-        <html lang="pt-BR">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Erro no Servidor</title>
-            <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                body { 
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 100vh;
-                    color: white;
-                    text-align: center;
-                    padding: 20px;
-                }
-                .error-container { max-width: 600px; }
-                h1 { font-size: 72px; margin-bottom: 20px; }
-                h2 { font-size: 32px; margin-bottom: 20px; font-weight: 300; }
-                p { font-size: 18px; margin-bottom: 30px; opacity: 0.9; }
-                a { 
-                    display: inline-block;
-                    background: white; 
-                    color: #667eea; 
-                    padding: 12px 30px; 
-                    text-decoration: none; 
-                    border-radius: 25px;
-                    font-weight: 600;
-                    transition: transform 0.2s;
-                }
-                a:hover { transform: translateY(-2px); }
-            </style>
-        </head>
-        <body>
-            <div class="error-container">
-                <h1>500</h1>
-                <h2>Erro no Servidor</h2>
-                <p>Desculpe, algo deu errado. Nossa equipe foi notificada e está trabalhando para resolver o problema.</p>
-                <a href="<?= BASE_URL ?>">Voltar para Home</a>
-            </div>
-        </body>
-        </html>
-        <?php
+        try {
+            echo TwigEngine::getInstance()->render(self::isAdminRequest() ? 'admin/pages/500' : 'site/pages/500');
+            return;
+        } catch (Throwable $exception) {
+            ?>
+            <!DOCTYPE html>
+            <html lang="pt-BR">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Erro no Servidor</title>
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body {
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                        background: #0f172a;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        min-height: 100vh;
+                        color: white;
+                        text-align: center;
+                        padding: 20px;
+                    }
+                    .error-container { max-width: 600px; }
+                    h1 { font-size: 72px; margin-bottom: 20px; }
+                    h2 { font-size: 32px; margin-bottom: 20px; font-weight: 300; }
+                    p { font-size: 18px; margin-bottom: 30px; opacity: 0.9; }
+                    a {
+                        display: inline-block;
+                        background: white;
+                        color: #0f172a;
+                        padding: 12px 30px;
+                        text-decoration: none;
+                        border-radius: 25px;
+                        font-weight: 600;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="error-container">
+                    <h1>500</h1>
+                    <h2>Erro no Servidor</h2>
+                    <p>Ocorreu uma falha interna ao processar a requisicao.</p>
+                    <a href="<?= BASE_URL ?>">Voltar para Home</a>
+                </div>
+            </body>
+            </html>
+            <?php
+        }
     }
 
     /**
@@ -374,6 +377,12 @@ class ExceptionHandler
         return ($_ENV['APP_ENV'] ?? 'production') === 'dev' 
             || getenv('APP_ENV') === 'dev'
             || (defined('APP_ENV') && APP_ENV === 'dev');
+    }
+
+    private static function isAdminRequest(): bool
+    {
+        $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
+        return preg_match('#/(cbmrn/)?admin(?:/|$)#', (string) $path) === 1;
     }
 
     /**

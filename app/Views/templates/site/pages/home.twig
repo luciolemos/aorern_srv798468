@@ -28,17 +28,9 @@
                             <p class="text-white mb-4" style="font-size: 1.1rem; line-height: 1.7; max-width: 600px; opacity: 0.92; margin: 0 auto;"><i>"Alienam vitam et bona salvare"</i></p>
                             {# <p class="section-lead text-white-75 mb-4">Baseados em Goianinha, garantimos cobertura 24/7 com equipes treinadas, protocolos digitais e integração permanente com SAMU, Defesa Civil e demais parceiros regionais.</p> #}
                             <div class="home-hero-actions d-flex flex-column flex-md-row justify-content-center gap-3 gap-md-4">
-                             {#                                {% include 'site/components/button.twig' with {
-                                    href: 'tel:193',
-                                    label: 'Ligar 193',
-                                    icon: 'bi-telephone',
-                                    variant: 'solid',
-                                    size: 'lg',
-                                    button_class: 'fw-bold text-white',
-                                } %} #}
-                                   {% include 'site/components/button.twig' with {
-                                    href: 'tel:193',
-                                    label: 'Ligar 193',
+                                {% include 'site/components/button.twig' with {
+                                    href: institutional_contact.emergency.tel,
+                                    label: 'Ligar ' ~ institutional_contact.emergency.display,
                                     icon: 'bi-telephone',
                                     variant: 'solid',
                                     size: 'lg',
@@ -55,22 +47,15 @@
                                 } %} #}
 
                                  {% include 'site/components/button.twig' with {
-                                    href: 'https://wa.me/5584988389889',
+                                    href: whatsapp.links.general,
                                     label: 'WhatsApp',
                                     icon: 'bi-whatsapp',
                                     variant: 'solid',
                                     size: 'lg',
                                     button_class: 'fw-bold',
+                                    target: '_blank'
                                 } %}
 
-                          {#{% include 'site/components/button.twig' with {
-                            href: 'https://wa.me/5584988389889',
-                            label: 'WhatsApp',
-                            icon: 'bi-whatsapp',
-                            variant: 'solid',
-                            size: 'lg',
-                            button_class: 'fw-bold text-dark',
-                        } %} #}
                             </div>
                         </div>
                     </div>
@@ -582,7 +567,7 @@
                 <div class="col-lg-8">                    
                     {% include 'site/components/section-header.twig' with {
                         kicker: 'Canal direto',
-                        title: '193 - Emergências · WhatsApp (84) 98838-9889',
+                        title: institutional_contact.emergency.display ~ ' - Emergências · WhatsApp ' ~ whatsapp.display,
                         subtitle: 'Informe localização, tipo de ocorrência e mantenha o contato aberto. Nossa equipe acompanha todo o deslocamento.',
                         heading_level: 3,
                         kicker_class: 'text-muted',
@@ -594,15 +579,15 @@
                 <div class="col-lg-4 text-lg-end">
                     <div class="home-cta-actions d-flex gap-3 gap-md-4 flex-column flex-md-row justify-content-center justify-content-lg-end">
                         {% include 'site/components/button.twig' with {
-                            href: 'tel:193',
-                            label: 'Ligue 193',
+                            href: institutional_contact.emergency.tel,
+                            label: 'Ligue ' ~ institutional_contact.emergency.display,
                             icon: 'bi-telephone',
                             variant: 'solid',
                             size: 'lg',
                             button_class: 'flex-fill flex-md-grow-0 fw-bold text-wite'
                         } %}
                         {% include 'site/components/button.twig' with {
-                            href: 'https://wa.me/5584988389889',
+                            href: whatsapp.links.emergency,
                             label: 'WhatsApp',
                             icon: 'bi-whatsapp',
                             variant: 'outline',

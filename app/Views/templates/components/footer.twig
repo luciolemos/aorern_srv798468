@@ -106,7 +106,7 @@ Monitoramento, relatórios e transparência em tempo real.
                     <a href="https://www.facebook.com/lucciolemos" class="footer-social__link" data-network="facebook" target="_blank" title="Facebook" aria-label="Facebook">
                         <i class="bi bi-facebook"></i>
                     </a>
-                    <a href="https://wa.me/5584988389889" class="footer-social__link" data-network="whatsapp" target="_blank" title="WhatsApp" aria-label="WhatsApp">
+                    <a href="{{ whatsapp.links.general }}" class="footer-social__link" data-network="whatsapp" target="_blank" title="WhatsApp" aria-label="WhatsApp">
                         <i class="bi bi-whatsapp"></i>
                     </a>
                 </div>
@@ -119,28 +119,28 @@ Monitoramento, relatórios e transparência em tempo real.
                     <i class="bi bi-geo-alt-fill fs-5 text-white"></i>
                     <div>
                         <p class="mb-1 fw-semibold text-white">Endereço</p>
-                        <p class="mb-0 small text-white-50">Rua Presidente Kenedy nº 168, Centro<br>Goianinha/RN – CEP 59173-000</p>
+                        <p class="mb-0 small text-white-50">{{ institutional_contact.address.line_1 }}<br>{{ institutional_contact.address.line_2 }}</p>
                     </div>
                 </div>
                 <div class="d-flex align-items-start gap-3 mb-3">
                     <i class="bi bi-telephone-fill fs-5 text-white"></i>
                     <div>
                         <p class="mb-1 fw-semibold text-white">Telefone</p>
-                        <p class="mb-0 small text-white-50">(84) 98838-9889</p>
+                        <p class="mb-0 small text-white-50">{{ institutional_contact.phone.display }}</p>
                     </div>
                 </div>
                 <div class="d-flex align-items-start gap-3 mb-3">
                     <i class="bi bi-whatsapp fs-5 text-white"></i>
                     <div>
                         <p class="mb-1 fw-semibold text-white">WhatsApp</p>
-                        <p class="mb-0 small text-white-50">(84) 98838-9889</p>
+                        <p class="mb-0 small text-white-50">{{ whatsapp.display }}</p>
                     </div>
                 </div>
                 <div class="d-flex align-items-start gap-3 mb-4">
                     <i class="bi bi-envelope-fill fs-5 text-white"></i>
                     <div>
                         <p class="mb-1 fw-semibold text-white">E-mail</p>
-                        <p class="mb-0 small text-white-50">suporte@2sgb2gbm.org<br>2sgb2gbm@2sgb2gbm.org</p>
+                        <p class="mb-0 small text-white-50">{{ institutional_contact.emails.primary }}<br>{{ institutional_contact.emails.secondary }}</p>
                     </div>
                 </div>                
             </div>

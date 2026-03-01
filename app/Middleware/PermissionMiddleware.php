@@ -3,6 +3,7 @@
 namespace App\Middleware;
 
 use App\Config\Permissions;
+use App\Core\TwigEngine;
 
 /**
  * PermissionMiddleware - Valida permissões do usuário
@@ -40,11 +41,9 @@ class PermissionMiddleware
                 $_SERVER['REQUEST_URI']
             ));
 
-            // Redireciona ou mostra erro
-            $redirectTo = $redirectTo ?? BASE_URL . 'admin/dashboard';
             http_response_code(403);
             header('X-Permission-Denied: ' . $permission);
-            header('Location: ' . $redirectTo);
+            self::renderForbiddenPage($permission, $redirectTo);
             exit;
         }
     }
@@ -109,5 +108,29 @@ class PermissionMiddleware
     public static function canOrOwns(string $permission, int $resourceUserId): bool
     {
         return self::can($permission) || self::isOwner($resourceUserId);
+    }
+
+    private static function renderForbiddenPage(string $permission, ?string $redirectTo = null): void
+    {
+        try {
+            echo TwigEngine::getInstance()->render(self::isAdminRequest() ? 'admin/pages/403' : 'site/pages/403', [
+                'permission_denied' => $permission,
+                'redirect_to' => $redirectTo,
+            ]);
+            return;
+        } catch (\Throwable $exception) {
+            if ($redirectTo) {
+                header('Location: ' . $redirectTo);
+                return;
+            }
+
+            echo 'Acesso negado.';
+        }
+    }
+
+    private static function isAdminRequest(): bool
+    {
+        $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
+        return preg_match('#/(cbmrn/)?admin(?:/|$)#', (string) $path) === 1;
     }
 }
