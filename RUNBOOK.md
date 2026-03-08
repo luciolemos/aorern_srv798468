@@ -146,3 +146,12 @@ Este documento é a referência operacional única para subir, validar, operar e
   - rota afetada
   - usuário/role (se autenticado)
   - mensagem de erro e stack trace
+
+## 9) Histórico operacional de releases
+
+- 2026-03-08 01:37 UTC
+  - Release publicada: `v1.0.0`
+  - Commit: `a195613`
+  - Link: https://github.com/luciolemos/aorern_srv798468/releases/tag/v1.0.0
+  - Artefato: `artifacts/release-check-20260308-013543.md`
+  - SHA256: `cf101c51dc18c02f1973025ede777d450e98c0d786bce50f42b73c15111f9397`
