@@ -24,12 +24,14 @@ class Database {
             $dbname = $_ENV['DB_NAME'];
             $user = $_ENV['DB_USER'];
             $pass = $_ENV['DB_PASS'];
+            $dbTimezone = (string) ($_ENV['DB_TIMEZONE'] ?? '-03:00');
 
             $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
 
             try {
                 self::$instance = new PDO($dsn, $user, $pass);
                 self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$instance->exec("SET time_zone = " . self::$instance->quote($dbTimezone));
             } catch (PDOException $e) {
                 self::logConnectionError($e, $host, $dbname);
                 throw new RuntimeException('Falha ao conectar ao banco de dados.', 0, $e);

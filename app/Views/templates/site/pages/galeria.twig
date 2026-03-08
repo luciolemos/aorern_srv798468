@@ -1,10 +1,10 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}Galeria de Imagens - CBMRN{% endblock %}
+{% block title %}Galeria de Imagens - AORE/RN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/gallery.css">
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/gallery.css?v=20260304-hero1">
 {% endblock %}
 
 {% block content %}
@@ -20,7 +20,7 @@
              <div class="row justify-content-center g-5">
                 <div class="col-lg-8 hero-content">
                    <p class="section-kicker text-white-50 mb-2">
-  Acervo institucional do 2º Subgrupamento de Bombeiros Militar
+  Acervo institucional da AORE/RN
 </p>
 
 <h1 class="section-title text-white mb-3">
@@ -28,14 +28,14 @@
 </h1>
 
 <p class="section-lead text-white-75 mb-0">
-  Registro visual das atividades operacionais, treinamentos, ações preventivas e educativas desenvolvidas pelo 2º Subgrupamento do Corpo de Bombeiros Militar do Rio Grande do Norte, evidenciando o compromisso permanente com a proteção da vida, do patrimônio e do meio ambiente.
+  Registro visual de solenidades, encontros, atos institucionais, homenagens e atividades associativas da AORE/RN, preservando a memória da reserva e a identidade institucional da entidade.
 </p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
                     <div class="gallery-active-context">
                         {% if categoriaSelecionada %}
                             <p class="text-uppercase small text-white-50 mb-1">Categoria em foco</p>
-                            <div class="badge rounded-pill px-3 py-2" style="background-color: {{ categoriaSelecionada.color|default('#df6301')|e('html_attr') }}; color: #0b1a2b;">
+                            <div class="badge rounded-pill px-3 py-2" style="background-color: {{ categoriaSelecionada.color|default('#556b2f')|e('html_attr') }}; color: #0b1a2b;">
                                 <i class="bi bi-tag me-1"></i>{{ categoriaSelecionada.nome|e }}
                             </div>
                         {% else %}
@@ -53,12 +53,12 @@
                 <article class="gallery-stat-card">
                     <p class="gallery-stat-label mb-2">Imagens publicadas</p>
                     <p class="gallery-stat-value mb-1">{{ totalImagens }}</p>
-                    <p class="small mb-0">Atualizadas continuamente pelas equipes oficiais.</p>
+                    <p class="small mb-0">Atualizadas continuamente pelos responsáveis institucionais.</p>
                 </article>
                 <article class="gallery-stat-card">
                     <p class="gallery-stat-label mb-2">Categorias mapeadas</p>
                     <p class="gallery-stat-value mb-1">{{ totalCategorias }}</p>
-                    <p class="small mb-0">Grupos temáticos para filtrar operações.</p>
+                    <p class="small mb-0">Grupos temáticos para filtrar o acervo institucional.</p>
                 </article>
                 <article class="gallery-stat-card">
                     <p class="gallery-stat-label mb-2">Itens por página</p>
@@ -75,7 +75,7 @@
             
 {#             <header class="section-header text-center" data-aos="fade-up">
                 <p class="text-uppercase text-muted small fw-semibold mb-2">GALERIA DE EVENTOS</p>
-                <h2 class="text-primary">2º Subgrupamento de Bombeiros - Coleção institucional</h2>
+                <h2 class="text-primary">AORE/RN - Coleção institucional</h2>
                 <p class="text-muted mb-0">Clique em um cartão para abrir o lightbox, navegar entre as fotos e copiar o link original.</p>
             </header> #}
             <div class="container mt-4 mb-5" data-aos="fade-up">
@@ -125,7 +125,7 @@
                                 {% set optionValueString = optionValue ~ '' %}
                                 {% set isActive = categoryFilter == optionValueString or categoryFilter == (categoria.id ~ '') %}
                                 <a href="{{ BASE_URL }}galeria?categoria={{ optionValueString|url_encode }}" class="gallery-pill{% if isActive %} active{% endif %}">
-                                    <span class="dot" style="background-color: {{ categoria.color|default('#df6301')|e('html_attr') }};"></span>
+                                    <span class="dot" style="background-color: {{ categoria.color|default('#556b2f')|e('html_attr') }};"></span>
                                     {{ categoria.nome|e }}
                                 </a>
                             {% endfor %}
@@ -275,7 +275,7 @@
             'description': imagem.descricao|default(''),
             'url': imagem.url,
             'category': imagem.categoria_nome|default('Sem categoria'),
-            'category_color': imagem.categoria_color|default('#df6301'),
+            'category_color': imagem.categoria_color|default('#556b2f'),
             'uploaded_at': imagem.data_upload|date('c'),
             'uploaded_label': imagem.data_upload|date('d/m/Y \à\s H\hi')
         }]) %}

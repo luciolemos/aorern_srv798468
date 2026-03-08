@@ -1,22 +1,22 @@
 {% extends 'admin/layouts/base_admin.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Painel Institucional{% endblock %}
 
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-           <h2 class="fw-bold" style="color: var(--admin-primary);">
-                <i class="bi bi-speedometer2 me-2" style="color: #df6301;"></i>Painel de controle
+            <h2 class="fw-bold admin-page-title">
+                <i class="bi bi-buildings me-2 admin-page-icon-brand"></i>Painel institucional
             </h2>
-            <p class="text-muted mb-0"><i class="bi bi-calendar3 me-1" style="color: #df6301;"></i> {{ 'now'|date('d/m/Y') }}</p>
+            <p class="text-muted mb-0"><i class="bi bi-calendar3 me-1 admin-page-icon-brand"></i> {{ 'now'|date('d/m/Y') }}</p>
         </div>
         <div class="text-end">
             <small class="text-muted d-block">Último acesso</small>
-            <strong style="color: #df6301;">{{ ultimo_login|date('d/m/Y H:i') }}</strong>
+            <strong class="admin-link-brand">{{ ultimo_login|date('d/m/Y H:i') }}</strong>
         </div>
     </div>
-     <hr class="my-4">
+    <hr class="my-4">
 
     <div class="row g-4 mb-5">
         <div class="col-md-6 col-lg-3">
@@ -26,13 +26,24 @@
                         <div class="icon-box bg-success bg-opacity-10 rounded-3 p-3">
                             <i class="bi bi-people-fill fs-2 text-success"></i>
                         </div>
-                        <span class="badge bg-success bg-opacity-25 text-success">Ativos</span>
+                        <span class="badge bg-success bg-opacity-25 text-success">Base associativa</span>
                     </div>
                     <h3 class="fw-bold text-success mb-1">{{ total_pessoal }}</h3>
-                    <p class="text-muted mb-0 small">Bombeiros cadastrados</p>
-                    <div class="progress mt-3" style="height: 4px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                    <p class="text-muted mb-0 small">Associados cadastrados</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm h-100 bg-gradient-primary-light">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="icon-box icon-box-primary rounded-3 p-3">
+                            <i class="bi bi-person-badge fs-2 text-white"></i>
+                        </div>
+                        <span class="badge badge-soft-primary">Acesso interno</span>
                     </div>
+                    <h3 class="fw-bold text-primary mb-1">{{ total_usuarios }}</h3>
+                    <p class="text-muted mb-0 small">Usuários do painel</p>
                 </div>
             </div>
         </div>
@@ -41,32 +52,12 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="icon-box bg-info bg-opacity-10 rounded-3 p-3">
-                            <i class="bi bi-tools fs-2 text-info"></i>
+                            <i class="bi bi-journal-text fs-2 text-info"></i>
                         </div>
-                        <span class="badge bg-info bg-opacity-25 text-info">Disponíveis</span>
+                        <span class="badge bg-info bg-opacity-25 text-info">Comunicação</span>
                     </div>
-                    <h3 class="fw-bold text-info mb-1">{{ total_equipamentos }}</h3>
-                    <p class="text-muted mb-0 small">Equipamentos registrados</p>
-                    <div class="progress mt-3" style="height: 4px;">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 70%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-            <div class="card border-0 shadow-sm h-100 bg-gradient-danger-light">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="icon-box bg-danger bg-opacity-10 rounded-3 p-3">
-                            <i class="bi bi-bricks fs-2 text-danger"></i>
-                        </div>
-                        <span class="badge bg-danger bg-opacity-25 text-danger">Em andamento</span>
-                    </div>
-                    <h3 class="fw-bold text-danger mb-1">{{ total_obras }}</h3>
-                    <p class="text-muted mb-0 small">Obras ativas</p>
-                    <div class="progress mt-3" style="height: 4px;">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 60%"></div>
-                    </div>
+                    <h3 class="fw-bold text-info mb-1">{{ posts_publicados }}</h3>
+                    <p class="text-muted mb-0 small">Publicações publicadas</p>
                 </div>
             </div>
         </div>
@@ -75,15 +66,12 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="icon-box bg-warning bg-opacity-10 rounded-3 p-3">
-                            <i class="bi bi-tags-fill fs-2 text-warning"></i>
+                            <i class="bi bi-hourglass-split fs-2 text-warning"></i>
                         </div>
-                        <span class="badge bg-warning bg-opacity-25 text-warning">Cadastradas</span>
+                        <span class="badge bg-warning bg-opacity-25 text-warning">Pendências</span>
                     </div>
-                    <h3 class="fw-bold text-warning mb-1">{{ total_funcoes }}</h3>
-                    <p class="text-muted mb-0 small">Funções disponíveis</p>
-                    <div class="progress mt-3" style="height: 4px;">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 90%"></div>
-                    </div>
+                    <h3 class="fw-bold text-warning mb-1">{{ posts_pendentes + usuarios_pendentes }}</h3>
+                    <p class="text-muted mb-0 small">Itens aguardando tratamento</p>
                 </div>
             </div>
         </div>
@@ -91,120 +79,88 @@
 
     <div class="row g-4 mb-5">
         <div class="col-md-6 col-lg-3">
-            <div class="card border-0 shadow-sm h-100 bg-gradient-primary-light">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="icon-box icon-box-primary rounded-3 p-3">
-                            <i class="bi bi-journal-medical fs-2 text-white"></i>
-                        </div>
-                        <span class="badge badge-soft-primary">Consolidadas</span>
-                    </div>
-                    <h3 class="fw-bold text-primary mb-1">{{ total_ocorrencias|default(0) }}</h3>
-                    <p class="text-muted mb-0 small">Ocorrências registradas</p>
-                    <div class="progress mt-3" style="height: 4px;">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 95%"></div>
-                    </div>
+                    <p class="text-uppercase small fw-semibold text-muted mb-2">Comunicação</p>
+                    <h4 class="fw-bold mb-1 admin-kpi-value">{{ total_categorias_posts }}</h4>
+                    <p class="text-muted mb-0 small">Categorias editoriais</p>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="card border-0 shadow-sm h-100 bg-gradient-secondary-light">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="icon-box bg-secondary bg-opacity-10 rounded-3 p-3">
-                            <i class="bi bi-exclamation-octagon fs-2 text-secondary"></i>
-                        </div>
-                        <span class="badge bg-secondary bg-opacity-25 text-secondary">Abertas</span>
-                    </div>
-                    <h3 class="fw-bold text-secondary mb-1">{{ ocorrencias_abertas|default(0) }}</h3>
-                    <p class="text-muted mb-0 small">Em tratamento</p>
-                    <div class="progress mt-3" style="height: 4px;">
-                        <div class="progress-bar bg-secondary" role="progressbar" style="width: 50%"></div>
-                    </div>
+                    <p class="text-uppercase small fw-semibold text-muted mb-2">Galeria</p>
+                    <h4 class="fw-bold mb-1 admin-kpi-value">{{ total_categorias_galeria }}</h4>
+                    <p class="text-muted mb-0 small">Categorias de acervo</p>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="card border-0 shadow-sm h-100 bg-gradient-success-light">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="icon-box bg-success bg-opacity-10 rounded-3 p-3">
-                            <i class="bi bi-check2-circle fs-2 text-success"></i>
-                        </div>
-                        <span class="badge bg-success bg-opacity-25 text-success">Concluídas</span>
-                    </div>
-                    <h3 class="fw-bold text-success mb-1">{{ ocorrencias_concluidas|default(0) }}</h3>
-                    <p class="text-muted mb-0 small">Encerradas com relatório</p>
-                    <div class="progress mt-3" style="height: 4px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 80%"></div>
-                    </div>
+                    <p class="text-uppercase small fw-semibold text-muted mb-2">Diretoria e cargos</p>
+                    <h4 class="fw-bold mb-1 admin-kpi-value">{{ total_funcoes }}</h4>
+                    <p class="text-muted mb-0 small">Funções cadastradas</p>
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="card border-0 shadow-sm h-100 bg-gradient-dark-light">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="icon-box bg-dark bg-opacity-10 rounded-3 p-3">
-                            <i class="bi bi-person-badge fs-2 text-dark"></i>
-                        </div>
-                        <span class="badge bg-dark bg-opacity-25 text-dark">Sistema</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1">{{ total_usuarios|default(0) }}</h3>
-                    <p class="text-muted mb-0 small">Usuários cadastrados</p>
-                    <div class="progress mt-3" style="height: 4px;">
-                        <div class="progress-bar bg-dark" role="progressbar" style="width: 65%"></div>
-                    </div>
+                    <p class="text-uppercase small fw-semibold text-muted mb-2">Legado técnico</p>
+                    <h4 class="fw-bold mb-1 admin-kpi-value">{{ total_ocorrencias|default(0) }}</h4>
+                    <p class="text-muted mb-0 small">Registros herdados monitorados</p>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="card border-0 shadow-sm mb-5">
-        <div class="card-header bg-white border-bottom" style="background: linear-gradient(90deg, rgba(223,99,1,0.02), transparent) !important;">
+        <div class="card-header bg-white border-bottom admin-card-header-tint-brand">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
                 <div>
-                    <h5 class="mb-0" style="font-family: 'Roboto Condensed', sans-serif; font-weight: 700;">
-                        <i class="bi bi-lightning-charge-fill me-2" style="color: #df6301;"></i> Ações Rápidas
+                    <h5 class="mb-0 admin-card-heading-strong">
+                        <i class="bi bi-lightning-charge-fill me-2 admin-page-icon-brand"></i> Ações rápidas
                     </h5>
-                    <p class="text-muted small mb-0">Atalhos críticos para despachar equipes, atualizar efetivo e manter o acervo digital.</p>
+                    <p class="text-muted small mb-0">Atalhos principais para gestão institucional, comunicação e base associativa.</p>
                 </div>
-                <span class="badge bg-primary bg-opacity-10 text-primary mt-3 mt-md-0">Tempo médio &lt; 30s</span>
+                <span class="badge bg-primary bg-opacity-10 text-primary mt-3 mt-md-0">Modo compatível</span>
             </div>
         </div>
         <div class="card-body">
             {% set quickActions = [
                 {
-                    title: 'Registrar ocorrência',
-                    description: 'Gera protocolo, vincula responsável e já aparece no mapa operacional.',
-                    icon: 'bi-journal-plus',
-                    href: BASE_URL ~ 'admin/livro-ocorrencias/create',
-                    badge: 'Livro digital',
-                    accent: 'primary'
-                },
-                {
-                    title: 'Painel de ocorrências',
-                    description: 'Consulta atendimentos ativos, filtros por município e exportação.',
-                    icon: 'bi-activity',
-                    href: BASE_URL ~ 'admin/livro-ocorrencias',
-                    badge: 'Monitoramento',
-                    accent: 'info'
-                },
-                {
-                    title: 'Cadastrar bombeiro',
-                    description: 'Atualiza o efetivo com documentos, lotação e contato.',
+                    title: 'Cadastrar associado',
+                    description: 'Inclui novos registros na base associativa e mantém o cadastro institucional atualizado.',
                     icon: 'bi-person-plus-fill',
                     href: BASE_URL ~ 'admin/pessoal/cadastrar',
-                    badge: 'Efetivo',
+                    badge: 'Associados',
                     accent: 'success'
                 },
                 {
-                    title: 'Novo equipamento',
-                    description: 'Registra itens, vincula categoria e acompanha disponibilidade.',
-                    icon: 'bi-tools',
-                    href: BASE_URL ~ 'admin/equipamentos/cadastrar',
-                    badge: 'Logística',
-                    accent: 'warning'
+                    title: 'Gerenciar publicações',
+                    description: 'Publica notícias, comunicados e conteúdos oficiais do portal da AORERN.',
+                    icon: 'bi-journal-text',
+                    href: BASE_URL ~ 'admin/posts',
+                    badge: 'Comunicação',
+                    accent: 'primary'
+                },
+                {
+                    title: 'Núcleo institucional',
+                    description: 'Reúne a gestão inicial de conteúdos permanentes, referências oficiais e estrutura institucional da associação.',
+                    icon: 'bi-bank',
+                    href: BASE_URL ~ 'admin/institucional',
+                    badge: 'Institucional',
+                    accent: 'info'
+                },
+                {
+                    title: 'Diretoria e mandatos',
+                    description: 'Organiza governança, composição institucional e preparação do histórico de gestões.',
+                    icon: 'bi-person-workspace',
+                    href: BASE_URL ~ 'admin/diretoria',
+                    badge: 'Governança',
+                    accent: 'info'
                 }
             ] %}
 
@@ -229,29 +185,41 @@
     </div>
 
     <div class="row g-4 mb-4">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center" style="background: linear-gradient(90deg, rgba(223,99,1,0.02), transparent) !important;">
-                    <h5 class="mb-0" style="font-family: 'Roboto Condensed', sans-serif; font-weight: 700;">
-                        <i class="bi bi-clock-history me-2" style="color: #df6301;"></i> Últimos Cadastros
+                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center admin-card-header-tint-brand">
+                    <h5 class="mb-0 admin-card-heading-strong">
+                        <i class="bi bi-people-fill me-2 admin-page-icon-brand"></i> Base associativa recente
                     </h5>
-                    <span class="badge" style="background-color: #df6301;">Recente</span>
+                    <a href="{{ BASE_URL }}admin/pessoal" class="text-decoration-none small fw-semibold admin-link-brand">Ver todos</a>
                 </div>
                 <div class="card-body">
-                    <h6 class="text-muted text-uppercase small mb-3">Bombeiros</h6>
-                    <div class="list-group list-group-flush mb-4">
+                    <div class="list-group list-group-flush">
                         {% if ultimos_bombeiros is not empty %}
                             {% for func in ultimos_bombeiros %}
                                 <div class="list-group-item border-0 px-0 py-2">
                                     <div class="d-flex align-items-center">
-                                        {% if func.avatar is not empty and func.avatar %}
-                                            <img src="{{ BASE_URL }}{{ func.avatar|e('html_attr') }}"
-                                                 alt="{{ func.nome|default('')|e('html_attr') }}"
-                                                 class="rounded-circle shadow-sm me-3"
-                                                 style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #28a745;">
+                                        {% set associatePhotoSrc = null %}
+                                        {% if func.foto is not empty %}
+                                            {% if func.foto starts with 'http://' or func.foto starts with 'https://' %}
+                                                {% set associatePhotoSrc = func.foto %}
+                                            {% else %}
+                                                {% set associatePhotoSrc = BASE_URL ~ func.foto %}
+                                            {% endif %}
+                                        {% elseif func.user_avatar is not empty %}
+                                            {% if func.user_avatar starts with 'http://' or func.user_avatar starts with 'https://' %}
+                                                {% set associatePhotoSrc = func.user_avatar %}
+                                            {% else %}
+                                                {% set associatePhotoSrc = BASE_URL ~ func.user_avatar %}
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if associatePhotoSrc %}
+                                            <img src="{{ associatePhotoSrc|e('html_attr') }}"
+                                                 alt="{{ func.nome|default('Associado')|e('html_attr') }}"
+                                                 class="rounded-circle shadow-sm me-3 admin-avatar-square-40">
                                         {% else %}
-                                            <span class="rounded-circle d-inline-flex align-items-center justify-content-center bg-success text-white fw-bold me-3"
-                                                  style="width: 40px; height: 40px; font-size: 16px;">
+                                            <span class="rounded-circle d-inline-flex align-items-center justify-content-center bg-success text-white fw-bold me-3 admin-avatar-square-40">
                                                 {{ (func.nome|default('?'))[0:1]|upper }}
                                             </span>
                                         {% endif %}
@@ -259,95 +227,75 @@
                                             <p class="mb-0 fw-semibold">{{ func.nome|default('N/A')|e }}</p>
                                             <small class="text-muted">{{ func.funcao_nome|default('Sem função')|e }}</small>
                                         </div>
-                                        {% if func.telefone %}
-                                            {% set telefone_digitos = '' %}
-                                            {% for c in func.telefone %}
-                                                {% if c in '0123456789' %}
-                                                    {% set telefone_digitos = telefone_digitos ~ c %}
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if telefone_digitos|length == 11 %}
-                                                <small class="text-muted"><i class="bi bi-telephone me-1"></i>({{ telefone_digitos[0:2] }}) {{ telefone_digitos[2] }} {{ telefone_digitos[3:7] }}-{{ telefone_digitos[7:11] }}</small>
-                                            {% else %}
-                                                <small class="text-muted"><i class="bi bi-telephone me-1"></i>{{ func.telefone|e }}</small>
-                                            {% endif %}
-                                        {% else %}
-                                            <small class="text-muted">Sem telefone</small>
-                                        {% endif %}
                                     </div>
                                 </div>
                             {% endfor %}
                         {% else %}
-                            <p class="text-muted text-center py-3">Nenhum bombeiro cadastrado ainda</p>
-                        {% endif %}
-                    </div>
-
-                    <h6 class="text-muted text-uppercase small mb-3">Equipamentos</h6>
-                    <div class="list-group list-group-flush">
-                        {% if ultimos_equipamentos is not empty %}
-                            {% for eqp in ultimos_equipamentos %}
-                                <div class="list-group-item border-0 px-0 py-2">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-box bg-info bg-opacity-10 rounded-circle p-2 me-3">
-                                            <i class="bi bi-tools text-info"></i>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <p class="mb-0 fw-semibold">{{ eqp.nome|default('N/A')|e }}</p>
-                                            <small class="text-muted">{{ eqp.categoria|default('Sem categoria')|e }}</small>
-                                        </div>
-                                        <small class="text-muted">ID #{{ eqp.id }}</small>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            <p class="text-muted text-center py-3">Nenhum equipamento cadastrado ainda</p>
+                            <p class="text-muted text-center py-3 mb-0">Nenhum associado cadastrado ainda</p>
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center" style="background: linear-gradient(90deg, rgba(220,53,69,0.02), transparent) !important;">
-                    <h5 class="mb-0" style="font-family: 'Roboto Condensed', sans-serif; font-weight: 700;">
-                        <i class="bi bi-building me-2" style="color: #dc3545;"></i> Obras Recentes
+                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center admin-card-header-tint-primary">
+                    <h5 class="mb-0 admin-card-heading-strong">
+                        <i class="bi bi-megaphone me-2 text-primary"></i> Comunicação recente
                     </h5>
-                    <a href="{{ BASE_URL }}admin/obras" class="text-decoration-none small fw-semibold" style="color: #dc3545;">Ver todas</a>
+                    <a href="{{ BASE_URL }}admin/posts" class="text-decoration-none small fw-semibold text-primary">Ver posts</a>
                 </div>
                 <div class="card-body">
-                    {% if ultimas_obras is not empty %}
-                        {% for obra in ultimas_obras %}
-                            <div class="card mb-3 border-start border-4 border-danger">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <h6 class="mb-1 fw-bold">{{ obra.descricao|default('Obra sem descrição')|e }}</h6>
-                                        <span class="badge bg-danger">{{ obra.status|default('Ativa')|e }}</span>
-                                    </div>
-                                    <p class="text-muted small mb-2">
-                                        <i class="bi bi-geo-alt me-1"></i> {{ obra.endereco|default('Endereço não informado')|e }}
-                                    </p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">
-                                            <i class="bi bi-calendar3 me-1"></i>
-                                            Início: {{ obra.data_inicio|default('N/A')|e }}
-                                        </small>
-                                        <a href="{{ BASE_URL }}admin/obras/detalhes/{{ obra.id }}" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-eye me-1"></i> Ver
-                                        </a>
+                    <div class="list-group list-group-flush">
+                        {% if ultimos_posts is not empty %}
+                            {% for post in ultimos_posts %}
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <div class="d-flex justify-content-between gap-3">
+                                        <div>
+                                            <p class="mb-1 fw-semibold">{{ post.titulo|default('Sem título')|e }}</p>
+                                            <small class="text-muted">{{ post.categoria_nome|default('Sem categoria')|e }}</small>
+                                        </div>
+                                        <span class="badge bg-light text-dark text-uppercase">{{ post.status|default('draft')|e }}</span>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="text-center py-5">
-                            <i class="bi bi-building display-1 text-muted opacity-25"></i>
-                            <p class="text-muted mt-3">Nenhuma obra cadastrada ainda</p>
-                            <a href="{{ BASE_URL }}admin/obras/cadastrar" class="btn btn-danger">
-                                <i class="bi bi-plus-circle me-1"></i> Cadastrar Obra
-                            </a>
-                        </div>
-                    {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted text-center py-3 mb-0">Nenhuma publicação cadastrada ainda</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center admin-card-header-tint-info">
+                    <h5 class="mb-0 admin-card-heading-strong">
+                        <i class="bi bi-image me-2 text-info"></i> Acervo visual recente
+                    </h5>
+                    <a href="{{ BASE_URL }}admin/galeria" class="text-decoration-none small fw-semibold text-info">Ver galeria</a>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% if ultimas_imagens is not empty %}
+                            {% for imagem in ultimas_imagens %}
+                                <div class="list-group-item border-0 px-0 py-2">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="icon-box bg-info bg-opacity-10 rounded-circle p-2">
+                                            <i class="bi bi-image text-info"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <p class="mb-1 fw-semibold">{{ imagem.titulo|default('Imagem sem título')|e }}</p>
+                                            <small class="text-muted">{{ imagem.categoria_nome|default('Sem categoria')|e }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted text-center py-3 mb-0">Nenhuma imagem cadastrada ainda</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

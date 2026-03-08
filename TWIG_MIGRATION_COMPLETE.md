@@ -2,7 +2,7 @@
 
 ## Summary
 
-Successfully migrated the CBMRN public website from PHP to Twig templating engine while maintaining 100% admin dashboard compatibility. The new architecture uses a parallel rendering system: **Twig for public site views** and **PHP for admin dashboard**.
+Successfully migrated the AORE/RN public website from PHP to Twig templating engine while maintaining 100% admin dashboard compatibility. The new architecture uses a parallel rendering system: **Twig for public site views** and **PHP for admin dashboard**.
 
 ---
 
@@ -255,7 +255,7 @@ app/
 ## 🎨 Design Features
 
 ### Color Scheme
-- **Primary**: `#df6301` (Laranja CBMRN)
+- **Primary**: `#556b2f` (Verde AORE/RN)
 - **Dark**: `#b54f01` (Laranja escuro)
 - **Light**: `#ed7f22` (Laranja claro)
 

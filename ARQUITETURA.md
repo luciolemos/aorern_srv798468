@@ -126,10 +126,10 @@ include 'components/navbar.php';
 
 ### Variáveis Globais
 ```css
---cbmrn-orange: #df6301
---cbmrn-orange-dark: #b54f01
---cbmrn-white: #ffffff
---cbmrn-dark: #212529
+--aorern-primary: #556b2f
+--aorern-primary-dark: #3f4f22
+--aorern-white: #ffffff
+--aorern-dark: #212529
 ```
 
 ### Dimensões

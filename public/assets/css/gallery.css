@@ -2,16 +2,8 @@ body.no-scroll {
     overflow: hidden;
 }
 
-.gallery-hero {
- background: linear-gradient(130deg, #0f1f2d 0%, #1f2f44 45%, #1b283b 100%);
-}
-
-.gallery-hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath fill='none' stroke='rgba(255,255,255,0.06)' d='M0 80h160M80 0v160'/%3E%3C/svg%3E");
-    opacity: 0.6;
+.gallery-hero.site-hero {
+    background: var(--site-hero-background);
 }
 
 .gallery-hero .container {
@@ -32,8 +24,8 @@ body.no-scroll {
 }
 
 .gallery-filters-wrapper {
-    background: linear-gradient(180deg, #fffdfb 0%, #fff5ec 100%);
-    border: 1px solid rgba(223, 99, 1, 0.15);
+    background: var(--site-surface-soft-gradient);
+    border: 1px solid rgba(85, 107, 47, 0.15);
     border-radius: 1.5rem;
     padding: 0.75rem;
     box-shadow: 0 22px 45px rgba(0, 0, 0, 0.25);
@@ -48,15 +40,15 @@ body.no-scroll {
 
 .gallery-filters .form-control,
 .gallery-filters .form-select {
-    border: 1px solid rgba(223, 99, 1, 0.25);
+    border: 1px solid rgba(85, 107, 47, 0.25);
     border-radius: 0.85rem;
     padding: 0.75rem 1rem;
 }
 
 .gallery-filters .form-control:focus,
 .gallery-filters .form-select:focus {
-    border-color: var(--bombeiros-orange, #df6301);
-    box-shadow: 0 0 0 0.25rem rgba(223, 99, 1, 0.15);
+    border-color: var(--brand-primary, #556b2f);
+    box-shadow: 0 0 0 0.25rem rgba(85, 107, 47, 0.15);
 }
 
 .gallery-filters .gallery-filters-actions {
@@ -151,8 +143,8 @@ body.no-scroll {
 }
 
 .gallery-pill-reset:hover {
-    color: var(--bombeiros-orange, #df6301);
-    border-color: rgba(223,99,1,0.5);
+    color: var(--brand-primary, #556b2f);
+    border-color: rgba(85,107,47,0.5);
 }
 
 .gallery-pill.disabled,
@@ -165,10 +157,10 @@ body.no-scroll {
 
 .gallery-pill:hover,
 .gallery-pill.active {
-    background: var(--bombeiros-orange, #df6301);
+    background: var(--brand-primary, #556b2f);
     color: #fff;
     transform: translateY(-1px);
-    border-color: var(--bombeiros-orange, #df6301);
+    border-color: var(--brand-primary, #556b2f);
 }
 
 .gallery-pill:hover .dot,
@@ -214,7 +206,7 @@ body.no-scroll {
     border: 1px dashed rgba(15,31,51,0.18);
     border-radius: 1.1rem;
     padding: 1rem 1.25rem 1.25rem;
-    background: linear-gradient(180deg, #fffefe 0%, #fff6ed 100%);
+    background: var(--site-surface-soft-gradient);
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -324,7 +316,7 @@ body.no-scroll {
 }
 
 .gallery-grid-section {
-    background: #f4f7fb;
+    background: var(--site-surface-gradient);
 }
 
 .gallery-grid-section .section-header {
@@ -334,6 +326,7 @@ body.no-scroll {
 .gallery-grid-section .section-header h2 {
     font-weight: 700;
     font-size: clamp(2rem, 4vw, 2.8rem);
+    color: var(--site-title-color);
 }
 
 .gallery-card {
@@ -427,9 +420,9 @@ body.no-scroll {
 }
 
 .gallery-pagination .page-link {
-    color: var(--bombeiros-orange, #df6301);
+    color: var(--brand-primary, #556b2f);
     border-radius: 0;
-    border: 1px solid rgba(223, 99, 1, 0.3);
+    border: 1px solid rgba(85, 107, 47, 0.3);
     font-weight: 600;
     margin-left: -1px;
 }
@@ -446,8 +439,8 @@ body.no-scroll {
 }
 
 .gallery-pagination .page-item.active .page-link {
-    background-color: var(--bombeiros-orange, #df6301);
-    border-color: var(--bombeiros-orange, #df6301);
+    background-color: var(--brand-primary, #556b2f);
+    border-color: var(--brand-primary, #556b2f);
     color: #fff;
 }
 

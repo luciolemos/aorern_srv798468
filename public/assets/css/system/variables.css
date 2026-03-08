@@ -1,9 +1,9 @@
 :root {
-    --color-primary: #df6301;
-    --color-primary-dark: #c55501;
-    --color-primary-light: #fbe1cd;
-    --color-secondary: #006989;
-    --color-accent: #198754;
+    --color-primary: #556b2f;
+    --color-primary-dark: #3f4f22;
+    --color-primary-light: #dbe4cf;
+    --color-secondary: #0082c8;
+    --color-accent: #8b1e2d;
     --color-neutral-900: #0f0f10;
     --color-neutral-800: #1c1c1e;
     --color-neutral-700: #2f3033;
@@ -11,7 +11,7 @@
     --color-neutral-100: #f7f7f9;
 
     --surface-elevated: #ffffff;
-    --surface-muted: #fff4ea;
+    --surface-muted: #eef2e8;
 
     --shadow-soft: 0 14px 40px rgba(0, 0, 0, 0.08);
     --shadow-card: 0 18px 50px rgba(0, 0, 0, 0.12);
@@ -20,15 +20,113 @@
     --radius-md: 1rem;
     --radius-lg: 1.5rem;
 
+    --button-height-sm: 2.5rem;
+    --button-height-md: 3rem;
+    --button-height-lg: 3.5rem;
+    --button-padding-x-sm: 1rem;
+    --button-padding-x-md: 1.35rem;
+    --button-padding-x-lg: 1.65rem;
+    --button-radius-sm: 0.75rem;
+    --button-radius-md: 0.9rem;
+    --button-radius-lg: 1rem;
+    --button-gap: 0.5rem;
+    --button-font-weight: 600;
+    --button-line-height: 1.1;
+    --button-icon-size: 1.05rem;
+
     --font-heading: 'Roboto Condensed', 'Roboto', Arial, sans-serif;
     --font-body: 'Roboto', Arial, sans-serif;
+    --font-body-line-height: 1.6;
+    --heading-line-height: 1.15;
+    --heading-letter-spacing: 0.02em;
+
+    --site-title-color: #152036;
+    --site-text-color: #2b3440;
+    --site-text-muted: #5f6b79;
+
+    --site-hero-linear-gradient: linear-gradient(135deg, #253a17 0%, #3b5323 52%, #556b2f 100%);
+    --site-hero-highlight: radial-gradient(circle at top right, rgba(231, 209, 72, 0.2), transparent 34%);
+    --site-hero-gradient: var(--site-hero-linear-gradient);
+    --site-hero-background: var(--site-hero-highlight), var(--site-hero-linear-gradient);
+    --site-hero-pattern-a: radial-gradient(circle at 18% 18%, rgba(255,255,255,0.2), transparent 45%);
+    --site-hero-pattern-b: radial-gradient(circle at 82% 8%, rgba(255,255,255,0.08), transparent 35%);
+    --site-hero-pattern-c: repeating-linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.04) 2px, transparent 2px, transparent 8px);
+    --site-hero-pattern-opacity: 0.32;
+    --site-hero-overlay: rgba(255, 255, 255, 0.78);
+
+    --site-surface-gradient: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    --site-surface-soft-gradient: linear-gradient(180deg, #fffdfb 0%, #fff5ec 100%);
+
+    --site-card-bg: #ffffff;
+    --site-card-border: rgba(85, 107, 47, 0.15);
+    --site-card-shadow: 0 12px 32px rgba(6, 18, 33, 0.08);
+
+    --site-icon-surface: rgba(85, 107, 47, 0.12);
+    --site-accent-gradient: linear-gradient(135deg, #556b2f 0%, #0082c8 100%);
+
+    --motion-duration-fast: 160ms;
+    --motion-duration-base: 240ms;
+    --motion-duration-slow: 320ms;
+    --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --motion-ease-emphasis: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    --section-rhythm-y: clamp(3rem, 6vw, 5rem);
+
+    --site-navbar-height-desktop: 80px;
+    --site-navbar-height-mobile: 80px;
+    --site-navbar-logo-size-desktop: 48px;
+    --site-navbar-logo-size-mobile: 48px;
+    --site-navbar-brand-gap: 0.5rem;
+    --site-navbar-link-padding-y: 0.55rem;
+    --site-navbar-link-padding-x: 0.9rem;
 
     --section-kicker-letter-spacing: 0.08em;
     --section-title-weight: 700;
+
+    /* Tipografia de marca */
+    --font-brand: 'Montserrat', 'Roboto Condensed', Arial, sans-serif;
+    --font-heading-display: 'Georgia', 'Times New Roman', serif;
+
+    /* Escala de marca (aliases globais para módulos legados) */
+    --brand-primary: var(--color-primary);
+    --brand-primary-dark: var(--color-primary-dark);
+    --brand-primary-light: var(--color-primary-light);
+    --brand-secondary: var(--color-secondary);
+    --brand-accent: var(--color-accent);
+    --brand-white: #ffffff;
+    --brand-surface: var(--surface-elevated);
+    --brand-surface-muted: var(--surface-muted);
+    --brand-text: var(--site-text-color);
+    --brand-text-muted: var(--site-text-muted);
+
+    /* Navbar pública */
+    --navbar-site-surface: var(--brand-primary);
+    --navbar-site-panel: rgba(32, 45, 23, 0.97);
+    --navbar-site-panel-gradient: linear-gradient(180deg, var(--navbar-site-surface) 0%, rgba(49, 67, 35, 0.98) 18%, var(--navbar-site-panel) 100%);
+    --navbar-site-panel-border: rgba(255, 255, 255, 0.12);
+    --navbar-site-panel-shadow: 0 16px 40px rgba(1, 10, 45, 0.28);
+    --navbar-site-accent: #d6e3b6;
+
+    /* Sidebar/admin */
+    --admin-sidebar-width: 320px;
+    --admin-navbar-height: var(--site-navbar-height-desktop);
+    --admin-surface: #f8f9fa;
+    --admin-content-bg: #f5f7fa;
+    --admin-shadow-sm: 0 0.125rem 0.25rem rgba(63, 79, 34, 0.12);
+    --admin-shadow-lg: 0 0.5rem 1rem rgba(63, 79, 34, 0.18);
+
+    /* Footer */
+    --footer-brand-primary: var(--brand-primary);
+    --footer-brand-primary-dark: var(--brand-primary-dark);
+    --footer-brand-white: var(--brand-white);
+    --footer-brand-light-gray: #f8f9fa;
+    --footer-brand-text-muted: #6c757d;
+    --footer-surface-gradient: linear-gradient(135deg, rgba(85, 107, 47, 0.9) 0%, rgba(63, 79, 34, 0.92) 100%);
 
     /* Aliases usados por módulos existentes */
     --inst-primary: var(--color-primary);
     --inst-primary-dark: var(--color-primary-dark);
     --inst-bg: var(--surface-muted);
-    --inst-muted: #6c757d;
+    --inst-muted: var(--site-text-muted);
+    --inst-hero-gradient: var(--site-hero-background);
 }

@@ -1,0 +1,246 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Visualizar Associado - Admin{% endblock %}
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1 admin-page-title"><i class="bi bi-person-vcard me-2"></i>Visualizar associado</h2>
+            <p class="text-muted mb-0">Consulta de dados cadastrais em modo somente leitura.</p>
+        </div>
+        <div class="d-flex flex-column flex-sm-row align-items-stretch gap-2">
+            <a href="{{ BASE_URL }}admin/pessoal/editar/{{ registro.id }}" class="btn btn-theme w-100 w-sm-auto">
+                <i class="bi bi-pencil-square me-1"></i> Editar
+            </a>
+            <a href="{{ BASE_URL }}admin/pessoal" class="btn btn-outline-secondary w-100 w-sm-auto">
+                <i class="bi bi-arrow-left me-1"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    {% set associadoFoto = registro.foto|default('') ?: registro.user_avatar|default('') %}
+    {% set status = registro.status|default('Ativo') %}
+    {% set assocStatus = registro.status_associativo|default('provisorio') %}
+
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold admin-section-title">
+                        <i class="bi bi-person-vcard me-2"></i>Dados pessoais
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% set elegivelAcesso = registro.status == 'Ativo' and registro.status_associativo == 'efetivo' %}
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-3 text-center">
+                            {% if associadoFoto is not empty %}
+                                <img src="{{ BASE_URL }}{{ associadoFoto|e('html_attr') }}"
+                                     alt="{{ registro.nome|default('Associado')|e('html_attr') }}"
+                                     class="rounded shadow-sm admin-avatar-square-220">
+                            {% else %}
+                                <img src="{{ BASE_URL }}assets/images/conscrito.png"
+                                     alt="Imagem padrão de associado"
+                                     class="rounded shadow-sm admin-avatar-square-220">
+                            {% endif %}
+                        </div>
+                        <div class="col-12 col-lg-9">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Código do associado</label>
+                                    <input type="text" class="form-control" value="{{ registro.staff_id|default('-')|e('html_attr') }}" readonly>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="form-label fw-bold">Nome completo</label>
+                                    <input type="text" class="form-control" value="{{ registro.nome|default('-')|e('html_attr') }}" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">CPF</label>
+                                    <input type="text" class="form-control" value="{{ registro.cpf|default('-')|e('html_attr') }}" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Data de nascimento</label>
+                                    <input type="text" class="form-control" value="{{ registro.nascimento ? registro.nascimento|date('d/m/Y') : '-' }}" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">Telefone</label>
+                                    <input type="text" class="form-control" value="{{ registro.telefone|default('-')|e('html_attr') }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold admin-section-title">
+                        <i class="bi bi-diagram-3 me-2"></i>Vínculo associativo
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Data de ingresso</label>
+                            <input type="text" class="form-control" value="{{ registro.data_admissao ? registro.data_admissao|date('d/m/Y') : '-' }}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Status</label>
+                            <input type="text" class="form-control" value="{{ status|e('html_attr') }}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Status associativo</label>
+                            <input type="text" class="form-control" value="{{ assocStatus == 'efetivo' ? 'Sócio Efetivo' : (assocStatus == 'honorario' ? 'Sócio Honorário' : (assocStatus == 'fundador' ? 'Sócio Fundador' : (assocStatus == 'benemerito' ? 'Sócio Benemérito' : (assocStatus == 'veterano' ? 'Sócio Veterano' : (assocStatus == 'aluno' ? 'Sócio Aluno' : 'Sócio Provisório'))))) }}" readonly>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Observações</label>
+                            <textarea class="form-control" rows="4" readonly>{{ registro.observacoes|default('')|e }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold admin-section-title">
+                        <i class="bi bi-journal-text me-2"></i>Dados da filiação
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if filiacao %}
+                        {% set filiacaoCidade = filiacao.cidade|default('') %}
+                        {% set filiacaoUf = filiacao.uf|default('') %}
+                        {% set localizacao = filiacaoCidade and filiacaoUf ? filiacaoCidade ~ '/' ~ filiacaoUf : (filiacaoCidade ?: '-') %}
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">CAM</label>
+                                <input type="text" class="form-control" value="{{ filiacao.cam|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">RG</label>
+                                <input type="text" class="form-control" value="{{ filiacao.rg|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Nascimento (ficha)</label>
+                                <input type="text" class="form-control" value="{{ filiacao.data_nascimento ? filiacao.data_nascimento|date('d/m/Y') : '-' }}" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Nome da mãe</label>
+                                <input type="text" class="form-control" value="{{ filiacao.nome_mae|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Nome do pai</label>
+                                <input type="text" class="form-control" value="{{ filiacao.nome_pai|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">UF</label>
+                                <input type="text" class="form-control" value="{{ filiacaoUf ? filiacaoUf|upper : '-' }}" readonly>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label fw-bold">Cidade</label>
+                                <input type="text" class="form-control" value="{{ localizacao|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Posto/Graduação</label>
+                                <input type="text" class="form-control" value="{{ filiacao.posto_graduacao|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Nº</label>
+                                <input type="text" class="form-control" value="{{ filiacao.numero_militar|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Nome de guerra</label>
+                                <input type="text" class="form-control" value="{{ filiacao.nome_guerra|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Arma / quadro / serviço</label>
+                                <input type="text" class="form-control" value="{{ filiacao.arma_quadro|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Ano NPOR</label>
+                                <input type="text" class="form-control" value="{{ filiacao.ano_npor|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Denominação da turma</label>
+                                <input type="text" class="form-control" value="{{ filiacao.turma_npor|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-light border mb-0">
+                            Não há ficha de filiação vinculada a este associado.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold admin-section-title">
+                        <i class="bi bi-person-workspace me-2"></i>Acesso institucional
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Conta vinculada</label>
+                            <input type="text" class="form-control" value="{{ registro.user_id ? 'Sim' : 'Não' }}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Usuário</label>
+                            <input type="text" class="form-control" value="{{ registro.user_username|default('-')|e('html_attr') }}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Perfil no painel</label>
+                            <input type="text" class="form-control" value="{{ attribute(roleLabels, registro.user_role|default('usuario'))|default('-') }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">E-mail da conta</label>
+                            <input type="text" class="form-control" value="{{ registro.user_email|default('-')|e('html_attr') }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Status da conta</label>
+                            {% set accessStatus = registro.user_status|default('') %}
+                            <input type="text" class="form-control" value="{{ accessStatus ? accessStatus|capitalize : 'Sem acesso' }}" readonly>
+                        </div>
+                        <div class="col-12">
+                            {% if not elegivelAcesso %}
+                                <div class="alert alert-warning mb-0">
+                                    Apenas associados com status <strong>Ativo</strong> e associativo <strong>Sócio Efetivo</strong> podem receber acesso ao portal.
+                                </div>
+                            {% elseif registro.user_id %}
+                                <div class="alert alert-light border mb-0">
+                                    Este associado já possui credencial básica liberada.
+                                </div>
+                            {% elseif accessDefaults.has_application and accessDefaults.application_status == 'aprovada' %}
+                                <div class="alert alert-light border mb-0">
+                                    A liberação usará os dados informados pelo associado na solicitação de filiação aprovada.
+                                </div>
+                            {% else %}
+                                <div class="alert alert-warning mb-0">
+                                    Não existe solicitação de filiação aprovada com credencial válida para este associado.
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Usuário da inscrição</label>
+                            <input type="text" class="form-control" value="{{ accessDefaults.username|default('-')|e('html_attr') }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">E-mail da inscrição</label>
+                            <input type="text" class="form-control" value="{{ accessDefaults.email|default('-')|e('html_attr') }}" readonly>
+                        </div>
+                        <div class="col-12 d-flex justify-content-start">
+                            <form method="post" action="{{ BASE_URL }}admin/pessoal/acesso/{{ registro.id }}" class="admin-mobile-full-btn-wrap">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                <input type="hidden" name="redirect_to" value="visualizar">
+                                <button type="submit" class="btn {{ registro.user_id ? 'btn-primary btn-access-liberado' : 'btn-theme' }} admin-mobile-full-btn" {% if registro.user_id or not (elegivelAcesso and accessDefaults.has_application and accessDefaults.application_status == 'aprovada') %}disabled{% endif %}>
+                                    <i class="bi bi-shield-check me-1"></i> {{ registro.user_id ? 'Acesso já liberado' : 'Liberar acesso' }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

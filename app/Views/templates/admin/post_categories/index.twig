@@ -1,12 +1,12 @@
 {% extends 'admin/layouts/base_admin.twig' %}
 
-{% block title %}Categorias de Posts - Admin{% endblock %}
+{% block title %}Categorias Editoriais - Admin{% endblock %}
 
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
     <div data-aos="fade-down" class="mb-4">
-        <h2 class="text-primary"><i class="bi bi-tags me-2"></i> Categorias de Posts</h2>
-        <p class="lead text-muted">Gerencie categorias de posts do blog</p>
+        <h2 class="text-primary"><i class="bi bi-tags me-2"></i> Categorias editoriais</h2>
+        <p class="lead text-muted">Organize notícias, comunicados e conteúdos institucionais do portal.</p>
         <hr class="my-4">
         <div class="d-flex flex-column flex-md-row gap-2 w-100 justify-content-md-start mt-4 mb-4">
             <a href="{{ BASE_URL }}admin/post-categories/create" class="btn btn-primary text-white">
@@ -16,7 +16,7 @@
                 <i class="bi bi-plus-circle me-1"></i> Novo post
             </a> #}
             <a href="{{ BASE_URL }}admin/posts" class="btn btn-outline-primary">
-                <i class="bi bi-journal-text me-1"></i> Posts
+                <i class="bi bi-journal-text me-1"></i> Publicações
             </a>
             <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
                 <i class="bi bi-speedometer2 me-1"></i> Painel
@@ -69,8 +69,8 @@
                         <td>{{ cat.nome|e }}</td>
                         <td><code class="text-muted">{{ cat.slug|e }}</code></td>
                         <td>
-                            <span class="badge text-uppercase" style="background-color: {{ cat.badge_color|default('#df6301') }}; color: #fff;">
-                                {{ cat.badge_color|default('#df6301') }}
+                            <span class="badge text-uppercase" style="background-color: {{ cat.badge_color|default('#556b2f') }}; color: #fff;">
+                                {{ cat.badge_color|default('#556b2f') }}
                             </span>
                         </td>
                         <td class="text-center">

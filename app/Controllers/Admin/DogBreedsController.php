@@ -383,12 +383,12 @@ class DogBreedsController extends Controller
 
     private function resolvePublicRoot(): string
     {
-        $docRoot = $_SERVER['DOCUMENT_ROOT'] ?? '';
-        if ($docRoot !== '') {
-            return rtrim($docRoot, '/');
+        $projectPublic = rtrim(dirname(__DIR__, 3) . '/public', '/');
+        if (is_dir($projectPublic)) {
+            return $projectPublic;
         }
 
-        return rtrim(dirname(__DIR__, 3) . '/public', '/');
+        return rtrim((string) ($_SERVER['DOCUMENT_ROOT'] ?? $projectPublic), '/');
     }
 
     private function flashAndRedirect(string $type, string $message, string $path): void

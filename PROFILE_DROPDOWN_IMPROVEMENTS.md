@@ -110,7 +110,7 @@ $_SESSION['user_avatar'] = $user['avatar'];
 ```
 ┌─────────────────────────────────────────┐
 │  [Avatar 48px]  Admin                   │
-│  admin@cbmrn.gov.br                     │
+│  admin@aorern.org.br                    │
 │  [Badge: Admin]                         │
 ├─────────────────────────────────────────┤
 │  👤 Meu Perfil                          │
@@ -127,7 +127,7 @@ $_SESSION['user_avatar'] = $user['avatar'];
 
 **Usuário Admin:**
 - Username: `admin`
-- Email: `admin@cbmrn.gov.br`
+- Email: `admin@aorern.org.br`
 - Password: `1234`
 - Role: `admin`
 - Avatar: `NULL` (usa inícial "A" em fundo branco)

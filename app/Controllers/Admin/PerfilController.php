@@ -89,7 +89,7 @@ class PerfilController extends Controller {
                 // Remove avatar antigo se existir
                 $user = $this->userModel->buscarPorId($user_id);
                 if ($user && !empty($user['avatar'])) {
-                    $old_avatar = $_SERVER['DOCUMENT_ROOT'] . '/' . $user['avatar'];
+                    $old_avatar = $this->resolvePublicRoot() . '/' . ltrim((string) $user['avatar'], '/');
                     if (file_exists($old_avatar)) {
                         @unlink($old_avatar);
                     }
@@ -155,7 +155,7 @@ class PerfilController extends Controller {
         // Remove avatar antigo se existir
         $user = $this->userModel->buscarPorId($user_id);
         if ($user && !empty($user['avatar'])) {
-            $old_avatar = $_SERVER['DOCUMENT_ROOT'] . '/' . $user['avatar'];
+            $old_avatar = $this->resolvePublicRoot() . '/' . ltrim((string) $user['avatar'], '/');
             if (file_exists($old_avatar)) {
                 @unlink($old_avatar);
             }
@@ -283,7 +283,7 @@ class PerfilController extends Controller {
         }
 
         // Caminho absoluto
-        $publicRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? (dirname(__DIR__, 3) . '/public'), '/');
+        $publicRoot = $this->resolvePublicRoot();
         $upload_dir = $publicRoot . '/' . self::USER_AVATAR_DIR;
 
         // Garante que o diretório existe
@@ -320,5 +320,15 @@ class PerfilController extends Controller {
         @chmod($filepath, 0644);
 
         return self::USER_AVATAR_DIR . $filename;
+    }
+
+    private function resolvePublicRoot(): string
+    {
+        $projectPublic = rtrim(dirname(__DIR__, 3) . '/public', '/');
+        if (is_dir($projectPublic)) {
+            return $projectPublic;
+        }
+
+        return rtrim((string) ($_SERVER['DOCUMENT_ROOT'] ?? $projectPublic), '/');
     }
 }

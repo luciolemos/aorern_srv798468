@@ -1,241 +1,178 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}CBMRN - 2º SGB/2º GBM{% endblock %}
+{% block title %}AORE/RN - Associação dos Oficiais da Reserva do Exército{% endblock %}
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/home.css">     
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/home.css?v=20260307-sponsors1">     
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            const carouselEl = document.getElementById('homeSponsorsCarousel');
+            if (!carouselEl) return;
+
+            const thumbs = Array.from(document.querySelectorAll('.home-sponsor-thumb[data-bs-slide-to]'));
+            if (!thumbs.length) return;
+
+            carouselEl.addEventListener('slide.bs.carousel', function (event) {
+                const nextIndex = Number(event.to);
+                thumbs.forEach((thumb, index) => {
+                    const isActive = index === nextIndex;
+                    thumb.classList.toggle('active', isActive);
+                    if (isActive) {
+                        thumb.setAttribute('aria-current', 'true');
+                    } else {
+                        thumb.removeAttribute('aria-current');
+                    }
+                });
+            });
+        })();
+    </script>
 {% endblock %}
 
 {% block content %}
-    {% set profissionais = (totalProfissionais is defined and totalProfissionais > 0) ? totalProfissionais : '50+' %}
-
     <section class="home-hero site-hero">
-                <div class="site-hero-pattern"></div>
-            <div class="container-fluid position-relative px-3 px-md-4">
-                <div class="row justify-content-center">
-                    <div class="col-xl-8 col-lg-9">
-                        <div class="hero-content text-center home-hero-intro">
-                            <div class="home-hero-logo mt-5 mb-4">
-                                <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="Brasão oficial do CBMRN" class="img-fluid">
-                            </div>
-                            {# <p class="section-kicker text-white-50 mb-2">Comando especializado do litoral sul</p> #}
-                            <h1 class="home-hero-title text-white mb-2">CBMRN</h1>
-                            {# <h1 class="home-hero-title text-white mb-2">CBMRN<br> · </h1> #}
-                            {# <h2 class="home-hero-subheading text-white-75 fw-semibold mb-3">Resposta rápida e tecnologia aplicada à proteção dos 25 municípios atendidos</h2> #}
-                            <h2 class="home-hero-subheading text-white-75 fw-semibold mb-2">2º SUBGRUPAMENTO DE BOMBEIROS MILITAR</h2>
-                            {# <h2 class="home-hero-subheading text-white-75 fw-semibold mb-2">2º SGB/2º GBM</h2> #}
-                            <p class="text-white mb-4" style="font-size: 1.1rem; line-height: 1.7; max-width: 600px; opacity: 0.92; margin: 0 auto;"><i>"Alienam vitam et bona salvare"</i></p>
-                            {# <p class="section-lead text-white-75 mb-4">Baseados em Goianinha, garantimos cobertura 24/7 com equipes treinadas, protocolos digitais e integração permanente com SAMU, Defesa Civil e demais parceiros regionais.</p> #}
-                            <div class="home-hero-actions d-flex flex-column flex-md-row justify-content-center gap-3 gap-md-4">
-                                {% include 'site/components/button.twig' with {
-                                    href: institutional_contact.emergency.tel,
-                                    label: 'Ligar ' ~ institutional_contact.emergency.display,
-                                    icon: 'bi-telephone',
-                                    variant: 'solid',
-                                    size: 'lg',
-                                    button_class: 'fw-bold',
-                                   
-                                } %}
-                               {#{% include 'site/components/button.twig' with {
-                                    href: BASE_URL ~ 'contact',
-                                    label: 'Falar com a equipe',
-                                    icon: 'bi-envelope',
-                                    variant: 'muted',
-                                    size: 'lg',
-                                    button_class: 'w-100 w-md-auto'
-                                } %} #}
-
-                                 {% include 'site/components/button.twig' with {
-                                    href: whatsapp.links.general,
-                                    label: 'WhatsApp',
-                                    icon: 'bi-whatsapp',
-                                    variant: 'solid',
-                                    size: 'lg',
-                                    button_class: 'fw-bold',
-                                    target: '_blank'
-                                } %}
-
-                            </div>
+        <div class="site-hero-pattern"></div>
+        <div class="container-fluid position-relative px-3 px-md-4">
+            <div class="row justify-content-center">
+                <div class="col-xl-9 col-lg-10">
+                    <div class="hero-content text-center home-hero-intro">
+                        <div class="home-hero-logo mb-4">
+                            <img src="{{ BASE_URL }}assets/images/aorern-medalhao-verde-aorer6-oficial-3200_1.png" alt="Identidade visual da AORE/RN" class="img-fluid home-hero-logo-image">
+                        </div>
+                        {# <p class="home-hero-subtitle text-white mb-2">Associação dos Oficiais da Reserva do Exército</p> #}
+                        <h1 class="home-hero-title text-white mb-3">AORE/RN</h1>
+                        <p class="home-hero-motto mb-4"><i>Perpetuum Officium erga Patriam</i></p>
+                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center home-hero-actions">
+                            {% include 'site/components/button.twig' with {
+                                href: BASE_URL ~ 'about',
+                                label: 'Conheça',
+                                icon: 'bi-shield-check',
+                                variant: 'outline',
+                                size: 'lg',
+                                button_class: 'fw-bold home-hero-btn home-hero-btn--secondary'
+                            } %}
+                            {% include 'site/components/button.twig' with {
+                                href: whatsapp.links.general,
+                                label: 'WhatsApp',
+                                icon: 'bi-whatsapp',
+                                variant: 'outline',
+                                size: 'lg',
+                                button_class: 'fw-bold home-hero-btn home-hero-btn--secondary',
+                                target: '_blank'
+                            } %}
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 
     <section class="home-about home-section py-5">
         <div class="container">
             <div class="row align-items-center g-4">
-                <div class="col-lg-6">
+                <div class="col-lg-7">
                     {% include 'site/components/section-header.twig' with {
-                        kicker: 'Serviço essencial',
-                        title: 'Bombeiros militares dedicados à proteção da população',
-                        subtitle: 'Combinar disciplina operacional, tecnologia e presença nas ruas é o que garante respostas rápidas e humanizadas para quem mais precisa.',
+                        kicker: 'Identidade institucional',
+                        title: 'Uma associação que mantém vivo o elo entre o Exército Brasileiro e seus oficiais da reserva',
+                        subtitle: 'A AORE/RN congrega oficiais formados pelos Núcleos e Centros de Preparação de Oficiais da Reserva, fortalecendo a camaradagem, o espírito de corpo e a identidade institucional dos oficiais R/2 no Rio Grande do Norte.',
                         align: 'start',
                         kicker_class: 'text-muted mb-2',
                         title_class: 'text-primary mb-3',
                         subtitle_class: 'text-muted mb-4'
                     } %}
 
-                     <ul class="list-unstyled home-k9-list icon-list mb-4">
+                    <ul class="list-unstyled home-k9-list icon-list mb-0">
                         <li class="icon-list-item">
-    <span class="icon-circle icon-soft" aria-hidden="true">
-      <i class="bi bi-fire"></i>
-    </span>
-    <span>
-      GUARNIÇÕES especializadas no combate a incêndios urbanos, florestais e industriais, com atuação preventiva e emergencial.
-    </span>
-  </li>
-
-  <li class="icon-list-item">
-    <span class="icon-circle icon-soft" aria-hidden="true">
-      <i class="bi bi-life-preserver"></i>
-    </span>
-    <span>
-      Equipes treinadas para operações de resgate e salvamento em altura, ambientes aquáticos, áreas alagadas e estruturas colapsadas.
-    </span>
-  </li>
-
-  <li class="icon-list-item">
-    <span class="icon-circle icon-soft" aria-hidden="true">
-      <i class="bi bi-heart-pulse"></i>
-    </span>
-    <span>
-      Atendimento pré-hospitalar e primeiros socorros, com resposta rápida e suporte à preservação da vida em situações de emergência.
-    </span>
-  </li>
-
-  <li class="icon-list-item">
-    <span class="icon-circle icon-soft" aria-hidden="true">
-      <i class="bi bi-shield-check"></i>
-    </span>
-    <span>
-      Atuação em ações de defesa civil, prevenção de riscos e resposta a desastres naturais e tecnológicos.
-    </span>
-  </li>
-
-  <li class="icon-list-item">
-    <span class="icon-circle icon-soft" aria-hidden="true">
-      <i class="bi bi-people"></i>
-    </span>
-    <span>
-      Desenvolvimento de ações educativas, orientações preventivas e iniciativas comunitárias voltadas à promoção da cultura de segurança.
-    </span>
-  </li>
+                            <span class="icon-circle icon-soft" aria-hidden="true">
+                                <i class="bi bi-people"></i>
+                            </span>
+                            <span>Congrega Oficiais da Reserva do Exército, valorizando o vínculo duradouro entre os integrantes da ativa e os oficiais licenciados.</span>
+                        </li>
+                        <li class="icon-list-item">
+                            <span class="icon-circle icon-soft" aria-hidden="true">
+                                <i class="bi bi-bank"></i>
+                            </span>
+                            <span>Preserva valores, tradições e a cultura militar do Exército Brasileiro por meio de ações institucionais permanentes.</span>
+                        </li>
+                        <li class="icon-list-item">
+                            <span class="icon-circle icon-soft" aria-hidden="true">
+                                <i class="bi bi-award"></i>
+                            </span>
+                            <span>Promove solenidades, eventos comemorativos, encontros de integração e cerimônias de reconhecimento entre associados.</span>
+                        </li>
+                        <li class="icon-list-item">
+                            <span class="icon-circle icon-soft" aria-hidden="true">
+                                <i class="bi bi-shield-check"></i>
+                            </span>
+                            <span>Atua na valorização institucional dos oficiais da reserva, na defesa de seus direitos e no estímulo à participação cívica e social.</span>
+                        </li>
                     </ul>
-
-                    {# <p class="text-muted mb-0">O 2º SGB/2º GBM integra Defesa Civil, SAMU, polícias e lideranças locais para planejar, prevenir e agir com eficiência em todo o litoral sul potiguar.</p> #}
                 </div>
-                <div class="col-lg-6">
-                    <div class="home-video-wrapper shadow-sm rounded-4 overflow-hidden">
-                        <iframe
-                            src="https://www.youtube.com/embed/qH-5LrMs5T0?rel=0&modestbranding=1"
-                            title="Rotina de operações do Corpo de Bombeiros"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            allowfullscreen
-                            loading="lazy"></iframe>
+                <div class="col-lg-5">
+                    <div class="bg-white shadow-sm rounded-4 p-4 p-lg-5 h-100 border">
+                        <p class="text-uppercase small fw-semibold text-muted mb-2">Dados institucionais</p>
+                        <h3 class="h4 fw-bold text-primary mb-4">Base administrativa e identidade jurídica</h3>
+                        <dl class="row mb-0 g-3">
+                            <dt class="col-sm-4 text-muted">Nome</dt>
+                            <dd class="col-sm-8 mb-0">Associação dos Oficiais da Reserva do Exército do Rio Grande do Norte</dd>
+                            <dt class="col-sm-4 text-muted">Sigla</dt>
+                            <dd class="col-sm-8 mb-0">AORE/RN</dd>
+                            <dt class="col-sm-4 text-muted">CNPJ</dt>
+                            <dd class="col-sm-8 mb-0">70.145.065/0001-00</dd>
+                            <dt class="col-sm-4 text-muted">Sede</dt>
+                            <dd class="col-sm-8 mb-0">Natal/RN, nas dependências do 16º Batalhão de Infantaria Motorizado, bairro Tirol</dd>
+                            <dt class="col-sm-4 text-muted">Natureza</dt>
+                            <dd class="col-sm-8 mb-0">Entidade civil privada, sem fins lucrativos</dd>
+                        </dl>
                     </div>
-                    {# <p class="text-muted small mt-3 mb-0">Vídeo institucional ilustrativo: operações de busca, salvamento e demonstrações públicas.</p> #}
                 </div>
-                
             </div>
         </div>
     </section>
 
     <section class="home-k9 home-section py-5">
         <div class="container">
-            <div class="row align-items-center gy-4">
-                <div class="col-lg-6 d-none d-lg-block">
-                    <img src="{{ BASE_URL }}assets/images/caes/malinois_1600_1600.jpg"
-                         alt="Esquadrão com cães farejadores do CBMRN"
-                         class="img-fluid home-k9-image shadow-sm" style="border-radius: 0.55rem;">
-                </div>
-                <div class="col-lg-6">
-                    {% include 'site/components/section-header.twig' with {
-                        kicker: 'Esquadrão de Cães de Combate',
-                        title: 'Operações com apoio canino especializado',
-                        subtitle: "O 2º Subgrupamento conta com cães treinados para busca, salvamento e apoio psicossocial. Os binômios realizam treinamentos semanais, garantindo prontidão para ocorrências urbanas e rurais. " ~
-                                  "Os treinamentos são realizados de forma sistemática, com rotinas que englobam socialização, obediência, condicionamento físico, ambientação a cenários simulados, pistas de escombros, trilhas rurais e exercícios de resiliência comportamental. " ~
-                                  "Essas práticas garantem não apenas a prontidão operacional da tropa, mas também o bem-estar físico e emocional dos cães, condição indispensável para o desempenho seguro e eficaz das missões.",
-                        kicker_class: 'text-muted',
-                        title_class: 'text-primary',
-                        subtitle_class: 'text-muted',
-                        extra_class: 'mb-4'
-                    } %}
-
-                    <div class="home-k9-image-inline d-lg-none mb-4">
-                        <img src="{{ BASE_URL }}assets/images/caes/malinois_1600_1600.jpg"
-                             alt="Esquadrão com cães farejadores do CBMRN"
-                             class="img-fluid home-k9-image shadow-sm">
-                    </div>
-
-                    <ul class="list-unstyled home-k9-list icon-list mb-4">
-                        <li class="icon-list-item">
-                            <span class="icon-circle icon-soft" aria-hidden="true">
-                                <i class="bi bi-shield-check"></i>
-                            </span>
-                            <span>Protocolos de segurança e bem-estar animal</span>
-                        </li>
-                        <li class="icon-list-item">
-                            <span class="icon-circle icon-soft" aria-hidden="true">
-                                <i class="bi bi-geo-alt"></i>
-                            </span>
-                            <span>Prontidão para missões em toda a Região Agreste e Litoral Sul,</span>
-                        </li>
-                        <li class="icon-list-item">
-                            <span class="icon-circle icon-soft" aria-hidden="true">
-                                <i class="bi bi-heart-pulse"></i>
-                            </span>
-                            <span>Atuação em ações educativas com a comunidade</span>
-                        </li>
-                    </ul>
-                    {% include 'site/components/button.twig' with {
-                        href: BASE_URL ~ 'esquadrao',
-                        label: 'Saiba mais',
-                        icon: 'bi-arrow-right',
-                        icon_position: 'end',                       
-                        variant: 'solid',
-                        size: 'lg',
-                        button_class: 'fw-bold'
-                    } %}
-                </div>
-            </div>
-        </div>
-    </section>
-
-   {# <section class="home-services home-section py-5">
-        <div class="container">
             {% include 'site/components/section-header.twig' with {
                 kicker: 'Frentes de atuação',
-                title: 'Serviços essenciais',
-                subtitle: 'Operamos desde o combate a incêndios até programas educativos, sempre com transparência e integração tecnológica.',
+                title: 'Como a AORE/RN atua no plano institucional e associativo',
+                subtitle: 'A associação combina memória, representação, integração e reconhecimento para manter ativos os valores adquiridos na formação militar e ampliar a presença cívica dos oficiais da reserva no estado.',
                 align: 'center',
-                kicker_class: 'text-uppercase small text-muted mb-2',
-                title_class: 'fw-bold text-primary mb-3',
-                subtitle_class: 'text-muted mb-0',
+                kicker_class: 'text-muted',
+                title_class: 'text-primary',
+                subtitle_class: 'text-muted',
                 extra_class: 'mb-5'
             } %}
-            {% set service_cards = [
+
+            {% set home_cards = [
                 {
-                    icon: 'bi bi-fire',
-                    title: 'Combate a incêndios',
-                    description: 'Estruturas urbanas, áreas de vegetação e veículos recebem resposta rápida graças a protocolos digitais de despacho.'
+                    icon: 'bi bi-flag',
+                    title: 'Preservação de valores e tradições',
+                    description: 'Mantém viva a cultura militar do Exército Brasileiro por meio de ritos, memória institucional, datas comemorativas e práticas associativas permanentes.'
                 },
                 {
-                    icon: 'bi bi-life-preserver',
-                    title: 'Resgate e salvamento',
-                    description: 'Equipes especializadas atuam em altura, espaços confinados e ocorrências veiculares com monitoramento centralizado.'
+                    icon: 'bi bi-people-fill',
+                    title: 'Camaradagem e espírito de corpo',
+                    description: 'Fortalece a convivência entre oficiais R/2, promovendo integração, amizade cívica e identidade comum entre gerações de reservistas.'
                 },
                 {
-                    icon: 'bi bi-mortarboard',
-                    title: 'Prevenção e educação',
-                    description: 'Visitas, vistorias, palestras e conteúdos digitais fortalecem a cultura de segurança nas comunidades atendidas.'
+                    icon: 'bi bi-briefcase',
+                    title: 'Representação e valorização',
+                    description: 'Desenvolve ações voltadas à valorização dos oficiais da reserva, à defesa de seus direitos e à participação responsável na vida social e institucional.'
+                },
+                {
+                    icon: 'bi bi-building-check',
+                    title: 'Parcerias com organizações militares',
+                    description: 'Atua em cooperação com o 16º BIMtz e outras organizações para realizar solenidades, encontros e atividades de integração entre ativa e reserva.'
                 }
             ] %}
+
             <div class="row g-4">
-                {% for card in service_cards %}
-                    <div class="col-md-4">
+                {% for card in home_cards %}
+                    <div class="col-md-6 col-xl-3">
                         {% include 'site/components/feature-card.twig' with {
                             icon: card.icon,
                             title: card.title,
@@ -249,326 +186,163 @@
                 {% endfor %}
             </div>
         </div>
-    </section> #}
+    </section>
 
-    <section class="home-occurrence-metrics home-highlights home-section py-5">
-      {% set ocorrenciaCards = ocorrenciasPorTipo|default([]) %}
-      {% if ocorrenciaCards|length > 0 %}
-        
+    <section class="home-testimonials home-section py-5">
         <div class="container">
-            <div class="row align-items-center g-4">
-                    <div class="col-lg-6">
-                        {% include 'site/components/section-header.twig' with {
-                        kicker: 'Tecnologia e pessoas',
-                        title: 'Integração entre dados, equipes e frota',
-                        subtitle: 'Acompanhamos cada fase da ocorrência com dashboards em tempo real, garantindo comunicação entre o centro de operações, o efetivo em campo e as defesas civis municipais.',
-                        kicker_class: 'text-muted',
-                        subtitle_class: 'text-muted',
-                        extra_class: 'mb-4'
-                    } %}
-                        {# <p class="text-uppercase text-muted small fw-semibold mb-1">Monitoramento operacional</p>
-                        <h3 class="h4 fw-bold mb-2">Ocorrências por tipo</h3>
-                        <p class="text-muted mb-0">Atualizado a partir do Livro de Ocorrências. Destaque imediato para as frentes com maior demanda.</p> #}
-                         <p class="text-muted mb-0">Indicadores de desempenho do 2º Subgrupamento de Bombeiros Militar</p>
-                         {% if ocorrenciasPeriodoDescricao is defined %}
-                             <p class="text-muted small mb-0">{{ ocorrenciasPeriodoDescricao }}</p>
-                         {% endif %}
-                    </div>
-                    <div class="col-lg-6 text-lg-end">
-                        {% include 'site/components/button.twig' with {
-                            href: BASE_URL ~ 'admin/livro-ocorrencias',
-                            label: 'Abrir painel completo',
-                            icon: 'bi-speedometer2',
-                            variant: 'solid',
-                            size: 'lg',
-                            button_class: 'd-none d-lg-inline-flex ms-lg-auto',
-                            target: '_blank',
-                            attrs: {
-                                rel: 'noopener'
-                            }
-                        } %}
-                    </div>
-                </div>
-                {% set civicoRef = 'ação cívico-social'|lower %}
-                {% set civicoCardMatch = null %}
-                {% set outrosCards = [] %}
-                {% for ocorrencia in ocorrenciaCards %}
-                    {% set tipoNome = ocorrencia.tipo|default('') %}
-                    {% set tipoNormalized = tipoNome|lower %}
-                    {% if civicoCardMatch is null and tipoNormalized == civicoRef %}
-                        {% set civicoCardMatch = ocorrencia %}
-                    {% else %}
-                        {% set outrosCards = outrosCards|merge([ocorrencia]) %}
-                    {% endif %}
-                {% endfor %}
-
-                {% set civicoCard = civicoCardMatch ?? {
-                    tipo: 'Ação cívico-social',
-                    total: 0,
-                    meta: 'Projetos educativos e apoio às comunidades'
-                } %}
-
-                {% if civicoCard.meta is not defined or civicoCard.meta is empty %}
-                    {% set civicoCard = civicoCard|merge({ meta: 'Projetos educativos e apoio às comunidades' }) %}
-                {% endif %}
-
-                {% set cardsComCivico = outrosCards|merge([civicoCard]) %}
-                {% set cardRows = cardsComCivico|batch(4, null) %}
-                {% for row in cardRows %}
-                    <div class="row g-3 g-md-4 mt-2 mt-md-4">
-                        {% for ocorrencia in row %}
-                            {% if ocorrencia %}
-                                <div class="col-12 col-sm-6 col-xl-3">
-                                    <article class="occurrence-card h-100">
-                                        <p class="occurrence-card-label text-uppercase small mb-1">{{ ocorrencia.tipo|default('Não classificada') }}</p>
-                                        <p class="occurrence-card-value mb-0">{{ ocorrencia.total }}</p>
-                                        <p class="occurrence-card-meta text-muted mb-0">{{ ocorrencia.meta|default('Registros recentes') }}</p>
-                                    </article>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-                <div class="row mt-3 d-lg-none">
-                    <div class="col text-center">
-                        {% include 'site/components/button.twig' with {
-                            href: BASE_URL ~ 'admin/livro-ocorrencias',
-                            label: 'Abrir painel completo',
-                            icon: 'bi-speedometer2',
-                            variant: 'solid',
-                            size: 'lg',
-                            button_class: 'fw-bold text-white',
-                            target: '_blank',
-                            attrs: {
-                                rel: 'noopener'
-                            }
-                        } %}
-                    </div>
-                </div>
-            </div>       
-      {% endif %}
-     </section>
-
-     <section class="home-occurrence-map home-section py-5">
-        <div class="container">
-            <div class="row align-items-center g-4">
-                <div class="col-lg-4">
+            <div class="row g-4 align-items-stretch">
+                <div class="col-lg-7">
                     {% include 'site/components/section-header.twig' with {
-                        kicker: 'Mapa operacional',
-                        title: 'Ocorrências por município',
-                        subtitle: 'Visualize onde os atendimentos do 2º Subgrupamento de Bombeiros Militar se concentram e acompanhe o pulso regional em tempo real.',
+                        kicker: 'Vida associativa',
+                        title: 'Atividades que reforçam o vínculo permanente com a Pátria',
+                        subtitle: 'A AORE/RN promove ações que ultrapassam a convivência social: estrutura encontros institucionais, solenidades cívico-militares, celebrações comemorativas e iniciativas de reconhecimento ao mérito associativo.',
                         align: 'start',
-                        kicker_class: 'text-muted text-uppercase small',
+                        kicker_class: 'text-muted',
                         title_class: 'text-primary',
                         subtitle_class: 'text-muted',
                         extra_class: 'mb-4'
                     } %}
-                    <div class="occurrence-map-controls d-flex flex-wrap align-items-end gap-3 mb-3">
-                        <div class="occurrence-map-control">
-                            <label for="occurrence-map-year" class="small text-muted mb-1">Ano</label>
-                            <select id="occurrence-map-year" class="form-select form-select-sm" data-map-year-select>
-                                {% for yearOption in mapYearOptions|default([mapYear]) %}
-                                    <option value="{{ yearOption }}" {% if yearOption == mapYear %}selected{% endif %}>{{ yearOption }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        {% if mapTipoOptions is defined and mapTipoOptions|length > 0 %}
-                            <div class="occurrence-map-control flex-grow-1">
-                                <label for="occurrence-map-type" class="small text-muted mb-1">Tipo</label>
-                                <select id="occurrence-map-type" class="form-select form-select-sm" data-map-type-select>
-                                    <option value="">Todos os tipos</option>
-                                    {% for tipoOption in mapTipoOptions %}
-                                        <option value="{{ tipoOption.id }}">{{ tipoOption.nome }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        {% endif %}
-                        {% if mapStatusOptions is defined and mapStatusOptions|length > 0 %}
-                            <div class="occurrence-map-control flex-grow-1">
-                                <label for="occurrence-map-status" class="small text-muted mb-1">Status</label>
-                                <select id="occurrence-map-status" class="form-select form-select-sm" data-map-status-select>
-                                    <option value="">Todos os status</option>
-                                    {% for statusValue, statusLabel in mapStatusOptions %}
-                                        <option value="{{ statusValue }}">{{ statusLabel }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="occurrence-map-summary" data-map-summary>
-                        <p class="mb-1 fw-semibold">Carregando painel dinâmico...</p>
-                        <p class="mb-0 text-muted small">Conectando aos registros consolidados do livro.</p>
-                    </div>
-                    <ul class="occurrence-map-top list-unstyled mt-3" data-map-top-list>
-                        <li class="text-muted small">Os municípios com maior volume aparecerão aqui.</li>
-                    </ul>
-                    <p class="occurrence-map-status small text-muted mt-3" data-map-status role="status">Mapa pronto para atualização.</p>
-                </div>
-                <div class="col-lg-8">
-                    <div class="occurrence-map-wrapper">
-                        <div class="occurrence-map-canvas">
-                            <div id="occurrence-map"
-                                 data-endpoint="{{ BASE_URL }}ocorrencias/mapa-municipios"
-                                 data-initial-year="{{ mapYear }}"
-                                   data-maps-enabled="{{ GOOGLE_MAPS_API_KEY ? '1' : '0' }}"
-                                   data-badge-src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png"></div>
-                            <div class="occurrence-map-fallback {{ GOOGLE_MAPS_API_KEY ? 'd-none' : '' }}" data-map-fallback>
-                                <p class="fw-semibold mb-1">Mapa em modo reduzido</p>
-                                <p class="mb-2 small text-muted">Informe a variável <span class="occurrence-map-key">GOOGLE_MAPS_API_KEY</span> no arquivo .env para liberar os marcadores do Google Maps.</p>
-                                <p class="mb-0 text-muted small">Os totais seguem disponíveis na lista lateral.</p>
-                            </div>
-                        </div>
-                        <div class="occurrence-map-legend mt-3 d-flex flex-wrap align-items-center gap-2">
-                            <span class="legend-badge legend-badge-low">Baixa</span>
-                            <span class="legend-badge legend-badge-medium">Moderada</span>
-                            <span class="legend-badge legend-badge-high">Alta</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-     </section>
 
-{#      <section class="home-highlights home-section py-5">
-        <div class="container">
-            <div class="row align-items-center g-4">
-                <div class="col-lg-5">
-                    {% include 'site/components/section-header.twig' with {
-                        kicker: 'Tecnologia e pessoas',
-                        title: 'Integração entre dados, equipes e frota',
-                        subtitle: 'Acompanhamos cada fase da ocorrência com dashboards em tempo real, garantindo comunicação entre o centro de operações, o efetivo em campo e as defesas civis municipais.',
-                        kicker_class: 'text-muted',
-                        subtitle_class: 'text-muted',
-                        extra_class: 'mb-4'
-                    } %}
-                    {% set highlight_items = [
-                        {
-                            icon: 'bi bi-cpu-fill',
-                            title: 'Monitoramento contínuo',
-                            description: 'Painéis com status das guarnições e estatísticas de resposta.'
-                        },
-                        {
-                            icon: 'bi bi-diagram-3-fill',
-                            title: 'Integração regional',
-                            description: 'Parceria com SAMU, Defesa Civil e lideranças municipais.'
-                        },
-                        {
-                            icon: 'bi bi-shield-lock-fill',
-                            title: 'Prontidão certificada',
-                            description: 'Manutenção preventiva e treinamentos contínuos do efetivo.'
-                        }
-                    ] %}
-                    <div class="d-flex flex-column gap-3">
-                        {% for item in highlight_items %}
-                            <div class="home-highlight-item">
-                                <span class="icon-circle icon-soft" aria-hidden="true">
-                                    <i class="{{ item.icon }}"></i>
-                                </span>
-                                <div>
-                                    <p class="fw-semibold mb-0">{{ item.title }}</p>
-                                    <small class="text-muted">{{ item.description }}</small>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="col-lg-7">
-                    {% set metrics = [
-                        {
-                            label: 'Tempo médio',
-                            value: '12min',
-                            description: 'entre despacho e chegada em ocorrências urbanas.'
-                        },
-                        {
-                            label: 'Cobertura',
-                            value: '25',
-                            description: 'municípios assistidos com equipes dedicadas.'
-                        },
-                        {
-                            label: 'Programas educativos',
-                            value: '+30',
-                            description: 'ações anuais em escolas e comunidades.'
-                        },
-                        {
-                            label: 'Vistorias técnicas',
-                            value: '+120',
-                            description: 'inspeções por ano em edificações estratégicas.'
-                        }
-                    ] %}
                     <div class="row g-3">
-                        {% for metric in metrics %}
-                            <div class="col-md-6">
-                                {% include 'site/components/stat-card.twig' with {
-                                    label: metric.label,
-                                    value: metric.value,
-                                    description: metric.description,
-                                    card_class: 'h-100'
-                                } %}
+                        <div class="col-md-6">
+                            <div class="bg-white border rounded-4 p-4 h-100 shadow-sm">
+                                <h3 class="h5 fw-bold mb-3">Integração institucional</h3>
+                                <ul class="text-muted mb-0 ps-3">
+                                    <li>Encontros e reuniões entre associados, oficiais da ativa e convidados.</li>
+                                    <li>Solenidades e datas alusivas à memória do Exército Brasileiro.</li>
+                                    <li>Participação em agendas cívicas, sociais e comemorativas no estado.</li>
+                                </ul>
                             </div>
-                        {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="bg-white border rounded-4 p-4 h-100 shadow-sm">
+                                <h3 class="h5 fw-bold mb-3">Reconhecimento ao mérito</h3>
+                                <ul class="text-muted mb-0 ps-3">
+                                    <li>Outorga de honrarias a associados que tenham prestado relevantes serviços.</li>
+                                    <li>Valorização pública de trajetórias marcadas por disciplina e liderança.</li>
+                                    <li>Registro e preservação da contribuição institucional dos reservistas.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="bg-white shadow-sm rounded-4 p-4 p-lg-5 h-100 border">
+                        <p class="text-uppercase small fw-semibold text-muted mb-2">Honraria institucional</p>
+                        <h3 class="h4 fw-bold text-primary mb-3">Medalha Reserva Ativa</h3>
+                        <p class="text-muted mb-3">
+                            A AORE/RN realiza cerimônias de reconhecimento e outorga de honrarias destinadas a distinguir associados que tenham prestado relevantes serviços à associação e à sociedade.
+                        </p>
+                        <p class="text-muted mb-4">
+                            Mais do que um símbolo, a Medalha Reserva Ativa expressa a continuidade do compromisso com a disciplina, a lealdade, a liderança e o serviço à Pátria, mesmo após o licenciamento.
+                        </p>
+                        {% include 'site/components/button.twig' with {
+                            href: BASE_URL ~ 'about',
+                            label: 'Ler apresentação institucional',
+                            icon: 'bi-arrow-right',
+                            icon_position: 'end',
+                            variant: 'solid',
+                            size: 'lg',
+                            button_class: 'fw-bold'
+                        } %}
                     </div>
                 </div>
             </div>
         </div>
-     </section> #}
+    </section>
 
-     <section class="home-testimonials home-section py-5">
+    {% if colaboradores is defined and colaboradores|length > 0 %}
+    <section class="home-sponsors home-section py-5">
         <div class="container">
             {% include 'site/components/section-header.twig' with {
-                kicker: 'Depoimentos',
-                title: 'Quem confia no nosso trabalho',
-                subtitle: 'Autoridades públicas, representantes de instituições parceiras e membros da sociedade civil destacam o papel estratégico desempenhado pelo 2º Subgrupamento de Bombeiros Militar na região do litoral sul potiguar. Os depoimentos evidenciam a relevância da atuação operacional, preventiva e educativa da unidade, bem como sua contribuição permanente para a proteção da vida, do patrimônio e para o fortalecimento da segurança pública nos municípios sob sua área de responsabilidade.',
+                kicker: 'Rede de apoio',
+                title: 'Colaboradores da AORE/RN',
+                subtitle: 'Empresas e instituições que contribuem para fortalecer as ações da associação.',
                 align: 'center',
                 kicker_class: 'text-muted',
                 title_class: 'text-primary',
-                subtitle_class: 'text-muted',
-                extra_class: 'mb-5'
+                subtitle_class: 'text-muted home-sponsors-subtitle-nowrap',
+                extra_class: 'mb-4'
             } %}
 
-        {% set testimonials = [
-            {
-                name: 'Antonella Paiva',
-                role: 'Diretora da Agência Aeroespacial -Goianinha/RN',
-                quote: '"A presença da unidade em Goianinha reduziu drasticamente os tempos de resposta. Hoje conseguimos apoiar os municípios vizinhos com muito mais eficiência."',
-                photo: 'assets/images/testimonials/testimonial1.jpg'
-            },
-            {
-                name: 'Karla Lemos',
-                role: 'Coord. Defesa Cibernética - Tibau do Sul/RN',
-                quote: '"O suporte do 2º SGB é constante. Trabalhamos juntos em planos de prevenção e nas ocorrências críticas, sempre com comunicação clara. O Subgrupamento está de parabéns!"',
-                photo: 'assets/images/testimonials/testimonial2.jpg'
-            },
-            {
-                name: 'Marta Morais',
-                role: 'Moradora de Canguaretama/RN',
-                quote: '"Após um incêndio residencial, fomos atendidos em minutos. A equipe nos orientou, controlou o fogo e deixou toda a vizinhança segura. I love 2º Subgrupamento de Bombeiros!"',
-                photo: 'assets/images/testimonials/testimonial3.jpg'
-            }
-        ] %}
-
-        <div class="row g-4">
-            {% for testimonial in testimonials %}
-                <div class="col-12 col-md-4">
-                    {% include 'site/components/testimonial-card.twig' with {
-                        name: testimonial.name,
-                        role: testimonial.role,
-                        quote: testimonial.quote,
-                        photo: BASE_URL ~ testimonial.photo,
-                        card_class: 'p-4 h-100'
-                    } %}
+            <div class="home-sponsors-shell">
+                <div id="homeSponsorsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6500">
+                    <div class="carousel-inner">
+                        {% for patrocinador in colaboradores %}
+                            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                <article class="home-sponsor-feature-card"
+                                    style="
+                                        --sponsor-title-color: {{ patrocinador.texto_cor_titulo|default('#FFFFFF')|e('html_attr') }};
+                                        --sponsor-description-color: {{ patrocinador.texto_cor_descricao|default('#FFFFFF')|e('html_attr') }};
+                                        --sponsor-icon-color: {{ patrocinador.icone_cor|default('#FFFFFF')|e('html_attr') }};
+                                    ">
+                                    <div class="home-sponsor-feature-media">
+                                        <img class="home-sponsor-feature-banner" src="{{ patrocinador.banner_url|default(patrocinador.logo_url|default(BASE_URL ~ 'assets/images/conscrito.png')) }}" alt="Banner de {{ patrocinador.nome|e('html_attr') }}" loading="lazy">
+                                        {% if patrocinador.exibir_texto_banner %}
+                                            <div class="home-sponsor-feature-title">
+                                                <div class="home-sponsor-feature-title-text">{{ patrocinador.nome }}</div>
+                                                <div class="home-sponsor-feature-subtitle">{{ patrocinador.descricao_curta|default('Empresa colaboradora da AORE/RN.') }}</div>
+                                                <div class="home-sponsor-social-inline">
+                                                    {% if patrocinador.whatsapp %}
+                                                        <a class="home-sponsor-social-icon" href="https://wa.me/{{ patrocinador.whatsapp }}?text={{ 'Olá! Vim pelo site da AORE/RN e gostaria de informações.'|url_encode }}" target="_blank" rel="noopener" aria-label="WhatsApp">
+                                                            <i class="bi bi-whatsapp"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                    <a class="home-sponsor-social-icon" href="{{ patrocinador.instagram|e('html_attr') }}" target="_blank" rel="noopener" aria-label="Instagram da empresa">
+                                                        <i class="bi bi-instagram"></i>
+                                                    </a>
+                                                    {% if patrocinador.site %}
+                                                        <a class="home-sponsor-social-icon" href="{{ patrocinador.site|e('html_attr') }}" target="_blank" rel="noopener" aria-label="Site da empresa" title="{{ patrocinador.site|e('html_attr') }}">
+                                                            <i class="bi bi-globe2"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="home-sponsor-feature-content">
+                                                <div class="home-sponsor-actions-placeholder" aria-hidden="true"></div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </article>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#homeSponsorsCarousel" data-bs-slide="prev" aria-label="Anterior">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#homeSponsorsCarousel" data-bs-slide="next" aria-label="Próximo">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
                 </div>
-            {% endfor %}
-        </div>
-     </section>
 
-     <section class="home-services home-section py-5">
+                <div class="home-sponsors-thumbs" role="tablist" aria-label="Selecionar patrocinador">
+                    {% for patrocinador in colaboradores %}
+                        <button
+                            class="home-sponsor-thumb {% if loop.first %}active{% endif %}"
+                            type="button"
+                            data-bs-target="#homeSponsorsCarousel"
+                            data-bs-slide-to="{{ loop.index0 }}"
+                            {% if loop.first %}aria-current="true"{% endif %}
+                            aria-label="Exibir {{ patrocinador.nome|e('html_attr') }}"
+                        >
+                            <img src="{{ patrocinador.logo_url|default(BASE_URL ~ 'assets/images/conscrito.png') }}" alt="" loading="lazy">
+                            <span>{{ patrocinador.nome }}</span>
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="home-services home-section py-5">
         <div class="container">
             <div class="row align-items-center g-3">
-                <div class="col-lg-8">                    
+                <div class="col-lg-8">
                     {% include 'site/components/section-header.twig' with {
-                        kicker: 'Canal direto',
-                        title: institutional_contact.emergency.display ~ ' - Emergências · WhatsApp ' ~ whatsapp.display,
-                        subtitle: 'Informe localização, tipo de ocorrência e mantenha o contato aberto. Nossa equipe acompanha todo o deslocamento.',
+                        kicker: 'Canal institucional',
+                        title: 'Entre em contato com a AORE/RN',
+                        subtitle: 'Fale com a associação para informações institucionais, participação em atividades, integração entre oficiais da reserva e assuntos administrativos.',
                         heading_level: 3,
                         kicker_class: 'text-muted',
                         title_class: 'text-primary',
@@ -579,33 +353,81 @@
                 <div class="col-lg-4 text-lg-end">
                     <div class="home-cta-actions d-flex gap-3 gap-md-4 flex-column flex-md-row justify-content-center justify-content-lg-end">
                         {% include 'site/components/button.twig' with {
-                            href: institutional_contact.emergency.tel,
-                            label: 'Ligue ' ~ institutional_contact.emergency.display,
-                            icon: 'bi-telephone',
+                            href: BASE_URL ~ 'contact',
+                            label: 'Entrar em contato',
+                            icon: 'bi-envelope',
                             variant: 'solid',
                             size: 'lg',
-                            button_class: 'flex-fill flex-md-grow-0 fw-bold text-wite'
+                            button_class: 'flex-fill flex-md-grow-0 fw-bold'
                         } %}
                         {% include 'site/components/button.twig' with {
-                            href: whatsapp.links.emergency,
-                            label: 'WhatsApp',
-                            icon: 'bi-whatsapp',
+                            href: BASE_URL ~ 'institucional',
+                            label: 'Área institucional',
+                            icon: 'bi-building-gear',
                             variant: 'outline',
                             size: 'lg',
-                            button_class: 'flex-fill flex-md-grow-0 fw-bold',
-                            target: '_blank'
+                            button_class: 'flex-fill flex-md-grow-0 fw-bold'
                         } %}
                     </div>
                 </div>
             </div>
         </div>
-     </section>
-{% endblock %}
+    </section>
 
-{% block scripts %}
-    {{ parent() }}
-    <script src="{{ BASE_URL }}assets/js/occurrence-map.js" defer></script>
-    {% if GOOGLE_MAPS_API_KEY %}
-        <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&callback=initOccurrenceMap" async defer></script>
+    {% if official_documents is defined and official_documents|length > 0 %}
+    <section class="home-documents home-section py-5 bg-light">
+        <div class="container">
+            {% include 'site/components/section-header.twig' with {
+                kicker: 'Documentos Oficiais',
+                title: 'Acervo essencial da AORE/RN',
+                subtitle: 'Acesso rápido ao selo institucional, ao hino e a outros arquivos oficiais já publicados no novo módulo administrativo.',
+                align: 'center',
+                kicker_class: 'text-muted',
+                title_class: 'text-primary',
+                subtitle_class: 'text-muted',
+                extra_class: 'mb-5'
+            } %}
+            <div class="row g-4">
+                {% for documento in official_documents %}
+                    {% set documento_titulo = (documento.titulo|default(''))
+                        |replace({'AORERN': 'AORE/RN', 'Aorern': 'AORE/RN', 'aorern': 'AORE/RN'}) %}
+                    {% set documento_resumo = (documento.resumo|default('Documento institucional publicado para consulta e uso oficial.'))
+                        |replace({'AORERN': 'AORE/RN', 'Aorern': 'AORE/RN', 'aorern': 'AORE/RN'}) %}
+                    <div class="col-md-6 col-xl-4">
+                        <article class="feature-card h-100 shadow-sm">
+                            <div class="feature-card-icon mb-3">
+                                <i class="bi bi-file-earmark-text"></i>
+                            </div>
+                            <h3 class="h5 fw-bold mb-2">{{ documento_titulo }}</h3>
+                            <p class="text-muted mb-3">{{ documento_resumo }}</p>
+                            {% include 'site/components/button.twig' with {
+                                href: documento.arquivo_url ?: (documento.link_externo ?: BASE_URL ~ 'institucional/documentos'),
+                                label: 'Abrir documento',
+                                icon: 'bi-box-arrow-up-right',
+                                icon_position: 'end',
+                                variant: 'link',
+                                size: 'md',
+                                button_class: 'text-decoration-none ps-0 fw-semibold',
+                                attrs: {
+                                    'target': '_blank',
+                                    'rel': 'noopener'
+                                }
+                            } %}
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-4">
+                {% include 'site/components/button.twig' with {
+                    href: BASE_URL ~ 'institucional/documentos',
+                    label: 'Ver todos os documentos',
+                    icon: 'bi-folder2-open',
+                    variant: 'outline',
+                    size: 'lg',
+                    button_class: 'fw-bold'
+                } %}
+            </div>
+        </div>
+    </section>
     {% endif %}
 {% endblock %}

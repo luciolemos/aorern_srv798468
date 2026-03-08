@@ -26,7 +26,7 @@ class LoginController extends Controller {
             $adminRoles = ['admin', 'gerente', 'operador'];
             $redirect = in_array($_SESSION['user_role'] ?? null, $adminRoles, true)
                 ? BASE_URL . "admin/dashboard"
-                : BASE_URL;
+                : BASE_URL . "associado";
             header("Location: " . $redirect);
             exit;
         }
@@ -105,7 +105,7 @@ class LoginController extends Controller {
         $adminRoles = ['admin', 'gerente', 'operador'];
         $redirect = in_array($user['role'] ?? null, $adminRoles, true)
             ? BASE_URL . "admin/dashboard"
-            : BASE_URL . "admin/perfil"; // usuário comum vê seu perfil na área admin
+            : BASE_URL . "associado";
 
         header("Location: " . $redirect);
         exit;

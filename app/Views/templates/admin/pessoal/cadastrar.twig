@@ -1,32 +1,33 @@
 {% extends 'admin/layouts/base_admin.twig' %}
-{% block title %}Cadastrar Pessoal - Admin{% endblock %}
+{% block title %}Cadastrar Associado - Admin{% endblock %}
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
    <!-- Cabeçalho -->
     <div data-aos="fade-down" class="mb-4">
-        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-person-plus me-2"></i>Cadastrar pessoal</h2>
-        <p class="text-muted mb-0">Cadastre novo registro de pessoal para o sistema do CBMRN</p>
+        <h2 class="fw-bold admin-page-title"><i class="bi bi-person-plus me-2"></i>Cadastrar associado</h2>
+        <p class="text-muted mb-0">Cadastre um novo registro para a base associativa da AORERN</p>
     </div>
     <hr class="my-4">
     
     <!-- Formulário -->
     <form method="post" action="{{ BASE_URL }}admin/pessoal/salvar" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <div class="row">
             <!-- Coluna Principal -->
             <div class="col-lg-12">
                 <!-- Card Dados Pessoais -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
-                        <h5 class="mb-0 fw-bold" style="color: #df6301;">
+                        <h5 class="mb-0 fw-bold admin-section-title">
                             <i class="bi bi-person-vcard me-2"></i>Dados Pessoais
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">Código do Bombeiro</label>
+                                <label class="form-label fw-bold">Código do associado</label>
                                 <input type="text" class="form-control" name="staff_id" readonly
-                                       value="FIREMAN-{{ 'now'|date('YmdHis') }}">
+                                       value="{{ staff_id }}">
                             </div>
 
                             <div class="col-md-8">
@@ -53,7 +54,7 @@
 
                             <div class="col-md-12">
                                 <label class="form-label fw-bold">
-                                    <i class="bi bi-image me-1"></i>Foto do Bombeiro
+                                    <i class="bi bi-image me-1"></i>Foto do associado
                                 </label>
                                 <input type="file" class="form-control" name="foto"
                                        accept="image/jpeg,image/png,image/webp" 
@@ -61,60 +62,37 @@
                                 <small class="text-muted">JPG, PNG ou WebP • Máximo 50MB (opcional)</small>
                                 
                                 <!-- Preview -->
-                                <div class="mt-2" id="fotoPreviewContainer" style="display: none;">
+                                <div class="mt-2 d-none" id="fotoPreviewContainer">
                                     <img id="fotoPreview" src="" alt="Preview"
-                                         class="rounded shadow-sm" 
-                                         style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #df6301;">
+                                         class="rounded shadow-sm admin-photo-preview">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card Atuação na Obra -->
+                <!-- Card Vínculo associativo -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
-                        <h5 class="mb-0 fw-bold" style="color: #df6301;">
-                            <i class="bi bi-cone-striped me-2"></i>Atuação na Obra
+                        <h5 class="mb-0 fw-bold admin-section-title">
+                            <i class="bi bi-diagram-3 me-2"></i>Vínculo associativo
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="form-label fw-bold">Função <span class="text-danger">*</span></label>
-                                <select name="workRole" class="form-select" required>
+                                <select name="funcao_id" class="form-select" required>
                                     <option value="" disabled selected>Selecione a função</option>
                                     {% for funcao in funcoes %}
                                         <option value="{{ funcao.id }}">{{ funcao.nome }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Obra <span class="text-danger">*</span></label>
-                                <select class="form-select" name="obra_id" required>
-                                    <option value="" disabled selected>Selecione a obra</option>
-                                    {% for obra in obras %}
-                                        <option value="{{ obra.id }}">{{ obra.descricao }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Jornada</label>
-                                <select name="jornada" class="form-select">
-                                    <option value="8h">8h/dia</option>
-                                    <option value="6h">6h/dia</option>
-                                    <option value="4h">4h/dia</option>
-                                    <option value="Outros">Outros</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Data Admissão <span class="text-danger">*</span></label>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Data de ingresso <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="data_admissao" required>
                             </div>
-
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">Status</label>
                                 <select name="status" class="form-select">
@@ -124,6 +102,16 @@
                                     <option value="Demitido">Demitido</option>
                                 </select>
                             </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Status associativo</label>
+                                <select name="status_associativo" class="form-select">
+                                    {% for option in statusAssociativoOptions %}
+                                        <option value="{{ option }}" {% if option == 'provisorio' %}selected{% endif %}>
+                                            {{ option == 'efetivo' ? 'Sócio Efetivo' : (option == 'honorario' ? 'Sócio Honorário' : (option == 'fundador' ? 'Sócio Fundador' : (option == 'benemerito' ? 'Sócio Benemérito' : (option == 'veterano' ? 'Sócio Veterano' : (option == 'aluno' ? 'Sócio Aluno' : 'Sócio Provisório'))))) }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -131,12 +119,12 @@
                 <!-- Card Observações -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
-                        <h5 class="mb-0 fw-bold" style="color: #df6301;">
+                        <h5 class="mb-0 fw-bold admin-section-title">
                             <i class="bi bi-list-columns-reverse me-2"></i>Observações
                         </h5>
                     </div>
                     <div class="card-body">
-                        <textarea name="observacoes" rows="4" class="form-control" placeholder="Informações adicionais sobre o bombeiro..."></textarea>
+                        <textarea name="observacoes" rows="4" class="form-control" placeholder="Informações adicionais sobre o associado..."></textarea>
                 </div>
             </div>
 
@@ -148,9 +136,9 @@
             <!-- Botões de Ação -->
             <div class="col-12">
                 <div class="d-flex flex-column flex-md-row gap-2 order-md-2 w-100 w-md-auto justify-content-md-end">
-                    <a href="{{ BASE_URL }}admin" class="btn btn-primary"><i class="bi bi-speedometer2 me-1"></i> Painel</a>
-                    <a href="{{ BASE_URL }}admin/pessoal" class="btn btn-danger"><i class="bi bi-x-circle me-1"></i> Cancelar</a>
-                    <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i> Salvar</button>
+                    <a href="{{ BASE_URL }}admin" class="btn btn-theme-surface"><i class="bi bi-speedometer2 me-1"></i> Painel</a>
+                    <a href="{{ BASE_URL }}admin/pessoal" class="btn btn-theme-outline-neutral"><i class="bi bi-x-circle me-1"></i> Cancelar</a>
+                    <button type="submit" class="btn btn-theme"><i class="bi bi-save me-1"></i> Salvar</button>
                 </div>
             </div>
         </div>            <!-- Sidebar Informações -->
@@ -158,7 +146,7 @@
                 <!-- Card de Ajuda -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
-                        <h5 class="mb-0 fw-bold" style="color: #df6301;">
+                                        <h5 class="mb-0 fw-bold admin-section-title">
                             <i class="bi bi-info-circle me-2"></i>Informações
                         </h5>
                     </div>
@@ -195,35 +183,11 @@ function previewFoto(input) {
         const reader = new FileReader();
         reader.onload = function(e) {
             preview.src = e.target.result;
-            container.style.display = 'block';
+            container.classList.remove('d-none');
         };
         reader.readAsDataURL(input.files[0]);
     }
 }
 </script>
 
-<style>
-.form-control:focus,
-.form-select:focus {
-    border-color: #df6301;
-    box-shadow: 0 0 0 0.2rem rgba(223, 99, 1, 0.25);
-}
-
-.btn-primary {
-    background-color: #df6301;
-    border-color: #df6301;
-}
-
-.btn-primary:hover {
-    background-color: #b54f01;
-    border-color: #b54f01;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(223, 99, 1, 0.3);
-}
-
-.card {
-    border-radius: 0.5rem;
-    transition: all 0.3s ease;
-}
-</style>
 {% endblock %}

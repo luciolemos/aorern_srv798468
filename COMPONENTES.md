@@ -34,7 +34,7 @@ include 'components/navbar.php';
 - Hamburger menu em mobile
 - Logo com scaling automático (40px → 46px)
 - Overlay de sombra para mobile
-- Cores tema CBMRN (laranja #df6301)
+- Cores tema AORE/RN (verde #556b2f)
 
 ---
 
@@ -112,10 +112,10 @@ include 'components/footer.php';
 **Variáveis CSS (Customizáveis):**
 ```css
 :root {
-  --cbmrn-orange: #df6301;
-  --cbmrn-orange-dark: #b54f01;
-  --cbmrn-white: #ffffff;
-  --cbmrn-dark: #212529;
+   --aorern-primary: #556b2f;
+   --aorern-primary-dark: #3f4f22;
+   --aorern-white: #ffffff;
+   --aorern-dark: #212529;
   --navbar-height: 56px;
 }
 ```

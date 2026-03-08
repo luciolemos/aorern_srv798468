@@ -1,0 +1,138 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Editar Patrocinador{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold admin-page-title"><i class="bi bi-pencil-square me-2"></i>Editar patrocinador</h2>
+        <p class="text-muted mb-0">Atualize os dados exibidos na seção de colaboradores da home.</p>
+        <hr class="my-4">
+    </div>
+
+    <form method="post" action="{{ BASE_URL }}admin/patrocinadores/atualizar/{{ patrocinador.id }}" enctype="multipart/form-data" class="card border-0 shadow-sm">
+        <div class="card-body">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token|e('html_attr') }}">
+
+            <div class="row g-3">
+                <div class="col-lg-6">
+                    <label class="form-label fw-bold">Nome da empresa*</label>
+                    <input type="text" name="nome" class="form-control" required maxlength="160" value="{{ patrocinador.nome|default('')|e('html_attr') }}">
+                </div>
+                <div class="col-lg-3">
+                    <label class="form-label fw-bold">Telefone</label>
+                    <input type="text" name="telefone" class="form-control js-phone-mask" inputmode="numeric" value="{{ patrocinador.telefone|default('')|e('html_attr') }}" placeholder="(84) 99999-9999">
+                </div>
+                <div class="col-lg-3">
+                    <label class="form-label fw-bold">WhatsApp</label>
+                    <input type="text" name="whatsapp" class="form-control js-phone-mask" inputmode="numeric" value="{{ patrocinador.whatsapp|default('')|e('html_attr') }}" placeholder="(84) 99999-9999">
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-bold">E-mail</label>
+                    <input type="email" name="email" class="form-control" value="{{ patrocinador.email|default('')|e('html_attr') }}" placeholder="contato@empresa.com">
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-bold">Site</label>
+                    <input type="text" name="site" class="form-control" value="{{ patrocinador.site|default('')|e('html_attr') }}" placeholder="https://empresa.com.br">
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-bold">Instagram</label>
+                    <input type="text" name="instagram" class="form-control" value="{{ patrocinador.instagram|default('')|e('html_attr') }}" placeholder="@empresa ou URL completa">
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label fw-bold">Ordem</label>
+                    <input type="number" name="ordem" class="form-control" min="0" value="{{ patrocinador.ordem|default(0) }}">
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label fw-bold">Situação</label>
+                    <select name="ativo" class="form-select">
+                        <option value="1" {% if patrocinador.ativo %}selected{% endif %}>Ativo</option>
+                        <option value="0" {% if not patrocinador.ativo %}selected{% endif %}>Inativo</option>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-bold">Exibir textos sobre o banner</label>
+                    <select name="exibir_texto_banner" class="form-select">
+                        <option value="1" {% if patrocinador.exibir_texto_banner is not defined or patrocinador.exibir_texto_banner %}selected{% endif %}>Sim</option>
+                        <option value="0" {% if patrocinador.exibir_texto_banner is defined and not patrocinador.exibir_texto_banner %}selected{% endif %}>Não</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <div class="border rounded-3 p-3 bg-light-subtle">
+                        <p class="fw-bold mb-3">Aparência no banner</p>
+                        <div class="d-flex flex-column gap-2">
+                            <label class="d-flex align-items-center justify-content-between gap-3 mb-0">
+                                <span class="small fw-semibold">Cor do nome da empresa</span>
+                                <input type="color" name="texto_cor_titulo" class="form-control form-control-color" value="{{ patrocinador.texto_cor_titulo|default('#FFFFFF')|e('html_attr') }}" title="Cor do nome da empresa">
+                            </label>
+                            <label class="d-flex align-items-center justify-content-between gap-3 mb-0">
+                                <span class="small fw-semibold">Cor da descrição curta</span>
+                                <input type="color" name="texto_cor_descricao" class="form-control form-control-color" value="{{ patrocinador.texto_cor_descricao|default('#FFFFFF')|e('html_attr') }}" title="Cor da descrição curta">
+                            </label>
+                            <label class="d-flex align-items-center justify-content-between gap-3 mb-0">
+                                <span class="small fw-semibold">Cor dos ícones sociais</span>
+                                <input type="color" name="icone_cor" class="form-control form-control-color" value="{{ patrocinador.icone_cor|default('#FFFFFF')|e('html_attr') }}" title="Cor dos ícones sociais">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Descrição curta</label>
+                    <textarea name="descricao_curta" rows="3" class="form-control" maxlength="500">{{ patrocinador.descricao_curta|default('')|e }}</textarea>
+                </div>
+                <div class="col-lg-8">
+                    <label class="form-label fw-bold">Trocar logo (opcional)</label>
+                    <input type="file" name="logo" class="form-control" accept="image/jpeg,image/png,image/webp">
+                    <small class="text-muted">Envie apenas se quiser substituir a imagem atual.</small>
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-bold d-block">Logo atual</label>
+                    {% if patrocinador.logo_path %}
+                        <img src="{{ BASE_URL }}{{ patrocinador.logo_path }}" alt="{{ patrocinador.nome|e('html_attr') }}" class="img-thumbnail" style="max-width:160px;max-height:160px;object-fit:contain;">
+                    {% else %}
+                        <span class="text-muted">Sem logo.</span>
+                    {% endif %}
+                </div>
+                <div class="col-lg-8">
+                    <label class="form-label fw-bold">Trocar banner (opcional)</label>
+                    <input type="file" name="banner" class="form-control" accept="image/jpeg,image/png,image/webp">
+                    <small class="text-muted">Formato recomendado: 1600x900. Se não houver banner, o sistema usa a logo.</small>
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-bold d-block">Banner atual</label>
+                    {% if patrocinador.banner_path %}
+                        <img src="{{ BASE_URL }}{{ patrocinador.banner_path }}" alt="Banner de {{ patrocinador.nome|e('html_attr') }}" class="img-thumbnail" style="max-width:220px;max-height:140px;object-fit:cover;">
+                    {% else %}
+                        <span class="text-muted">Sem banner.</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-white border-top d-flex flex-column flex-md-row justify-content-md-end gap-2">
+            <a href="{{ BASE_URL }}admin/patrocinadores" class="btn btn-outline-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-success">Atualizar patrocinador</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            function formatPhone(value) {
+                const digits = String(value || '').replace(/\D+/g, '').slice(0, 11);
+                if (digits.length <= 2) return digits;
+                if (digits.length <= 6) return `(${digits.slice(0,2)}) ${digits.slice(2)}`;
+                if (digits.length <= 10) return `(${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`;
+                return `(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`;
+            }
+
+            document.querySelectorAll('.js-phone-mask').forEach((input) => {
+                input.value = formatPhone(input.value);
+                input.addEventListener('input', () => {
+                    input.value = formatPhone(input.value);
+                });
+            });
+        })();
+    </script>
+{% endblock %}

@@ -1,7 +1,7 @@
 .admin-error-shell {
     min-height: 100vh;
     background:
-        radial-gradient(circle at top left, rgba(223, 99, 1, 0.18), transparent 30%),
+        radial-gradient(circle at top left, rgba(85, 107, 47, 0.18), transparent 30%),
         linear-gradient(160deg, #111827 0%, #0f172a 50%, #1e293b 100%);
     padding: 2rem 0;
 }
@@ -26,7 +26,7 @@
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(135deg, rgba(223, 99, 1, 0.16), transparent 38%),
+        linear-gradient(135deg, rgba(85, 107, 47, 0.16), transparent 38%),
         radial-gradient(circle at bottom right, rgba(251, 191, 36, 0.12), transparent 28%);
     pointer-events: none;
 }
@@ -45,7 +45,7 @@
     margin-bottom: 1.25rem;
     padding: 0.65rem 1rem;
     border-radius: 999px;
-    background: rgba(223, 99, 1, 0.16);
+    background: rgba(85, 107, 47, 0.16);
     color: #fdba74;
     font-size: 0.92rem;
     font-weight: 800;

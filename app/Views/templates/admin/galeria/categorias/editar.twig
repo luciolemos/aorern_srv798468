@@ -24,14 +24,14 @@
                 </div>
                 <div class="col-lg-4">
                     <label class="form-label fw-semibold text-uppercase small text-muted">Cor do badge</label>
-                    <input type="color" name="color" class="form-control form-control-color" value="{{ categoria.color|default('#df6301')|e('html_attr') }}">
+                    <input type="color" name="color" class="form-control form-control-color" value="{{ categoria.color|default('#556b2f')|e('html_attr') }}">
                 </div>
                 <div class="col-lg-8">
                     <label class="form-label fw-semibold text-uppercase small text-muted">Prévia</label>
                     <div class="d-flex align-items-center gap-3 border rounded p-3 bg-light">
-                        <span class="color-dot" id="colorPreview" style="background-color: {{ categoria.color|default('#df6301')|e('html_attr') }};"></span>
+                        <span class="color-dot" id="colorPreview" style="background-color: {{ categoria.color|default('#556b2f')|e('html_attr') }};"></span>
                         <div>
-                            <div class="badge rounded-pill text-white" id="badgePreview" style="background-color: {{ categoria.color|default('#df6301')|e('html_attr') }};">{{ categoria.nome|e }}</div>
+                            <div class="badge rounded-pill text-white" id="badgePreview" style="background-color: {{ categoria.color|default('#556b2f')|e('html_attr') }};">{{ categoria.nome|e }}</div>
                             <p class="small text-muted mb-0" id="slugPreview">/{{ categoria.slug|e }}</p>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
         const updatePreview = () => {
             const nameValue = nameInput.value.trim() || 'Categoria';
             const slugValue = slugInput.value.trim() || 'categoria';
-            const colorValue = colorInput.value || '#df6301';
+            const colorValue = colorInput.value || '#556b2f';
 
             badgePreview.textContent = nameValue;
             badgePreview.style.backgroundColor = colorValue;

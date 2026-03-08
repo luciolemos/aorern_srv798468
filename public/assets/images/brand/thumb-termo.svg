@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+  <rect width="960" height="600" rx="32" fill="#f5f1f7"/>
+  <rect x="62" y="62" width="836" height="476" rx="24" fill="#ffffff" stroke="#dfd3e6"/>
+  <rect x="112" y="126" width="236" height="304" rx="18" fill="#fbf8fd" stroke="#dfd3e6"/>
+  <line x1="144" y1="186" x2="314" y2="186" stroke="#dcd2e6" stroke-width="2"/>
+  <line x1="144" y1="222" x2="314" y2="222" stroke="#dcd2e6" stroke-width="2"/>
+  <line x1="144" y1="258" x2="314" y2="258" stroke="#dcd2e6" stroke-width="2"/>
+  <path d="M180 332c38-28 80-28 118 0" fill="none" stroke="#8b1e2d" stroke-width="6" stroke-linecap="round"/>
+  <text x="378" y="214" fill="#10253f" font-size="38" font-family="Georgia" font-weight="700">Termo</text>
+  <text x="378" y="258" fill="#8b1e2d" font-size="22" font-family="Arial" font-weight="700">Aceite, compromisso ou instrumento declaratorio</text>
+  <text x="378" y="318" fill="#46556b" font-size="20" font-family="Arial">Documento de formalizacao com valor institucional.</text>
+</svg>

@@ -2,7 +2,7 @@
 
 ## What Was Done
 
-Your CBMRN website has been successfully migrated from plain PHP views to **Twig templating engine** with a professional component-based architecture. The admin dashboard remains completely untouched and functional.
+Your AORE/RN website has been successfully migrated from plain PHP views to **Twig templating engine** with a professional component-based architecture. The admin dashboard remains completely untouched and functional.
 
 ---
 
@@ -77,7 +77,7 @@ Simply visit the URL:
 1. **Create a Twig template** in `app/Views/templates/`:
    ```twig
    {% extends "layouts/base.twig" %}
-   {% block title %}My Page - CBMRN{% endblock %}
+    {% block title %}My Page - AORE/RN{% endblock %}
    {% block content %}
        <div class="container">
            <h1>{{ title }}</h1>
@@ -206,7 +206,7 @@ All CSS and JS files are included in the base layout:
 ## Color Scheme Reference
 
 ```css
---primary:     #df6301   /* Laranja CBMRN */
+--primary:     #556b2f   /* Verde AORE/RN */
 --dark:        #b54f01   /* Dark orange for hover/active */
 --light:       #ed7f22   /* Light orange for accent */
 ```

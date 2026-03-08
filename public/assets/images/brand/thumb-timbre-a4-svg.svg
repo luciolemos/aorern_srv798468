@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+  <rect width="960" height="600" rx="32" fill="#f4f6f0"/>
+  <rect x="180" y="52" width="420" height="496" rx="18" fill="#ffffff" stroke="#d8dfcf"/>
+  <rect x="180" y="52" width="420" height="86" rx="18" fill="#556b2f"/>
+  <circle cx="238" cy="94" r="22" fill="#d9b54a"/>
+  <text x="280" y="100" fill="#ffffff" font-size="18" font-family="Arial" font-weight="700">AORERN</text>
+  <line x1="220" y1="174" x2="560" y2="174" stroke="#d8dee5" stroke-width="2"/>
+  <line x1="220" y1="226" x2="560" y2="226" stroke="#e4e9ef" stroke-width="2"/>
+  <line x1="220" y1="264" x2="560" y2="264" stroke="#e4e9ef" stroke-width="2"/>
+  <line x1="220" y1="302" x2="560" y2="302" stroke="#e4e9ef" stroke-width="2"/>
+  <line x1="220" y1="340" x2="560" y2="340" stroke="#e4e9ef" stroke-width="2"/>
+  <text x="650" y="240" fill="#10253f" font-size="34" font-family="Georgia" font-weight="700">Timbre oficial A4</text>
+  <text x="650" y="284" fill="#556b2f" font-size="22" font-family="Arial" font-weight="700">Versao SVG para edicao e escala</text>
+  <text x="650" y="344" fill="#46556b" font-size="20" font-family="Arial">Ideal para ajustes de diagramação,</text>
+  <text x="650" y="374" fill="#46556b" font-size="20" font-family="Arial">exportacao e composicoes refinadas.</text>
+</svg>

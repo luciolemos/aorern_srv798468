@@ -57,7 +57,7 @@ CREATE TABLE users (
 $userModel = new User();
 $dados = [
     'username' => 'paulo_bombeiro',
-    'email'    => 'paulo@cbmrn.gov.br',
+   'email'    => 'paulo@aorern.org.br',
     'password' => password_hash('minha_senha', PASSWORD_BCRYPT),
     'avatar'   => 'assets/avatars/foto.jpg',
     'role'     => 'operador'
@@ -73,7 +73,7 @@ $user = $userModel->buscarPorUsername('paulo_bombeiro');
 
 ### **3. Buscar por email**
 ```php
-$user = $userModel->buscarPorEmail('paulo@cbmrn.gov.br');
+$user = $userModel->buscarPorEmail('paulo@aorern.org.br');
 ```
 
 ### **4. Buscar por ID**
@@ -119,7 +119,7 @@ if ($userModel->usernameExiste('paulo_bombeiro')) {
 
 ### **10. Verificar se email existe**
 ```php
-if ($userModel->emailExiste('paulo@cbmrn.gov.br')) {
+if ($userModel->emailExiste('paulo@aorern.org.br')) {
     echo 'Já existe!';
 }
 ```
@@ -476,7 +476,7 @@ SELECT id, username, email, role, ativo, ultimo_login, created_at FROM users;
 
 ```bash
 # Verificar arquivos salvos
-ls -la /var/www/cbmrn/public/assets/avatars/
+ls -la /var/www/aorern/public/assets/avatars/
 ```
 
 ---

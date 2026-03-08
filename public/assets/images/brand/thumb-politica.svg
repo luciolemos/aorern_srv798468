@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+  <rect width="960" height="600" rx="32" fill="#eef4f7"/>
+  <rect x="62" y="62" width="836" height="476" rx="24" fill="#ffffff" stroke="#d7e1e6"/>
+  <circle cx="208" cy="236" r="88" fill="#2a86c5" opacity="0.12"/>
+  <path d="M208 170l58 24v42c0 54-34 99-58 112-24-13-58-58-58-112v-42z" fill="#2a86c5"/>
+  <path d="M181 236l20 20 34-40" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="378" y="214" fill="#10253f" font-size="38" font-family="Georgia" font-weight="700">Politica</text>
+  <text x="378" y="258" fill="#2a86c5" font-size="22" font-family="Arial" font-weight="700">Diretriz institucional de governanca e protecao</text>
+  <text x="378" y="318" fill="#46556b" font-size="20" font-family="Arial">Normas permanentes aplicadas ao funcionamento do portal.</text>
+</svg>

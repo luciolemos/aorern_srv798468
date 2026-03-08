@@ -11,6 +11,10 @@ use App\Models\EquipamentoModel;
 use App\Models\ObraModel;
 use App\Models\LivroOcorrenciaModel;
 use App\Models\User as UserModel;
+use App\Models\Post;
+use App\Models\PostCategoryModel;
+use App\Models\GaleriaImagemModel;
+use App\Models\GaleriaCategoriaModel;
 use App\Helpers\AdminHelper;
 
 class DashboardController extends Controller {
@@ -33,6 +37,21 @@ class DashboardController extends Controller {
 
         $userModel = new UserModel();
         $total_usuarios = $userModel->contar();
+        $usuarios_pendentes = $userModel->contarPorStatus('pendente');
+
+        $postModel = new Post();
+        $postsPendentes = $postModel->contarPorStatus('pending');
+        $postsPublicados = $postModel->contarPorStatus('published');
+        $ultimos_posts = array_slice($postModel->todos(), 0, 5);
+
+        $postCategoryModel = new PostCategoryModel();
+        $total_categorias_posts = count($postCategoryModel->listar());
+
+        $galeriaImagemModel = new GaleriaImagemModel();
+        $ultimas_imagens = $galeriaImagemModel->listarRecentes(5);
+
+        $galeriaCategoriaModel = new GaleriaCategoriaModel();
+        $total_categorias_galeria = count($galeriaCategoriaModel->listar());
         
         // Atividades recentes
         $pessoalModel = new PessoalModel();
@@ -53,7 +72,14 @@ class DashboardController extends Controller {
             'ocorrencias_abertas' => $ocorrencias_abertas,
             'ocorrencias_concluidas' => $ocorrencias_concluidas,
             'total_usuarios'      => $total_usuarios,
+            'usuarios_pendentes'  => $usuarios_pendentes,
+            'posts_pendentes'     => $postsPendentes,
+            'posts_publicados'    => $postsPublicados,
+            'total_categorias_posts' => $total_categorias_posts,
+            'total_categorias_galeria' => $total_categorias_galeria,
             'ultimos_bombeiros' => $ultimos_bombeiros,
+            'ultimos_posts' => $ultimos_posts,
+            'ultimas_imagens' => $ultimas_imagens,
             'ultimos_equipamentos' => $ultimos_equipamentos,
             'ultimas_obras'        => $ultimas_obras,
             'ultimo_login'        => $_SESSION['last_activity'] ?? time(),

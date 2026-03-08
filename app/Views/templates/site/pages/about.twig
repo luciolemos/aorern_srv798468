@@ -1,30 +1,33 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}Sobre Nós - CBMRN{% endblock %}
+{% block title %}Sobre a AORE/RN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/about.css">
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/about.css?v=20260304-hero1">
 {% endblock %}
 
 {% block content %}
     <section class="about-hero site-hero">
         <div class="site-hero-pattern"></div>
         <div class="container position-relative">
-             <div class="row justify-content-center g-5">
-                <div class="hero-content text-lg-start">
+            <div class="row justify-content-center g-5">
+                <div class="col-lg-7 hero-content text-lg-start">
                     <p class="section-kicker text-white-50 mb-2">Quem somos</p>
-                    <h1 class="section-title text-white mb-3">2º Subgrupamento de Bombeiros Militar (2º SGB)</h1>
+                    <h1 class="section-title text-white mb-3">AORE/RN</h1>
                     <p class="section-lead text-white-75 mb-4">
-                        A atuação do <strong>2º SGB</strong> apoia-se em uma 
-                        doutrina moderna, treinamento permanente e integração com forças parceiras, 
-                        assegurando respostas rápidas e eficazes diante dos mais variados cenários de emergência.
-                        Baseado em Goianinha/RN e inaugurado em setembro de 2024, o 2º SGB reforça a presença do Corpo de 
-                        Bombeiros Militar do RN no Litoral Sul e Região Agreste do estado, encurtando o tempo de resposta e levando 
-                        segurança especializada para 25 municípios potiguares.
+                        A Associação dos Oficiais da Reserva do Exército do Rio Grande do Norte, também identificada como AORE/RN,
+                        é uma entidade civil de natureza privada, sem fins lucrativos, com sede na cidade de Natal/RN,
+                        estabelecida nas dependências do 16º Batalhão de Infantaria Motorizado, no bairro Tirol.
                     </p>
                     <p class="section-lead text-white-75 mb-4">
-                       Instalado na Rua Presidente Kennedy, nº 168, em Goianinha/RN, o 2º Subgrupamento de Bombeiros Militar exerce papel estratégico no atendimento às demandas emergenciais do interior do estado. Suas atribuições incluem o combate a incêndios, operações de resgate e salvamento e ações de defesa civil, assegurando a proteção da vida e do patrimônio e promovendo maior segurança e tranquilidade às comunidades sob sua responsabilidade.
+                        Sua finalidade é congregar Oficiais da Reserva (R/2), preservando valores, tradições e a cultura militar do Exército Brasileiro no âmbito estadual,
+                        além de fortalecer a camaradagem, o espírito de corpo e a identidade institucional dos oficiais formados pelos NPOR e CPOR.
+                    </p>
+                    <p class="section-lead text-white-75 mb-4">
+                        No campo institucional, a associação promove ações de valorização dos oficiais da reserva, defesa de direitos,
+                        participação cívica e social, integração com organizações militares e reconhecimento de trajetórias marcadas pelo compromisso com a Pátria.
+                    </p>
                     <div class="d-flex flex-wrap gap-3 about-hero-actions">
                         {% include 'site/components/button.twig' with {
                             href: BASE_URL ~ 'contact',
@@ -36,7 +39,7 @@
                         } %}
                         {% include 'site/components/button.twig' with {
                             href: '#nossos-pilares',
-                            label: 'Missão & valores',
+                            label: 'Ver frentes institucionais',
                             icon: 'bi-gem',
                             variant: 'solid',
                             size: 'lg',
@@ -44,33 +47,35 @@
                         } %}
                     </div>
                 </div>
-      {#           <div class="col-lg-5 hero-panel-col">
+                <div class="col-lg-5 hero-panel-col">
                     {% include 'site/components/hero-panel.twig' with {
-                        eyebrow: 'Marcos recentes',
-                        title: 'Nossa trajetória',
+                        badge: '<i class="bi bi-shield-check me-1 text-primary"></i> Referência institucional',
+                        title: 'Base associativa da reserva no Rio Grande do Norte',
+                        description: 'A AORE/RN atua em frentes de memória, integração, representação e valorização dos oficiais da reserva no estado.',
                         theme: 'light',
+                        list_class: 'mb-0',
                         items: [
                             {
-                                icon: 'bi bi-fire',
-                                title: '2024 · Inauguração oficial do 2º SGB/2º GBM',
-                                description: 'Estrutura moderna dedicada ao Litoral Sul e Agreste',
+                                title: 'Sede institucional',
+                                meta: 'Natal/RN · 16º BIMtz (Tirol)',
+                                dot: true,
                                 item_class: 'py-2'
                             },
                             {
-                                icon: 'bi bi-geo-alt',
-                                title: '25 municípios atendidos',
-                                description: 'Cobertura contínua e integrada com outras forças',
+                                title: 'Natureza jurídica',
+                                meta: 'Entidade civil privada, sem fins lucrativos',
+                                dot: true,
                                 item_class: 'py-2'
                             },
                             {
-                                icon: 'bi bi-lightning-charge',
-                                title: 'Operações 24/7',
-                                description: 'Equipes prontas para combate a incêndio e salvamento',
+                                title: 'Propósito institucional',
+                                meta: 'Congregar oficiais R/2 e preservar valores do Exército Brasileiro',
+                                dot: true,
                                 item_class: 'py-2'
                             }
                         ]
                     } %}
-                </div> #}
+                </div>
             </div>
         </div>
     </section>
@@ -79,10 +84,8 @@
         <div class="container">
             {% include 'site/components/section-header.twig' with {
                 kicker: 'Nossa essência',
-                title: 'Missão, cobertura e compromisso',
-                subtitle: 'Responder com rapidez, prevenir com inteligência e cuidar das pessoas.
-
-Garantimos proteção à vida, ao patrimônio e ao meio ambiente por meio de planejamento baseado em cenários, equipes altamente treinadas e tecnologia aplicada à gestão operacional.',
+                title: 'Natureza, finalidade e compromisso associativo',
+                subtitle: 'A AORE/RN organiza a vida associativa dos oficiais da reserva no estado, preserva a memória militar, fortalece a identidade institucional e mantém vivo o vínculo permanente entre a ativa e a reserva.',
                 align: 'center',
                 kicker_class: 'text-uppercase small text-muted mb-2',
                 title_class: 'fw-bold text-primary mb-3',
@@ -92,55 +95,40 @@ Garantimos proteção à vida, ao patrimônio e ao meio ambiente por meio de pla
 
             {% set about_pillars = [
                 {
-                    icon: 'bi bi-compass',
-                    title: 'Missão',
-                    description: 'Proteger vidas e patrimônios por meio de operações especializadas, treinamento constante e atendimento humano à comunidade.'
+                    icon: 'bi bi-building',
+                    title: 'Entidade civil sem fins lucrativos',
+                    description: 'Possui natureza privada e estrutura associativa orientada ao fortalecimento institucional dos oficiais da reserva no Rio Grande do Norte.'
                 },
                 {
-                    icon: 'bi bi-geo-alt',
-                    title: 'Cobertura geográfica',
-                    description: 'Atuamos em 25 municípios do Litoral Sul e Agreste, reduzindo tempos de chegada e integrando ações com defesas civis municipais.'
+                    icon: 'bi bi-person-badge',
+                    title: 'Congregação dos oficiais R/2',
+                    description: 'Reúne oficiais da reserva formados pelos Núcleos e Centros de Preparação de Oficiais da Reserva, promovendo integração entre gerações.'
+                },
+                {
+                    icon: 'bi bi-bank2',
+                    title: 'Preservação da cultura militar',
+                    description: 'Atua na preservação dos valores, tradições e referências históricas do Exército Brasileiro no plano estadual.'
+                },
+                {
+                    icon: 'bi bi-people-fill',
+                    title: 'Camaradagem e espírito de corpo',
+                    description: 'Estimula convivência, solidariedade, respeito mútuo e senso de pertencimento entre os associados.'
                 },
                 {
                     icon: 'bi bi-shield-check',
-                    title: 'Compromisso contínuo',
-                    description: 'Operamos 24/7 com protocolos claros, frota revisada e equipes capacitadas para incêndios, salvamentos e prevenção.'
-                },
-                                {
-                    icon: 'bi bi-fire',
-                    title: 'Combate a incêndios',
-                    description: 'Estruturas urbanas, áreas de vegetação e veículos recebem resposta rápida graças a protocolos digitais de despacho.'
+                    title: 'Valorização e defesa institucional',
+                    description: 'Desenvolve ações voltadas à valorização dos oficiais da reserva, à defesa de seus direitos e à participação cívica e social.'
                 },
                 {
-                    icon: 'bi bi-life-preserver',
-                    title: 'Resgate e salvamento',
-                    description: 'Equipes especializadas atuam em altura, espaços confinados e ocorrências veiculares com monitoramento centralizado.'
-                },
-                {
-                    icon: 'bi bi-mortarboard',
-                    title: 'Prevenção e educação',
-                    description: 'Visitas, vistorias, palestras e conteúdos digitais fortalecem a cultura de segurança nas comunidades atendidas.'
-                },
-                             {
-                    icon: 'bi bi-life-preserver',
-                    title: 'Busca em estruturas colapsadas',
-                    description: 'Protocolos de varredura rápida para localizar vítimas em deslizamentos, desabamentos e áreas de difícil acesso.'
-                },
-                {
-                    icon: 'bi bi-geo-alt',
-                    title: 'Rastreamento em áreas rurais',
-                    description: 'Suporte em ocorrências de pessoas desaparecidas, com foco em mata fechada e extensões do agreste.'
-                },
-                    {
-                    icon: 'bi bi-heart',
-                    title: 'Apoio psicossocial',
-                    description: 'Interação com vítimas, familiares e comunidades para reduzir o trauma após grandes ocorrências.'
+                    icon: 'bi bi-diagram-3',
+                    title: 'Integração entre ativa e reserva',
+                    description: 'Reforça, em parceria com organizações militares, o elo permanente entre o Exército na ativa e seus oficiais licenciados.'
                 }
             ] %}
 
             <div class="row g-4">
                 {% for card in about_pillars %}
-                    <div class="col-md-4">
+                    <div class="col-md-6 col-xl-4">
                         {% include 'site/components/feature-card.twig' with {
                             icon: card.icon,
                             title: card.title,
@@ -152,6 +140,105 @@ Garantimos proteção à vida, ao patrimônio e ao meio ambiente por meio de pla
                         } %}
                     </div>
                 {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light border-top border-bottom">
+        <div class="container">
+            <div class="row g-4 align-items-stretch">
+                <div class="col-lg-7">
+                    {% include 'site/components/section-header.twig' with {
+                        kicker: 'Frentes institucionais',
+                        title: 'Como a AORE/RN materializa sua missão',
+                        subtitle: 'A atuação da associação combina representação, memória, integração e reconhecimento, sempre orientada pelos valores de disciplina, lealdade, liderança e compromisso com a Pátria.',
+                        align: 'start',
+                        kicker_class: 'text-muted',
+                        title_class: 'text-primary',
+                        subtitle_class: 'text-muted',
+                        extra_class: 'mb-4'
+                    } %}
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="bg-white rounded-4 shadow-sm border p-4 h-100">
+                                <h3 class="h5 fw-bold mb-3">Integração e camaradagem</h3>
+                                <ul class="text-muted mb-0 ps-3">
+                                    <li>Promoção de encontros, reuniões e eventos comemorativos.</li>
+                                    <li>Fortalecimento do espírito de corpo entre associados.</li>
+                                    <li>Preservação do convívio institucional entre oficiais da reserva.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="bg-white rounded-4 shadow-sm border p-4 h-100">
+                                <h3 class="h5 fw-bold mb-3">Memória e tradição militar</h3>
+                                <ul class="text-muted mb-0 ps-3">
+                                    <li>Valorização da história militar e dos símbolos do Exército Brasileiro.</li>
+                                    <li>Participação em solenidades, celebrações e datas cívico-militares.</li>
+                                    <li>Preservação da identidade dos oficiais formados por NPOR e CPOR.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="bg-white rounded-4 shadow-sm border p-4 h-100">
+                                <h3 class="h5 fw-bold mb-3">Representação institucional</h3>
+                                <ul class="text-muted mb-0 ps-3">
+                                    <li>Valorização dos oficiais da reserva no ambiente associativo e social.</li>
+                                    <li>Defesa de direitos e estímulo à participação cívica responsável.</li>
+                                    <li>Articulação com parceiros institucionais e organizações militares.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="bg-white rounded-4 shadow-sm border p-4 h-100">
+                                <h3 class="h5 fw-bold mb-3">Reconhecimento e honrarias</h3>
+                                <ul class="text-muted mb-0 ps-3">
+                                    <li>Concessão de distinções a associados com serviços relevantes.</li>
+                                    <li>Realização de cerimônias de reconhecimento institucional.</li>
+                                    <li>Valorização pública de trajetórias de serviço à associação e à sociedade.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="bg-white rounded-4 shadow-sm border p-4 p-lg-5 h-100">
+                        <p class="text-uppercase small fw-semibold text-muted mb-2">Base institucional</p>
+                        <h3 class="h4 fw-bold text-primary mb-4">Dados de referência da associação</h3>
+                        <dl class="row g-3 mb-0">
+                            <dt class="col-sm-4 text-muted">CNPJ</dt>
+                            <dd class="col-sm-8 mb-0">70.145.065/0001-00</dd>
+                            <dt class="col-sm-4 text-muted">Cidade-sede</dt>
+                            <dd class="col-sm-8 mb-0">Natal/RN</dd>
+                            <dt class="col-sm-4 text-muted">Instalação</dt>
+                            <dd class="col-sm-8 mb-0">Dependências do 16º Batalhão de Infantaria Motorizado, bairro Tirol</dd>
+                            <dt class="col-sm-4 text-muted">Perfil</dt>
+                            <dd class="col-sm-8 mb-0">Associação civil privada, sem fins lucrativos</dd>
+                            <dt class="col-sm-4 text-muted">Propósito</dt>
+                            <dd class="col-sm-8 mb-0">Congregar oficiais da reserva e manter vivo o elo com o Exército Brasileiro</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
+                    <div class="bg-white border rounded-4 shadow-sm p-4 p-lg-5 text-center">
+                        <p class="text-uppercase small fw-semibold text-muted mb-2">Síntese institucional</p>
+                        <h2 class="h3 fw-bold text-primary mb-3">Um elo permanente entre formação militar, serviço prestado e compromisso com a Pátria</h2>
+                        <p class="text-muted mb-0" style="line-height: 1.8;">
+                            A AORE/RN constitui-se como espaço permanente de pertencimento, memória e representação.
+                            Ao manter vivos os valores de disciplina, lealdade, liderança e compromisso com a Pátria,
+                            a associação reafirma o papel dos oficiais da reserva como agentes de continuidade institucional,
+                            integração social e preservação da cultura militar no Rio Grande do Norte.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

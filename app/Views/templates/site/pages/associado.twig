@@ -1,0 +1,333 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Área do Associado - AORE/RN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/associado.css?v=20260306-3">
+{% endblock %}
+
+{% block content %}
+    <section class="site-hero associado-hero py-5">
+        <div class="site-hero-pattern"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <h1 class="section-title text-white mb-3">Área do associado</h1>
+                    <p class="section-lead text-white-75 mb-0">Ambiente reservado para acompanhamento da sua filiação, status associativo e dados institucionais vinculados ao seu cadastro na AORE/RN.</p>
+                    {% if not session.user_id %}
+                        <div class="mt-4 d-flex flex-column flex-sm-row gap-3 associado-hero-actions">
+                            <a href="{{ BASE_URL }}register" class="btn btn-light btn-lg fw-bold">
+                                <i class="bi bi-person-plus me-1"></i>Associe-se
+                            </a>
+                            <a href="{{ BASE_URL }}login/admin" class="btn btn-outline-light btn-lg fw-bold">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 associado-page">
+        <div class="container">
+            <div class="row g-4">
+                <aside class="col-lg-4">
+                    <div class="associado-sidebar d-grid gap-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="associado-account-avatar-wrap mb-3 text-center">
+                                    <img id="associadoAvatarPreview" src="{{ associadoAvatarUrl|e('html_attr') }}" alt="{{ user.username|default('Associado')|e('html_attr') }}" class="associado-account-avatar shadow-sm">
+                                </div>
+                                <h2 class="h5 fw-bold mb-3">Conta de acesso</h2>
+                                <div class="small text-muted associado-account-meta">
+                                    <div><strong>Usuário:</strong> {{ user.username|default('-')|e }}</div>
+                                    <div><strong>E-mail:</strong> {{ user.email|default('-')|e }}</div>
+                                    <div><strong>Status da conta:</strong> {{ user.status == 'ativo' ? 'Ativa' : 'Pendente' }}</div>
+                                    <div><strong>Último login:</strong> {{ user.ultimo_login ? user.ultimo_login|date('d/m/Y H:i') : 'Primeiro acesso' }}</div>
+                                </div>
+                                <div class="mt-4 d-grid gap-2 associado-logout-inline">
+                                    <a href="{{ BASE_URL }}login/logout" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-box-arrow-right me-1"></i>Sair
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                                    <h2 class="h6 fw-bold mb-0">Status associativo</h2>
+                                    <span class="badge associado-status associado-status--{{ solicitacao.status_associativo|default('provisorio') }}">
+                                        {{ statusAssociativoLabel }}
+                                    </span>
+                                </div>
+                                <p class="small text-muted mb-0">Situação institucional atual do vínculo com a AORE/RN.</p>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm associado-quick-links-card">
+                            <div class="card-body p-4">
+                                <h2 class="h6 fw-bold mb-3">Atalhos</h2>
+                                <div class="d-grid gap-2 associado-quick-links associado-quick-links-inline">
+                                    <a href="{{ BASE_URL }}contact" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-envelope me-1"></i>Falar com a secretaria
+                                    </a>
+                                    <a href="{{ BASE_URL }}institucional/governanca" class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-diagram-3 me-1"></i>Consultar governança
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="col-lg-8">
+                    <div class="d-grid gap-4">
+                        <div class="card border-0 shadow-sm associado-dossier-card">
+                            <div class="card-body p-4">
+                                <div class="associado-dossier-card__header mb-4">
+                                    <h2 class="h5 fw-bold mb-1">Ficha institucional do associado</h2>
+                                    <p class="text-muted mb-0">Consolidado cadastral da solicitação de filiação e do vínculo associativo.</p>
+                                </div>
+
+                                {% if solicitacao %}
+                                    <div class="associado-dossier-section mb-4">
+                                        <h3 class="associado-dossier-section__title">Dados pessoais e militares</h3>
+                                        <div class="row g-3 small">
+                                            <div class="col-md-6"><strong>Nome:</strong> {{ solicitacao.nome_completo|e }}</div>
+                                            <div class="col-md-6"><strong>CPF:</strong> {{ solicitacao.cpf|e }}</div>
+                                            <div class="col-md-6"><strong>Nome da mãe:</strong> {{ solicitacao.nome_mae|default('-')|e }}</div>
+                                            <div class="col-md-6"><strong>Nome do pai:</strong> {{ solicitacao.nome_pai|default('-')|e }}</div>
+                                            <div class="col-md-6"><strong>CAM:</strong> {{ solicitacao.cam|default('-')|e }}</div>
+                                            <div class="col-md-6"><strong>RG:</strong> {{ solicitacao.rg|default('-')|e }}</div>
+                                            <div class="col-md-6"><strong>Ano NPOR:</strong> {{ solicitacao.ano_npor|e }}</div>
+                                            <div class="col-md-6"><strong>Posto/Graduação:</strong> {{ solicitacao.posto_graduacao|default('-')|e }}</div>
+                                            <div class="col-md-6"><strong>Nº:</strong> {{ solicitacao.numero_militar|default('-')|e }}</div>
+                                            <div class="col-md-6"><strong>Nome de guerra:</strong> {{ solicitacao.nome_guerra|default('-')|e }}</div>
+                                            <div class="col-md-6"><strong>Turma:</strong> {{ solicitacao.turma_npor|default('-')|e }}</div>
+                                            <div class="col-md-6"><strong>Arma/Quadro:</strong> {{ solicitacao.arma_quadro|default('-')|e }}</div>
+                                            <div class="col-md-6"><strong>Cidade:</strong> {{ solicitacao.localizacao_label|default('-')|e }}</div>
+                                            <div class="col-md-6"><strong>Filiação aprovada em:</strong> {{ solicitacao.aprovado_em ? solicitacao.aprovado_em|date('d/m/Y H:i') : '-' }}</div>
+                                            {% if associado %}
+                                                <div class="col-md-6"><strong>ID do associado:</strong> {{ associado.staff_id|default('-')|e }}</div>
+                                                <div class="col-md-6"><strong>Cadastro interno:</strong> {{ associado.funcao_nome|default('Associado')|e }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    {% if solicitacao.observacoes_admin %}
+                                        <div class="alert alert-light border mt-3 mb-0">
+                                            <strong>Observação da diretoria:</strong><br>
+                                            {{ solicitacao.observacoes_admin|nl2br }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if solicitacao.status == 'complementacao' %}
+                                        <div class="alert alert-warning border mt-4 mb-0">
+                                            <strong>Complementação documental em andamento.</strong><br>
+                                            Sua solicitação segue em análise e depende das orientações da diretoria registradas acima.
+                                        </div>
+
+                                        <div class="card border-0 shadow-sm mt-4" id="complementar-proposta">
+                                            <div class="card-body p-4">
+                                                <h3 class="h6 fw-bold mb-3">Complementar proposta de filiação</h3>
+                                                <p class="text-muted small mb-3">Atualize os dados solicitados e anexe novos documentos. Após envio, sua solicitação volta para análise.</p>
+                                                <form method="POST" action="{{ BASE_URL }}associado/complementar" enctype="multipart/form-data" class="row g-3">
+                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label small fw-semibold">CAM</label>
+                                                        <input type="text" name="cam" class="form-control" value="{{ solicitacao.cam|default('')|e('html_attr') }}">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label small fw-semibold">RG</label>
+                                                        <input type="text" name="rg" class="form-control" value="{{ solicitacao.rg|default('')|e('html_attr') }}">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label small fw-semibold">Telefone</label>
+                                                        <input type="text" name="telefone" class="form-control" value="{{ solicitacao.telefone|default('')|e('html_attr') }}">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label small fw-semibold">Ano NPOR</label>
+                                                        <input type="text" name="ano_npor" class="form-control" value="{{ solicitacao.ano_npor|default('')|e('html_attr') }}">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label small fw-semibold">Nº</label>
+                                                        <input type="text" name="numero_militar" class="form-control" value="{{ solicitacao.numero_militar|default('')|e('html_attr') }}">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-semibold">Posto/Graduação</label>
+                                                        <input type="text" name="posto_graduacao" class="form-control" value="{{ solicitacao.posto_graduacao|default('')|e('html_attr') }}">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-semibold">Nome de guerra</label>
+                                                        <input type="text" name="nome_guerra" class="form-control" value="{{ solicitacao.nome_guerra|default('')|e('html_attr') }}">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-semibold">Turma</label>
+                                                        <input type="text" name="turma_npor" class="form-control" value="{{ solicitacao.turma_npor|default('')|e('html_attr') }}">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-semibold">Arma/Quadro</label>
+                                                        <input type="text" name="arma_quadro" class="form-control" value="{{ solicitacao.arma_quadro|default('')|e('html_attr') }}">
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label class="form-label small fw-semibold">Atualizar foto (opcional)</label>
+                                                        <input type="file" name="avatar" class="form-control" accept="image/jpeg,image/png,image/webp">
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label class="form-label small fw-semibold">Anexar novos documentos (opcional)</label>
+                                                        <input type="file" name="documentos[]" class="form-control" accept=".pdf,image/jpeg,image/png,image/webp" multiple>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <label class="form-label small fw-semibold">Observações complementares</label>
+                                                        <textarea name="observacoes" class="form-control" rows="3">{{ solicitacao.observacoes|default('')|e }}</textarea>
+                                                    </div>
+                                                    <div class="col-12 d-grid d-lg-flex justify-content-lg-end">
+                                                        <button type="submit" class="btn btn-warning">
+                                                            <i class="bi bi-send-check me-1"></i>Enviar complementação
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="associado-dossier-section mt-4">
+                                        <h3 class="associado-dossier-section__title">Documentos anexados</h3>
+                                        {% if documentos is not empty %}
+                                            <div class="list-group list-group-flush">
+                                                {% for documento in documentos %}
+                                                    <a href="{{ BASE_URL ~ documento.path }}" target="_blank" rel="noopener" class="list-group-item list-group-item-action px-0">
+                                                        <i class="bi bi-paperclip me-2"></i>{{ documento.label|default(documento.name|default('Documento'))|e }}
+                                                    </a>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <p class="text-muted mb-0">Nenhum documento comprobatório foi anexado na solicitação.</p>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-warning mb-0">
+                                        Não encontramos uma solicitação de filiação vinculada a esta conta. Entre em contato com a secretaria da associação para regularização.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-lg-6">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-body p-4">
+                                        <h2 class="h5 fw-bold mb-3">Minha conta</h2>
+                                        <form method="POST" action="{{ BASE_URL }}associado/update" enctype="multipart/form-data" class="row g-3">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                            <div class="col-12">
+                                                <label class="form-label small fw-semibold">Usuário</label>
+                                                <input type="text" name="username" class="form-control" value="{{ user.username|default('')|e('html_attr') }}" required
+                                                       pattern="^[a-z]+[0-9]{4}$"
+                                                       minlength="5"
+                                                       maxlength="24"
+                                                       title="Use somente letras sem acento seguidas de 4 números (ex.: csilva1968).">
+                                                <small class="text-muted d-block mt-1">Formato: letras sem acento + 4 números no final.</small>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label small fw-semibold">E-mail</label>
+                                                <input type="email" name="email" class="form-control" value="{{ user.email|default('')|e('html_attr') }}" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label small fw-semibold">Atualizar avatar</label>
+                                                <input type="file" id="associadoAvatarInput" name="avatar" class="form-control" accept="image/jpeg,image/png,image/webp">
+                                                <small class="text-muted d-block mt-1">Prévia exibida antes de salvar.</small>
+                                            </div>
+                                            <div class="col-12 d-grid">
+                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                    <i class="bi bi-save me-1"></i>Salvar dados da conta
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-3">Segurança e próximos passos</h2>
+                            <form method="POST" action="{{ BASE_URL }}associado/change-password" class="row g-3 mb-4">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                <div class="col-12">
+                                    <label class="form-label small fw-semibold">Senha atual</label>
+                                    <input type="password" name="current_password" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold">Nova senha</label>
+                                    <input type="password" name="new_password" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold">Confirmar nova senha</label>
+                                    <input type="password" name="confirm_password" class="form-control" required>
+                                </div>
+                                <div class="col-12 d-grid">
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-shield-lock me-1"></i>Atualizar senha
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="row g-3 small text-muted associado-security-list">
+                                <div class="col-md-6"><strong>Sócio Provisório:</strong> vínculo inicial após aprovação do pedido, sujeito a complementação documental ou validação final.</div>
+                                <div class="col-md-6"><strong>Sócio Efetivo:</strong> associado com vínculo plenamente reconhecido no cadastro institucional.</div>
+                                <div class="col-md-6"><strong>Sócio Honorário:</strong> condição honorífica atribuída pela associação, quando cabível.</div>
+                                <div class="col-md-6"><strong>Sócio Fundador:</strong> associado reconhecido por participação estruturante na constituição da associação.</div>
+                                <div class="col-md-6"><strong>Sócio Benemérito:</strong> associado ou colaborador distinguido por contribuição relevante à entidade.</div>
+                                <div class="col-md-6"><strong>Sócio Veterano:</strong> associado com trajetória consolidada e histórico institucional reconhecido.</div>
+                                <div class="col-md-6"><strong>Sócio Aluno:</strong> associado em condição formativa, com vínculo em fase inicial de integração.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="associado-mobile-footer-action mt-4">
+                <a href="{{ BASE_URL }}contact" class="btn btn-primary">
+                    <i class="bi bi-envelope me-1"></i>Falar com a secretaria
+                </a>
+                <a href="{{ BASE_URL }}institucional/governanca" class="btn btn-outline-secondary">
+                    <i class="bi bi-diagram-3 me-1"></i>Consultar governança
+                </a>
+                <a href="{{ BASE_URL }}login/logout" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right me-1"></i>Sair
+                </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('associadoAvatarInput');
+            const preview = document.getElementById('associadoAvatarPreview');
+            let previewUrl = null;
+
+            if (!input || !preview) {
+                return;
+            }
+
+            input.addEventListener('change', function () {
+                const file = this.files && this.files[0] ? this.files[0] : null;
+                if (!file || !file.type.startsWith('image/')) {
+                    return;
+                }
+
+                if (previewUrl) {
+                    URL.revokeObjectURL(previewUrl);
+                }
+
+                previewUrl = URL.createObjectURL(file);
+                preview.src = previewUrl;
+            });
+        });
+    </script>
+{% endblock %}

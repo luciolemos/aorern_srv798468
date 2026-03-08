@@ -14,7 +14,7 @@ use App\Models\PostCategoryModel;
 class PostCategoriesController extends Controller
 {
     private PostCategoryModel $model;
-    private const DEFAULT_COLOR = '#df6301';
+    private const DEFAULT_COLOR = '#556b2f';
 
     public function __construct()
     {

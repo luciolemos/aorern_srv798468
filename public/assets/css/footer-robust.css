@@ -1,5 +1,5 @@
 /**
- * 🎯 FOOTER ROBUSTO - CBMRN
+ * 🎯 FOOTER ROBUSTO - AORE/RN
  * Estilos institucionais para rodapé responsivo e moderno
  * Importar DEPOIS de bootstrap.css
  */
@@ -8,11 +8,11 @@
    CORES INSTITUCIONAIS
    ============================================ */
 :root {
-    --cbmrn-orange: #df6301;
-    --cbmrn-orange-dark: #b54f01;
-    --cbmrn-white: #ffffff;
-    --cbmrn-light-gray: #f8f9fa;
-    --cbmrn-text-muted: #6c757d;
+    --footer-brand-primary: var(--brand-primary);
+    --footer-brand-primary-dark: var(--brand-primary-dark);
+    --footer-brand-white: var(--brand-white);
+    --footer-brand-light-gray: #f8f9fa;
+    --footer-brand-text-muted: #6c757d;
 }
 
 /* ============================================
@@ -24,6 +24,83 @@ footer {
     overflow: hidden;
 }
 
+.site-footer {
+    background: var(--footer-brand-primary);
+    border-top: 4px solid var(--footer-brand-primary-dark);
+}
+
+.site-footer__logo {
+    height: 96px;
+    width: auto;
+}
+
+.site-footer__description {
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.site-footer__heading {
+    color: var(--footer-brand-white);
+    letter-spacing: 0.5px;
+}
+
+.site-footer__links {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.site-footer__links a {
+    opacity: 0.85;
+}
+
+.footer-social {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.footer-social__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: var(--footer-brand-white);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+
+.footer-social__link:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.footer-social__link[data-network="github"] {
+    background: linear-gradient(120deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+}
+
+.footer-social__link[data-network="linkedin"] {
+    background: linear-gradient(120deg, rgba(10,102,194,0.35), rgba(10,102,194,0.15));
+}
+
+.footer-social__link[data-network="twitter"] {
+    background: linear-gradient(120deg, rgba(29,155,240,0.35), rgba(29,155,240,0.15));
+}
+
+.footer-social__link[data-network="instagram"] {
+    background: linear-gradient(120deg, rgba(225,48,108,0.4), rgba(255,196,0,0.1));
+}
+
+.footer-social__link[data-network="facebook"] {
+    background: linear-gradient(120deg, rgba(59,89,152,0.35), rgba(59,89,152,0.15));
+}
+
+.footer-social__link[data-network="whatsapp"] {
+    background: linear-gradient(120deg, rgba(37,211,102,0.4), rgba(7,94,84,0.1));
+}
+
 /* Efeito de fundo */
 footer::before {
     content: '';
@@ -32,10 +109,7 @@ footer::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
-        linear-gradient(135deg, 
-            rgba(223, 99, 1, 0.8) 0%, 
-            rgba(181, 79, 1, 0.8) 100%);
+    background: var(--footer-surface-gradient, linear-gradient(135deg, rgba(85, 107, 47, 0.9) 0%, rgba(63, 79, 34, 0.92) 100%));
     opacity: 0.95;
     z-index: -1;
 }
@@ -60,7 +134,7 @@ footer h5::after {
     left: 0;
     width: 60%;
     height: 2px;
-    background: var(--cbmrn-white);
+    background: var(--footer-brand-white);
     border-radius: 2px;
 }
 
@@ -70,7 +144,7 @@ footer h6 {
     letter-spacing: 1.2px;
     text-transform: uppercase;
     margin-bottom: 1.25rem;
-    color: var(--cbmrn-white);
+    color: var(--footer-brand-white);
 }
 
 footer p {
@@ -97,7 +171,7 @@ footer i {
 
 footer h5 i,
 footer h6 i {
-    color: var(--cbmrn-white);
+    color: var(--footer-brand-white);
     font-size: 1.5rem;
 }
 
@@ -106,7 +180,7 @@ footer .bi-geo-alt,
 footer .bi-telephone,
 footer .bi-envelope {
     font-size: 1.1rem;
-    color: var(--cbmrn-white);
+    color: var(--footer-brand-white);
     transition: transform 0.3s ease;
 }
 
@@ -114,14 +188,14 @@ footer .bi-envelope {
    LINKS FOOTER
    ============================================ */
 footer a {
-    color: var(--cbmrn-white);
+    color: var(--footer-brand-white);
     text-decoration: none;
     transition: all 0.3s ease;
     position: relative;
 }
 
 footer a:hover {
-    color: var(--cbmrn-white);
+    color: var(--footer-brand-white);
     opacity: 0.9;
 }
 
@@ -137,7 +211,7 @@ footer .col-md-4 .list-unstyled li a::before {
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--cbmrn-white);
+    background: var(--footer-brand-white);
     transition: width 0.3s ease;
 }
 
@@ -153,7 +227,7 @@ footer a[href^="mailto:"] {
 }
 
 footer a[href^="mailto:"]:hover {
-    border-bottom-color: var(--cbmrn-white);
+    border-bottom-color: var(--footer-brand-white);
 }
 
 /* ============================================
@@ -210,7 +284,7 @@ footer .row:last-child a {
 }
 
 footer .row:last-child a:hover {
-    border-bottom-color: var(--cbmrn-white);
+    border-bottom-color: var(--footer-brand-white);
     opacity: 1;
 }
 
@@ -218,8 +292,8 @@ footer .row:last-child a:hover {
    BADGES
    ============================================ */
 footer .badge {
-    background-color: #28a745 !important;
-    color: var(--cbmrn-white) !important;
+    background-color: var(--footer-brand-primary) !important;
+    color: var(--footer-brand-white) !important;
     padding: 0.5rem 0.75rem;
     border-radius: 20px;
     font-size: 0.75rem;
@@ -255,7 +329,7 @@ footer .badge i {
     border-radius: 50%;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
     border: 2px solid rgba(255, 255, 255, 0.3);
-    color: var(--cbmrn-white);
+    color: var(--footer-brand-white);
     font-size: 1.2rem;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
@@ -285,11 +359,11 @@ footer .badge i {
 .social-icon-footer:hover {
     transform: translateY(-6px) scale(1.15);
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
-    border-color: var(--cbmrn-white);
+    border-color: var(--footer-brand-white);
     box-shadow: 
         0 12px 30px rgba(0, 0, 0, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        0 0 20px rgba(223, 99, 1, 0.4);
+        0 0 20px rgba(85, 107, 47, 0.4);
     color: #ffffff;
 }
 
@@ -363,7 +437,7 @@ footer .badge i {
 
 /* Focus state (acessibilidade) */
 .social-icon-footer:focus {
-    outline: 2px solid var(--cbmrn-white);
+    outline: 2px solid var(--footer-brand-white);
     outline-offset: 2px;
 }
 
@@ -373,6 +447,10 @@ footer .badge i {
         width: 2.4rem;
         height: 2.4rem;
         font-size: 1rem;
+    }
+
+    .footer-social__link {
+        flex: none;
     }
 }
 

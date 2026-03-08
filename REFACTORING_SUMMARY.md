@@ -68,7 +68,7 @@ public/assets/css/
 ├── navbar-universal.css             ← NOVO: Estilos centralizados
 ├── admin.css                        ← Overrides admin
 ├── header.css                       ← Overrides site
-├── bombeiros-theme.css              ← Tema CBMRN
+├── bombeiros-theme.css              ← Tema AORE/RN
 └── main.css                         ← Utilitários
 ```
 
@@ -182,7 +182,7 @@ include 'components/footer.php';
 **Navbar:**
 - Altura: 56px (consistente)
 - Logo: 40px desktop → 46px mobile (responsivo)
-- Cor site: #df6301 (laranja CBMRN)
+- Cor site: #556b2f (verde AORE/RN)
 - Cor admin: #212529 (dark)
 
 **Sidebar:**

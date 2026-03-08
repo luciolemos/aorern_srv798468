@@ -1,6 +1,6 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}Erro interno - CBMRN{% endblock %}
+{% block title %}Erro interno - AORE/RN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="error-meta__item">
                                     <i class="bi bi-telephone"></i>
-                                    <span>Canal emergencial: {{ institutional_contact.emergency.display }}</span>
+                                    <span>Contato institucional: {{ institutional_contact.phone.display }}</span>
                                 </div>
                             </div>
                             <div class="error-actions">
@@ -53,8 +53,8 @@
                         </div>
                         <div class="col-lg-5">
                             <div class="error-visual text-center">
-                                <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="Brasao institucional do CBMRN" class="error-badge">
-                                <p class="error-note">CBMRN · Integridade operacional e continuidade de servico</p>
+                                <img src="{{ BASE_URL }}assets/images/aore1.png" alt="Brasão institucional da AORE/RN" class="error-badge">
+                                <p class="error-note">AORE/RN · Continuidade institucional e suporte ao portal</p>
                             </div>
                         </div>
                     </div>

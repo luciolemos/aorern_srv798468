@@ -19,7 +19,7 @@ include 'components/navbar.php';
 
 **Resultado:**
 - Menu com: INÍCIO, SOBRE, BLOG, CONTATO
-- Logo CBMRN
+- Logo AORE/RN
 - Responsivo em mobile
 - Laranja (#df6301)
 
@@ -69,7 +69,7 @@ include 'layouts/components/navbar.php';
 
 **Resultado:**
 - 3 colunas: Sobre, Links, Contato
-- Informações CBMRN
+- Informações AORE/RN
 - Copyright
 - Links rápidos
 
@@ -149,10 +149,10 @@ include 'layouts/components/navbar.php';
 
 ```css
 :root {
-  --cbmrn-orange: #df6301;        /* Altere aqui */
-  --cbmrn-orange-dark: #b54f01;   /* Altere aqui */
-  --cbmrn-white: #ffffff;
-  --cbmrn-dark: #212529;
+  --aorern-primary: #556b2f;      /* Altere aqui */
+  --aorern-primary-dark: #3f4f22; /* Altere aqui */
+  --aorern-white: #ffffff;
+  --aorern-dark: #212529;
   --navbar-height: 56px;
 }
 

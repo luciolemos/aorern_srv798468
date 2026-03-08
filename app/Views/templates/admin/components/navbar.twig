@@ -1,6 +1,6 @@
 {# Navbar ADMIN- Importando do PHP original para manter compatibilidade #}
-<nav class="navbar navbar-expand-lg navbar-dark admin-navbar" style="background-color: #df6301; min-height: 80px; height: 80px; padding: 0 !important;">
-    <div class="container-fluid px-4 d-flex align-items-center justify-content-between" style="height: 80px; margin: 0; padding: 0 1rem !important;">
+<nav class="navbar navbar-expand-lg navbar-dark admin-navbar">
+    <div class="container-fluid px-4 d-flex align-items-center justify-content-between admin-navbar__shell">
         <div class="d-flex align-items-center gap-2">
             <button class="btn btn-outline-light d-none d-lg-inline-flex align-items-center justify-content-center" type="button" id="sidebarCollapseBtn" aria-label="Alternar largura do menu lateral" title="Alternar menu lateral">
                 <i class="bi bi-layout-sidebar-inset fs-5"></i>
@@ -9,25 +9,20 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
-{#         <a class="navbar-brand d-flex align-items-center gap-2" href="{{ BASE_URL }}">
-            <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="navbar-logo" style="height: 46px; width: auto;">
-            <span class="fw-bold text-white" style="letter-spacing: 0.5px;">CBMRN</span>
-        </a> #}
-        <div class="d-flex align-items-center gap-2 ms-auto">
+        <div class="d-flex align-items-center gap-3 ms-auto">
             {% set pendingCount = notifications.pending_users|default(0) %}
+            {% set pendingMembershipApplications = notifications.pending_membership_applications|default(0) %}
             {% set occurrenceCount = notifications.occurrences_in_progress|default(0) %}
             {% set pendingPostsCount = notifications.posts_pending_review|default(0) %}
-            {% set totalAlerts = pendingCount + occurrenceCount + pendingPostsCount %}
+            {% set totalAlerts = pendingCount + pendingMembershipApplications + occurrenceCount + pendingPostsCount %}
             <div class="dropdown">
-                <button class="btn btn-outline-light btn-sm position-relative d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn admin-navbar-action admin-navbar-action--icon position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Abrir notificações" title="Notificações">
                     <i class="bi {{ totalAlerts > 0 ? 'bi-bell-fill text-warning' : 'bi-bell' }} fs-6"></i>
-                    <span class="d-none d-md-inline small fw-semibold">Notificações</span>
-                    <i class="bi bi-chevron-down d-none d-md-inline small"></i>
                     {% if totalAlerts > 0 %}
-                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">{{ totalAlerts }}</span>
+                        <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle admin-navbar-badge" data-digits="{{ totalAlerts|length }}">{{ totalAlerts }}</span>
                     {% endif %}
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="min-width: 260px;">
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm admin-navbar-dropdown admin-notifications-menu">
                     <li class="px-3 py-2 border-bottom">
                         <small class="text-uppercase text-muted fw-semibold">Alertas</small>
                     </li>
@@ -36,6 +31,16 @@
                             <span><i class="bi bi-people me-2"></i>Contas pendentes</span>
                             {% if pendingCount > 0 %}
                                 <span class="badge bg-danger rounded-pill">{{ pendingCount }}</span>
+                            {% else %}
+                                <span class="badge bg-success-subtle text-success">OK</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ BASE_URL }}admin/solicitacoes-filiacao?status=pendente">
+                            <span><i class="bi bi-person-vcard me-2"></i>Filiações pendentes</span>
+                            {% if pendingMembershipApplications > 0 %}
+                                <span class="badge bg-warning text-dark rounded-pill">{{ pendingMembershipApplications }}</span>
                             {% else %}
                                 <span class="badge bg-success-subtle text-success">OK</span>
                             {% endif %}
@@ -52,8 +57,8 @@
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ BASE_URL }}admin/livro-ocorrencias?status=em_andamento">
-                            <span><i class="bi bi-journal-medical me-2"></i>Ocorrências em andamento</span>
+                        <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ BASE_URL }}admin/dashboard">
+                            <span><i class="bi bi-archive me-2"></i>Registros legados monitorados</span>
                             {% if occurrenceCount > 0 %}
                                 <span class="badge bg-warning text-dark rounded-pill">{{ occurrenceCount }}</span>
                             {% else %}
@@ -67,20 +72,22 @@
                 </ul>
             </div>
             <div class="dropdown">
-                <button class="btn btn-outline-light btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn admin-navbar-action admin-user-menu dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {% if user.avatar %}
-                        <img src="{{ BASE_URL }}{{ user.avatar }}" alt="{{ user.name }}" class="rounded-circle" style="width: 38px; height: 38px; object-fit: cover;">
+                        <img src="{{ BASE_URL }}{{ user.avatar }}" alt="{{ user.name }}" class="admin-user-menu__avatar rounded-circle">
                     {% else %}
-                        <span class="rounded-circle d-inline-flex justify-content-center align-items-center bg-white text-dark" style="width: 38px; height: 38px; font-weight: 700; font-size: 1.1rem;">
+                        <span class="admin-user-menu__avatar admin-user-menu__avatar--fallback rounded-circle d-inline-flex justify-content-center align-items-center bg-white text-dark">
                             {{ user.initial }}
                         </span>
                     {% endif %}
-                    <span class="d-none d-md-flex flex-column lh-1 text-start">
+                    <span class="admin-user-menu__identity d-none d-xl-flex flex-column lh-1 text-start">
                         <span class="fw-semibold">{{ user.name }}</span>
                         <small class="opacity-75">{{ user.email }}</small>
                     </span>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end">
+                <ul class="dropdown-menu dropdown-menu-end admin-navbar-dropdown">
+                    <li><a class="dropdown-item" href="{{ BASE_URL }}" target="_blank" rel="noopener"><i class="bi bi-house-door me-2"></i>Abrir site público</a></li>
+                    <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{{ BASE_URL }}admin/perfil"><i class="bi bi-person-circle me-2"></i>Perfil</a></li>
                     <li><a class="dropdown-item" href="{{ BASE_URL }}admin/configuracoes"><i class="bi bi-gear-wide-connected me-2"></i>Preferências</a></li>
                     <li><hr class="dropdown-divider"></li>
@@ -90,10 +97,3 @@
         </div>
     </div>
 </nav>
-
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<style>
-    body, .navbar, .nav-link, .navbar-brand, .fw-bold, h1, h2, h3, h4, h5, h6 {
-        font-family: 'Montserrat', 'Inter', Arial, sans-serif !important;
-    }
-</style>

@@ -1,0 +1,89 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+
+{% block title %}Editar Usuário - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1 admin-page-title">
+                <i class="bi bi-pencil-square me-2"></i> {{ title|default('Editar Usuário') }}
+            </h2>
+            <p class="text-muted mb-0">Atualize os dados da conta de acesso ao painel.</p>
+        </div>
+        <a href="{{ BASE_URL }}admin/usuarios/visualizar/{{ usuario.id }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Voltar para visualização
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold admin-section-title">
+                <i class="bi bi-gear me-2"></i>Dados da conta
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ BASE_URL }}admin/usuarios/atualizar">
+                <input type="hidden" name="id" value="{{ usuario.id }}">
+
+                <div class="row g-3">
+                    <div class="col-12 col-lg-3 text-center">
+                        {% if usuario.avatar %}
+                            <img
+                                src="{{ BASE_URL }}{{ usuario.avatar }}"
+                                alt="{{ usuario.username|default('Usuário')|e('html_attr') }}"
+                                class="rounded shadow-sm admin-avatar-square-220"
+                            >
+                        {% else %}
+                            <div
+                                class="rounded bg-secondary-subtle text-secondary d-inline-flex align-items-center justify-content-center shadow-sm fs-1 fw-bold admin-avatar-square-220"
+                            >
+                                {{ usuario.username ? usuario.username[0]|upper : 'U' }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-12 col-lg-9">
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Usuário</label>
+                                <input type="text" name="username" class="form-control" maxlength="50" required value="{{ usuario.username|default('')|e('html_attr') }}">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">E-mail</label>
+                                <input type="email" name="email" class="form-control" required value="{{ usuario.email|default('')|e('html_attr') }}">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Perfil</label>
+                                <select name="role" class="form-select" required>
+                                    <option value="admin" {% if usuario.role == 'admin' %}selected{% endif %}>{{ roleLabels.admin|default('Administrador do Sistema') }}</option>
+                                    <option value="gerente" {% if usuario.role == 'gerente' %}selected{% endif %}>{{ roleLabels.gerente|default('Diretoria / Secretaria') }}</option>
+                                    <option value="operador" {% if usuario.role == 'operador' %}selected{% endif %}>{{ roleLabels.operador|default('Equipe de Apoio') }}</option>
+                                    <option value="usuario" {% if usuario.role == 'usuario' %}selected{% endif %}>{{ roleLabels.usuario|default('Associado') }}</option>
+                                </select>
+                            </div>
+
+                            {% set statusValue = usuario.status ?? (usuario.ativo ? 'ativo' : 'pendente') %}
+                            <div class="col-12 col-md-6">
+                                <label class="form-label fw-semibold">Status</label>
+                                <select name="status" class="form-select" required>
+                                    <option value="ativo" {% if statusValue == 'ativo' %}selected{% endif %}>Ativo</option>
+                                    <option value="pendente" {% if statusValue == 'pendente' %}selected{% endif %}>Pendente</option>
+                                    <option value="bloqueado" {% if statusValue == 'bloqueado' %}selected{% endif %}>Bloqueado</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 d-flex flex-column flex-sm-row gap-2 justify-content-sm-end mt-2">
+                                <a href="{{ BASE_URL }}admin/usuarios/visualizar/{{ usuario.id }}" class="btn btn-outline-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-theme">
+                                    <i class="bi bi-check-circle me-1"></i> Salvar alterações
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

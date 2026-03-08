@@ -22,4 +22,13 @@ class ErrorController extends Controller
     {
         throw new \RuntimeException('Teste interno de erro 500 na area publica.');
     }
+
+    public function temporariamenteIndisponivel(): void
+    {
+        http_response_code(503);
+        header('Retry-After: 86400');
+        header('X-Robots-Tag: noindex, nofollow', true);
+
+        $this->renderTwig('site/pages/503');
+    }
 }

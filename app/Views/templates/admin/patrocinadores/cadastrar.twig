@@ -1,0 +1,121 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Novo Patrocinador{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold admin-page-title"><i class="bi bi-plus-circle me-2"></i>Cadastrar patrocinador</h2>
+        <p class="text-muted mb-0">Inclua a empresa que será exibida no carrossel de colaboradores da home.</p>
+        <hr class="my-4">
+    </div>
+
+    <form method="post" action="{{ BASE_URL }}admin/patrocinadores/salvar" enctype="multipart/form-data" class="card border-0 shadow-sm">
+        <div class="card-body">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token|e('html_attr') }}">
+
+            <div class="row g-3">
+                <div class="col-lg-6">
+                    <label class="form-label fw-bold">Nome da empresa*</label>
+                    <input type="text" name="nome" class="form-control" required maxlength="160">
+                </div>
+                <div class="col-lg-3">
+                    <label class="form-label fw-bold">Telefone</label>
+                    <input type="text" name="telefone" class="form-control js-phone-mask" inputmode="numeric" placeholder="(84) 99999-9999">
+                </div>
+                <div class="col-lg-3">
+                    <label class="form-label fw-bold">WhatsApp</label>
+                    <input type="text" name="whatsapp" class="form-control js-phone-mask" inputmode="numeric" placeholder="(84) 99999-9999">
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-bold">E-mail</label>
+                    <input type="email" name="email" class="form-control" placeholder="contato@empresa.com">
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-bold">Site</label>
+                    <input type="text" name="site" class="form-control" placeholder="https://empresa.com.br">
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-bold">Instagram</label>
+                    <input type="text" name="instagram" class="form-control" placeholder="@empresa ou URL completa">
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label fw-bold">Ordem</label>
+                    <input type="number" name="ordem" class="form-control" min="0" value="0">
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label fw-bold">Situação</label>
+                    <select name="ativo" class="form-select">
+                        <option value="1" selected>Ativo</option>
+                        <option value="0">Inativo</option>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    <label class="form-label fw-bold">Exibir textos sobre o banner</label>
+                    <select name="exibir_texto_banner" class="form-select">
+                        <option value="1" selected>Sim</option>
+                        <option value="0">Não</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <div class="border rounded-3 p-3 bg-light-subtle">
+                        <p class="fw-bold mb-3">Aparência no banner</p>
+                        <div class="d-flex flex-column gap-2">
+                            <label class="d-flex align-items-center justify-content-between gap-3 mb-0">
+                                <span class="small fw-semibold">Cor do nome da empresa</span>
+                                <input type="color" name="texto_cor_titulo" class="form-control form-control-color" value="#FFFFFF" title="Cor do nome da empresa">
+                            </label>
+                            <label class="d-flex align-items-center justify-content-between gap-3 mb-0">
+                                <span class="small fw-semibold">Cor da descrição curta</span>
+                                <input type="color" name="texto_cor_descricao" class="form-control form-control-color" value="#FFFFFF" title="Cor da descrição curta">
+                            </label>
+                            <label class="d-flex align-items-center justify-content-between gap-3 mb-0">
+                                <span class="small fw-semibold">Cor dos ícones sociais</span>
+                                <input type="color" name="icone_cor" class="form-control form-control-color" value="#FFFFFF" title="Cor dos ícones sociais">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Descrição curta</label>
+                    <textarea name="descricao_curta" rows="3" class="form-control" maxlength="500"></textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Logo da empresa*</label>
+                    <input type="file" name="logo" class="form-control" accept="image/jpeg,image/png,image/webp" required>
+                    <small class="text-muted">Formatos aceitos: JPG, PNG ou WEBP. Tamanho máximo: 5MB.</small>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Banner do patrocinador (opcional)</label>
+                    <input type="file" name="banner" class="form-control" accept="image/jpeg,image/png,image/webp">
+                    <small class="text-muted">Se enviado, será usado na área principal do carrossel. Recomendado: 1600x900.</small>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-white border-top d-flex flex-column flex-md-row justify-content-md-end gap-2">
+            <a href="{{ BASE_URL }}admin/patrocinadores" class="btn btn-outline-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-success">Salvar patrocinador</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            function formatPhone(value) {
+                const digits = String(value || '').replace(/\D+/g, '').slice(0, 11);
+                if (digits.length <= 2) return digits;
+                if (digits.length <= 6) return `(${digits.slice(0,2)}) ${digits.slice(2)}`;
+                if (digits.length <= 10) return `(${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`;
+                return `(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`;
+            }
+
+            document.querySelectorAll('.js-phone-mask').forEach((input) => {
+                input.addEventListener('input', () => {
+                    input.value = formatPhone(input.value);
+                });
+            });
+        })();
+    </script>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+
+{% block title %}{{ hub.title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="mb-4">
+        <p class="text-uppercase small fw-semibold text-muted mb-2">{{ hub.eyebrow }}</p>
+        <h1 class="fw-bold mb-3" style="color: var(--admin-primary);">{{ hub.title }}</h1>
+        <p class="text-muted mb-0" style="max-width: 860px;">{{ hub.description }}</p>
+    </div>
+
+    {% if hub.stats|default([]) is not empty %}
+        <div class="row g-4 mb-4">
+            {% for stat in hub.stats %}
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <p class="text-uppercase small fw-semibold text-muted mb-2">{{ stat.label }}</p>
+                            <div class="d-flex align-items-end justify-content-between gap-3">
+                                <div>
+                                    <h2 class="fw-bold mb-1" style="color: #556b2f;">{{ stat.value }}</h2>
+                                    <p class="text-muted small mb-0">{{ stat.description }}</p>
+                                </div>
+                                <i class="bi {{ stat.icon|default('bi-grid') }} fs-2" style="color: rgba(85,107,47,0.32);"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4 p-lg-5">
+            <h2 class="h5 fw-bold mb-3">Direção desta área</h2>
+            <ul class="mb-0 text-muted">
+                {% for item in hub.highlights %}
+                    <li class="{{ not loop.last ? 'mb-2' : '' }}">{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {% if hub.sections|default([]) is not empty %}
+        <div class="row g-4 mb-4">
+            {% for section in hub.sections %}
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <h2 class="h5 fw-bold mb-3">{{ section.title }}</h2>
+                            <ul class="mb-0 text-muted">
+                                {% for item in section.items %}
+                                    <li class="{{ not loop.last ? 'mb-2' : '' }}">{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="row g-4">
+        {% for card in hub.cards %}
+            <div class="col-md-6 col-xl-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="mb-3">
+                            <span class="d-inline-flex align-items-center justify-content-center rounded-3" style="width: 52px; height: 52px; background: rgba(85,107,47,0.12); color: #556b2f;">
+                                <i class="bi {{ card.icon }} fs-4"></i>
+                            </span>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">{{ card.title }}</h3>
+                        <p class="text-muted mb-4 flex-grow-1">{{ card.description }}</p>
+                        <a href="{{ card.href }}" class="btn btn-outline-success fw-semibold" {% if card.external|default(false) %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                            {{ card.label }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if hub.note|default('') %}
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body p-4">
+                <p class="mb-0 text-muted">{{ hub.note }}</p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

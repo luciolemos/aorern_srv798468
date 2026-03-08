@@ -1,0 +1,65 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Página temporariamente indisponível - AORE/RN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/error-pages.css">
+{% endblock %}
+
+{% block content %}
+    <section class="error-shell">
+        <div class="container">
+            <div class="error-panel">
+                <div class="error-panel__body">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-7">
+                            <div class="error-code">
+                                <i class="bi bi-cone-striped"></i>
+                                <span>Erro 503</span>
+                            </div>
+                            <h1 class="error-title">Página em construção</h1>
+                            <p class="error-lead">
+                                Este conteúdo está temporariamente indisponível porque está em fase de implantação. A equipe de desenvolvedores da AORE/RN já está trabalhando para disponibilizá-lo em breve e garantir aos usuários uma experiência de navegação mais estável, clara e segura.
+                            </p>
+                            <div class="error-meta">
+                                <div class="error-meta__item">
+                                    <i class="bi bi-hourglass-split"></i>
+                                    <span>Indisponibilidade temporária para ajustes técnicos, testes e publicação de conteúdo</span>
+                                </div>
+                                <div class="error-meta__item">
+                                    <i class="bi bi-envelope"></i>
+                                    <span>{{ institutional_contact.emails.primary }}</span>
+                                </div>
+                            </div>
+                            <div class="error-actions">
+                                {% include 'site/components/button.twig' with {
+                                    href: BASE_URL,
+                                    label: 'Voltar ao portal',
+                                    icon: 'bi-house-door',
+                                    variant: 'solid',
+                                    size: 'lg',
+                                    button_class: 'fw-bold'
+                                } %}
+                                {% include 'site/components/button.twig' with {
+                                    href: BASE_URL ~ 'contact',
+                                    label: 'Falar com a equipe',
+                                    icon: 'bi-envelope',
+                                    variant: 'outline',
+                                    size: 'lg',
+                                    button_class: 'fw-bold'
+                                } %}
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="error-visual text-center">
+                                <img src="{{ BASE_URL }}assets/images/aore1.png" alt="Brasão institucional da AORE/RN" class="error-badge">
+                                <p class="error-note">AORE/RN · Atualização institucional em andamento</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

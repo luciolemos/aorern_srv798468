@@ -16,7 +16,7 @@ class SystemController extends Controller
         AuthMiddleware::requireAuth();
         
         $versions = SystemVersions::get();
-        $this->renderTwig('admin/system/versions', array_merge(compact('versions'), AdminHelper::getUserData('system')));
+        $this->renderTwig('admin/system/versions', array_merge(compact('versions'), AdminHelper::getUserData('versions')));
     }
 
     public function info()
@@ -30,6 +30,12 @@ class SystemController extends Controller
             'Memory'     => ini_get('memory_limit'),
         ];
 
-        $this->renderTwig('admin/system/info', array_merge(compact('info'), AdminHelper::getUserData('system')));
+        $this->renderTwig('admin/system/info', array_merge(compact('info'), AdminHelper::getUserData('info')));
+    }
+
+    public function guiaUsuario()
+    {
+        AuthMiddleware::requireAuth();
+        $this->renderTwig('admin/system/guia-usuario', AdminHelper::getUserData('guia-usuario'));
     }
 }

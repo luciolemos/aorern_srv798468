@@ -59,7 +59,7 @@
 ### Footer
 - [x] Renderiza corretamente para site público
 - [x] Renderiza corretamente para admin
-- [x] Informações CBMRN presentes
+- [x] Informações AORE/RN presentes
 - [x] Links rápidos funcionam
 - [x] Copyright dinâmico
 
@@ -108,29 +108,29 @@ Economia: ~328 linhas removidas
 
 ### Site Público
 ```
-URL: http://cbmrn.local/home
+URL: http://aorern.local/home
 ✓ Navbar visível
-✓ Logo CBMRN presente
+✓ Logo AORE/RN presente
 ✓ Menu responsivo
 ✓ Footer com informações
 ✓ Links funcionam
 
-URL: http://cbmrn.local/about
+URL: http://aorern.local/about
 ✓ Navbar e footer presentes
 ✓ Conteúdo renderizado
 
-URL: http://cbmrn.local/blog
+URL: http://aorern.local/blog
 ✓ Navbar e footer presentes
 ✓ Posts listados
 
-URL: http://cbmrn.local/contact
+URL: http://aorern.local/contact
 ✓ Navbar e footer presentes
 ✓ Formulário visível
 ```
 
 ### Admin Dashboard
 ```
-URL: http://cbmrn.local/admin/dashboard
+URL: http://aorern.local/admin/dashboard
 ✓ Navbar com "Sair"
 ✓ Sidebar com menu
 ✓ Hamburger em mobile
@@ -179,7 +179,7 @@ URL: http://cbmrn.local/admin/dashboard
 ## 🎨 Design & UX
 
 ### Cores
-- [x] Laranja CBMRN (#df6301) correto
+- [x] Cor institucional AORE/RN (#556b2f) correta
 - [x] Dark (#212529) correto
 - [x] Contraste adequado
 - [x] Acessibilidade OK

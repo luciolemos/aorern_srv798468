@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "titulo": "Missão permanente do 2º SGB",
+    "slug": "missao-permanente-2sgb",
+    "conteudo": "<h1>Planejamento estratégico em campo</h1><p>O 2º Subgrupamento de Bombeiros Militar mantém equipes 24/7 distribuídas entre litoral e agreste, garantindo resposta coordenada para incêndios, salvamentos e apoio de Defesa Civil. A missão combina disciplina operacional, inteligência territorial e proximidade com as prefeituras parceiras.</p>"
+  },
+  {
+    "id": "2",
+    "titulo": "Desafios logísticos na faixa litorânea",
+    "slug": "desafios-logisticos-litoral",
+    "conteudo": "<h1>Rotas e recursos críticos</h1><p>As viaturas operacionais do 2º Subgrupamento de Bombeiros Militar atuam em um território marcado por diversidade geográfica e desafios logísticos, deslocando-se por rodovias estaduais, acessos vicinais e áreas de dunas para garantir o atendimento às comunidades pesqueiras e demais localidades sob sua responsabilidade. Cada guarnição opera com o apoio de checklists digitais e sistemas de monitoramento, permitindo o acompanhamento em tempo real das condições das viaturas, do abastecimento, da disponibilidade de equipamentos e dos tempos de despacho, assegurando maior eficiência, rastreabilidade e prontidão operacional.</p>"
+  },
+  {
+    "id": "3",
+    "titulo": "Profissionalização do efetivo",
+    "slug": "profissionalizacao-efetivo",
+    "conteudo": "<h1>Treinamento contínuo</h1><p>Instrutores especializados em salvamento em altura, mergulho e atendimento pré-hospitalar conduzem módulos periódicos de capacitação, estruturados a partir de cenários reais e recorrentes do litoral sul potiguar. Os conteúdos contemplam desde a análise de riscos geográficos e ambientais até a aplicação de protocolos operacionais e de comunicação integrada com o Serviço de Atendimento Móvel de Urgência (SAMU) e a Polícia Militar, fortalecendo a interoperabilidade e a prontidão das equipes.</p>"
+  },
+  {
+    "id": "4",
+    "titulo": "Integração com defesas civis municipais",
+    "slug": "integracao-defesa-civil",
+    "conteudo": "<h1>Gabinetes integrados</h1><p>Reuniões periódicas de caráter estratégico consolidam a análise de dados meteorológicos, o histórico de ocorrências e as demandas sociais da região atendida. A partir desses encontros, o 2º Subgrupamento de Bombeiros Militar coordena a elaboração e a atualização de planos de contingência, além de manter canais permanentes de articulação com as secretarias municipais, visando agilizar a ativação de abrigos temporários e o desenvolvimento de ações educativas e preventivas junto à população.</p>"
+  },
+  {
+    "id": "5",
+    "titulo": "Programa de estágio operacional",
+    "slug": "programa-estagio-operacional",
+    "conteudo": "<h1>Imersão supervisionada</h1><p>Estagiários acompanham guarnições em vistorias técnicas, simulados e oficinas de manutenção. Cada ciclo termina com avaliação sobre postura, domínio dos EPIs e entendimento das rotinas administrativas do Subgrupamento.</p>"
+  },
+  {
+    "id": "6",
+    "titulo": "Rotinas de salvamento aquático",
+    "slug": "rotinas-salvamento-aquatico",
+    "conteudo": "<h1>Monitoramento das marés</h1><p>As equipes de salvamento do 2º Subgrupamento de Bombeiros Militar realizam o mapeamento sistemático de marés, correntes marítimas e pontos críticos de risco à navegação, especialmente para embarcações de pequeno porte e atividades costeiras. O planejamento operacional contempla a disponibilidade permanente de kits de primeiros socorros, pranchas de resgate e sistemas de comunicação redundantes, integrando rádio operacional e aplicativos institucionais, de modo a assegurar coordenação eficiente, resposta rápida e segurança nas operações de salvamento aquático.</p>"
+  },
+  {
+    "id": "9",
+    "titulo": "Atuação em eventos de grande público",
+    "slug": "atuacao-eventos-grande-publico",
+    "conteudo": "<h1>Planos especiais</h1><p>Eventos de grande porte, como carnavais, festivais religiosos e corridas de aventura, são atendidos mediante a elaboração de planos operacionais específicos, desenvolvidos de forma integrada entre o 2º Subgrupamento de Bombeiros Militar, o Serviço de Atendimento Móvel de Urgência (SAMU) e a Polícia Militar. Esses planejamentos definem corredores de evacuação, pontos de triagem e atendimento, além de canais exclusivos de comunicação por meio de rádio digital, assegurando coordenação, agilidade e segurança durante a realização dos eventos.</p>"
+  },
+  {
+    "id": "11",
+    "titulo": "Planejamento para estiagens prolongadas",
+    "slug": "planejamento-estiagens",
+    "conteudo": "<h1>Riscos hidrológicos</h1><p>O Subgrupamento mantém inventário de açudes e áreas de vegetação suscetíveis a queimadas. Durante estiagens, são executadas campanhas de conscientização e posicionadas unidades de apoio em municípios críticos.</p>"
+  },
+  {
+    "id": "12",
+    "titulo": "Resposta rápida a acidentes rodoviários",
+    "slug": "resposta-rapida-rodovias",
+    "conteudo": "<h1>Coordenação multiagência</h1><p>As ocorrências registradas ao longo da BR-101 exigem atuação coordenada e alinhamento operacional entre o 2º Subgrupamento de Bombeiros Militar, a Polícia Rodoviária Federal e as concessionárias responsáveis pelo trecho. Nessas situações, o 2º SGB emprega equipamentos especializados, como desencarceradores portáteis, além do uso de drones para reconhecimento e avaliação inicial do cenário, permitindo maior segurança na intervenção e subsidiando o acesso das equipes médicas de forma eficiente e controlada.</p>"
+  },
+  {
+    "id": "14",
+    "titulo": "Mapa operacional aproxima comunidade e guarnições",
+    "slug": "mapa-operacional-ocorrencias-municipio",
+    "conteudo": "<h1>Visão territorial em tempo real</h1><p>O novo mapa operacional <strong>“Ocorrências por Município”</strong>, disponível na página inicial, consolida informações estratégicas ao integrar os registros do livro digital de ocorrências às frentes de serviço ativas do 2º Subgrupamento de Bombeiros Militar. A ferramenta permite visualizar, em tempo quase real, o volume e a distribuição dos atendimentos realizados em cada município sob responsabilidade da unidade.</p><h2>Apoio à gestão e à tomada de decisão</h2><p>Ao oferecer uma leitura territorial imediata das demandas operacionais, o painel subsidia o reposicionamento de viaturas, o dimensionamento do efetivo e o reforço de recursos materiais conforme a dinâmica das ocorrências. Além disso, a visualização dos dados facilita a articulação institucional com prefeitos, secretarias municipais e lideranças locais, que passam a dispor de indicadores confiáveis e transparentes para o planejamento de ações preventivas e respostas coordenadas.</p><h2>Transparência e fortalecimento do vínculo com a comunidade</h2><p>Para a população, a ferramenta amplia a previsibilidade e o acesso à informação. Os moradores podem identificar períodos de maior incidência de ocorrências, adotar medidas de autoproteção e acompanhar a atuação do Corpo de Bombeiros com base em dados oficiais. Esse processo contribui para o fortalecimento da confiança institucional, estimulando a participação social e o diálogo qualificado entre a comunidade e o 2º Subgrupamento de Bombeiros Militar.</p>"
+  }
+]

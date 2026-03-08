@@ -1,6 +1,12 @@
-# 🚀 Lucio Lemos - Sistema MVC Profissional
+# AORE/RN - Portal Institucional e Administrativo
 
-**Plataforma empresarial completa com fluxo de publicação, gerenciamento de equipamentos, autenticação multi-role e blog profissional.**
+Plataforma MVC em PHP/Twig para gestão pública do site e painel administrativo.
+
+## Documentação oficial (fonte única operacional)
+
+- Operação e incidentes: [`RUNBOOK.md`](/var/www/aorern/RUNBOOK.md)
+- Processo de deploy: [`DEPLOY.md`](/var/www/aorern/DEPLOY.md)
+- Configuração de ambiente: [`.env.example`](/var/www/aorern/.env.example)
 
 ---
 
@@ -27,7 +33,7 @@
 
 ## 🎯 Visão Geral
 
-Sistema MVC moderno construído em **PHP puro** (sem frameworks) com arquitetura profissional, oferecendo:
+Sistema MVC moderno construído em **PHP puro** (sem frameworks), oferecendo:
 
 - ✅ **Blog profissional** com fluxo de aprovação em 5 etapas
 - ✅ **Painel administrativo** multi-role (usuario/operador/gerente/admin)
@@ -35,9 +41,34 @@ Sistema MVC moderno construído em **PHP puro** (sem frameworks) com arquitetura
 - ✅ **Autenticação unificada** com segurança CSRF e sessions
 - ✅ **Editor WYSIWYG** (Quill.js) para criação de conteúdo
 - ✅ **100% responsivo** (Bootstrap 5.3.3)
-- ✅ **Cobertura de testes** 82%+ com PHPUnit
+- ✅ **Testes automatizados** com PHPUnit
 
 **Base de usuários:** Lucio Lemos (admin), Fernando (usuario), Maria (gerente)
+
+## Fluxo AORE/RN
+
+### Filiação e acesso
+- O cadastro público em `/register` agora representa uma `solicitação de filiação`, não a criação imediata de usuário interno.
+- A solicitação é armazenada em `membership_applications` com documentos comprobatórios e status de análise.
+- A diretoria analisa essa fila no admin e pode:
+  - aprovar
+  - solicitar complementação
+  - rejeitar
+- Na aprovação, o sistema cria:
+  - a conta em `users`
+  - o cadastro de associado em `pessoal`
+  - o vínculo entre a solicitação e o associado aprovado
+
+### Perfis atuais
+- `usuario`: associado aprovado; entra em `/associado`
+- `operador`: equipe interna; entra em `/admin/dashboard`
+- `gerente`: gestão intermediária; entra em `/admin/dashboard`
+- `admin`: administração total; entra em `/admin/dashboard`
+
+### Regra de negócio
+- Aprovação de filiação não significa acesso automático ao painel administrativo.
+- O associado aprovado nasce como `role = usuario`.
+- Se a diretoria desejar conceder acesso ao painel, o `role` deve ser alterado depois para `operador`, `gerente` ou `admin`.
 
 ---
 
@@ -109,8 +140,8 @@ Sistema MVC moderno construído em **PHP puro** (sem frameworks) com arquitetura
 
 ### 1. **Clonar Repositório**
 ```bash
-git clone https://github.com/luciolemos/cbmrn_srv798468.git
-cd cbmrn_srv798468
+git clone https://github.com/luciolemos/aorern.git
+cd aorern
 ```
 
 ### 2. **Instalar Dependências**
@@ -129,8 +160,8 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 
 // URLs
-define('BASE_URL', 'http://localhost/cbmrn/');
-define('SITE_URL', 'http://localhost/cbmrn/');
+define('BASE_URL', 'http://localhost/aorern/');
+define('SITE_URL', 'http://localhost/aorern/');
 ```
 
 ### 4. **Criar Banco de Dados**
@@ -153,11 +184,11 @@ mysql -u luciolemos -p mvc < sql/seeds/001_base_data.sql
 ### 5. **Configurar VirtualHost (Apache)**
 ```apache
 <VirtualHost *:80>
-    ServerName cbmrn.local
-    ServerAlias www.cbmrn.local
-    DocumentRoot /var/www/cbmrn/public
+   ServerName aorern.local
+   ServerAlias www.aorern.local
+   DocumentRoot /var/www/aorern/public
     
-    <Directory /var/www/cbmrn/public>
+   <Directory /var/www/aorern/public>
         AllowOverride All
         Order Allow,Deny
         Allow from all
@@ -177,7 +208,7 @@ mysql -u luciolemos -p mvc < sql/seeds/001_base_data.sql
 # Desenvolvimento
 php -S localhost:8000 -t public
 
-# Ou navegar para http://cbmrn.local
+# Ou navegar para http://aorern.local
 ```
 
 ---
@@ -900,8 +931,8 @@ mvc/
 
 1. **Clonar em `/var/www/`**
    ```bash
-   git clone https://github.com/luciolemos/cbmrn_srv798468.git /var/www/cbmrn
-   cd /var/www/cbmrn
+   git clone https://github.com/luciolemos/aorern.git /var/www/aorern
+   cd /var/www/aorern
    ```
 
 2. **Instalar dependências**
@@ -918,9 +949,9 @@ mvc/
 
 4. **Permissões**
    ```bash
-   chown -R www-data:www-data /var/www/cbmrn
-   chmod -R 755 /var/www/cbmrn/public
-   chmod -R 775 /var/www/cbmrn/app/Views
+   chown -R www-data:www-data /var/www/aorern
+   chmod -R 755 /var/www/aorern/public
+   chmod -R 775 /var/www/aorern/app/Views
    ```
 
 5. **SSL (Let's Encrypt)**
@@ -932,7 +963,7 @@ mvc/
 
 ## 📞 Suporte
 
-- **GitHub Issues:** [Reportar bugs](https://github.com/luciolemos/cbmrn_srv798468/issues)
+- **GitHub Issues:** [Reportar bugs](https://github.com/luciolemos/aorern/issues)
 - **Email:** lucio@example.com
 - **Docs:** [Veja POST_WORKFLOW.md](./POST_WORKFLOW.md)
 

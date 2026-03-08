@@ -1,0 +1,99 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Termos de Uso | AORE/RN{% endblock %}
+
+{% block content %}
+    <section class="py-5" style="background: linear-gradient(135deg, #123d63 0%, #0b2a4a 100%);">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-xl-9">
+                    <p class="text-uppercase small fw-semibold text-white-50 mb-2">Regras gerais do portal</p>
+                    <h1 class="display-6 fw-bold text-white mb-3">Termos de Uso do Portal AORE/RN</h1>
+                    <p class="lead text-white-50 mb-0">
+                        Estes termos disciplinam o acesso e a utilização do portal institucional da AORE/RN.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-9">
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4 p-lg-5">
+                            <div class="alert alert-light border mb-4">
+                                <strong>Última atualização:</strong> {{ last_updated }}<br>
+                                <strong>Titular do portal:</strong> Associação dos Oficiais da Reserva do Exército do Rio Grande do Norte (AORE/RN)
+                            </div>
+
+                            <h2 class="h4 fw-bold text-primary mb-3">1. Aceitação</h2>
+                            <p class="text-muted">
+                                Ao acessar ou utilizar este portal, o usuário declara ciência destes termos e da
+                                <a href="{{ BASE_URL }}privacidade">Política de Privacidade</a> aplicável ao site.
+                            </p>
+
+                            <h2 class="h4 fw-bold text-primary mt-5 mb-3">2. Finalidade do portal</h2>
+                            <p class="text-muted">
+                                O portal da AORE/RN tem finalidade institucional, informativa e de comunicação. Seu conteúdo
+                                busca divulgar informações da associação, disponibilizar canais de contato e apresentar
+                                materiais oficiais e institucionais.
+                            </p>
+
+                            <h2 class="h4 fw-bold text-primary mt-5 mb-3">3. Uso adequado</h2>
+                            <p class="text-muted mb-2">O usuário se compromete a não utilizar o portal para:</p>
+                            <ul class="text-muted">
+                                <li>praticar atos ilícitos, fraudulentos ou que violem a boa-fé;</li>
+                                <li>tentar invadir, contornar proteções de segurança ou comprometer a disponibilidade do site;</li>
+                                <li>enviar mensagens abusivas, ofensivas, automatizadas ou incompatíveis com a finalidade do formulário de contato;</li>
+                                <li>utilizar o conteúdo institucional de forma enganosa, descontextualizada ou que sugira vínculo ou autorização inexistente.</li>
+                            </ul>
+
+                            <h2 class="h4 fw-bold text-primary mt-5 mb-3">4. Conteúdo e propriedade intelectual</h2>
+                            <p class="text-muted">
+                                Salvo indicação em contrário, textos, sinais distintivos, marcas, elementos visuais, documentos
+                                institucionais e demais conteúdos disponíveis no portal pertencem à AORE/RN ou são utilizados
+                                legitimamente por ela. O uso de tais materiais deve respeitar a legislação aplicável e, quando
+                                necessário, dependerá de autorização prévia da associação.
+                            </p>
+
+                            <h2 class="h4 fw-bold text-primary mt-5 mb-3">5. Links e serviços de terceiros</h2>
+                            <p class="text-muted">
+                                O portal pode conter links, integrações ou conteúdos incorporados de terceiros. A AORE/RN não se
+                                responsabiliza por políticas, práticas, disponibilidade ou conteúdo mantido por sites externos.
+                            </p>
+
+                            <h2 class="h4 fw-bold text-primary mt-5 mb-3">6. Disponibilidade e segurança</h2>
+                            <p class="text-muted">
+                                A AORE/RN busca manter o portal funcional e seguro, mas não garante disponibilidade contínua,
+                                ausência de falhas, indisponibilidades temporárias ou completa eliminação de riscos tecnológicos.
+                            </p>
+
+                            <h2 class="h4 fw-bold text-primary mt-5 mb-3">7. Limitação de responsabilidade</h2>
+                            <p class="text-muted">
+                                O uso do portal é realizado por conta e risco do usuário. A AORE/RN não responde por prejuízos
+                                decorrentes de mau uso do site, de indisponibilidades temporárias, de atos de terceiros ou de
+                                eventos fora de seu controle razoável, ressalvadas as hipóteses legais aplicáveis.
+                            </p>
+
+                            <h2 class="h4 fw-bold text-primary mt-5 mb-3">8. Canal de contato</h2>
+                            <p class="text-muted">
+                                Dúvidas sobre estes termos podem ser encaminhadas para
+                                <a href="{{ institutional_contact.emails.mailto_primary }}">{{ institutional_contact.emails.primary }}</a>.
+                                Como este endereço é carregado a partir da configuração institucional do portal, eventual troca do
+                                e-mail oficial refletirá automaticamente nesta página.
+                            </p>
+
+                            <h2 class="h4 fw-bold text-primary mt-5 mb-3">9. Alterações</h2>
+                            <p class="text-muted mb-0">
+                                Estes termos podem ser alterados a qualquer tempo para refletir mudanças operacionais, institucionais
+                                ou legais. A versão vigente será a publicada nesta página.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

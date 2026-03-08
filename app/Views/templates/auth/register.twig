@@ -1,66 +1,36 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}Registrar - CBMRN{% endblock %}
+{% block title %}Solicitação de Filiação - AORE/RN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/auth.css">
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/auth.css?v=20260306-register7">
 {% endblock %}
 
 {% block content %}
-    <section class="auth-hero register-hero site-hero">
+    <section class="auth-hero register-hero site-hero hero-form-layout">
         <div class="site-hero-pattern"></div>
-        <div class="container position-relative">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6 hero-content">
-{#                     <div class="auth-hero-logo mb-4">
-                        <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="img-fluid">
-                    </div> #}
-                    <p class="section-kicker text-white-50 mb-2">Solicitar acesso</p>
-                    <h1 class="section-title text-white mb-3">Registro de colaboradores</h1>
-                    <p class="section-lead text-white-75 mb-4">Novos usuários têm acesso ao painel administrativo após validação pelo comando. Preencha seus dados institucionais e aguarde a confirmação. Esse fluxo garante segurança e rastreabilidade das alterações no portal.</p>
-                    <ul class="auth-benefits icon-list text-white-75 mb-4">
-                        <li class="icon-list-item">
-                            <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-person-badge"></i></span>
-                            <span>Usuários identificados e aprovados pela chefia</span>
-                        </li>
-                        <li class="icon-list-item">
-                            <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-card-image"></i></span>
-                            <span>Perfil com foto para facilitar auditorias</span>
-                        </li>
-                        <li class="icon-list-item">
-                            <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-check2-circle"></i></span>
-                            <span>Confirmação por e-mail corporativo</span>
-                        </li>
-                    </ul>
-                    <div class="d-flex flex-wrap gap-3">
-                        {% include 'site/components/button.twig' with {
-                            href: BASE_URL ~ 'login/admin',
-                            label: 'Já tenho conta',
-                            icon: 'bi-box-arrow-in-right',
-                            variant: 'solid',
-                            size: 'lg'
-                        } %}
-                        {% include 'site/components/button.twig' with {
-                            href: institutional_contact.emails.mailto_primary,
-                            label: 'Falar com suporte',
-                            icon: 'bi-envelope',
-                            variant: 'solid',
-                            size: 'lg',
-                            button_class: 'fw-bold text-dark'
-                        } %}
-                    </div>
-                </div>
-                <div class="col-lg-5 ms-lg-auto hero-panel-col">
-                    <div class="auth-card hero-panel hero-panel--dark">
-{#                         <div class="text-center mb-4">
-                            <p class="hero-panel-badge text-white-75"><i class="bi bi-file-earmark-text me-2"></i>Formulário de registro</p>
-                            <h2 class="h4 fw-bold text-white mb-1">Preencha seus dados</h2>
-                            <p class="text-white-50 small mb-0">Campos obrigatórios com *.</p>
-                        </div> #}
-                        <div class="auth-hero-logo mb-4">
-                        <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="img-fluid">
+        <div class="container-fluid position-relative register-hero-shell px-3 px-md-4 px-xl-5">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="auth-card auth-card--light register-form-card">
+                        <div class="register-form-header d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+                            <div class="register-form-header__content">
+                                <p class="hero-panel-badge"><i class="bi bi-person-vcard me-2"></i>Formulário de filiação</p>
+                                <h2 class="h3 fw-bold mb-1">Olá ex-aluno do NPOR DO 16º BI Mtz. Preencha sua proposta de Sócio Efetivo da AORE/RN</h2>
+                                <p class="small mb-0">Campos obrigatórios com <span class="required-mark">*</span>.</p>
+                            </div>
+                            <div class="auth-hero-logo register-form-logo mb-0">
+                                <img src="{{ BASE_URL }}assets/images/aore1.png" alt="AORE/RN" class="img-fluid">
+                            </div>
                         </div>
+
+                        {% if success %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-check-circle me-2"></i>{{ success }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endif %}
 
                         {% if error %}
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -69,47 +39,850 @@
                             </div>
                         {% endif %}
 
-                        <form method="POST" action="{{ BASE_URL }}register/store" enctype="multipart/form-data" class="auth-form">
-                            <div class="mb-3">
-                                <label for="username" class="form-label text-white">Usuário*</label>
-                                <input type="text" class="form-control form-control-lg" id="username" name="username" required autofocus>
+                        <form method="POST" action="{{ BASE_URL }}register/store" enctype="multipart/form-data" class="auth-form auth-form--light register-wizard" novalidate>
+                            <div class="register-stepper" role="tablist" aria-label="Etapas do formulário de filiação">
+                                <button type="button" class="register-step is-active" data-step-index="0" data-step-target="acesso" aria-current="step">
+                                    <span class="register-step__number">1</span>
+                                    <span class="register-step__text">
+                                        <span class="register-step__label">Acesso</span>
+                                        <span class="register-step__caption">Conta e credenciais</span>
+                                    </span>
+                                </button>
+                                <button type="button" class="register-step" data-step-index="1" data-step-target="pessoal">
+                                    <span class="register-step__number">2</span>
+                                    <span class="register-step__text">
+                                        <span class="register-step__label">Dados pessoais</span>
+                                        <span class="register-step__caption">Identificação e contato</span>
+                                    </span>
+                                </button>
+                                <button type="button" class="register-step" data-step-index="2" data-step-target="formacao">
+                                    <span class="register-step__number">3</span>
+                                    <span class="register-step__text">
+                                        <span class="register-step__label">Formação</span>
+                                        <span class="register-step__caption">NPOR e documentos</span>
+                                    </span>
+                                </button>
+                                <button type="button" class="register-step" data-step-index="3" data-step-target="revisao">
+                                    <span class="register-step__number">4</span>
+                                    <span class="register-step__text">
+                                        <span class="register-step__label">Revisão</span>
+                                        <span class="register-step__caption">Aceite e envio</span>
+                                    </span>
+                                </button>
                             </div>
-                            <div class="mb-3">
-                                <label for="nome" class="form-label text-white">Nome completo*</label>
-                                <input type="text" class="form-control form-control-lg" id="nome" name="nome" required>
+
+                            <div class="register-step-panels">
+                                <section class="register-step-panel is-active" data-step-panel="acesso">
+                                    <div class="register-step-panel__header">
+                                        <p class="register-step-panel__eyebrow">Etapa 1</p>
+                                        <h3 class="register-step-panel__title">Crie seu acesso inicial</h3>
+                                        <p class="register-step-panel__description register-step-panel__description--single-line">Defina como sua conta será identificada no portal e informe um e-mail válido para comunicação.</p>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6 col-lg-2">
+                                            <label for="username" class="form-label">Usuário desejado<span class="required-mark">*</span></label>
+                                            <input type="text" class="form-control form-control-lg" id="username" name="username" required autofocus
+                                                   placeholder="Ex.: csilva1968"
+                                                   autocomplete="username"
+                                                   minlength="5"
+                                                   maxlength="24"
+                                                   pattern="^[a-z]+[0-9]{4}$"
+                                                   title="Use somente letras sem acento seguidas de 4 números (ex.: csilva1968).">
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <label for="email" class="form-label">E-mail principal<span class="required-mark">*</span></label>
+                                            <input type="email" class="form-control form-control-lg" id="email" name="email" required
+                                                   placeholder="voce@exemplo.com"
+                                                   autocomplete="email"
+                                                   inputmode="email"
+                                                   maxlength="160"
+                                                   title="Informe um e-mail válido para contato.">
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="password" class="form-label">Senha de acesso desejada<span class="required-mark">*</span></label>
+                                            <input type="password" class="form-control form-control-lg" id="password" name="password" required
+                                                   placeholder="Mínimo de 8 caracteres"
+                                                   autocomplete="new-password"
+                                                   minlength="8"
+                                                   maxlength="72"
+                                                   title="Use pelo menos 8 caracteres para a senha.">
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="password_confirm" class="form-label">Confirmar senha<span class="required-mark">*</span></label>
+                                            <input type="password" class="form-control form-control-lg" id="password_confirm" name="password_confirm" required
+                                                   placeholder="Repita a senha"
+                                                   autocomplete="new-password"
+                                                   minlength="8"
+                                                   maxlength="72"
+                                                   title="Repita a mesma senha informada acima.">
+                                        </div>
+                                    </div>
+                                    <div class="register-step-actions justify-content-end">
+                                        <button type="button" class="btn btn-theme btn-lg fw-bold register-step-next">Continuar <i class="bi bi-arrow-right btn-icon"></i></button>
+                                    </div>
+                                </section>
+
+                                <section class="register-step-panel" data-step-panel="pessoal" hidden>
+                                    <div class="register-step-panel__header">
+                                        <p class="register-step-panel__eyebrow">Etapa 2</p>
+                                        <h3 class="register-step-panel__title">Informe seus dados pessoais</h3>
+                                        <p class="register-step-panel__description">Preencha os dados de identificação e os meios de contato usados pela diretoria para retorno.</p>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-lg-4">
+                                            <label for="nome" class="form-label">Nome completo<span class="required-mark">*</span></label>
+                                            <input type="text" class="form-control form-control-lg" id="nome" name="nome" required
+                                                   placeholder="Ex.: João da Silva"
+                                                   autocomplete="name"
+                                                   minlength="6"
+                                                   maxlength="160"
+                                                   title="Informe seu nome completo.">
+                                        </div>
+                                        <div class="col-md-4 col-lg-2">
+                                            <label for="data_nascimento" class="form-label">Data de nascimento<span class="required-mark">*</span></label>
+                                            <input type="date" class="form-control form-control-lg" id="data_nascimento" name="data_nascimento" required>
+                                        </div>
+                                        <div class="col-md-4 col-lg-2">
+                                            <label for="uf" class="form-label">UF<span class="required-mark">*</span></label>
+                                            <select class="form-select form-select-lg" id="uf" name="uf" autocomplete="address-level1" required>
+                                                <option value="">Selecione</option>
+                                                {% for uf in ufs|default([]) %}
+                                                    <option value="{{ uf }}">{{ uf }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 col-lg-4">
+                                            <label for="cidade" class="form-label">Cidade<span class="required-mark">*</span></label>
+                                            <select class="form-select form-select-lg" id="cidade" name="cidade" autocomplete="address-level2" required disabled>
+                                                <option value="">Selecione a UF primeiro</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="nome_mae" class="form-label">Nome da mãe</label>
+                                            <input type="text" class="form-control form-control-lg" id="nome_mae" name="nome_mae"
+                                                   placeholder="Ex.: Maria da Silva"
+                                                   autocomplete="off"
+                                                   maxlength="160">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="nome_pai" class="form-label">Nome do pai</label>
+                                            <input type="text" class="form-control form-control-lg" id="nome_pai" name="nome_pai"
+                                                   placeholder="Ex.: José da Silva"
+                                                   autocomplete="off"
+                                                   maxlength="160">
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="cpf" class="form-label">CPF<span class="required-mark">*</span></label>
+                                            <input type="text" class="form-control form-control-lg" id="cpf" name="cpf" required
+                                                   placeholder="000.000.000-00"
+                                                   autocomplete="off"
+                                                   inputmode="numeric"
+                                                   maxlength="14"
+                                                   pattern="^\d{3}\.\d{3}\.\d{3}-\d{2}$"
+                                                   title="Informe o CPF no formato 000.000.000-00.">
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="cam" class="form-label">CAM<span class="required-mark">*</span></label>
+                                            <input type="text" class="form-control form-control-lg" id="cam" name="cam" required
+                                                   placeholder="Certificado de Alistamento Militar"
+                                                   autocomplete="off"
+                                                   maxlength="40"
+                                                   title="Informe o número do Certificado de Alistamento Militar.">
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="rg" class="form-label">RG<span class="required-mark">*</span></label>
+                                            <input type="text" class="form-control form-control-lg" id="rg" name="rg" required
+                                                   placeholder="10102976455/SSP-CE"
+                                                   autocomplete="off"
+                                                   maxlength="40"
+                                                   title="Informe o RG no padrão número/órgão-emissor.">
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="telefone" class="form-label">Telefone / WhatsApp<span class="required-mark">*</span></label>
+                                            <input type="text" class="form-control form-control-lg" id="telefone" name="telefone" required
+                                                   placeholder="(84) 99999-0000"
+                                                   autocomplete="tel"
+                                                   inputmode="tel"
+                                                   maxlength="16"
+                                                   pattern="^\(\d{2}\)\s\d{4,5}-\d{4}$"
+                                                   title="Informe o telefone com DDD no formato (00) 00000-0000.">
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label for="avatar" class="form-label">Foto de perfil (opcional)</label>
+                                            <input type="file" class="form-control form-control-lg" id="avatar" name="avatar" accept="image/jpeg,image/png,image/webp">
+                                        </div>
+                                    </div>
+                                    <div class="register-step-actions">
+                                        <button type="button" class="btn btn-theme-outline btn-lg fw-bold register-step-prev"><i class="bi bi-arrow-left btn-icon"></i>Voltar</button>
+                                        <button type="button" class="btn btn-theme btn-lg fw-bold register-step-next">Continuar <i class="bi bi-arrow-right btn-icon"></i></button>
+                                    </div>
+                                </section>
+
+                                <section class="register-step-panel" data-step-panel="formacao" hidden>
+                                    <div class="register-step-panel__header">
+                                        <p class="register-step-panel__eyebrow">Etapa 3</p>
+                                        <h3 class="register-step-panel__title">Vínculo com o NPOR e comprovação</h3>
+                                        <p class="register-step-panel__description">Esses dados ajudam a diretoria a validar sua formação e acelerar a análise da solicitação.</p>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="posto_graduacao" class="form-label">Posto/Graduação<span class="required-mark">*</span></label>
+                                            <select class="form-select form-select-lg" id="posto_graduacao" name="posto_graduacao" required>
+                                                <option value="">Selecione</option>
+                                                <option value="General de Exército">General de Exército</option>
+                                                <option value="General de Divisão">General de Divisão</option>
+                                                <option value="General de Brigada">General de Brigada</option>
+                                                <option value="Coronel">Coronel</option>
+                                                <option value="Tenente-Coronel">Tenente-Coronel</option>
+                                                <option value="Major">Major</option>
+                                                <option value="Capitão">Capitão</option>
+                                                <option value="Primeiro-Tenente">Primeiro-Tenente</option>
+                                                <option value="Segundo-Tenente">Segundo-Tenente</option>
+                                                <option value="Aspirante a Oficial" selected>Aspirante a Oficial</option>
+                                                <option value="Aluno CPOR">Aluno CPOR</option>
+                                                <option value="Aluno NPOR">Aluno NPOR</option>
+                                                <option value="Aluno CFGS">Aluno CFGS</option>
+                                                <option value="Subtenente">Subtenente</option>
+                                                <option value="Primeiro-Sargento">Primeiro-Sargento</option>
+                                                <option value="Segundo-Sargento">Segundo-Sargento</option>
+                                                <option value="Terceiro-Sargento">Terceiro-Sargento</option>
+                                                <option value="Cabo">Cabo</option>
+                                                <option value="Soldado">Sd</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="numero_militar" class="form-label">Nº<span class="required-mark">*</span></label>
+                                            <input type="text" class="form-control form-control-lg" id="numero_militar" name="numero_militar" required
+                                                   placeholder="Ex.: 01"
+                                                   autocomplete="off"
+                                                   inputmode="numeric"
+                                                   minlength="2"
+                                                   maxlength="2"
+                                                   pattern="^\d{2}$"
+                                                   title="Informe exatamente 2 dígitos numéricos.">
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="nome_guerra" class="form-label">Nome de guerra<span class="required-mark">*</span></label>
+                                            <input type="text" class="form-control form-control-lg" id="nome_guerra" name="nome_guerra" required
+                                                   placeholder="Ex.: SILVA"
+                                                   autocomplete="off"
+                                                   maxlength="60">
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="arma_quadro" class="form-label">Arma / quadro / serviço<span class="required-mark">*</span></label>
+                                            <select class="form-select form-select-lg" id="arma_quadro" name="arma_quadro" required>
+                                                <option value="">Selecione</option>
+                                                {% for option in arma_quadro_options|default([]) %}
+                                                    <option value="{{ option|e('html_attr') }}" {% if option == 'Infantaria' %}selected{% endif %}>{{ option|e }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="ano_npor" class="form-label">Ano de formação no NPOR<span class="required-mark">*</span></label>
+                                            <select class="form-select form-select-lg" id="ano_npor" name="ano_npor" required>
+                                                <option value="">Selecione</option>
+                                                {% for ano in ano_npor_options|default([]) %}
+                                                    <option value="{{ ano|e('html_attr') }}">{{ ano|e }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            <label for="turma_npor" class="form-label">Denominação da turma</label>
+                                            <input type="text" class="form-control form-control-lg" id="turma_npor" name="turma_npor"
+                                                   placeholder="Ex.: Turma Aspirante X">
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="documentos" class="form-label">Documentos comprobatórios</label>
+                                            <input type="file" class="form-control form-control-lg" id="documentos" name="documentos[]" accept="application/pdf,image/jpeg,image/png,image/webp" multiple>
+                                            <div class="form-text">Envie comprovantes que ajudem a diretoria a validar sua filiação, como identidade, certificado, declaração ou documento equivalente.</div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="observacoes" class="form-label">Observações</label>
+                                            <textarea class="form-control form-control-lg" id="observacoes" name="observacoes" rows="4" placeholder="Informe dados complementares relevantes para a análise do pedido."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="register-step-actions">
+                                        <button type="button" class="btn btn-theme-outline btn-lg fw-bold register-step-prev"><i class="bi bi-arrow-left btn-icon"></i>Voltar</button>
+                                        <button type="button" class="btn btn-theme btn-lg fw-bold register-step-next">Continuar <i class="bi bi-arrow-right btn-icon"></i></button>
+                                    </div>
+                                </section>
+
+                                <section class="register-step-panel" data-step-panel="revisao" hidden>
+                                    <div class="register-step-panel__header">
+                                        <p class="register-step-panel__eyebrow">Etapa 4</p>
+                                        <h3 class="register-step-panel__title">Revise e envie sua solicitação</h3>
+                                        <p class="register-step-panel__description">Confirme a veracidade das informações e conclua o envio para análise da diretoria.</p>
+                                    </div>
+                                    <article class="register-review-document" aria-label="Prévia do termo de solicitação de filiação">
+                                        <header class="register-review-document__header">
+                                            <div class="register-review-document__brand">
+                                                <img src="{{ BASE_URL }}assets/images/aore1.png" alt="AORE/RN">
+                                                <div>
+                                                    <h4>AORE/RN</h4>
+                                                    <p>Associação dos Oficiais da Reserva do Exército</p>
+                                                    <p class="mb-0">Termo de solicitação de filiação - Sócio Efetivo</p>
+                                                </div>
+                                            </div>
+                                        </header>
+
+                                        <div class="register-review-document__body">
+                                            <div class="register-review-document__intro">
+                                                <div class="register-review-document__photo-wrap">
+                                                    <img src="{{ BASE_URL }}assets/images/conscrito.png" alt="Foto do solicitante" class="register-review-document__photo" data-review="avatar_img">
+                                                    <small class="register-review-document__photo-caption" data-review="avatar">Foto não enviada</small>
+                                                </div>
+                                                <div class="register-review-document__intro-text">
+                                                    <p>
+                                                        Eu, <strong data-review="nome">Não informado</strong>, CPF nº <strong data-review="cpf">Não informado</strong>, RG nº <strong data-review="rg">Não informado</strong>,
+                                                        nascido em <strong data-review="data_nascimento">Não informado</strong>, na cidade de <strong data-review="uf">Não informado</strong>/<strong data-review="cidade">Não informado</strong>,
+                                                        <strong data-review="posto_graduacao">Não informado</strong> da Reserva de 2ª Classe da arma de <strong data-review="arma_quadro">Não informado</strong>,
+                                                        formado em <strong data-review="ano_npor">Não informado</strong> (Turma "<strong data-review="turma_npor">Não informado</strong>"),
+                                                        venho, por meio desta, apresentar proposta de filiação à AORE/RN, autorizando a análise dos dados abaixo informados:
+                                                    </p>
+                                                    <h5 class="mt-3 mb-2">Dados da formação</h5>
+                                                    <ul class="mb-3">
+                                                        <li>Aluno nº <strong data-review="numero_militar">Não informado</strong></li>
+                                                        <li>Nome de guerra: <strong data-review="nome_guerra">Não informado</strong></li>
+                                                    </ul>
+                                                    <h5 class="mt-3 mb-2">Dados de contato para comunicação institucional</h5>
+                                                    <ul class="mb-3">
+                                                        <li>Nome de usuário do associado: <strong data-review="username">Não informado</strong></li>
+                                                        <li>E-mail: <strong data-review="email">Não informado</strong></li>
+                                                        <li>Telefone: <strong data-review="telefone">Não informado</strong></li>
+                                                    </ul>
+                                                    <h5 class="mt-3 mb-2">Filiação</h5>
+                                                    <ul class="mb-0">
+                                                        <li>Nome da mãe: <strong data-review="nome_mae">Não informado</strong></li>
+                                                        <li>Nome do pai: <strong data-review="nome_pai">Não informado</strong></li>
+                                                    </ul>
+                                                    <h5 class="mt-3 mb-2">Anexos e observações</h5>
+                                                    <p class="mb-1"><strong>Documentos comprobatórios:</strong> <span data-review="documentos">Não informado</span></p>
+                                                    <p class="mb-0"><strong>Observações:</strong> <span data-review="observacoes">Não informado</span></p>
+                                                    <h5 class="mt-3 mb-2">Declaração de responsabilidade</h5>
+                                                    <p class="mb-0">
+                                                        Declaro, para os devidos fins, que todas as informações prestadas nesta proposta são verdadeiras e passíveis de comprovação documental, estando ciente de que inconsistências podem resultar em indeferimento da solicitação.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <footer class="register-review-document__footer">
+                                            <span>Natal/RN, <strong data-review="data_atual">--/--/----</strong></span>
+                                            <span>AORE/RN - Secretaria</span>
+                                        </footer>
+                                    </article>
+                                    <div class="row g-3 mt-1">
+                                        <div class="col-12">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="aceite_termo" name="aceite_termo" required>
+                                                <label class="form-check-label small" for="aceite_termo">
+                                                    Declaro que as informações prestadas são verdadeiras, autorizo a análise da solicitação de filiação pela AORE/RN e estou ciente da
+                                                    <a href="{{ BASE_URL }}privacidade" class="fw-semibold" target="_blank" rel="noopener">Política de Privacidade</a>
+                                                    aplicável ao tratamento dos meus dados para esse processo.
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="register-step-actions">
+                                        <button type="button" class="btn btn-theme-outline btn-lg fw-bold register-step-prev"><i class="bi bi-arrow-left btn-icon"></i>Voltar</button>
+                                        {% include 'site/components/button.twig' with {
+                                            label: 'Enviar solicitação de filiação',
+                                            icon: 'bi-send',
+                                            variant: 'solid',
+                                            size: 'lg',
+                                            type: 'submit',
+                                            button_class: 'w-100 w-lg-auto fw-bold'
+                                        } %}
+                                    </div>
+                                </section>
                             </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label text-white">Email corporativo*</label>
-                                <input type="email" class="form-control form-control-lg" id="email" name="email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="avatar" class="form-label text-white">Foto de perfil (opcional)</label>
-                                <input type="file" class="form-control form-control-lg" id="avatar" name="avatar" accept="image/jpeg,image/png,image/webp">
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label text-white">Senha*</label>
-                                <input type="password" class="form-control form-control-lg" id="password" name="password" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="password_confirm" class="form-label text-white">Confirmar senha*</label>
-                                <input type="password" class="form-control form-control-lg" id="password_confirm" name="password_confirm" required>
-                            </div>
-                            {% include 'site/components/button.twig' with {
-                                label: 'Enviar para aprovação',
-                                icon: 'bi-send',
-                                variant: 'solid',
-                                size: 'lg',
-                                type: 'submit',
-                                button_class: 'w-100 fw-bold'
-                            } %}
                         </form>
 
-                        <p class="text-center text-white-50 small mt-4 mb-0">
-                            Já recebeu aprovação? <a href="{{ BASE_URL }}login/admin" class="text-white fw-semibold text-decoration-none">Faça login</a>
+                        <p class="text-center small mt-4 mb-0">
+                            Já foi aprovado? <a href="{{ BASE_URL }}login/admin" class="fw-semibold text-decoration-none">Acesse o portal</a>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('.auth-form');
+            const cpfInput = document.getElementById('cpf');
+            const phoneInput = document.getElementById('telefone');
+            const ufSelect = document.getElementById('uf');
+            const cidadeSelect = document.getElementById('cidade');
+            const passwordInput = document.getElementById('password');
+            const passwordConfirmInput = document.getElementById('password_confirm');
+            const stepButtons = Array.from(document.querySelectorAll('.register-step'));
+            const stepPanels = Array.from(document.querySelectorAll('.register-step-panel'));
+            const nextButtons = Array.from(document.querySelectorAll('.register-step-next'));
+            const prevButtons = Array.from(document.querySelectorAll('.register-step-prev'));
+            const reviewFields = {
+                username: document.querySelector('[data-review="username"]'),
+                nome: document.querySelector('[data-review="nome"]'),
+                email: document.querySelector('[data-review="email"]'),
+                cpf: document.querySelector('[data-review="cpf"]'),
+                nome_mae: document.querySelector('[data-review="nome_mae"]'),
+                nome_pai: document.querySelector('[data-review="nome_pai"]'),
+                cam: document.querySelector('[data-review="cam"]'),
+                rg: document.querySelector('[data-review="rg"]'),
+                telefone: document.querySelector('[data-review="telefone"]'),
+                data_nascimento: document.querySelector('[data-review="data_nascimento"]'),
+                uf: document.querySelector('[data-review="uf"]'),
+                cidade: document.querySelector('[data-review="cidade"]'),
+                ano_npor: document.querySelector('[data-review="ano_npor"]'),
+                posto_graduacao: document.querySelector('[data-review="posto_graduacao"]'),
+                numero_militar: document.querySelector('[data-review="numero_militar"]'),
+                nome_guerra: document.querySelector('[data-review="nome_guerra"]'),
+                turma_npor: document.querySelector('[data-review="turma_npor"]'),
+                arma_quadro: document.querySelector('[data-review="arma_quadro"]'),
+                avatar: document.querySelector('[data-review="avatar"]'),
+                avatar_img: document.querySelector('[data-review="avatar_img"]'),
+                documentos: document.querySelector('[data-review="documentos"]'),
+                observacoes: document.querySelector('[data-review="observacoes"]'),
+                data_atual: document.querySelector('[data-review="data_atual"]')
+            };
+            let currentStep = 0;
+            let currentAvatarPreviewUrl = null;
+
+            const applyCpfMask = (value) => {
+                const digits = value.replace(/\D/g, '').slice(0, 11);
+
+                return digits
+                    .replace(/(\d{3})(\d)/, '$1.$2')
+                    .replace(/(\d{3})(\d)/, '$1.$2')
+                    .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            };
+
+            const applyPhoneMask = (value) => {
+                const digits = value.replace(/\D/g, '').slice(0, 11);
+
+                if (digits.length <= 10) {
+                    return digits
+                        .replace(/(\d{2})(\d)/, '($1) $2')
+                        .replace(/(\d{4})(\d{1,4})$/, '$1-$2');
+                }
+
+                return digits
+                    .replace(/(\d{2})(\d)/, '($1) $2')
+                    .replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+            };
+
+            const isValidCpf = (value) => {
+                const digits = value.replace(/\D/g, '');
+
+                if (digits.length !== 11 || /^(\d)\1{10}$/.test(digits)) {
+                    return false;
+                }
+
+                let sum = 0;
+                for (let i = 0; i < 9; i += 1) {
+                    sum += Number(digits.charAt(i)) * (10 - i);
+                }
+
+                let remainder = (sum * 10) % 11;
+                if (remainder === 10) {
+                    remainder = 0;
+                }
+
+                if (remainder !== Number(digits.charAt(9))) {
+                    return false;
+                }
+
+                sum = 0;
+                for (let i = 0; i < 10; i += 1) {
+                    sum += Number(digits.charAt(i)) * (11 - i);
+                }
+
+                remainder = (sum * 10) % 11;
+                if (remainder === 10) {
+                    remainder = 0;
+                }
+
+                return remainder === Number(digits.charAt(10));
+            };
+
+            const validatePasswordConfirmation = () => {
+                if (!passwordInput || !passwordConfirmInput) {
+                    return;
+                }
+
+                if (passwordConfirmInput.value && passwordConfirmInput.value !== passwordInput.value) {
+                    passwordConfirmInput.setCustomValidity('A confirmação da senha deve ser idêntica à senha informada.');
+                    return;
+                }
+
+                passwordConfirmInput.setCustomValidity('');
+            };
+
+            const getPanelFields = (panel) => {
+                if (!panel) {
+                    return [];
+                }
+
+                return Array.from(panel.querySelectorAll('input, textarea, select'))
+                    .filter((field) => !field.disabled && field.type !== 'hidden' && field.type !== 'button' && field.type !== 'submit');
+            };
+
+            const validatePanel = (panel, report = true) => {
+                const fields = getPanelFields(panel);
+
+                for (const field of fields) {
+                    if (!field.checkValidity()) {
+                        if (report) {
+                            field.reportValidity();
+                        }
+                        return false;
+                    }
+                }
+
+                return true;
+            };
+
+            const setStep = (nextStep) => {
+                currentStep = nextStep;
+                updateReview();
+
+                stepPanels.forEach((panel, index) => {
+                    const isActive = index === currentStep;
+                    panel.classList.toggle('is-active', isActive);
+                    panel.hidden = !isActive;
+                });
+
+                stepButtons.forEach((button, index) => {
+                    button.classList.toggle('is-active', index === currentStep);
+                    button.classList.toggle('is-complete', index < currentStep);
+
+                    if (index === currentStep) {
+                        button.setAttribute('aria-current', 'step');
+                    } else {
+                        button.removeAttribute('aria-current');
+                    }
+                });
+            };
+
+            const goToStep = (nextStep) => {
+                if (nextStep < 0 || nextStep >= stepPanels.length) {
+                    return;
+                }
+
+                setStep(nextStep);
+                const firstField = getPanelFields(stepPanels[nextStep])[0];
+                if (firstField && window.innerWidth >= 768) {
+                    firstField.focus({ preventScroll: true });
+                }
+            };
+
+            const findFirstInvalidStep = () => {
+                return stepPanels.findIndex((panel) => !validatePanel(panel, false));
+            };
+
+            const setReviewValue = (key, value) => {
+                if (!reviewFields[key]) {
+                    return;
+                }
+
+                reviewFields[key].textContent = value && String(value).trim() !== '' ? value : 'Não informado';
+            };
+
+            const formatDateForReview = (value) => {
+                if (!value) {
+                    return '';
+                }
+
+                const [year, month, day] = value.split('-');
+                if (!year || !month || !day) {
+                    return value;
+                }
+
+                return `${day}/${month}/${year}`;
+            };
+
+            const summarizeFiles = (input, emptyLabel, multipleLabel) => {
+                if (!input || !input.files || input.files.length === 0) {
+                    return emptyLabel;
+                }
+
+                if (input.files.length === 1) {
+                    return input.files[0].name;
+                }
+
+                return `${input.files.length} ${multipleLabel}`;
+            };
+
+            const updateReview = () => {
+                const selectedUf = ufSelect?.options?.[ufSelect.selectedIndex]?.text || '';
+                const selectedCidade = cidadeSelect?.options?.[cidadeSelect.selectedIndex]?.text || '';
+                const avatarInput = document.getElementById('avatar');
+                const avatarFile = avatarInput?.files?.[0] || null;
+
+                setReviewValue('username', document.getElementById('username')?.value);
+                setReviewValue('nome', document.getElementById('nome')?.value);
+                setReviewValue('email', document.getElementById('email')?.value);
+                setReviewValue('cpf', cpfInput?.value);
+                setReviewValue('nome_mae', document.getElementById('nome_mae')?.value);
+                setReviewValue('nome_pai', document.getElementById('nome_pai')?.value);
+                setReviewValue('cam', document.getElementById('cam')?.value);
+                setReviewValue('rg', document.getElementById('rg')?.value);
+                setReviewValue('telefone', phoneInput?.value);
+                setReviewValue('data_nascimento', formatDateForReview(document.getElementById('data_nascimento')?.value));
+                setReviewValue('uf', ufSelect?.value ? selectedUf : '');
+                setReviewValue('cidade', cidadeSelect?.value ? selectedCidade : '');
+                setReviewValue('ano_npor', document.getElementById('ano_npor')?.value);
+                setReviewValue('posto_graduacao', document.getElementById('posto_graduacao')?.value);
+                setReviewValue('numero_militar', document.getElementById('numero_militar')?.value);
+                setReviewValue('nome_guerra', document.getElementById('nome_guerra')?.value);
+                setReviewValue('turma_npor', document.getElementById('turma_npor')?.value);
+                setReviewValue('arma_quadro', document.getElementById('arma_quadro')?.value);
+                setReviewValue('avatar', summarizeFiles(avatarInput, 'Foto não enviada', 'arquivo(s)'));
+                setReviewValue('documentos', summarizeFiles(document.getElementById('documentos'), 'Nenhum anexo', 'documento(s)'));
+                setReviewValue('data_atual', new Date().toLocaleDateString('pt-BR'));
+
+                const observacoes = document.getElementById('observacoes')?.value || '';
+                setReviewValue('observacoes', observacoes.length > 140 ? `${observacoes.slice(0, 140)}...` : observacoes);
+
+                if (reviewFields.avatar_img) {
+                    if (avatarFile && avatarFile.type.startsWith('image/')) {
+                        if (currentAvatarPreviewUrl) {
+                            URL.revokeObjectURL(currentAvatarPreviewUrl);
+                        }
+                        currentAvatarPreviewUrl = URL.createObjectURL(avatarFile);
+                        reviewFields.avatar_img.src = currentAvatarPreviewUrl;
+                    } else {
+                        if (currentAvatarPreviewUrl) {
+                            URL.revokeObjectURL(currentAvatarPreviewUrl);
+                            currentAvatarPreviewUrl = null;
+                        }
+                        reviewFields.avatar_img.src = '{{ BASE_URL }}assets/images/conscrito.png';
+                    }
+                }
+            };
+
+            const setCidadeLoading = (loading) => {
+                if (!cidadeSelect) {
+                    return;
+                }
+
+                cidadeSelect.innerHTML = '';
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = loading ? 'Carregando cidades...' : 'Selecione';
+                cidadeSelect.appendChild(option);
+                cidadeSelect.disabled = loading;
+            };
+
+            const resetCidadeSelect = (message = 'Selecione a UF primeiro') => {
+                if (!cidadeSelect) {
+                    return;
+                }
+
+                cidadeSelect.innerHTML = '';
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = message;
+                cidadeSelect.appendChild(option);
+                cidadeSelect.disabled = true;
+                cidadeSelect.value = '';
+                updateReview();
+            };
+
+            const loadCidadesByUf = async (uf) => {
+                if (!uf || !cidadeSelect) {
+                    resetCidadeSelect();
+                    return;
+                }
+
+                setCidadeLoading(true);
+                const desiredCity = (cidadeSelect.dataset.defaultCity || cidadeSelect.value || '').trim().toLowerCase();
+
+                try {
+                    const response = await fetch(`{{ BASE_URL }}register/cidades-por-uf?uf=${encodeURIComponent(uf)}`, {
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    const payload = await response.json();
+                    const items = Array.isArray(payload?.items) ? payload.items : [];
+
+                    cidadeSelect.innerHTML = '';
+                    const firstOption = document.createElement('option');
+                    firstOption.value = '';
+                    firstOption.textContent = 'Selecione';
+                    cidadeSelect.appendChild(firstOption);
+
+                    items.forEach((item) => {
+                        if (!item?.nome) {
+                            return;
+                        }
+                        const option = document.createElement('option');
+                        option.value = item.nome;
+                        option.textContent = item.nome;
+                        cidadeSelect.appendChild(option);
+                    });
+
+                    cidadeSelect.disabled = items.length === 0;
+                    if (desiredCity && items.length > 0) {
+                        const matched = items.find((item) => String(item.nome || '').trim().toLowerCase() === desiredCity);
+                        if (matched) {
+                            cidadeSelect.value = matched.nome;
+                        }
+                    }
+                    delete cidadeSelect.dataset.defaultCity;
+                    if (items.length === 0) {
+                        firstOption.textContent = 'Nenhuma cidade encontrada para a UF';
+                    }
+                } catch (error) {
+                    console.error('Falha ao carregar cidades por UF:', error);
+                    resetCidadeSelect('Falha ao carregar cidades');
+                    return;
+                }
+
+                updateReview();
+            };
+
+            if (cpfInput) {
+                cpfInput.addEventListener('input', function () {
+                    this.value = applyCpfMask(this.value);
+                    this.setCustomValidity('');
+                    updateReview();
+                });
+
+                cpfInput.addEventListener('blur', function () {
+                    if (!this.value) {
+                        this.setCustomValidity('');
+                        return;
+                    }
+
+                    if (!isValidCpf(this.value)) {
+                        this.setCustomValidity('Informe um CPF válido.');
+                        return;
+                    }
+
+                    this.setCustomValidity('');
+                });
+            }
+
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function () {
+                    this.value = applyPhoneMask(this.value);
+                    this.setCustomValidity('');
+                    updateReview();
+                });
+
+                phoneInput.addEventListener('blur', function () {
+                    const digits = this.value.replace(/\D/g, '');
+
+                    if (!digits.length) {
+                        this.setCustomValidity('');
+                        return;
+                    }
+
+                    if (digits.length < 10 || digits.length > 11) {
+                        this.setCustomValidity('Informe um telefone com DDD válido.');
+                        return;
+                    }
+
+                    this.setCustomValidity('');
+                });
+            }
+
+            if (passwordInput && passwordConfirmInput) {
+                passwordInput.addEventListener('input', validatePasswordConfirmation);
+                passwordConfirmInput.addEventListener('input', validatePasswordConfirmation);
+            }
+
+            form?.querySelectorAll('input, textarea, select').forEach((field) => {
+                if (field === cpfInput || field === phoneInput) {
+                    return;
+                }
+
+                field.addEventListener('input', updateReview);
+                field.addEventListener('change', updateReview);
+            });
+
+            if (ufSelect) {
+                ufSelect.addEventListener('change', function () {
+                    const uf = this.value ? this.value.toUpperCase() : '';
+                    this.value = uf;
+                    loadCidadesByUf(uf);
+                });
+            }
+
+            stepButtons.forEach((button, index) => {
+                button.addEventListener('click', function () {
+                    if (index === currentStep) {
+                        return;
+                    }
+
+                    if (index > currentStep) {
+                        const currentPanel = stepPanels[currentStep];
+                        validatePasswordConfirmation();
+                        if (!validatePanel(currentPanel)) {
+                            return;
+                        }
+                    }
+
+                    goToStep(index);
+                });
+            });
+
+            nextButtons.forEach((button) => {
+                button.addEventListener('click', function () {
+                    validatePasswordConfirmation();
+                    if (!validatePanel(stepPanels[currentStep])) {
+                        return;
+                    }
+
+                    goToStep(currentStep + 1);
+                });
+            });
+
+            prevButtons.forEach((button) => {
+                button.addEventListener('click', function () {
+                    goToStep(currentStep - 1);
+                });
+            });
+
+            if (form) {
+                form.addEventListener('submit', function (event) {
+                    if (cpfInput && cpfInput.value && !isValidCpf(cpfInput.value)) {
+                        cpfInput.setCustomValidity('Informe um CPF válido.');
+                    }
+
+                    if (phoneInput) {
+                        const digits = phoneInput.value.replace(/\D/g, '');
+                        if (digits.length && (digits.length < 10 || digits.length > 11)) {
+                            phoneInput.setCustomValidity('Informe um telefone com DDD válido.');
+                        }
+                    }
+
+                    validatePasswordConfirmation();
+
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        const firstInvalidStep = findFirstInvalidStep();
+                        if (firstInvalidStep >= 0) {
+                            goToStep(firstInvalidStep);
+                        }
+                        form.reportValidity();
+                    }
+                });
+            }
+
+            if (ufSelect && ufSelect.value) {
+                loadCidadesByUf(ufSelect.value.toUpperCase());
+            } else {
+                resetCidadeSelect();
+            }
+
+            setStep(0);
+            updateReview();
+        });
+    </script>
 {% endblock %}

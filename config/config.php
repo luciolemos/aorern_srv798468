@@ -6,8 +6,13 @@ $dotenv->safeLoad();
 
 $appEnv = strtolower((string) ($_ENV['APP_ENV'] ?? 'production'));
 $appDebug = in_array($appEnv, ['local', 'dev', 'development', 'test'], true);
+$configuredAppUrl = trim((string) ($_ENV['APP_URL'] ?? ''));
+$appTimezone = (string) ($_ENV['APP_TIMEZONE'] ?? 'America/Sao_Paulo');
 
-$https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+date_default_timezone_set($appTimezone);
+
+$forwardedProto = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
+$https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $forwardedProto === 'https';
 $protocol = $https ? 'https://' : 'http://';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $requestPath = (string) (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/');
@@ -28,8 +33,16 @@ if (!defined('APP_DEBUG')) {
     define('APP_DEBUG', $appDebug);
 }
 
+if (!defined('APP_TIMEZONE')) {
+    define('APP_TIMEZONE', $appTimezone);
+}
+
 if (!defined('BASE_URL')) {
-    define('BASE_URL', $protocol . $host . $basePath);
+    if ($configuredAppUrl !== '') {
+        define('BASE_URL', rtrim($configuredAppUrl, '/') . '/');
+    } else {
+        define('BASE_URL', $protocol . $host . $basePath);
+    }
 }
 
 if (!defined('DB_HOST')) {
@@ -146,4 +159,3 @@ return [
         'session_timeout' => (int) ($_ENV['SESSION_TIMEOUT'] ?? 600),
     ],
 ];
-

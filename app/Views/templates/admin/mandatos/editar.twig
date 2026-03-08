@@ -1,0 +1,47 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Editar Mandato{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-clock-history me-2"></i>Editar mandato</h2>
+        <p class="text-muted mb-0">Atualize o período e o status da gestão institucional.</p>
+        <hr class="my-4">
+    </div>
+
+    <form method="post" action="{{ BASE_URL }}admin/mandatos/atualizar/{{ mandato.id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <label class="form-label fw-bold">Nome do mandato</label>
+                <input type="text" name="nome" class="form-control" required value="{{ mandato.nome|e('html_attr') }}">
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Data de início</label>
+                <input type="date" name="data_inicio" class="form-control" required value="{{ mandato.data_inicio|e('html_attr') }}">
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Data final</label>
+                <input type="date" name="data_fim" class="form-control" value="{{ mandato.data_fim|default('')|e('html_attr') }}">
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Status</label>
+                <select name="status" class="form-select">
+                    {% for option in statusOptions %}
+                        <option value="{{ option }}" {% if mandato.status == option %}selected{% endif %}>{{ option|title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12">
+                <label class="form-label fw-bold">Observações</label>
+                <textarea name="observacoes" rows="5" class="form-control">{{ mandato.observacoes|default('')|e }}</textarea>
+            </div>
+        </div>
+        <div class="border-top my-4"></div>
+        <div class="d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+            <a href="{{ BASE_URL }}admin/mandatos" class="btn btn-outline-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-success">Atualizar mandato</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

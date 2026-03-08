@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+  <rect width="960" height="600" rx="32" fill="#eef1ec"/>
+  <rect x="62" y="62" width="836" height="476" rx="24" fill="#ffffff" stroke="#d8decf"/>
+  <rect x="118" y="118" width="200" height="284" rx="18" fill="#f8faf7" stroke="#d5ddcd"/>
+  <rect x="118" y="118" width="200" height="46" rx="18" fill="#556b2f"/>
+  <text x="146" y="148" fill="#ffffff" font-size="16" font-family="Arial" font-weight="700">ESTATUTO</text>
+  <line x1="144" y1="212" x2="292" y2="212" stroke="#d0d8c8" stroke-width="2"/>
+  <line x1="144" y1="244" x2="292" y2="244" stroke="#d0d8c8" stroke-width="2"/>
+  <line x1="144" y1="276" x2="292" y2="276" stroke="#d0d8c8" stroke-width="2"/>
+  <text x="378" y="214" fill="#10253f" font-size="38" font-family="Georgia" font-weight="700">Estatuto</text>
+  <text x="378" y="258" fill="#556b2f" font-size="22" font-family="Arial" font-weight="700">Documento normativo principal</text>
+  <text x="378" y="318" fill="#46556b" font-size="20" font-family="Arial">Base juridica e organizacional da associacao.</text>
+</svg>

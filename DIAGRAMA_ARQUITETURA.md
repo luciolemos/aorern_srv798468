@@ -7,7 +7,7 @@
 │                    SITE PÚBLICO                              │
 └─────────────────────────────────────────────────────────────┘
 
-   URL: http://cbmrn.local/home
+     URL: http://aorern.local/home
         ↓
    ┌────────────────────────────┐
    │  public/index.php          │
@@ -33,10 +33,10 @@
    ┌─────────────────────────────────────────────────┐
    │  components/navbar.php                          │
    │  ┌───────────────────────────────────────────┐  │
-   │  │ Logo CBMRN (40px → 46px mobile)          │  │
+     │  │ Logo AORE/RN (40px → 46px mobile)         │  │
    │  │ Menu: INÍCIO | SOBRE | BLOG | CONTATO    │  │
    │  │ Hamburger em mobile com overlay           │  │
-   │  │ Cor: #df6301 (Laranja CBMRN)              │  │
+     │  │ Cor: #556b2f (Verde AORE/RN)               │  │
    │  └───────────────────────────────────────────┘  │
    └─────────────────────────────────────────────────┘
         ↓
@@ -51,7 +51,7 @@
    │  components/footer.php                 │
    │  {$footer_type = 'public'}             │
    │  ┌────────────────────────────────┐   │
-   │  │ Col 1: Sobre CBMRN             │   │
+     │  │ Col 1: Sobre AORE/RN            │   │
    │  │ Col 2: Links Rápidos           │   │
    │  │ Col 3: Contato                 │   │
    │  │ Footer: Copyright © 2024       │   │
@@ -74,7 +74,7 @@
 │                    ADMIN DASHBOARD                           │
 └─────────────────────────────────────────────────────────────┘
 
-   URL: http://cbmrn.local/admin/dashboard
+     URL: http://aorern.local/admin/dashboard
         ↓
    ┌────────────────────────────┐
    │  public/index.php          │
@@ -102,7 +102,7 @@
    │  components/navbar.php                          │
    │  (Navbar Admin)                                 │
    │  ┌───────────────────────────────────────────┐  │
-   │  │ Logo CBMRN (40px → 46px mobile)          │  │
+     │  │ Logo AORE/RN (40px → 46px mobile)         │  │
    │  │ Hamburger em mobile                       │  │
    │  │ Botão "Sair" (Logout)                     │  │
    │  │ Cor: #212529 (Dark)                       │  │
@@ -251,7 +251,7 @@ public/assets/css/
 **DEPOIS (Automático - Zero Risco):**
 ```
 1. Alterar navbar-universal.css
-   --cbmrn-orange: #ff0000;  ← Uma mudança
+     --aorern-primary: #ff0000;  ← Uma mudança
    
 2. Efeito cascata:
    ├─ Site público atualizado ✓
@@ -267,7 +267,7 @@ public/assets/css/
 Cascade (Especificidade crescente):
 
 ┌─────────────────────────────────────────┐
-│ bombeiros-theme.css (Tema Base)         │  Cores CBMRN
+│ bombeiros-theme.css (Tema Base)         │  Cores AORE/RN
 ├─────────────────────────────────────────┤
 │ navbar-universal.css (Navbar)           │  Componentes
 ├─────────────────────────────────────────┤
@@ -338,7 +338,7 @@ Footer consistente        footer.php           ✅
 Sem duplicação             —                    ✅
 CSS centralizado           navbar-universal.css ✅
 Responsivo mobile          @media queries       ✅
-CBMRN branding            bombeiros-theme.css ✅
+AORE/RN branding           bombeiros-theme.css ✅
 ```
 
 ---

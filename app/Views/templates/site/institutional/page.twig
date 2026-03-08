@@ -1,10 +1,10 @@
 {% extends 'layouts/base.twig' %}
 
-{% block title %}{{ page.title }} - CBMRN{% endblock %}
+{% block title %}{{ page.title }} - AORE/RN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/institutional.css">
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/institutional.css?v=20260306-2">
 {% endblock %}
 
 {% block content %}
@@ -17,7 +17,7 @@
                 <h1 class="display-5 fw-bold text-white">{{ page.title }}</h1>
                 {% if page.tagline %}<p class="text-white-75 fs-5 mb-1">{{ page.tagline }}</p>{% endif %}
                 <p class="lead text-white-75 mb-4">{{ page.lead }}</p>
-                {% if page.hero_highlights is defined and page.hero_highlights|length > 0 %}
+                {% if page.slug not in ['brasao', 'hino', 'visao'] and page.hero_highlights is defined and page.hero_highlights|length > 0 %}
                     <div class="inst-hero-stats mt-4">
                         {% for stat in page.hero_highlights %}
                             <div class="inst-stat">
@@ -38,36 +38,87 @@
                         } %}
                     {% endif %}
                     {% include 'site/components/button.twig' with {
-                        href: BASE_URL ~ 'institucional',
-                        label: 'Ver todas as seções',
-                        icon: 'bi-view-list',
+                        href: page.slug == 'hino' ? page.download_pdf_url|default(BASE_URL ~ 'assets/docs/cancao_oficial_aore.pdf') : BASE_URL ~ 'institucional',
+                        label: page.slug == 'hino' ? 'Baixar Hino da AORE/RN (.pdf)' : 'Ver todas as seções',
+                        icon: page.slug == 'hino' ? 'bi-file-earmark-arrow-down' : 'bi-view-list',
                         variant: 'light-outline',
-                        size: 'lg'
+                        size: 'lg',
+                        attrs: page.slug == 'hino'
+                            ? {
+                                'download': page.download_pdf_name|default('hino-aorern.pdf'),
+                                'aria-label': 'Baixar PDF do Hino da AORE/RN'
+                            }
+                            : {}
                     } %}
                 </div>
             </div>
-            <div class="col-lg-5">
-                {% if page.media and page.media.type == 'image' %}
-                    <div class="inst-media frame">
-                        <img src="{{ page.media.src }}" alt="{{ page.media.alt|default(page.title) }}" class="img-fluid">
-                        {% if page.media.caption %}
-                            <small class="text-white-75 d-block mt-2">{{ page.media.caption }}</small>
-                        {% endif %}
-                    </div>
-                {% else %}
-                    <div class="inst-spotlight-card">
-                        <h3 class="h4 text-white fw-bold mb-3">{{ page.spotlight.title|default('Ponto focal') }}</h3>
-                        <p class="text-white-75 mb-4">{{ page.spotlight.description|default('Conteúdo atualizado pela diretoria responsável.') }}</p>
-                        {% if page.spotlight.chips %}
-                            <div class="d-flex flex-wrap gap-2">
-                                {% for chip in page.spotlight.chips %}
-                                    <span class="badge rounded-pill bg-white text-inst-primary">{{ chip }}</span>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                {% endif %}
-            </div>
+            {% if page.slug != 'hino' %}
+                <div class="col-lg-5">
+                    {% if page.media and page.media.type == 'image' %}
+                        <div class="inst-media{{ page.slug != 'brasao' ? ' frame' : '' }}">
+                            <img src="{{ page.media.src }}" alt="{{ page.media.alt|default(page.title) }}" class="img-fluid">
+                            {% if page.media.caption %}
+                                <small class="text-white-75 d-block mt-2">{{ page.media.caption }}</small>
+                            {% endif %}
+                            {% if page.slug == 'brasao' %}
+                                <div class="mt-3 d-flex flex-column flex-lg-row gap-2">
+                                    {% include 'site/components/button.twig' with {
+                                        href: page.media.download_url|default(page.media.src),
+                                        label: page.media.download_label|default('Download do selo'),
+                                        icon: 'bi-download',
+                                        variant: 'inst',
+                                        size: 'md',
+                                        button_class: 'fw-bold',
+                                        attrs: {
+                                            'download': page.media.download_name|default('selo-aorern.svg'),
+                                            'aria-label': 'Baixar imagem do selo da AORE/RN'
+                                        }
+                                    } %}
+                                    {% if page.media.download_png_url is defined and page.media.download_png_url %}
+                                        {% include 'site/components/button.twig' with {
+                                            href: page.media.download_png_url|default(page.media.src),
+                                            label: page.media.download_png_label|default('Download do selo (PNG)'),
+                                            icon: 'bi-filetype-png',
+                                            variant: 'light-outline',
+                                            size: 'md',
+                                            button_class: 'fw-semibold opacity-75',
+                                            attrs: {
+                                                'download': page.media.download_png_name|default('selo-aorern.png'),
+                                                'aria-label': 'Baixar imagem PNG do selo da AORE/RN'
+                                            }
+                                        } %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="inst-spotlight-card">
+                            <h3 class="h4 text-white fw-bold mb-3">{{ page.spotlight.title|default('Ponto focal') }}</h3>
+                            <p class="text-white-75 mb-4">{{ page.spotlight.description|default('Conteúdo atualizado pela diretoria responsável.') }}</p>
+                            {% if page.spotlight.president %}
+                                <div class="inst-spotlight-president mb-4">
+                                    <img src="{{ page.spotlight.president.avatar_url|e('html_attr') }}" alt="{{ page.spotlight.president.name|e('html_attr') }}" class="inst-spotlight-president__avatar">
+                                    <div>
+                                        <div class="inst-spotlight-president__name">{{ page.spotlight.president.name }}</div>
+                                        <div class="inst-spotlight-president__role">{{ page.spotlight.president.role }}</div>
+                                        <div class="inst-spotlight-president__meta">
+                                            <span>Ano NPOR: <strong>{{ page.spotlight.president.ano_npor|default('-') }}</strong></span>
+                                            <span>Turma: <strong>{{ page.spotlight.president.turma_npor|default('-') }}</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if page.spotlight.chips %}
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for chip in page.spotlight.chips %}
+                                        <span class="badge rounded-pill bg-white text-inst-primary">{{ chip }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
     </div>
 </section>
@@ -127,21 +178,44 @@
                     <div class="inst-lyrics">
                         <div class="d-flex align-items-center gap-2 mb-3">
                             <i class="bi bi-music-note-beamed fs-3 text-inst-primary"></i>
-                            <h3 class="h5 fw-bold mb-0">Letra do hino</h3>
+                            <h3 class="h5 fw-bold mb-0">{{ page.slug == 'hino' ? 'Letra da canção da AORE/RN' : 'Letra do hino' }}</h3>
                         </div>
                         {% if page.lyrics_note %}
                             <div class="alert alert-warning mb-4">{{ page.lyrics_note }}</div>
                         {% endif %}
-                        <div class="row g-3">
-                            {% for stanza in page.lyrics %}
-                                <div class="col-md-4">
-                                    <article class="inst-lyrics-card h-100">
-                                        <h4 class="h6 text-uppercase text-inst-primary">{{ stanza.title }}</h4>
-                                        <p class="mb-0">{{ stanza.lines|join('<br>')|raw }}</p>
+                        {% if page.slug == 'hino' %}
+                            <div class="inst-audio-player mb-3" aria-label="Canção oficial da AORE/RN">
+                                <p class="inst-audio-player__label mb-1">
+                                    <i class="bi bi-play-circle me-1"></i>
+                                    Ouça a canção oficial
+                                </p>
+                                <audio controls preload="metadata" class="w-100">
+                                    <source src="{{ BASE_URL }}assets/docs/audio.mp4" type="audio/mp4">
+                                    Seu navegador não suporta reprodução de áudio.
+                                </audio>
+                            </div>
+                            <div class="inst-lyrics-flow">
+                                {% for stanza in page.lyrics %}
+                                    {% set isChorus = stanza.title|lower == 'refrão' %}
+                                    <article class="inst-lyrics-block {{ isChorus ? 'inst-lyrics-block--chorus' : 'inst-lyrics-block--verse' }}">
+                                        <h4 class="inst-lyrics-block__title">{{ stanza.title }}</h4>
+                                        <p class="inst-lyrics-block__text mb-0">{{ stanza.lines|join('<br>')|raw }}</p>
                                     </article>
-                                </div>
-                            {% endfor %}
-                        </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="row g-3 inst-lyrics-grid">
+                                {% for stanza in page.lyrics %}
+                                    {% set isChorus = stanza.title|lower == 'refrão' %}
+                                    <div class="{{ isChorus ? 'col-12' : 'col-md-6' }}">
+                                        <article class="inst-lyrics-card h-100 {{ isChorus ? 'inst-lyrics-card--chorus' : 'inst-lyrics-card--verse' }}">
+                                            <h4 class="h6 text-uppercase {{ isChorus ? 'text-white' : 'text-inst-primary' }}">{{ stanza.title }}</h4>
+                                            <p class="mb-0 {{ isChorus ? 'inst-lyrics-text--chorus' : 'inst-lyrics-text--verse' }}">{{ stanza.lines|join('<br>')|raw }}</p>
+                                        </article>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                 {% endif %}
 
@@ -157,6 +231,180 @@
                                 <p class="text-muted">{{ link.description }}</p>
                                 <a href="{{ link.url }}" class="stretched-link" target="_blank" rel="noopener">Acessar portal</a>
                             </article>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if page.document_cards %}
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-collection fs-3 text-inst-primary"></i>
+                            <h3 class="h5 fw-bold mb-0">Acervo editorial</h3>
+                        </div>
+                        {% if page.document_filters %}
+                            <div class="inst-filter-bar mb-4">
+                                {% for filter in page.document_filters %}
+                                    <a href="{{ filter.url }}" class="inst-filter-chip {{ filter.active ? 'active' : '' }}">
+                                        {{ filter.label }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if page.document_search %}
+                            <form method="get" action="{{ page.document_search.action }}" class="inst-search-form mb-4">
+                                {% for key, value in page.document_search.params %}
+                                    <input type="hidden" name="{{ key }}" value="{{ value }}">
+                                {% endfor %}
+                                <div class="input-group">
+                                    <input type="search" name="q" value="{{ page.document_search.value|default('') }}" class="form-control" placeholder="Buscar por título, resumo ou slug">
+                                    <button type="submit" class="btn btn-inst-primary">Buscar</button>
+                                </div>
+                            </form>
+                        {% endif %}
+                        {% if page.document_sorts %}
+                            <div class="inst-sort-bar mb-4">
+                                <span class="inst-sort-bar__label">Ordenar por</span>
+                                {% for sort in page.document_sorts %}
+                                    <a href="{{ sort.url }}" class="inst-sort-chip {{ sort.active ? 'active' : '' }}">
+                                        {{ sort.label }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="inst-card-grid">
+                            {% for documento in page.document_cards %}
+                                <article class="inst-card">
+                                    <div class="mb-3">
+                                        {% if documento.preview_image %}
+                                            <div class="rounded-4 border overflow-hidden bg-white">
+                                                <img src="{{ documento.preview_image }}" alt="{{ documento.title }}" class="img-fluid w-100 inst-doc-preview">
+                                            </div>
+                                        {% else %}
+                                            <div class="rounded-4 border d-flex align-items-center justify-content-center bg-light inst-doc-preview-placeholder">
+                                                <i class="bi {{ documento.preview_icon }} fs-1 text-inst-primary"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-2 mb-2">
+                                        <span class="badge rounded-pill bg-inst-soft">{{ documento.category }}</span>
+                                        <span class="badge rounded-pill bg-light text-dark border">{{ documento.order_label }}</span>
+                                    </div>
+                                    <h3 class="h5 fw-bold">{{ documento.title }}</h3>
+                                    <p class="text-muted mb-3">{{ documento.summary }}</p>
+                                    <a href="{{ documento.url }}" class="inst-side-link fw-semibold" target="_blank" rel="noopener">
+                                        <i class="bi bi-box-arrow-up-right me-1"></i>Abrir documento
+                                    </a>
+                                </article>
+                            {% endfor %}
+                        </div>
+                        {% if page.document_cards|length == 0 %}
+                            <div class="inst-side-card">
+                                <h3 class="h6 fw-bold text-uppercase text-muted">Nenhum documento nesta categoria</h3>
+                                <p class="mb-0">Não há documentos publicados para o filtro selecionado neste momento.</p>
+                            </div>
+                        {% endif %}
+                        {% if page.pagination and page.pagination.last_page > 1 %}
+                            {% set current = page.pagination.current_page|default(1) %}
+                            {% set last = page.pagination.last_page|default(1) %}
+                            {% set range = 2 %}
+                            {% set start = max(1, current - range) %}
+                            {% set end = min(last, current + range) %}
+                            {% set queryPairs = [] %}
+                            {% for key, value in page.pagination.query|default({}) %}
+                                {% set queryPairs = queryPairs|merge([key ~ '=' ~ value|url_encode]) %}
+                            {% endfor %}
+                            {% set baseQueryString = queryPairs ? queryPairs|join('&') ~ '&' : '' %}
+                            <nav aria-label="Paginação de documentos" class="mt-4">
+                                <ul class="pagination justify-content-center mb-0">
+                                    <li class="page-item {{ current <= 1 ? 'disabled' : '' }}">
+                                        <a class="page-link" href="{{ current <= 1 ? '#' : page.pagination.path ~ '?' ~ baseQueryString ~ 'page=' ~ (current - 1) }}">&laquo;</a>
+                                    </li>
+                                    {% if start > 1 %}
+                                        <li class="page-item"><a class="page-link" href="{{ page.pagination.path }}?{{ baseQueryString }}page=1">1</a></li>
+                                        {% if start > 2 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                    {% endif %}
+                                    {% for pageNumber in start..end %}
+                                        <li class="page-item {{ pageNumber == current ? 'active' : '' }}">
+                                            {% if pageNumber == current %}
+                                                <span class="page-link">{{ pageNumber }}</span>
+                                            {% else %}
+                                                <a class="page-link" href="{{ page.pagination.path }}?{{ baseQueryString }}page={{ pageNumber }}">{{ pageNumber }}</a>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                    {% if end < last %}
+                                        {% if end < last - 1 %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
+                                        <li class="page-item"><a class="page-link" href="{{ page.pagination.path }}?{{ baseQueryString }}page={{ last }}">{{ last }}</a></li>
+                                    {% endif %}
+                                    <li class="page-item {{ current >= last ? 'disabled' : '' }}">
+                                        <a class="page-link" href="{{ current >= last ? '#' : page.pagination.path ~ '?' ~ baseQueryString ~ 'page=' ~ (current + 1) }}">&raquo;</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if page.board_groups %}
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-people fs-3 text-inst-primary"></i>
+                            <h3 class="h5 fw-bold mb-0">Diretoria atual</h3>
+                        </div>
+                        <div class="inst-card-grid">
+                            {% for groupName, members in page.board_groups %}
+                                <article class="inst-card">
+                                    <h3 class="h5 fw-bold">{{ groupName }}</h3>
+                                    <ul class="list-unstyled mb-0">
+                                        {% for member in members %}
+                                            <li class="{{ not loop.last ? 'mb-3' : '' }}">
+                                                <div class="inst-board-member">
+                                                    <img src="{{ member.avatar_url|e('html_attr') }}" alt="{{ member.name|e('html_attr') }}" class="inst-board-member__avatar">
+                                                    <div>
+                                                        <div class="fw-semibold">{{ member.name }}</div>
+                                                        <div class="text-muted small">{{ member.role }}</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if page.search_results %}
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-search fs-3 text-inst-primary"></i>
+                            <h3 class="h5 fw-bold mb-0">Resultados da busca</h3>
+                        </div>
+                        {% for groupName, items in page.search_results %}
+                            <div class="inst-side-card mb-4">
+                                <h3 class="h6 fw-bold text-uppercase text-muted mb-3">{{ groupName }}</h3>
+                                {% if items %}
+                                    <ul class="list-unstyled mb-0">
+                                        {% for item in items %}
+                                            <li class="{{ not loop.last ? 'mb-3 pb-3 border-bottom' : '' }}">
+                                                <div class="d-flex align-items-start gap-3">
+                                                    <i class="bi {{ item.icon }} text-inst-primary fs-4"></i>
+                                                    <div>
+                                                        <p class="mb-1 fw-semibold">{{ item.title }}</p>
+                                                        <small class="text-muted d-block mb-1">{{ item.type }}</small>
+                                                        <p class="mb-1 text-muted">{{ item.description|length > 180 ? item.description|slice(0, 180) ~ '…' : item.description }}</p>
+                                                        <a href="{{ item.url }}" class="inst-side-link" target="_blank" rel="noopener">
+                                                            <i class="bi bi-box-arrow-up-right me-1"></i>Acessar
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <p class="mb-0 text-muted">Nenhum resultado encontrado neste grupo.</p>
+                                {% endif %}
+                            </div>
                         {% endfor %}
                     </div>
                 {% endif %}

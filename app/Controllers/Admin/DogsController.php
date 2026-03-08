@@ -391,10 +391,7 @@ class DogsController extends Controller
             return [null, 'Não foi possível identificar a extensão da imagem.'];
         }
 
-        $publicDir = rtrim($_SERVER['DOCUMENT_ROOT'] ?? '', '/');
-        if ($publicDir === '') {
-            $publicDir = rtrim(dirname(__DIR__, 3) . '/public', '/');
-        }
+        $publicDir = $this->resolvePublicRoot();
 
         $targetDir = $publicDir . '/' . self::STORAGE_DIR;
         if (!is_dir($targetDir) && !@mkdir($targetDir, 0755, true)) {
@@ -434,10 +431,20 @@ class DogsController extends Controller
             return;
         }
 
-        $fullPath = rtrim($_SERVER['DOCUMENT_ROOT'] ?? '', '/') . '/' . $normalized;
+        $fullPath = $this->resolvePublicRoot() . '/' . $normalized;
         if (is_file($fullPath)) {
             @unlink($fullPath);
         }
+    }
+
+    private function resolvePublicRoot(): string
+    {
+        $projectPublic = rtrim(dirname(__DIR__, 3) . '/public', '/');
+        if (is_dir($projectPublic)) {
+            return $projectPublic;
+        }
+
+        return rtrim((string) ($_SERVER['DOCUMENT_ROOT'] ?? $projectPublic), '/');
     }
 
     private function flashAndRedirect(string $type, string $message, string $path): void

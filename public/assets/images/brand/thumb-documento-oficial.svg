@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+  <rect width="960" height="600" rx="32" fill="#f3f5f6"/>
+  <rect x="62" y="62" width="836" height="476" rx="24" fill="#ffffff" stroke="#dde3e7"/>
+  <rect x="122" y="118" width="228" height="306" rx="18" fill="#ffffff" stroke="#d9e0e5"/>
+  <rect x="122" y="118" width="228" height="54" rx="18" fill="#10253f"/>
+  <line x1="150" y1="214" x2="322" y2="214" stroke="#d6dfe6" stroke-width="2"/>
+  <line x1="150" y1="248" x2="322" y2="248" stroke="#d6dfe6" stroke-width="2"/>
+  <line x1="150" y1="282" x2="322" y2="282" stroke="#d6dfe6" stroke-width="2"/>
+  <text x="392" y="214" fill="#10253f" font-size="38" font-family="Georgia" font-weight="700">Documento oficial</text>
+  <text x="392" y="258" fill="#556b2f" font-size="22" font-family="Arial" font-weight="700">Referencia institucional publicada</text>
+  <text x="392" y="318" fill="#46556b" font-size="20" font-family="Arial">Arquivo de consulta, memoria ou apoio ao portal.</text>
+</svg>

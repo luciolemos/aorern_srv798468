@@ -1,26 +1,26 @@
 /* 🚒 PALETA DE CORES - CORPO DE BOMBEIROS DO RN */
 :root {
     /* Cores principais - Bombeiros RN */
-    --bombeiros-orange: #df6301;          /* Laranja principal dos uniformes */
-    --bombeiros-orange-dark: #b54f01;     /* Laranja escuro (hover/active) */
-    --bombeiros-orange-light: #ff8833;    /* Laranja claro (destaques) */
-    --bombeiros-orange-lighter: #fff3e6;  /* Laranja muito claro (backgrounds) */
+    --bombeiros-orange: #556b2f;          /* Laranja principal dos uniformes */
+    --bombeiros-orange-dark: #3f4f22;     /* Laranja escuro (hover/active) */
+    --bombeiros-orange-light: #6f8650;    /* Laranja claro (destaques) */
+    --bombeiros-orange-lighter: #eef2e8;  /* Laranja muito claro (backgrounds) */
     
     /* Cores complementares */
     --bombeiros-dark: #212529;            /* Cinza escuro */
     --bombeiros-light: #f8f9fa;           /* Cinza claro */
-    --bombeiros-shadow: 0 0.125rem 0.25rem rgba(223, 99, 1, 0.15);
-    --bombeiros-shadow-lg: 0 0.5rem 1rem rgba(223, 99, 1, 0.2);
+    --bombeiros-shadow: 0 0.125rem 0.25rem rgba(85, 107, 47, 0.18);
+    --bombeiros-shadow-lg: 0 0.5rem 1rem rgba(0, 130, 200, 0.22);
     
     /* Tipografia Institucional */
     --font-primary: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
     --font-headings: 'Roboto Condensed', 'Roboto', sans-serif;
     
     /* Bootstrap override */
-    --bs-primary: #df6301;
-    --bs-primary-rgb: 223, 99, 1;
-    --bs-link-color: #df6301;
-    --bs-link-hover-color: #b54f01;
+    --bs-primary: #556b2f;
+    --bs-primary-rgb: 85, 107, 47;
+    --bs-link-color: #0082c8;
+    --bs-link-hover-color: #8b1e2d;
     --bs-body-font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
@@ -72,7 +72,7 @@ h1, h2, h3, h4, h5, h6,
 .btn-primary:active {
     background-color: var(--bombeiros-orange-dark) !important;
     border-color: var(--bombeiros-orange-dark) !important;
-    box-shadow: 0 0 0 0.25rem rgba(223, 99, 1, 0.25) !important;
+    box-shadow: 0 0 0 0.25rem rgba(85, 107, 47, 0.25) !important;
 }
 
 .btn-outline-primary {
@@ -114,7 +114,7 @@ a:hover {
 .form-control:focus,
 .form-select:focus {
     border-color: var(--bombeiros-orange-light);
-    box-shadow: 0 0 0 0.25rem rgba(223, 99, 1, 0.15);
+    box-shadow: 0 0 0 0.25rem rgba(85, 107, 47, 0.15);
 }
 
 /* 📊 PROGRESS BAR */
@@ -153,7 +153,7 @@ a:hover {
 
 /* ✨ BACKGROUNDS LIGHT */
 .bg-primary-light {
-    background-color: rgba(223, 99, 1, 0.1) !important;
+    background-color: rgba(85, 107, 47, 0.1) !important;
 }
 
 .bg-bombeiros-gradient {
@@ -280,7 +280,7 @@ i.text-primary {
 
 .toast-info {
     --toast-accent: var(--bombeiros-orange);
-    background: linear-gradient(135deg, rgba(223, 99, 1, 0.12), rgba(223, 99, 1, 0.4));
+    background: linear-gradient(135deg, rgba(85, 107, 47, 0.12), rgba(85, 107, 47, 0.4));
 }
 
 .toast-container .btn-close-white {
@@ -309,7 +309,7 @@ i.text-primary {
 
 /* 🎯 DASHBOARD ESPECÍFICO */
 .dashboard-icon.bg-primary-light {
-    background-color: rgba(223, 99, 1, 0.1) !important;
+    background-color: rgba(85, 107, 47, 0.1) !important;
 }
 
 .dashboard-icon i.text-primary {
@@ -317,12 +317,12 @@ i.text-primary {
 }
 
 .dashboard-footer {
-    background-color: rgba(223, 99, 1, 0.03) !important;
+    background-color: rgba(85, 107, 47, 0.03) !important;
 }
 
 /* 🔥 EFEITOS ESPECIAIS - BOMBEIROS */
 .bombeiros-glow {
-    box-shadow: 0 0 20px rgba(223, 99, 1, 0.3);
+    box-shadow: 0 0 20px rgba(85, 107, 47, 0.3);
 }
 
 .bombeiros-border {
@@ -365,10 +365,10 @@ i.text-primary {
 /* 🌟 ANIMAÇÃO DE PULSO */
 @keyframes pulse-bombeiros {
     0%, 100% {
-        box-shadow: 0 0 0 0 rgba(223, 99, 1, 0.7);
+        box-shadow: 0 0 0 0 rgba(85, 107, 47, 0.7);
     }
     50% {
-        box-shadow: 0 0 0 10px rgba(223, 99, 1, 0);
+        box-shadow: 0 0 0 10px rgba(85, 107, 47, 0);
     }
 }
 

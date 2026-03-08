@@ -1,0 +1,87 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Novo Documento{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-file-earmark-text me-2"></i>Cadastrar documento institucional</h2>
+        <p class="text-muted mb-0">Mantenha o acervo oficial da associação organizado e com links válidos.</p>
+        <hr class="my-4">
+    </div>
+
+    <form method="post" action="{{ BASE_URL }}admin/documentos/salvar">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <label class="form-label fw-bold">Título</label>
+                <input type="text" name="titulo" class="form-control" required data-slug-source>
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Tipo</label>
+                <select name="tipo" class="form-select" required>
+                    {% for option in typeOptions %}
+                        <option value="{{ option }}" {% if option == 'outro' %}selected{% endif %}>{{ option|replace({'_': ' '})|title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Status</label>
+                <select name="status" class="form-select" required>
+                    {% for option in statusOptions %}
+                        <option value="{{ option }}" {% if option == 'draft' %}selected{% endif %}>{{ option|title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <label class="form-label fw-bold">Slug</label>
+                <input type="text" name="slug" class="form-control text-lowercase" data-slug-target>
+            </div>
+            <div class="col-lg-4">
+                <label class="form-label fw-bold">URL do arquivo</label>
+                <input type="url" name="arquivo_url" class="form-control" placeholder="https://... ou /aorern/assets/...">
+            </div>
+            <div class="col-lg-4">
+                <label class="form-label fw-bold">Link externo</label>
+                <input type="url" name="link_externo" class="form-control" placeholder="https://...">
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Publicado em</label>
+                <input type="datetime-local" name="publicado_em" class="form-control">
+            </div>
+            <div class="col-lg-2">
+                <label class="form-label fw-bold">Ordem</label>
+                <input type="number" name="ordem" class="form-control" min="0" value="0">
+            </div>
+            <div class="col-12">
+                <div class="alert alert-light border mb-0">
+                    <strong>Curadoria editorial:</strong> use `marca` para selo, timbre e cabeçalhos; defina a `ordem` para controlar a prioridade visual no acervo público.
+                </div>
+            </div>
+            <div class="col-12">
+                <label class="form-label fw-bold">Resumo</label>
+                <textarea name="resumo" rows="5" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="border-top my-4"></div>
+        <div class="d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+            <a href="{{ BASE_URL }}admin/documentos" class="btn btn-outline-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-success">Salvar documento</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        (function() {
+            const source = document.querySelector('[data-slug-source]');
+            const target = document.querySelector('[data-slug-target]');
+            if (!source || !target) return;
+            let edited = false;
+            const slugify = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase();
+            target.addEventListener('input', () => { edited = target.value.trim().length > 0; });
+            source.addEventListener('input', () => { if (!edited) target.value = slugify(source.value); });
+        })();
+    </script>
+{% endblock %}

@@ -2,11 +2,11 @@
     <ol class="breadcrumb mb-0 align-items-center gap-1 flex-wrap">
         {% for item in breadcrumbs %}
             {% if loop.last or not item.url %}
-                <li class="breadcrumb-item active text-uppercase fw-semibold" aria-current="page">
+                <li class="breadcrumb-item active" aria-current="page">
                     <span>{{ item.label }}</span>
                 </li>
             {% else %}
-                <li class="breadcrumb-item text-uppercase fw-semibold">
+                <li class="breadcrumb-item">
                     <a href="{{ item.url }}">{{ item.label }}</a>
                 </li>
             {% endif %}

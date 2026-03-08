@@ -154,7 +154,7 @@ class AuthController extends Controller {
             exit;
         }
 
-        $username = $request->post('username');
+        $username = User::normalizeUsername((string) $request->post('username'));
         $email    = $request->post('email');
         $password = $request->post('password');
         $password_confirm = $request->post('password_confirmation');
@@ -174,6 +174,16 @@ class AuthController extends Controller {
             $_SESSION['toast'] = [
                 'type'    => 'danger',
                 'message' => 'Email inválido!'
+            ];
+            $_SESSION['old_input'] = $request->post();
+            header('Location: ' . BASE_URL . 'admin/auth/register');
+            exit;
+        }
+
+        if (!User::isValidUsernameFormat($username)) {
+            $_SESSION['toast'] = [
+                'type'    => 'danger',
+                'message' => 'Usuário inválido. Use somente letras sem acento seguidas de 4 números (ex.: admin1968).'
             ];
             $_SESSION['old_input'] = $request->post();
             header('Location: ' . BASE_URL . 'admin/auth/register');
@@ -277,7 +287,7 @@ class AuthController extends Controller {
                 return null;
             }
 
-            $publicRoot = rtrim($_SERVER['DOCUMENT_ROOT'] ?? (dirname(__DIR__, 3) . '/public'), '/');
+            $publicRoot = $this->resolvePublicRoot();
             $upload_dir = $publicRoot . '/' . self::USER_AVATAR_DIR;
 
             // Garante que o diretório existe
@@ -336,5 +346,15 @@ class AuthController extends Controller {
         AuthMiddleware::logout();
         header('Location: ' . BASE_URL);
         exit;
+    }
+
+    private function resolvePublicRoot(): string
+    {
+        $projectPublic = rtrim(dirname(__DIR__, 3) . '/public', '/');
+        if (is_dir($projectPublic)) {
+            return $projectPublic;
+        }
+
+        return rtrim((string) ($_SERVER['DOCUMENT_ROOT'] ?? $projectPublic), '/');
     }
 }

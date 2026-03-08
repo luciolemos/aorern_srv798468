@@ -4,10 +4,12 @@ namespace App\Helpers;
 
 use App\Models\User;
 use App\Models\LivroOcorrenciaModel;
+use App\Models\MembershipApplicationModel;
 use App\Models\Post;
 
 class AdminHelper {
     private static ?int $pendingUsersCache = null;
+    private static ?int $pendingMembershipApplicationsCache = null;
     private static ?int $occurrencesInProgressCache = null;
     private static ?int $postsPendingReviewCache = null;
 
@@ -39,6 +41,20 @@ class AdminHelper {
         return self::$occurrencesInProgressCache;
     }
 
+    private static function pendingMembershipApplicationsCount(): int {
+        if (self::$pendingMembershipApplicationsCache === null) {
+            try {
+                $model = new MembershipApplicationModel();
+                self::$pendingMembershipApplicationsCache = $model->contarPorStatus('pendente');
+            } catch (\Throwable $th) {
+                error_log('AdminHelper membership applications count error: ' . $th->getMessage());
+                self::$pendingMembershipApplicationsCache = 0;
+            }
+        }
+
+        return self::$pendingMembershipApplicationsCache;
+    }
+
     private static function postsPendingReviewCount(): int {
         if (self::$postsPendingReviewCache === null) {
             try {
@@ -64,13 +80,14 @@ class AdminHelper {
         return [
             'user' => [
                 'name' => $userName,
-                'email' => $userEmail ?: 'admin@cbmrn.gov.br',
+                'email' => $userEmail ?: (defined('INSTITUTIONAL_EMAIL_PRIMARY') ? INSTITUTIONAL_EMAIL_PRIMARY : 'aorern.comunicacao@gmail.com'),
                 'initial' => strtoupper($initial ?: 'U'),
                 'avatar' => $userAvatar
             ],
             'subRoute' => $subRoute,
             'notifications' => [
                 'pending_users' => self::pendingUsersCount(),
+                'pending_membership_applications' => self::pendingMembershipApplicationsCount(),
                 'occurrences_in_progress' => self::occurrencesInProgressCount(),
                 'posts_pending_review' => self::postsPendingReviewCount(),
             ],

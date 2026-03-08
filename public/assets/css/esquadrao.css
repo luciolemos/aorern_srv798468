@@ -1,7 +1,6 @@
 /* esquadrao.css */
 .site-hero.esquadrao-hero {
     padding: clamp(3rem, 6vw, 6rem) 0;
-    background: linear-gradient(130deg, #0f1f2d 0%, #1f2f44 45%, #1b283b 100%);
     position: relative;
     overflow: hidden;
 }
@@ -11,14 +10,12 @@
 }
 
 .site-hero.esquadrao-hero .site-hero-pattern {
-    background: radial-gradient(circle at 25% 20%, rgba(255,255,255,0.25), transparent 50%),
-                radial-gradient(circle at 75% 10%, rgba(255,255,255,0.15), transparent 35%);
-    opacity: 0.4;
+    opacity: var(--site-hero-pattern-opacity);
 }
 
 
 .esquadrao-indicators {
-    background: linear-gradient(135deg, #0f1f2d 0%, #1f2f44 45%, #1b283b 100%);
+    background: var(--site-hero-gradient);
     color: #fff;
     position: relative;
     overflow: hidden;
@@ -47,7 +44,7 @@
 
 .esquadrao-indicator-card {
     border-radius: 1.25rem;
-    border: 1px solid rgba(223, 99, 1, 0.4);
+    border: 1px solid rgba(85, 107, 47, 0.4);
     padding: 1.5rem;
     background: rgba(255, 255, 255, 0.08);
     box-shadow: 0 25px 45px rgba(5, 10, 20, 0.5);
@@ -60,7 +57,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 80% 10%, rgba(223, 99, 1, 0.35), transparent 55%);
+    background: radial-gradient(circle at 80% 10%, rgba(85, 107, 47, 0.35), transparent 55%);
     pointer-events: none;
 }
 
@@ -72,7 +69,7 @@
 .esquadrao-indicator-card-value {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #ffb347;
+    color: #8ecbff;
     line-height: 1;
 }
 
@@ -112,7 +109,7 @@
 }
 
 .esquadrao-overview {
-    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    background: var(--site-surface-gradient);
 }
 
 .esquadrao-image {
@@ -144,10 +141,10 @@
 
 .pillar-card {
     border-radius: 1.25rem;
-    border: 1px solid rgba(223, 99, 1, 0.15);
+    border: 1px solid var(--site-card-border);
     padding: 2rem;
-    background: #fff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    background: var(--site-card-bg);
+    box-shadow: var(--site-card-shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -157,11 +154,11 @@
 }
 
 .esquadrao-card {
-    border: 1px solid rgba(223,99,1,0.18);
+    border: 1px solid var(--site-card-border);
     border-radius: 1.25rem;
     padding: 2rem;
-    background: #fff;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    background: var(--site-card-bg);
+    box-shadow: var(--site-card-shadow);
     height: 100%;
 }
 
@@ -169,17 +166,17 @@
     width: 60px;
     height: 60px;
     border-radius: 16px;
-    background: rgba(223,99,1,0.13);
+    background: var(--site-icon-surface);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 1.6rem;
-    color: var(--bombeiros-orange, #df6301);
+    color: var(--brand-primary, #556b2f);
     margin-bottom: 1rem;
 }
 
 .esquadrao-protocols {
-    background: linear-gradient(135deg, #010b16 0%, #0c1f33 100%);
+    background: var(--site-hero-gradient);
     color: #fff;
 }
 

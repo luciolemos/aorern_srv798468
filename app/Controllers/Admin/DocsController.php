@@ -2,69 +2,84 @@
 
 namespace App\Controllers\Admin;
 
-
-use App\Helpers\AdminHelper;
-
 use App\Core\Controller;
 use App\Middleware\AuthMiddleware;
-use App\Middleware\PermissionMiddleware;
 
 class DocsController extends Controller
 {
     public function __construct()
     {
-        // Protege todas as rotas de documentação
-        AuthMiddleware::requireAuth();
-        PermissionMiddleware::authorize('docs:view');
+        AuthMiddleware::requireAdmin();
     }
     
-    public function estrutura() {
-        $this->renderTwig('admin/documents/estrutura', AdminHelper::getUserData('docs'));
+    public function index(): void
+    {
+        header('Location: ' . BASE_URL . 'docs');
+        exit;
     }
 
-    public function virtualhost() {
-        $this->renderTwig('admin/documents/virtualhost', AdminHelper::getUserData('docs'));
+    public function doc(string $slug = ''): void
+    {
+        $target = 'docs';
+        if ($slug !== '') {
+            $target .= '/doc/' . rawurlencode($slug);
+        }
+        header('Location: ' . BASE_URL . $target);
+        exit;
     }
 
-    public function composer() {
-        $this->renderTwig('admin/documents/composer', AdminHelper::getUserData('docs'));
+    public function estrutura(): void
+    {
+        $this->doc('estrutura-md');
     }
 
-    public function diagrama() {
-        $this->renderTwig('admin/documents/diagrama', AdminHelper::getUserData('docs'));
+    public function virtualhost(): void
+    {
+        $this->doc('deploy-md');
     }
 
-    public function caracteristicas() {
-        $this->renderTwig('admin/documents/caracteristicas', AdminHelper::getUserData('docs'));
+    public function composer(): void
+    {
+        $this->doc('readme-md');
     }
 
-    public function fluxomvc() {
-        $this->renderTwig('admin/documents/fluxomvc', AdminHelper::getUserData('docs'));
+    public function diagrama(): void
+    {
+        $this->doc('diagrama-arquitetura-md');
     }
 
-    public function fluxopost() {
-        $this->renderTwig('admin/documents/fluxopost', AdminHelper::getUserData('docs'));
+    public function caracteristicas(): void
+    {
+        $this->doc('architecture-md');
     }
 
-    public function novofluxomvc() {
-        $this->renderTwig('admin/documents/novofluxomvc', AdminHelper::getUserData('docs'));
+    public function fluxomvc(): void
+    {
+        $this->doc('architecture-md');
     }
 
-    public function blog() {
-        $this->renderTwig('admin/documents/blog', AdminHelper::getUserData('docs'));
+    public function fluxopost(): void
+    {
+        $this->doc('post-workflow-md');
     }
 
-    public function elements() {
-        $this->renderTwig('admin/documents/elements', AdminHelper::getUserData('docs'));
+    public function novofluxomvc(): void
+    {
+        $this->doc('architecture-md');
     }
 
-    public function scripts() {
-        $this->renderTwig('admin/documents/scriptssql', AdminHelper::getUserData('docs'));
+    public function blog(): void
+    {
+        $this->doc('post-workflow-md');
     }
 
-    public function index() {
-        // Redireciona para uma das páginas documentadas, ou mostra uma visão geral
-        $this->renderTwig('admin/documents/index', AdminHelper::getUserData('docs')); // Crie essa view
+    public function elements(): void
+    {
+        $this->doc('componentes-md');
     }
 
+    public function scripts(): void
+    {
+        $this->doc('sql-schema-inventory-md');
+    }
 }

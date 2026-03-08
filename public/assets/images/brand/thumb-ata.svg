@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+  <rect width="960" height="600" rx="32" fill="#f2f4f7"/>
+  <rect x="62" y="62" width="836" height="476" rx="24" fill="#ffffff" stroke="#d8dee6"/>
+  <rect x="108" y="116" width="222" height="300" rx="18" fill="#ffffff" stroke="#cfd8e4"/>
+  <line x1="136" y1="172" x2="302" y2="172" stroke="#d7dfe8" stroke-width="2"/>
+  <line x1="136" y1="208" x2="302" y2="208" stroke="#d7dfe8" stroke-width="2"/>
+  <line x1="136" y1="244" x2="302" y2="244" stroke="#d7dfe8" stroke-width="2"/>
+  <line x1="136" y1="280" x2="302" y2="280" stroke="#d7dfe8" stroke-width="2"/>
+  <text x="378" y="214" fill="#10253f" font-size="38" font-family="Georgia" font-weight="700">Ata</text>
+  <text x="378" y="258" fill="#2a86c5" font-size="22" font-family="Arial" font-weight="700">Registro formal de reunioes e deliberacoes</text>
+  <text x="378" y="318" fill="#46556b" font-size="20" font-family="Arial">Memoria oficial dos atos e decisoes institucionais.</text>
+</svg>

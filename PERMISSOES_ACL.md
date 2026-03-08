@@ -293,5 +293,5 @@ Permissions::getRoleLabel('gerente'); // "Gerente"
 ---
 
 **Criado em:** 7 de Dezembro de 2025
-**Sistema:** MVC CBMRN
+**Sistema:** MVC AORE/RN
 **Status:** Pronto para Produção ✅

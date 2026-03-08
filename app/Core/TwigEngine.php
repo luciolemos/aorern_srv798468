@@ -5,6 +5,7 @@ namespace App\Core;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 use App\Helpers\Toast;
 use App\Helpers\TextHelper;
 
@@ -28,6 +29,7 @@ class TwigEngine {
         $this->twig->addGlobal('APP_ENV', $_ENV['APP_ENV'] ?? 'prod');
         $this->twig->addGlobal('TINYMCE_API_KEY', TINYMCE_API_KEY ?? 'no-api-key');
         $this->twig->addGlobal('GOOGLE_MAPS_API_KEY', GOOGLE_MAPS_API_KEY ?? '');
+        $this->twig->addGlobal('RECAPTCHA_SITE_KEY', RECAPTCHA_SITE_KEY ?? '');
         $this->twig->addGlobal('institutional_contact', $this->buildInstitutionalContactConfig());
         $this->twig->addGlobal('whatsapp', $this->buildWhatsappConfig());
         $this->twig->addGlobal('toast_html', Toast::render());
@@ -41,8 +43,14 @@ class TwigEngine {
             'user_role' => $_SESSION['user_role'] ?? null,
         ]);
         $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-        $parsedPath = parse_url($requestUri, PHP_URL_PATH);
-        $currentPath = trim((string) ($parsedPath ?? '/'), '/');
+        $parsedPath = (string) (parse_url($requestUri, PHP_URL_PATH) ?? '/');
+        $basePath = trim((string) (parse_url(BASE_URL, PHP_URL_PATH) ?? ''), '/');
+        $currentPath = trim($parsedPath, '/');
+
+        if ($basePath !== '' && ($currentPath === $basePath || str_starts_with($currentPath, $basePath . '/'))) {
+            $currentPath = trim(substr($currentPath, strlen($basePath)), '/');
+        }
+
         $this->twig->addGlobal('current_path', $currentPath);
 
         $this->twig->addFilter(new TwigFilter('excerpt', function (?string $content, int $limit = 160) {
@@ -55,6 +63,10 @@ class TwigEngine {
 
         $this->twig->addFilter(new TwigFilter('first_paragraph', function (?string $content, int $limit = 160) {
             return TextHelper::firstParagraphExcerpt($content, $limit);
+        }));
+
+        $this->twig->addFunction(new TwigFunction('asset', function (string $path): string {
+            return $this->buildVersionedAssetUrl($path);
         }));
     }
 
@@ -122,5 +134,23 @@ class TwigEngine {
                 'line_2' => INSTITUTIONAL_ADDRESS_LINE_2 ?? '',
             ],
         ];
+    }
+
+    private function buildVersionedAssetUrl(string $path): string
+    {
+        $relativePath = ltrim($path, '/');
+        $absoluteUrl = BASE_URL . $relativePath;
+        $publicFile = dirname(__DIR__, 2) . '/public/' . $relativePath;
+
+        if (!is_file($publicFile)) {
+            return $absoluteUrl;
+        }
+
+        $version = filemtime($publicFile);
+        if ($version === false) {
+            return $absoluteUrl;
+        }
+
+        return $absoluteUrl . '?v=' . $version;
     }
 }

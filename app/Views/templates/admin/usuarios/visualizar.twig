@@ -1,0 +1,89 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+
+{% block title %}Visualizar Usuário - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1 admin-page-title">
+                <i class="bi bi-person-vcard me-2"></i> {{ title|default('Visualizar Usuário') }}
+            </h2>
+            <p class="text-muted mb-0">Dados da conta em modo somente leitura.</p>
+        </div>
+        <div class="d-flex flex-column flex-sm-row align-items-stretch gap-2">
+            <a href="{{ BASE_URL }}admin/usuarios/editar/{{ usuario.id }}" class="btn btn-theme admin-mobile-full-btn">
+                <i class="bi bi-pencil-square me-1"></i> Editar
+            </a>
+            <a href="{{ BASE_URL }}admin/usuarios" class="btn btn-outline-secondary admin-mobile-full-btn">
+                <i class="bi bi-arrow-left me-1"></i> Voltar para usuários
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold admin-section-title">
+                <i class="bi bi-info-circle me-2"></i>Informações da conta
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-12 col-lg-3 text-center">
+                    {% if usuario.avatar %}
+                        <img
+                            src="{{ BASE_URL }}{{ usuario.avatar }}"
+                            alt="{{ usuario.username|default('Usuário')|e('html_attr') }}"
+                            class="rounded shadow-sm admin-avatar-square-220"
+                        >
+                    {% else %}
+                        <div
+                            class="rounded bg-secondary-subtle text-secondary d-inline-flex align-items-center justify-content-center shadow-sm fs-1 admin-avatar-square-220"
+                        >
+                            {{ usuario.username ? usuario.username[0]|upper : 'U' }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-12 col-lg-9">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Usuário</label>
+                            <input type="text" class="form-control" value="{{ usuario.username|default('-')|e('html_attr') }}" readonly>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">E-mail</label>
+                            <input type="text" class="form-control" value="{{ usuario.email|default('-')|e('html_attr') }}" readonly>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Perfil de acesso</label>
+                            <input type="text" class="form-control" value="{{ attribute(roleLabels, usuario.role|default('usuario'))|default(usuario.role|default('-')) }}" readonly>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Status</label>
+                            {% set statusValue = usuario.status ?? (usuario.ativo ? 'ativo' : 'pendente') %}
+                            {% set statusLabel = statusValue == 'ativo' ? 'Ativo' : (statusValue == 'bloqueado' ? 'Bloqueado' : 'Pendente') %}
+                            <input type="text" class="form-control" value="{{ statusLabel }}" readonly>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Último login</label>
+                            <input type="text" class="form-control" value="{{ usuario.ultimo_login ? usuario.ultimo_login|date('d/m/Y H:i') : '-' }}" readonly>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Criado em</label>
+                            <input type="text" class="form-control" value="{{ usuario.created_at ? usuario.created_at|date('d/m/Y H:i') : '-' }}" readonly>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Atualizado em</label>
+                            <input type="text" class="form-control" value="{{ usuario.updated_at ? usuario.updated_at|date('d/m/Y H:i') : '-' }}" readonly>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">ID</label>
+                            <input type="text" class="form-control" value="{{ usuario.id|default('-') }}" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -19,7 +19,7 @@
     const fallback = document.querySelector('[data-map-fallback]');
     const badgeSrc = canvas.dataset.badgeSrc || '';
     const badgeImageMarkup = badgeSrc
-        ? `<img src="${badgeSrc}" alt="Brasão CBMRN" class="occurrence-map-infowindow-badge" loading="lazy">`
+        ? `<img src="${badgeSrc}" alt="Brasão AORE/RN" class="occurrence-map-infowindow-badge" loading="lazy">`
         : '';
 
     const state = {
@@ -190,7 +190,7 @@
                 infoWindow.setContent(`
                     <div class="occurrence-map-infowindow">
                        
-                        <p class="occurrence-map-infowindow-header">CBMRN<br>2º Subgrupamento de Bombeiros Militar</p>
+                        <p class="occurrence-map-infowindow-header">AORE/RN</p>
                         <strong>${item.municipio}</strong><br>
                         <span class="occurrence-map-badge ${severity.badgeClass}">${severity.label}</span>
                         <span class="text-muted small ms-2">${formatTotal(item.total)}</span>

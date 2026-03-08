@@ -1,5 +1,5 @@
 {% extends "layouts/base.twig" %}
-{% block title %}Login Admin - CBMRN{% endblock %}
+{% block title %}Login Admin - AORERN{% endblock %}
 {% block content %}
     <div class="container py-5" style="min-height: calc(100vh - 75px - 200px);">
         <div class="row">
@@ -7,9 +7,9 @@
                 <div class="card border-0 shadow-lg">
                     <div class="card-body p-5">
                         <div class="text-center mb-4">
-                            {# <i class="bi bi-shield-lock" style="font-size: 48px; color: #df6301;"></i> #}
-                              <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_fenix.png" alt="CBMRN" class="navbar-logo" style="height: 56px; width: auto;">
-                            <h2 class="text-center fw-bold mt-3" style="color: #df6301;">Login Administrativo</h2>
+                            {# <i class="bi bi-shield-lock" style="font-size: 48px; color: #556b2f;"></i> #}
+                              <img src="{{ BASE_URL }}assets/images/aore1.png" alt="AORERN" class="navbar-logo" style="height: 56px; width: auto;">
+                            <h2 class="text-center fw-bold mt-3" style="color: #556b2f;">Login Administrativo</h2>
                         </div>
                         
                         {% if error %}
@@ -29,7 +29,7 @@
                                 <label for="password" class="form-label fw-bold">Senha</label>
                                 <input type="password" class="form-control form-control-lg" id="password" name="password" required>
                             </div>
-                            <button type="submit" class="btn btn-sm w-100 fw-bold text-white mb-3" style="background-color: #df6301;">Entrar</button>
+                            <button type="submit" class="btn btn-theme w-100 mb-3">Entrar</button>
                         </form>
                         
                         <hr class="my-4">

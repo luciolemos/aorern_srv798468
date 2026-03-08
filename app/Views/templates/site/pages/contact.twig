@@ -1,36 +1,36 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}Contato - CBMRN{% endblock %}
+{% block title %}Contato - AORE/RN{% endblock %}
 {% set whatsappChannels = [
     {
-        label: 'Emergencia',
-        icon: 'bi bi-exclamation-triangle-fill',
-        href: whatsapp.links.emergency,
-        description: 'Contato inicial para ocorrencias com necessidade de resposta imediata.'
+        label: 'Contato geral',
+        icon: 'bi bi-chat-dots-fill',
+        href: whatsapp.links.general,
+        description: 'Canal inicial para duvidas gerais, orientacoes e atendimento institucional.'
     },
     {
-        label: 'Visita tecnica',
+        label: 'Agenda institucional',
         icon: 'bi bi-building-check',
         href: whatsapp.links.technical_visit,
-        description: 'Solicitacoes de agenda institucional, vistoria orientativa e apoio tecnico.'
+        description: 'Solicitacoes de reunioes, convites, visitas institucionais e alinhamentos formais.'
     },
     {
         label: 'Imprensa',
         icon: 'bi bi-megaphone-fill',
         href: whatsapp.links.press,
-        description: 'Demandas jornalisticas, entrevistas, notas e confirmacao de informacoes.'
+        description: 'Demandas jornalisticas, entrevistas, notas oficiais e confirmacao de informacoes.'
     },
     {
-        label: 'Orientacao preventiva',
-        icon: 'bi bi-shield-check',
+        label: 'Eventos e participacao',
+        icon: 'bi bi-calendar-event',
         href: whatsapp.links.prevention,
-        description: 'Duvidas sobre prevencao, seguranca e boas praticas para a comunidade.'
+        description: 'Informacoes sobre atividades, solenidades, eventos e participacao associativa.'
     }
 ] %}
 
 {% block styles %}
     {{ parent() }}
-        <link rel="stylesheet" href="{{ BASE_URL }}assets/css/contact.css">
+        <link rel="stylesheet" href="{{ BASE_URL }}assets/css/contact.css?v=20260304-panel2">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <style>
             .contact-social {
@@ -111,23 +111,73 @@
         </style>
 {% endblock %}
 
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        (function () {
+            var BASE_WIDTH = 304;
+            var BASE_HEIGHT = 78;
+
+            function applyRecaptchaWidth() {
+                var wrappers = document.querySelectorAll('.recaptcha-wrap .g-recaptcha');
+                wrappers.forEach(function (captcha) {
+                    var host = captcha.parentElement;
+                    var inner = captcha.firstElementChild;
+                    if (!host || !inner) {
+                        return;
+                    }
+
+                    var availableWidth = host.clientWidth;
+                    if (!availableWidth) {
+                        return;
+                    }
+
+                    var scale = Math.min(1, availableWidth / BASE_WIDTH);
+                    inner.style.transformOrigin = 'center top';
+                    inner.style.transform = 'scale(' + scale + ')';
+
+                    captcha.style.width = BASE_WIDTH + 'px';
+                    captcha.style.height = (BASE_HEIGHT * scale) + 'px';
+                    host.style.minHeight = (BASE_HEIGHT * scale) + 'px';
+                });
+            }
+
+            function waitAndApply(attempt) {
+                var rendered = document.querySelector('.recaptcha-wrap .g-recaptcha > div');
+                applyRecaptchaWidth();
+                if (!rendered && attempt < 30) {
+                    window.setTimeout(function () {
+                        waitAndApply(attempt + 1);
+                    }, 200);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                waitAndApply(0);
+                window.addEventListener('resize', applyRecaptchaWidth);
+            });
+        })();
+    </script>
+{% endblock %}
+
 {% block content %}
-    <section class="contact-hero site-hero">
-        <div class="site-hero-pattern"></div>
+    <section class="contact-hero site-hero hero-form-layout">
+        <div class="site-hero-pattern d-none d-lg-block"></div>
         <div class="container position-relative">
-                 <div class="row justify-content-center g-5">
-                    <div class="col-lg-7 hero-content">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6 hero-content">
                     <p class="section-kicker text-white-50 mb-2">Fale conosco</p>
                     <h1 class="section-title text-white mb-3">Utilize este canal para contato institucional</h1>
-                    <p class="section-lead text-white-75 mb-4">O 2º Subgrupamento de Bombeiros Militar atua de forma ininterrupta (24/7), com base em protocolos operacionais claros, integração com demais forças de segurança e uso de tecnologia, visando à redução do tempo de resposta e à ampliação da segurança da população. Este canal está disponível para atendimento a demandas institucionais, solicitações de imprensa, visitas técnicas e orientações preventivas à sociedade.</p>
+                    <p class="section-lead text-white-75 mb-4">Este canal foi organizado para atender demandas institucionais da AORE/RN, incluindo informações gerais, comunicação com associados, solicitações de agenda, assuntos de imprensa e temas relacionados a eventos e atividades da associação.</p>
                     <div class="d-flex flex-wrap gap-3">
                         {% include 'site/components/button.twig' with {
-                            href: institutional_contact.emergency.tel,
-                            label: 'Ligue ' ~ institutional_contact.emergency.display,
-                            icon: 'bi-telephone',
+                            href: whatsapp.links.general,
+                            label: 'WhatsApp',
+                            icon: 'bi-whatsapp',
                             variant: 'solid',
                             size: 'lg',
-                            button_class: 'fw-bold'
+                            button_class: 'fw-bold',
+                            target: '_blank'
                         } %}
                         {% include 'site/components/button.twig' with {
                             href: '#contato-direto',
@@ -139,35 +189,86 @@
                         } %}
                     </div>
                 </div>
-                    <div class="col-lg-5 hero-panel-col">
-                    {% include 'site/components/hero-panel.twig' with {
-                        eyebrow: 'Atendimento',
-                        title: 'Canais principais',
-                        theme: 'light',
-                        items: [
-                            {
-                                icon: 'bi bi-geo-alt-fill',
-                                icon_inner_class: 'text-primary fs-5',
-                                title: institutional_contact.address.line_1,
-                                meta: institutional_contact.address.line_2,
-                                item_class: 'py-2'
-                            },
-                            {
-                                icon: 'bi bi-whatsapp',
-                                icon_inner_class: 'text-success fs-5',
-                                title: whatsapp.display,
-                                meta: 'WhatsApp institucional',
-                                item_class: 'py-2'
-                            },
-                            {
-                                icon: 'bi bi-envelope-fill',
-                                icon_inner_class: 'text-danger fs-5',
-                                title: institutional_contact.emails.primary,
-                                description_html: '<small class="text-white-50">' ~ institutional_contact.emails.secondary ~ '</small>',
-                                item_class: 'py-2'
-                            }
-                        ]
-                    } %}
+                    <div class="col-lg-5 ms-lg-auto hero-panel-col">
+                        <div class="contact-form-panel auth-card auth-card--light hero-panel hero-panel--light">
+                            <div class="text-start mb-3">
+                                <p class="hero-panel-badge text-white-75"><i class="bi bi-chat-left-text me-2"></i>Envie sua mensagem</p>
+                            </div>
+                            {% if contact_status.ok %}
+                                <div class="alert alert-success border-0 shadow-sm" role="alert">
+                                    Mensagem enviada com sucesso. Verifique a caixa de entrada configurada para o teste.
+                                </div>
+                            {% elseif contact_status.error == 'recaptcha' %}
+                                <div class="alert alert-warning border-0 shadow-sm" role="alert">
+                                    Confirme o reCAPTCHA para enviar a mensagem.
+                                </div>
+                            {% elseif contact_status.error == 'invalid_email' %}
+                                <div class="alert alert-warning border-0 shadow-sm" role="alert">
+                                    Informe um e-mail valido para receber retorno.
+                                </div>
+                            {% elseif contact_status.error %}
+                                <div class="alert alert-danger border-0 shadow-sm" role="alert">
+                                    Nao foi possivel enviar a mensagem. Tente novamente.
+                                </div>
+                            {% endif %}
+                            <form method="POST" action="{{ BASE_URL }}contact/send" class="row g-3 auth-form auth-form--light">
+                                <div class="col-12 mt-0">
+                                    <label for="nome" class="form-label text-white">Nome <span class="text-warning">*</span></label>
+                                    <input type="text"
+                                           class="form-control form-control-lg"
+                                           id="nome"
+                                           name="nome"
+                                           placeholder="Seu nome completo"
+                                           autocomplete="name"
+                                           minlength="3"
+                                           maxlength="120"
+                                           title="Informe seu nome completo."
+                                           required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="email" class="form-label text-white">Email <span class="text-warning">*</span></label>
+                                    <input type="email"
+                                           class="form-control form-control-lg"
+                                           id="email"
+                                           name="email"
+                                           placeholder="voce@exemplo.com"
+                                           autocomplete="email"
+                                           inputmode="email"
+                                           maxlength="160"
+                                           title="Informe um e-mail valido para retorno."
+                                           required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="mensagem" class="form-label text-white">Mensagem <span class="text-warning">*</span></label>
+                                    <textarea class="form-control form-control-lg"
+                                              id="mensagem"
+                                              name="mensagem"
+                                              rows="5"
+                                              placeholder="Descreva sua solicitacao, duvida ou assunto institucional."
+                                              minlength="10"
+                                              maxlength="2000"
+                                              oninput="document.getElementById('mensagemCounter').textContent = this.value.length + '/2000';"
+                                              title="Escreva uma mensagem com pelo menos 10 caracteres."
+                                              required></textarea>
+                                    <div class="d-flex justify-content-end mt-2">
+                                        <small id="mensagemCounter" class="text-white-50">0/2000</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 recaptcha-wrap">
+                                    <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_SITE_KEY }}" data-theme="light" data-size="normal"></div>
+                                </div>
+                                <div class="col-12">
+                                    {% include 'site/components/button.twig' with {
+                                        label: 'Enviar mensagem',
+                                        icon: 'bi-send',
+                                        variant: 'solid',
+                                        size: 'lg',
+                                        type: 'submit',
+                                        button_class: 'w-100 fw-bold'
+                                    } %}
+                                </div>
+                            </form>
+                        </div>
                 </div>
             </div>
         </div>
@@ -179,18 +280,18 @@
                 <div class="col-lg-8">
                     {% set contact_summary_cards = [
                         {
-                            icon: 'bi bi-fire',
-                            title: 'Emergências',
-                            description: 'Apenas pelo 193 – disponibilidade 24/7.'
+                            icon: 'bi bi-building',
+                            title: 'Contato institucional',
+                            description: 'Canal voltado a informacoes gerais e relacionamento com a associacao.'
                         },
                         {
                             icon: 'bi bi-people',
-                            title: 'Visitas e imprensa',
-                            description: 'Agendamentos via formulário ou email.'
+                            title: 'Associados e parceiros',
+                            description: 'Solicitacoes de agenda, convites, interlocucao e integracao institucional.'
                         },
                         {
                             icon: 'bi bi-chat-dots',
-                            title: 'Dúvidas gerais',
+                            title: 'Retorno por mensagem',
                             description: 'Respondemos em até 2 dias úteis.'
                         }
                     ] %}
@@ -226,40 +327,6 @@
                         </div>
                     </div>
 
-                    <div class="contact-form-panel auth-card hero-panel hero-panel--dark">
-                        <div class="text-center mb-4">
-                            <p class="hero-panel-badge text-white-75"><i class="bi bi-chat-left-text me-2"></i>Envie sua mensagem</p>
-                            <h2 class="h4 fw-bold text-white mb-1">Central de atendimento</h2>
-                            <p class="text-white-50 small mb-0">Responderemos em até 48h úteis.</p>
-                        </div>
-                        <form method="POST" class="row g-3 auth-form">
-                            <div class="col-md-6">
-                                <label for="nome" class="form-label text-white">Nome</label>
-                                <input type="text" class="form-control form-control-lg" id="nome" name="nome" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="email" class="form-label text-white">Email</label>
-                                <input type="email" class="form-control form-control-lg" id="email" name="email" required>
-                            </div>
-                            <div class="col-12">
-                                <label for="mensagem" class="form-label text-white">Mensagem</label>
-                                <textarea class="form-control form-control-lg" id="mensagem" name="mensagem" rows="5" required></textarea>
-                            </div>
-                            <div class="col-12">
-                                <div class="g-recaptcha" data-sitekey="6Lf07DwrAAAAAFgUI7kHx81lmTMzKNcggy_S7sgL"></div>
-                            </div>
-                            <div class="col-12">
-                                {% include 'site/components/button.twig' with {
-                                    label: 'Enviar mensagem',
-                                    icon: 'bi-send',
-                                    variant: 'solid',
-                                    size: 'lg',
-                                    type: 'submit',
-                                    button_class: 'w-100 fw-bold'
-                                } %}
-                            </div>
-                        </form>
-                    </div>
                 </div>
                 <div class="col-lg-4" id="contato-direto">
                     <aside class="contact-direct card border-0 shadow-sm h-100">
@@ -290,14 +357,19 @@
                                 <i class="bi bi-envelope-fill contact-direct-icon text-danger"></i>
                                 <div>
                                     <h3 class="h6 fw-semibold mb-1">E-mail</h3>
-                                    <p class="mb-0 small">{{ institutional_contact.emails.primary }}<br>{{ institutional_contact.emails.secondary }}</p>
+                                    <p class="mb-0 small">
+                                        {{ institutional_contact.emails.primary }}
+                                        {% if institutional_contact.emails.secondary %}
+                                            <br>{{ institutional_contact.emails.secondary }}
+                                        {% endif %}
+                                    </p>
                                 </div>
                             </div>
                             <hr class="my-4">
                             <div>
                                 <h3 class="h6 fw-semibold mb-3">Redes sociais</h3>
                                 <div class="contact-social">
-                                    <a href="https://github.com/luciolemos/cbmrn_srv798468" class="contact-social__link" data-network="github" target="_blank" title="GitHub">
+                                    <a href="https://github.com/luciolemos/aorern_srv798468" class="contact-social__link" data-network="github" target="_blank" title="GitHub">
                                         <i class="bi bi-github"></i>
                                         <span>GitHub</span>
                                     </a>
@@ -309,7 +381,7 @@
                                         <i class="bi bi-twitter"></i>
                                         <span>X</span>
                                     </a>
-                                    <a href="https://x.com/lucciolemos" class="contact-social__link" data-network="instagram" target="_blank" title="Instagram">
+                                    <a href="https://www.instagram.com/aore.rn/" class="contact-social__link" data-network="instagram" target="_blank" title="Instagram">
                                         <i class="bi bi-instagram"></i>
                                         <span>Instagram</span>
                                     </a>
@@ -324,7 +396,7 @@
                                 </div>
                                {#  <div class="d-flex gap-2">
                                     {% include 'site/components/button.twig' with {
-                                        href: 'https://github.com/luciolemos/cbmrn_srv798468',
+                                        href: 'https://github.com/luciolemos/aorern_srv798468',
                                         label: 'GitHub',
                                         label_hidden: true,
                                         icon: 'bi-github',
@@ -371,13 +443,26 @@
     <section class="contact-map py-5">
         <div class="container">
             {% include 'site/components/section-header.twig' with {
+                kicker: '16º BI Mtz',
                 title: 'Nossa localização',
+                subtitle: 'Av. Hermes da Fonseca • Tirol • Natal/RN • Coordenadas: -5.803007741833617, -35.19831941695056',
                 align: 'center',
                 heading_level: 2,
                 extra_class: 'mb-3'
             } %}
             <div class="ratio ratio-21x9 rounded overflow-hidden shadow-sm">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d935.4089977755553!2d-35.21094443955298!3d-6.270164616892321!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b287007fdbe0f7%3A0xc0a709485b5e7305!2scorpo%20de%20bombeiros%20militar%202%2F2%20GBM!5e1!3m2!1spt-BR!2sbr!4v1764530435730!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-35.20231941695056%2C-5.806007741833617%2C-35.19431941695056%2C-5.800007741833617&layer=mapnik&marker=-5.803007741833617%2C-35.19831941695056" width="600" height="450" style="border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="contact-map-actions mt-3">
+                {% include 'site/components/button.twig' with {
+                    href: 'https://www.google.com/maps/dir/?api=1&destination=-5.803007741833617,-35.19831941695056',
+                    label: 'Como chegar',
+                    icon: 'bi-geo-alt',
+                    variant: 'outline',
+                    size: 'md',
+                    target: '_blank',
+                    attrs: {'rel': 'noopener noreferrer'}
+                } %}
             </div>
         </div>
     </section>

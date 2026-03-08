@@ -1,120 +1,51 @@
 {# Footer #}
-<footer class="text-white pt-5 pb-4" style="background: #df6301; border-top: 4px solid #df6301;">
-    <style>
-        .footer-social {
-            display: flex;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-        }
-        .footer-social__link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            color: #fff;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
-        }
-        .footer-social__link:hover {
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.75);
-            background: rgba(255, 255, 255, 0.08);
-        }
-        .footer-social__link[data-network="github"] {
-            background: linear-gradient(120deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-        }
-        .footer-social__link[data-network="linkedin"] {
-            background: linear-gradient(120deg, rgba(10,102,194,0.35), rgba(10,102,194,0.15));
-        }
-        .footer-social__link[data-network="twitter"] {
-            background: linear-gradient(120deg, rgba(29,155,240,0.35), rgba(29,155,240,0.15));
-        }
-        .footer-social__link[data-network="instagram"] {
-            background: linear-gradient(120deg, rgba(225,48,108,0.4), rgba(255,196,0,0.1));
-        }
-        .footer-social__link[data-network="facebook"] {
-            background: linear-gradient(120deg, rgba(59,89,152,0.35), rgba(59,89,152,0.15));
-        }
-        .footer-social__link[data-network="whatsapp"] {
-            background: linear-gradient(120deg, rgba(37,211,102,0.4), rgba(7,94,84,0.1));
-        }
-        @media (max-width: 575px) {
-            .footer-social__link {
-                flex: none;
-            }
-        }
-    </style>
+<footer class="text-white pt-5 pb-4 site-footer">
     <div class="container">
         <div class="row gy-4 align-items-start">
             <div class="col-lg-4 col-md-6">
                 <div class="d-flex align-items-center mb-3">
-                    <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" style="height: 70px; width: auto;" class="me-2">
+                    <img src="{{ BASE_URL }}assets/images/aore1.png" alt="AORE/RN" class="me-2 site-footer__logo">
                     <div>
-                        <h5 class="fw-bold mb-0">2º Subgrupamento de Bombeiros Militar</h5>
-                        {# <small class="text-muted">2º Subgrupamento de Bombeiros Militar</small> #}
+                        <h5 class="fw-bold mb-0">AORE/RN</h5>
                     </div>
                 </div>
-                <p class="mb-3" style="color: rgba(255,255,255,0.88);">
-               Tecnologia aplicada ao 2º Subgrupamento do 2º Grupamento de Bombeiros do Corpo de Bombeiros Militar do RN.<br>
-Monitoramento, relatórios e transparência em tempo real.
+                <p class="mb-3 site-footer__description">
+               Portal institucional da AORE/RN.<br>Memória associativa, comunicação oficial e valorização permanente dos oficiais da reserva.
                </p>
-                {# <div class="d-flex gap-3">
-                    <a href="https://www.instagram.com" target="_blank" class="text-white-75" aria-label="Instagram"><i class="bi bi-instagram" style="font-size: 1.3rem;"></i></a>
-                    <a href="https://www.facebook.com" target="_blank" class="text-white-75" aria-label="Facebook"><i class="bi bi-facebook" style="font-size: 1.3rem;"></i></a>
-                    <a href="https://www.youtube.com" target="_blank" class="text-white-75" aria-label="YouTube"><i class="bi bi-youtube" style="font-size: 1.3rem;"></i></a>
-                </div> #}
 {#                 <p class="h6 fw-semibold">Redes sociais</p>
                 <div class="d-flex gap-2">
-                    <a href="https://github.com/luciolemos/cbmrn_srv798468" class="btn btn-outline-light btn-sm" target="_blank" title="GitHub">
+                    <a href="https://github.com/luciolemos/aorern_srv798468" class="btn btn-outline-light btn-sm" target="_blank" title="GitHub">
                         <i class="bi bi-github"></i>
                     </a>
                     <a href="https://www.linkedin.com/in/lucciolemos/" class="btn btn-outline-light btn-sm" target="_blank" title="LinkedIn">
                         <i class="bi bi-linkedin"></i>
                     </a>
-                    <a href="https://x.com/lucciolemos" class="btn btn-outline-light btn-sm" target="_blank" title="Twitter">
+                    <a href="https://www.instagram.com/aore.rn/" class="btn btn-outline-light btn-sm" target="_blank" title="Twitter">
                         <i class="bi bi-twitter"></i>
                     </a>
                 </div> #}
             </div>
 
             <div class="col-lg-4 col-md-6">
-                <h6 class="text-uppercase fw-bold mb-3" style="color: #fff; letter-spacing: 0.5px;">Institucional</h6>
-                <ul class="list-unstyled mb-4" style="color: rgba(255,255,255,0.82);">
-                    <li class="mb-2"><a class="text-decoration-none text-white" style="opacity:0.85;" href="{{ BASE_URL }}about">Sobre</a></li>
-                    <li class="mb-2"><a class="text-decoration-none text-white" style="opacity:0.85;" href="{{ BASE_URL }}blog">Notícias</a></li>
-                    <li class="mb-2"><a class="text-decoration-none text-white" style="opacity:0.85;" href="{{ BASE_URL }}contact">Contato</a></li>
-                    <li class="mb-2"><a class="text-decoration-none text-white" style="opacity:0.85;" href="{{ BASE_URL }}coverage">Área de cobertura</a></li>
+                <h6 class="text-uppercase fw-bold mb-3 site-footer__heading">Institucional</h6>
+                <ul class="list-unstyled mb-4 site-footer__links">
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}about">Sobre</a></li>
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}blog">Notícias</a></li>
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}contact">Contato</a></li>
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}institucional">Institucional</a></li>
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}institucional/identidade-visual">Identidade Visual</a></li>
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}institucional/downloads-marca">Downloads de Marca</a></li>
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}institucional/documentos">Documentos Oficiais</a></li>
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}institucional/governanca">Governança</a></li>
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}institucional/busca">Busca Institucional</a></li>
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}privacidade">Política de Privacidade</a></li>
+                    <li class="mb-2"><a class="text-decoration-none text-white" href="{{ BASE_URL }}termos">Termos de Uso</a></li>
                 </ul>
-                <h6 class="text-uppercase fw-bold mb-3" style="color: #fff; letter-spacing: 0.5px;">Redes Sociais</h6>
-                <div class="footer-social">
-                    <a href="https://github.com/luciolemos/cbmrn_srv798468" class="footer-social__link" data-network="github" target="_blank" title="GitHub" aria-label="GitHub">
-                        <i class="bi bi-github"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/lucciolemos/" class="footer-social__link" data-network="linkedin" target="_blank" title="LinkedIn" aria-label="LinkedIn">
-                        <i class="bi bi-linkedin"></i>
-                    </a>
-                    <a href="https://x.com/lucciolemos" class="footer-social__link" data-network="twitter" target="_blank" title="X / Twitter" aria-label="X / Twitter">
-                        <i class="bi bi-twitter"></i>
-                    </a>
-                    <a href="https://x.com/lucciolemos" class="footer-social__link" data-network="instagram" target="_blank" title="Instagram" aria-label="Instagram">
-                        <i class="bi bi-instagram"></i>
-                    </a>
-                    <a href="https://www.facebook.com/lucciolemos" class="footer-social__link" data-network="facebook" target="_blank" title="Facebook" aria-label="Facebook">
-                        <i class="bi bi-facebook"></i>
-                    </a>
-                    <a href="{{ whatsapp.links.general }}" class="footer-social__link" data-network="whatsapp" target="_blank" title="WhatsApp" aria-label="WhatsApp">
-                        <i class="bi bi-whatsapp"></i>
-                    </a>
-                </div>
             </div>
             
 
             <div class="col-lg-4 col-md-12">
-                <h6 class="text-uppercase fw-bold mb-4" style="letter-spacing: 0.5px;">Contato direto</h6>
+                <h6 class="text-uppercase fw-bold mb-4 site-footer__heading">Contato direto</h6>
                 <div class="d-flex align-items-start gap-3 mb-3">
                     <i class="bi bi-geo-alt-fill fs-5 text-white"></i>
                     <div>
@@ -140,7 +71,12 @@ Monitoramento, relatórios e transparência em tempo real.
                     <i class="bi bi-envelope-fill fs-5 text-white"></i>
                     <div>
                         <p class="mb-1 fw-semibold text-white">E-mail</p>
-                        <p class="mb-0 small text-white-50">{{ institutional_contact.emails.primary }}<br>{{ institutional_contact.emails.secondary }}</p>
+                        <p class="mb-0 small text-white-50">
+                            {{ institutional_contact.emails.primary }}
+                            {% if institutional_contact.emails.secondary %}
+                                <br>{{ institutional_contact.emails.secondary }}
+                            {% endif %}
+                        </p>
                     </div>
                 </div>                
             </div>
@@ -148,8 +84,7 @@ Monitoramento, relatórios e transparência em tempo real.
 
         <hr class="border-secondary mt-4">
         <div class="text-center text-muted small">
-            {# <p class="mb-0">&copy; 2025 2º Subgrupamento de Bombeiros Militar. Todos os direitos reservados.</p> #}
-            <p class="mb-0">&copy; 2025 - 2sgb2gbm.org<br>Todos os direitos reservados</p>
+            <p class="mb-0">&copy; {{ 'now'|date('Y') }} - AORE/RN<br>Todos os direitos reservados</p>
         </div>
     </div>
 </footer>

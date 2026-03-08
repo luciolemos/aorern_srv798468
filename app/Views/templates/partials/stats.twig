@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row text-center mb-5" data-aos="fade-down">
             <div class="col">
-                <h2 class="fw-bold mb-3" style="color: #df6301;">Números que falam</h2>
+                <h2 class="fw-bold mb-3" style="color: #556b2f;">Números que falam</h2>
                 <p class="text-muted fs-5">Nosso trabalho em números</p>
             </div>
         </div>
@@ -11,8 +11,8 @@
         <div class="row g-4">
             {% for stat in stats %}
                 <div class="col-md-3 col-sm-6" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 50 }}">
-                    <div class="text-center p-4 bg-white rounded-4 shadow-sm h-100" style="border-top: 5px solid #df6301;">
-                        <div style="font-size: 3rem; font-weight: bold; color: #df6301;">{{ stat.value }}</div>
+                    <div class="text-center p-4 bg-white rounded-4 shadow-sm h-100" style="border-top: 5px solid #556b2f;">
+                        <div style="font-size: 3rem; font-weight: bold; color: #556b2f;">{{ stat.value }}</div>
                         <p class="text-muted fw-bold mt-2">{{ stat.label }}</p>
                     </div>
                 </div>

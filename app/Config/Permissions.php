@@ -113,6 +113,12 @@ class Permissions
         'gallery_categories:create' => ['admin', 'gerente'],
         'gallery_categories:edit' => ['admin', 'gerente'],
         'gallery_categories:delete' => ['admin'],
+
+        // ====== PATROCINADORES ======
+        'patrocinadores:list' => ['admin', 'gerente'],
+        'patrocinadores:create' => ['admin', 'gerente'],
+        'patrocinadores:edit' => ['admin', 'gerente'],
+        'patrocinadores:delete' => ['admin'],
     ];
 
     /**
@@ -157,10 +163,10 @@ class Permissions
     public static function getRoleLabel(string $role): string
     {
         $labels = [
-            'admin' => 'Administrador',
-            'gerente' => 'Gerente',
-            'operador' => 'Operador',
-            'usuario' => 'Usuário',
+            'admin' => 'Administrador do Sistema',
+            'gerente' => 'Diretoria / Secretaria',
+            'operador' => 'Equipe de Apoio',
+            'usuario' => 'Associado',
         ];
         return $labels[$role] ?? ucfirst($role);
     }

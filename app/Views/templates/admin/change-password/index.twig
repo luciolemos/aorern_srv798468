@@ -6,11 +6,11 @@
         <div class="col-12 d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
                 <h1 class="h3 fw-bold mb-1" style="color: #212529;">
-                    <i class="bi bi-shield-lock me-2" style="color: #df6301;"></i>{{ title|default('Alterar Senha') }}
+                    <i class="bi bi-shield-lock me-2" style="color: #556b2f;"></i>{{ title|default('Alterar Senha') }}
                 </h1>
                 <p class="text-muted mb-0">Atualize sua senha periodicamente para manter sua conta segura.</p>
             </div>
-            <a href="{{ BASE_URL }}admin/perfil" class="btn btn-outline-secondary">
+            <a href="{{ BASE_URL }}admin/perfil" class="btn btn-theme-outline-neutral">
                 <i class="bi bi-arrow-left me-2"></i>Voltar para o Perfil
             </a>
         </div>
@@ -18,7 +18,7 @@
         <div class="col-lg-8">
             <form action="{{ BASE_URL }}admin/alterar-senha/update" method="POST" class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0 fw-bold" style="color: #df6301;">
+                    <h5 class="mb-0 fw-bold" style="color: #556b2f;">
                         <i class="bi bi-key me-2"></i>Dados de Acesso
                     </h5>
                 </div>
@@ -54,10 +54,10 @@
                     </div>
 
                     <div class="d-flex flex-wrap gap-2">
-                        <button type="submit" class="btn btn-primary" style="background-color: #df6301; border-color: #df6301;">
+                        <button type="submit" class="btn btn-theme">
                             <i class="bi bi-floppy me-2"></i>Salvar nova senha
                         </button>
-                        <a href="{{ BASE_URL }}admin/perfil" class="btn btn-outline-secondary">
+                        <a href="{{ BASE_URL }}admin/perfil" class="btn btn-theme-outline-neutral">
                             <i class="bi bi-x-circle me-2"></i>Cancelar
                         </a>
                     </div>
@@ -68,7 +68,7 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0 fw-bold" style="color: #df6301;">
+                    <h6 class="mb-0 fw-bold" style="color: #556b2f;">
                         <i class="bi bi-lightbulb me-2"></i>Boas práticas
                     </h6>
                 </div>

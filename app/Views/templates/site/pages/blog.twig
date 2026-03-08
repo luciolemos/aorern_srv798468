@@ -1,10 +1,10 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}Blog - CBMRN{% endblock %}
+{% block title %}Blog - AORE/RN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/blog.css">
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/blog.css?v=20260304-hero1">
 {% endblock %}
 
 {% block content %}
@@ -29,7 +29,7 @@
                             </figure>
                         {% endif %}
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <p class="section-kicker text-white-50 mb-0">Artigo em destaque</p>
+                            <p class="section-kicker text-white-50 mb-0">Destaque institucional</p>
                         </div>
                         <h1 class="section-title text-white mb-3">{{ featured_post.titulo }}</h1>
                         <p class="blog-feature-meta mb-4">
@@ -40,29 +40,29 @@
                             {% endif %}
                             <span class="mx-3">•</span>
                             {% if featured_post.categoria_nome %}
-                                {% set categoriaCor = featured_post.categoria_cor|default('#df6301') %}
+                                {% set categoriaCor = featured_post.categoria_cor|default('#556b2f') %}
                                 <span class="blog-category-badge blog-category-badge-hero" style="background-color: {{ categoriaCor }}; border-color: {{ categoriaCor }}; color: #fff;">
                                     {{ featured_post.categoria_nome }}
                                 </span>
                             {% endif %}
                         </p>
-                        <p class="section-lead text-white-75 mb-4">{{ featured_post.conteudo|first_paragraph(260) }}</p>
+                        <p class="section-lead text-white-75 mb-4">A AORE/RN reúne oficiais da reserva em uma agenda permanente de integração, memória institucional e representação associativa. Este espaço publica conteúdos oficiais, notícias e registros que fortalecem a identidade da associação no Rio Grande do Norte.</p>
                         <div class="d-flex flex-wrap gap-3 blog-feature-actions">
                             {% include 'site/components/button.twig' with {
                                 href: BASE_URL ~ 'blog/' ~ featured_post.slug,
-                                label: 'Ler matéria completa',
+                                label: 'Ler publicação completa',
                                 icon: 'bi-arrow-right',
                                 icon_position: 'end',
                                 variant: 'solid',
                                 size: 'lg',
                                 button_class: 'fw-bold',
                                 attrs: {
-                                    'aria-label': 'Ler matéria completa: ' ~ featured_post.titulo
+                                    'aria-label': 'Ler publicação completa: ' ~ featured_post.titulo
                                 }
                             } %}
                             {% include 'site/components/button.twig' with {
                                 href: '#ultimos-posts',
-                                label: 'Ver mais artigos',
+                                label: 'Ver mais publicações',
                                 icon: 'bi-list-columns-reverse',
                                 icon_position: 'end',
                                 variant: 'solid',
@@ -86,7 +86,7 @@
                         {% endfor %}
 
                         {% include 'site/components/hero-panel.twig' with {
-                            badge: '<i class="bi bi-journal-text me-1 text-primary"></i> Últimas publicações',
+                            badge: '<i class="bi bi-journal-text me-1 text-primary"></i> Publicações institucionais' ,
                             theme: 'light',
                             list_class: 'mb-0',
                             items: feature_items
@@ -100,9 +100,9 @@
         <section id="ultimos-posts" class="blog-list-section py-5">
             <div class="container-xxl">
                 {% include 'site/components/section-header.twig' with {
-                    kicker: 'Novidades e artigos',
-                    title: 'Últimas publicações',
-                    subtitle: 'Conteúdos recentes, operações e bastidores do Corpo de Bombeiros Militar do Rio Grande do Norte.',
+                    kicker: 'Memória, notícias e conteúdo institucional',
+                    title: 'Publicações da AORE/RN',
+                    subtitle: 'Registros institucionais, notícias associativas, memória da reserva e conteúdos de interesse dos oficiais da AORE/RN.',
                     align: 'center',
                     kicker_class: 'text-muted',
                     title_class: 'text-primary',
@@ -125,7 +125,7 @@
                         <form action="{{ BASE_URL }}blog" method="get" class="row gy-3 gx-4 align-items-end" id="blog-filter-form">
                             <div class="col-12 col-md-5 col-lg-5 col-xl-6">
                                 <label for="blog-search" class="form-label text-muted text-uppercase small fw-semibold">Buscar no blog</label>
-                                <input type="search" id="blog-search" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Digite palavras-chave"
+                                <input type="search" id="blog-search" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Buscar por tema, título ou assunto"
                                        aria-label="Buscar artigos" />
                             </div>
                             <div class="col-12 col-md-4 col-lg-4 col-xl-3">
@@ -161,9 +161,9 @@
                                 {% include 'site/components/post-card.twig' with {
                                     cover_url: post.capa_url,
                                     cover_alt: 'Imagem de capa de ' ~ post.titulo,
-                                    badge_label: 'Artigo',
+                                    badge_label: 'Publicação',
                                     category_name: post.categoria_nome,
-                                    category_color: post.categoria_cor|default('#df6301'),
+                                    category_color: post.categoria_cor|default('#556b2f'),
                                     title: post.titulo,
                                     meta_date: post.criado_em|date('d/m/Y'),
                                     meta_author: post.autor,
@@ -259,7 +259,7 @@
                     <form action="{{ BASE_URL }}blog" method="get" class="row gy-3 gx-4 align-items-end">
                         <div class="col-12 col-md-6 col-lg-6">
                             <label for="blog-search-empty" class="form-label text-muted text-uppercase small fw-semibold">Buscar no blog</label>
-                            <input type="search" id="blog-search-empty" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Digite palavras-chave"
+                            <input type="search" id="blog-search-empty" name="q" value="{{ filters.q|default('') }}" class="form-control" placeholder="Buscar por tema, título ou assunto"
                                    aria-label="Buscar artigos" />
                         </div>
                         <div class="col-12 col-md-4 col-lg-4">

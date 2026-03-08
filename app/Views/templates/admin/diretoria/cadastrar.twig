@@ -1,0 +1,79 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Nova Composição de Diretoria{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-person-workspace me-2"></i>Cadastrar composição de diretoria</h2>
+        <p class="text-muted mb-0">Relacione cargos institucionais, associados e mandatos da AORERN.</p>
+        <hr class="my-4">
+    </div>
+
+    <form method="post" action="{{ BASE_URL }}admin/diretoria/salvar">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
+        <div class="row g-3">
+            <div class="col-lg-4">
+                <label class="form-label fw-bold">Função base</label>
+                <select name="funcao_id" class="form-select" required>
+                    <option value="">Selecione uma função</option>
+                    {% for funcao in funcoes %}
+                        <option value="{{ funcao.id }}">{{ funcao.nome|e }}</option>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">O cargo institucional será preenchido automaticamente com base na função selecionada.</small>
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Grupo</label>
+                <input type="text" name="grupo" class="form-control" placeholder="Diretoria Executiva, Conselho...">
+            </div>
+            <div class="col-lg-2">
+                <label class="form-label fw-bold">Ordem</label>
+                <input type="number" name="ordem" class="form-control" min="0" value="0">
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Mandato</label>
+                <select name="term_id" class="form-select">
+                    <option value="">Sem vínculo</option>
+                    {% for term in terms %}
+                        <option value="{{ term.id }}">{{ term.nome|e }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-6">
+                <label class="form-label fw-bold">Associado</label>
+                <select name="pessoal_id" class="form-select">
+                    <option value="">Não vincular agora</option>
+                    {% for associado in associados %}
+                        <option value="{{ associado.id }}">{{ associado.nome|e }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Situação</label>
+                <select name="is_active" class="form-select">
+                    <option value="1" selected>Ativo</option>
+                    <option value="0">Inativo</option>
+                </select>
+            </div>
+            <div class="col-lg-5">
+                <label class="form-label fw-bold">Perfil administrativo derivado da função</label>
+                <select name="access_role" class="form-select">
+                    <option value="">Sem perfil administrativo</option>
+                    <option value="operador">Equipe de Apoio</option>
+                    <option value="gerente">Diretoria / Secretaria</option>
+                </select>
+                <small class="text-muted">Use apenas quando o associado já possuir credencial básica criada no cadastro de associados.</small>
+            </div>
+            <div class="col-12">
+                <label class="form-label fw-bold">Observações</label>
+                <textarea name="observacoes" rows="4" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="border-top my-4"></div>
+        <div class="d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+            <a href="{{ BASE_URL }}admin/diretoria" class="btn btn-outline-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-success">Salvar registro</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

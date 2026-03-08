@@ -1,12 +1,12 @@
 {% extends 'admin/layouts/base_admin.twig' %}
 
-{% block title %}Usuários - Admin{% endblock %}
+{% block title %}Contas de Acesso - Admin{% endblock %}
 
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
     <div>
-        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-people-fill me-2"></i> Usuários do Sistema</h2>
-        <p class="text-muted mb-0">Gerencie usuários, roles e permissões</p>
+        <h2 class="fw-bold admin-page-title"><i class="bi bi-people-fill me-2"></i> Usuários do painel</h2>
+        <p class="text-muted mb-0">Esta lista mostra apenas contas com perfil administrativo. Associados comuns continuam autenticando normalmente, mas não aparecem aqui.</p>
         <hr class="my-4">
 
         <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
@@ -50,13 +50,12 @@
 
                 <!-- Filtro por Role -->
                 <div class="col-12 col-md-3 col-xl-3">
-                    <label class="form-label small mb-1" for="role"><i class="bi bi-shield me-1"></i> <strong>Role</strong></label>
+                    <label class="form-label small mb-1" for="role"><i class="bi bi-shield me-1"></i> <strong>Perfil</strong></label>
                     <select id="role" name="role" class="form-select">
                         <option value="">Todas</option>
-                        <option value="admin" {% if role == 'admin' %}selected{% endif %}>Admin</option>
-                        <option value="gerente" {% if role == 'gerente' %}selected{% endif %}>Gerente</option>
-                        <option value="operador" {% if role == 'operador' %}selected{% endif %}>Operador</option>
-                        <option value="usuario" {% if role == 'usuario' %}selected{% endif %}>Usuário</option>
+                        <option value="admin" {% if role == 'admin' %}selected{% endif %}>{{ roleLabels.admin|default('Administrador do Sistema') }}</option>
+                        <option value="gerente" {% if role == 'gerente' %}selected{% endif %}>{{ roleLabels.gerente|default('Diretoria / Secretaria') }}</option>
+                        <option value="operador" {% if role == 'operador' %}selected{% endif %}>{{ roleLabels.operador|default('Equipe de Apoio') }}</option>
                     </select>
                 </div>
 
@@ -92,11 +91,12 @@
                     <tr>
                         <th>USUÁRIO</th>
                         <th class="d-none d-lg-table-cell">EMAIL</th>
-                        <th class="d-none d-xxl-table-cell" style="width: 80px;">ROLE</th>
-                        <th class="d-none d-md-table-cell" style="width: 80px;">STATUS</th>
-                        <th class="d-none d-xxl-table-cell" style="width: 120px;">ÚLTIMO LOGIN</th>
-                        <th class="d-none d-xxl-table-cell" style="width: 100px;">CADASTRADO</th>
-                        <th class="text-center" style="width: 50px;">AÇÕES</th>
+                        <th class="d-none d-xl-table-cell">CARGO</th>
+                        <th class="d-none d-xxl-table-cell">PERFIL</th>
+                        <th class="d-none d-md-table-cell">STATUS</th>
+                        <th class="d-none d-xxl-table-cell">ÚLTIMO LOGIN</th>
+                        <th class="d-none d-xxl-table-cell">CADASTRADO</th>
+                        <th class="text-center">AÇÕES</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -105,17 +105,21 @@
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     {% if usuario.avatar %}
-                                        <img src="{{ BASE_URL }}{{ usuario.avatar }}" alt="{{ usuario.username }}" class="rounded" style="width: 48px; height: 48px; object-fit: cover; border-radius: .25rem;">
+                                        <img src="{{ BASE_URL }}{{ usuario.avatar }}" alt="{{ usuario.username }}" class="rounded admin-avatar-square-48">
                                     {% else %}
-                                        <div class="rounded bg-primary d-inline-flex justify-content-center align-items-center text-white" style="width: 48px; height: 48px; font-weight: 700; border-radius: .25rem;">
+                                        <div class="rounded bg-primary d-inline-flex justify-content-center align-items-center text-white admin-avatar-square-48">
                                             {{ usuario.username[0]|upper }}
                                         </div>
                                     {% endif %}
-                                    <span class="text-body">{{ usuario.username }}</span>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-body fw-semibold">{{ usuario.associado_nome|default(usuario.username)|e }}</span>
+                                        <small class="text-muted">{{ usuario.username|e }}</small>
+                                    </div>
                                 </div>
                             </td>
                             <td class="d-none d-lg-table-cell"><small>{{ usuario.email }}</small></td>
-                            <td class="d-none d-xxl-table-cell"><small>{{ usuario.role }}</small></td>
+                            <td class="d-none d-xl-table-cell"><small>{{ usuario.cargo_funcao_diretoria|default('-')|e }}</small></td>
+                            <td class="d-none d-xxl-table-cell"><small>{{ attribute(roleLabels, usuario.role|default('usuario'))|default(usuario.role|default('-')) }}</small></td>
                             <td class="d-none d-md-table-cell">
                                 {% set status = usuario.status ?? (usuario.ativo ? 'ativo' : 'pendente') %}
                                 {% if status == 'ativo' %}
@@ -134,10 +138,21 @@
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        {% if status == 'pendente' %}
-                                            <li>
-                                                <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
-                                                    <input type="hidden" name="id" value="{{ usuario.id }}">
+                                        <li>
+                                            <a class="dropdown-item" href="{{ BASE_URL }}admin/usuarios/visualizar/{{ usuario.id }}">
+                                                <i class="bi bi-eye me-2"></i> Visualizar
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ BASE_URL }}admin/usuarios/editar/{{ usuario.id }}">
+                                                <i class="bi bi-pencil-square me-2"></i> Editar
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                            {% if status == 'pendente' %}
+                                                <li>
+                                                    <form method="POST" action="{{ BASE_URL }}admin/usuarios/ativar" class="d-inline">
+                                                        <input type="hidden" name="id" value="{{ usuario.id }}">
                                                     <button type="submit" class="dropdown-item">
                                                         <i class="bi bi-check-circle me-2"></i> Aprovar
                                                     </button>

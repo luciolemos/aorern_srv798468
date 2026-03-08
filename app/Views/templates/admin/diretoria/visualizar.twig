@@ -1,0 +1,71 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Visualizar Composição de Diretoria{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1 admin-page-title"><i class="bi bi-person-workspace me-2"></i>Visualizar composição de diretoria</h2>
+            <p class="text-muted mb-0">Consulta em modo somente leitura do vínculo institucional.</p>
+        </div>
+        <div class="d-flex flex-column flex-sm-row align-items-stretch gap-2">
+            <a href="{{ BASE_URL }}admin/diretoria/editar/{{ membro.id }}" class="btn btn-theme w-100 w-sm-auto">
+                <i class="bi bi-pencil-square me-1"></i> Editar
+            </a>
+            <a href="{{ BASE_URL }}admin/diretoria" class="btn btn-outline-secondary w-100 w-sm-auto">
+                <i class="bi bi-arrow-left me-1"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold admin-section-title">
+                <i class="bi bi-diagram-3 me-2"></i>Dados da composição
+            </h5>
+        </div>
+        <div class="card-body">
+            {% set cargoExibicao = membro.funcao_nome ?: membro.cargo %}
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Cargo institucional (derivado da função base)</label>
+                    <input type="text" class="form-control" value="{{ cargoExibicao|default('-')|e('html_attr') }}" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Grupo</label>
+                    <input type="text" class="form-control" value="{{ membro.grupo|default('Sem grupo')|e('html_attr') }}" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Associado</label>
+                    <input type="text" class="form-control" value="{{ membro.associado_nome|default('Não vinculado')|e('html_attr') }}" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Mandato</label>
+                    <input type="text" class="form-control" value="{{ membro.term_nome|default('Sem mandato')|e('html_attr') }}" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Ordem</label>
+                    <input type="text" class="form-control" value="{{ membro.ordem|default(0) }}" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Situação</label>
+                    <input type="text" class="form-control" value="{{ membro.is_active ? 'Ativo' : 'Inativo' }}" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Acesso administrativo</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{% if membro.access_role == 'gerente' %}Diretoria / Secretaria{% elseif membro.access_role == 'operador' %}Equipe de Apoio{% else %}Sem acesso admin{% endif %}"
+                        readonly
+                    >
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Observações</label>
+                    <textarea class="form-control" rows="4" readonly>{{ membro.observacoes|default('')|e }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

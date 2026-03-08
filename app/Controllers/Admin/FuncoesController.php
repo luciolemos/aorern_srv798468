@@ -49,15 +49,27 @@ class FuncoesController extends Controller {
 
     public function cadastrar(): void {
         PermissionMiddleware::authorize('funcoes:create');
-        $this->renderTwig('admin/funcoes/cadastrar', AdminHelper::getUserData('funcoes'));
+        $staff_id = $this->model->gerarProximoStaffIdAore();
+        $this->renderTwig('admin/funcoes/cadastrar', array_merge(
+            compact('staff_id'),
+            AdminHelper::getUserData('funcoes')
+        ));
     }
 
     public function salvar(): void {
         PermissionMiddleware::authorize('funcoes:create');
         $request = Request::capture();
+
+        $staffIdInput = strtoupper(trim((string) $request->post('staff_id', '')));
+        $staffIdValido = preg_match('/^FUNC-AORE-\d{3,}$/', $staffIdInput) === 1;
+        $staffId = $staffIdValido ? $staffIdInput : $this->model->gerarProximoStaffIdAore();
+
+        if ($this->model->staffIdExiste($staffId)) {
+            $staffId = $this->model->gerarProximoStaffIdAore();
+        }
         
         $dados = [
-            'staff_id' => $request->post('staff_id', 'FUNC-' . date('YmdHis')),
+            'staff_id' => $staffId,
             'nome'     => trim($request->post('nome', ''))
         ];
 
@@ -77,12 +89,14 @@ class FuncoesController extends Controller {
     public function atualizar(int $id): void {
         PermissionMiddleware::authorize('funcoes:edit');
         $request = Request::capture();
-        
-        $this->model->atualizar($id, [
+
+        $ok = $this->model->atualizar($id, [
             'nome' => trim($request->post('nome', ''))
         ]);
 
-        $_SESSION['toast'] = ['type' => 'success', 'message' => 'Função atualizada com sucesso!'];
+        $_SESSION['toast'] = $ok
+            ? ['type' => 'success', 'message' => 'Função atualizada com sucesso!']
+            : ['type' => 'danger', 'message' => 'Não foi possível atualizar a função no momento.'];
         header("Location: " . BASE_URL . "admin/funcoes");
         exit;
     }
@@ -90,7 +104,7 @@ class FuncoesController extends Controller {
     public function deletar(int $id): void {
         PermissionMiddleware::authorize('funcoes:delete');
         if ($this->model->possuiBombeiros($id)) {
-            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Não é possível excluir: existem bombeiros vinculados a esta função.'];
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Não é possível excluir: existem associados vinculados a esta função.'];
             header("Location: " . BASE_URL . "admin/funcoes");
             exit;
         }

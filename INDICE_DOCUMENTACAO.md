@@ -170,7 +170,7 @@
 ## 📂 Estrutura de Arquivos Documentados
 
 ```
-/var/www/cbmrn/
+/var/www/aorern/
 ├── 📚 COMPONENTES.md              ← Guia de componentes
 ├── 💡 EXEMPLOS_USO.md             ← Exemplos práticos
 ├── ✅ REFACTORING_SUMMARY.md      ← Resumo executivo
@@ -196,7 +196,7 @@
     ├── navbar-universal.css       ← CSS navbar centralizado
     ├── admin.css                  ← Admin overrides
     ├── header.css                 ← Site overrides
-    ├── bombeiros-theme.css        ← Tema CBMRN
+    ├── bombeiros-theme.css        ← Tema AORE/RN
     └── main.css                   ← Utilitários
 ```
 

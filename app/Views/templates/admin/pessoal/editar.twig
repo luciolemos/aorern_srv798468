@@ -1,119 +1,102 @@
 {% extends 'admin/layouts/base_admin.twig' %}
-{% block title %}Editar Pessoal - Admin{% endblock %}
+{% block title %}Editar Associado - Admin{% endblock %}
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
    <!-- Cabeçalho -->
-    <div data-aos="fade-down" class="mb-4">
-        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-pencil-square me-2"></i>Editar Pessoal</h2>
-        <p class="text-muted mb-0">Atualize as informações do pessoal</p>
+    <div data-aos="fade-down" class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold admin-page-title"><i class="bi bi-pencil-square me-2"></i>Editar associado</h2>
+            <p class="text-muted mb-0">Atualize as informações da base associativa</p>
+        </div>
+        <div class="d-flex flex-column flex-sm-row align-items-stretch gap-2">
+            <a href="{{ BASE_URL }}admin/pessoal" class="btn btn-outline-secondary w-100 w-sm-auto">
+                <i class="bi bi-arrow-left me-1"></i> Voltar
+            </a>
+        </div>
     </div>
-    <hr class="my-4">
-    
     <!-- Formulário -->
     <form method="post" action="{{ BASE_URL }}admin/pessoal/atualizar/{{ registro.id }}" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <div class="row">
             <!-- Coluna Principal -->
             <div class="col-lg-12">
                 <!-- Card Dados Pessoais -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
-                        <h5 class="mb-0 fw-bold" style="color: #df6301;">
-                            <i class="bi bi-person-vcard me-2"></i>Dados Pessoais
+                        <h5 class="mb-0 fw-bold admin-section-title">
+                            <i class="bi bi-person-vcard me-2"></i>Dados pessoais
                         </h5>
                     </div>
                     <div class="card-body">
+                        {% set associadoFoto = registro.foto|default('') ?: registro.user_avatar|default('') %}
                         <div class="row g-3">
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Código do Bombeiro</label>
-                                <input type="text" class="form-control" name="staff_id" readonly value="{{ registro.staff_id }}">
+                            <div class="col-12 col-lg-3 text-center">
+                                <div class="mt-2" id="fotoPreviewContainer">
+                                    <img
+                                        id="fotoPreview"
+                                        src="{{ associadoFoto is not empty ? (BASE_URL ~ associadoFoto) : (BASE_URL ~ 'assets/images/conscrito.png') }}"
+                                        alt="Preview"
+                                        class="rounded shadow-sm admin-avatar-square-220"
+                                    >
+                                </div>
                             </div>
+                            <div class="col-12 col-lg-9">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold">Código do associado</label>
+                                        <input type="text" class="form-control" name="staff_id" readonly value="{{ registro.staff_id }}">
+                                    </div>
 
-                            <div class="col-md-8">
-                                <label class="form-label fw-bold">Nome Completo <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="nome" required placeholder="Digite o nome completo" value="{{ registro.nome }}">
-                            </div>
+                                    <div class="col-md-8">
+                                        <label class="form-label fw-bold">Nome Completo <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="nome" required placeholder="Digite o nome completo" value="{{ registro.nome }}">
+                                    </div>
 
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">CPF <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control cpf-mask" name="cpf" required
-                                       maxlength="14" placeholder="000.000.000-00" value="{{ registro.cpf }}">
-                            </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold">CPF <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control cpf-mask" name="cpf" required
+                                               maxlength="14" placeholder="000.000.000-00" value="{{ registro.cpf }}">
+                                    </div>
 
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Data Nascimento</label>
-                                <input type="date" class="form-control" name="nascimento" value="{{ registro.nascimento }}">
-                            </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold">Data Nascimento</label>
+                                        <input type="date" class="form-control" name="nascimento" value="{{ registro.nascimento }}">
+                                    </div>
 
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Celular</label>
-                                <input type="text" class="form-control phone-mask" name="telefone"
-                                       maxlength="16" placeholder="(00) 00000-0000" value="{{ registro.telefone }}">
-                            </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold">Celular</label>
+                                        <input type="text" class="form-control phone-mask" name="telefone"
+                                               maxlength="16" placeholder="(00) 00000-0000" value="{{ registro.telefone }}">
+                                    </div>
 
-                            <div class="col-md-12">
-                                <label class="form-label fw-bold">
-                                    <i class="bi bi-image me-1"></i>Foto do Bombeiro
-                                </label>
-                                <input type="file" class="form-control" name="foto"
-                                       accept="image/jpeg,image/png,image/webp" 
-                                    onchange="previewFoto(this)">
-                                <small class="text-muted">JPG, PNG ou WebP • Máximo 50MB (opcional)</small>
-                                
-                                <!-- Preview -->
-                                <div class="mt-2" id="fotoPreviewContainer" style="{{ registro.foto ? '' : 'display: none;' }}">
-                                    <img id="fotoPreview" src="{{ registro.foto ? BASE_URL ~ registro.foto : '' }}" alt="Preview"
-                                         class="rounded shadow-sm" 
-                                         style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #df6301;">
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold">
+                                            <i class="bi bi-image me-1"></i>Foto do associado
+                                        </label>
+                                        <input type="file" class="form-control" name="foto"
+                                               accept="image/jpeg,image/png,image/webp"
+                                               onchange="previewFoto(this)">
+                                        <small class="text-muted">JPG, PNG ou WebP • Máximo 50MB (opcional)</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card Atuação na Obra -->
+                <!-- Card Vínculo associativo -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
-                        <h5 class="mb-0 fw-bold" style="color: #df6301;">
-                            <i class="bi bi-cone-striped me-2"></i>Atuação na Obra
+                        <h5 class="mb-0 fw-bold admin-section-title">
+                            <i class="bi bi-diagram-3 me-2"></i>Vínculo associativo
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <label class="form-label fw-bold">Função <span class="text-danger">*</span></label>
-                                <select name="workRole" class="form-select" required>
-                                    <option value="" disabled>Selecione a função</option>
-                                    {% for funcao in funcoes %}
-                                        <option value="{{ funcao.id }}" {{ registro.funcao_id == funcao.id ? 'selected' : '' }}>{{ funcao.nome }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Obra <span class="text-danger">*</span></label>
-                                <select class="form-select" name="obra_id" required>
-                                    <option value="" disabled>Selecione a obra</option>
-                                    {% for obra in obras %}
-                                        <option value="{{ obra.id }}" {{ registro.obra_id == obra.id ? 'selected' : '' }}>{{ obra.descricao }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Jornada</label>
-                                <select name="jornada" class="form-select">
-                                    <option value="8h" {{ registro.jornada == '8h' ? 'selected' : '' }}>8h/dia</option>
-                                    <option value="6h" {{ registro.jornada == '6h' ? 'selected' : '' }}>6h/dia</option>
-                                    <option value="4h" {{ registro.jornada == '4h' ? 'selected' : '' }}>4h/dia</option>
-                                    <option value="Outros" {{ registro.jornada == 'Outros' ? 'selected' : '' }}>Outros</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Data Admissão <span class="text-danger">*</span></label>
+                                <label class="form-label fw-bold">Data de ingresso <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="data_admissao" required value="{{ registro.data_admissao }}">
                             </div>
-
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">Status</label>
                                 <select name="status" class="form-select">
@@ -123,19 +106,86 @@
                                     <option value="Demitido" {{ registro.status == 'Demitido' ? 'selected' : '' }}>Demitido</option>
                                 </select>
                             </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Status associativo</label>
+                                <select name="status_associativo" class="form-select">
+                                    {% for option in statusAssociativoOptions %}
+                                        <option value="{{ option }}" {{ registro.status_associativo == option ? 'selected' : '' }}>
+                                            {{ option == 'efetivo' ? 'Sócio Efetivo' : (option == 'honorario' ? 'Sócio Honorário' : (option == 'fundador' ? 'Sócio Fundador' : (option == 'benemerito' ? 'Sócio Benemérito' : (option == 'veterano' ? 'Sócio Veterano' : (option == 'aluno' ? 'Sócio Aluno' : 'Sócio Provisório'))))) }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm mb-4" id="acesso-institucional">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="mb-0 fw-bold admin-section-title">
+                            <i class="bi bi-person-workspace me-2"></i>Acesso institucional
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% set elegivelAcesso = registro.status == 'Ativo' and registro.status_associativo == 'efetivo' %}
+                        {% if not elegivelAcesso %}
+                            <div class="alert alert-warning mb-0">
+                                Apenas associados com status <strong>Ativo</strong> e associativo <strong>Sócio Efetivo</strong> podem receber acesso ao portal ou perfil administrativo.
+                            </div>
+                        {% else %}
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    {% if registro.user_id %}
+                                        <div class="alert alert-light border mb-0">
+                                            Esta credencial básica já foi liberada. Perfis administrativos são concedidos no módulo de <strong>Diretoria</strong>, conforme a função institucional ocupada.
+                                        </div>
+                                    {% elseif accessDefaults.has_application and accessDefaults.application_status == 'aprovada' %}
+                                        <div class="alert alert-light border mb-0">
+                                            A liberação do acesso usará exclusivamente os dados informados pelo próprio associado na solicitação de filiação já aprovada.
+                                        </div>
+                                    {% else %}
+                                        <div class="alert alert-warning mb-0">
+                                            Este associado ainda não possui uma solicitação de filiação aprovada com credencial válida. Sem isso, o acesso não pode ser liberado.
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Usuário informado na inscrição</label>
+                                    <input type="text" class="form-control" value="{{ accessDefaults.username|default('')|e('html_attr') }}" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">E-mail informado na inscrição</label>
+                                    <input type="email" class="form-control" value="{{ accessDefaults.email|default('')|e('html_attr') }}" readonly>
+                                </div>
+                                <div class="col-12">
+                                    <div class="small text-muted">
+                                        O perfil inicial da credencial sempre será <strong>{{ roleLabels.usuario|default('Associado') }}</strong>. A promoção para função administrativa é feita exclusivamente no módulo de Diretoria.
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    {% if registro.user_id %}
+                                        <div class="small text-muted mb-2">
+                                            Conta vinculada: <strong>{{ registro.user_username|default('-')|e }}</strong> · {{ attribute(roleLabels, registro.user_role|default('usuario'))|default(registro.user_role|default('-')) }}
+                                        </div>
+                                    {% endif %}
+                                    <button type="submit" formaction="{{ BASE_URL }}admin/pessoal/acesso/{{ registro.id }}" formmethod="post" class="btn {{ registro.user_id ? 'btn-primary btn-access-liberado' : 'btn-theme' }} admin-mobile-full-btn" {% if registro.user_id or not (accessDefaults.has_application and accessDefaults.application_status == 'aprovada') %}disabled{% endif %}>
+                                        <i class="bi bi-shield-check me-1"></i> {{ registro.user_id ? 'Acesso já liberado' : 'Liberar acesso' }}
+                                    </button>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
                 <!-- Card Observações -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
-                        <h5 class="mb-0 fw-bold" style="color: #df6301;">
+                        <h5 class="mb-0 fw-bold admin-section-title">
                             <i class="bi bi-list-columns-reverse me-2"></i>Observações
                         </h5>
                     </div>
                     <div class="card-body">
-                        <textarea name="observacoes" rows="4" class="form-control" placeholder="Informações adicionais sobre o bombeiro...">{{ registro.observacoes }}</textarea>
+                        <textarea name="observacoes" rows="4" class="form-control" placeholder="Informações adicionais sobre o associado...">{{ registro.observacoes }}</textarea>
                 </div>
             </div>
 
@@ -147,9 +197,9 @@
             <!-- Botões de Ação -->
             <div class="col-12">
                 <div class="d-flex flex-column flex-md-row gap-2 order-md-2 w-100 w-md-auto justify-content-md-end">
-                    <a href="{{ BASE_URL }}admin" class="btn btn-primary"><i class="bi bi-speedometer2 me-1"></i> Painel</a>
-                    <a href="{{ BASE_URL }}admin/pessoal" class="btn btn-danger"><i class="bi bi-x-circle me-1"></i> Cancelar</a>
-                    <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i> Atualizar</button>
+                    <a href="{{ BASE_URL }}admin" class="btn btn-theme-surface"><i class="bi bi-speedometer2 me-1"></i> Painel</a>
+                    <a href="{{ BASE_URL }}admin/pessoal" class="btn btn-theme-outline-neutral"><i class="bi bi-x-circle me-1"></i> Cancelar</a>
+                    <button type="submit" class="btn btn-theme"><i class="bi bi-save me-1"></i> Atualizar</button>
                 </div>
             </div>
         </div>            <!-- Sidebar Informações -->
@@ -157,7 +207,7 @@
                 <!-- Card de Ajuda -->
 {#                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
-                        <h5 class="mb-0 fw-bold" style="color: #df6301;">
+                        <h5 class="mb-0 fw-bold admin-section-title">
                             <i class="bi bi-info-circle me-2"></i>Informações
                         </h5>
                     </div>
@@ -184,7 +234,7 @@
                 <!-- Card de Estatísticas -->
 {#                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white border-bottom">
-                        <h5 class="mb-0 fw-bold" style="color: #df6301;">
+                        <h5 class="mb-0 fw-bold admin-section-title">
                             <i class="bi bi-graph-up me-2"></i>Registro
                         </h5>
                     </div>
@@ -213,35 +263,11 @@ function previewFoto(input) {
         const reader = new FileReader();
         reader.onload = function(e) {
             preview.src = e.target.result;
-            container.style.display = 'block';
+            container.classList.remove('d-none');
         };
         reader.readAsDataURL(input.files[0]);
     }
 }
 </script>
 
-<style>
-.form-control:focus,
-.form-select:focus {
-    border-color: #df6301;
-    box-shadow: 0 0 0 0.2rem rgba(223, 99, 1, 0.25);
-}
-
-.btn-primary {
-    background-color: #df6301;
-    border-color: #df6301;
-}
-
-.btn-primary:hover {
-    background-color: #b54f01;
-    border-color: #b54f01;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(223, 99, 1, 0.3);
-}
-
-.card {
-    border-radius: 0.5rem;
-    transition: all 0.3s ease;
-}
-</style>
 {% endblock %}

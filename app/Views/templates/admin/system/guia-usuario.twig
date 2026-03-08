@@ -1,0 +1,90 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Guia do usuário - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-journal-bookmark me-2"></i>Guia do usuário</h2>
+        <p class="text-muted mb-0">Procedimentos operacionais para gestão da seção de patrocinadores e banners da home.</p>
+        <hr class="my-4">
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold">Fluxo de gestão no painel</h5>
+        </div>
+        <div class="card-body">
+            <ol class="mb-0">
+                <li>Acesse <strong>NÚCLEO INSTITUCIONAL &gt; Patrocinadores</strong>.</li>
+                <li>Clique em <strong>Novo patrocinador</strong>.</li>
+                <li>Preencha os campos obrigatórios: <strong>Nome da empresa</strong> e <strong>Logo</strong>.</li>
+                <li>Envie opcionalmente o <strong>Banner</strong> para o slide principal da home.</li>
+                <li>Defina a <strong>Ordem</strong> de exibição e deixe como <strong>Ativo</strong>.</li>
+                <li>Salve e valide a visualização na página inicial.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold">Padrão de imagens recomendado</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-lg-6">
+                    <div class="p-3 rounded border h-100">
+                        <h6 class="fw-bold mb-2">Banner (slide principal)</h6>
+                        <ul class="mb-0 ps-3">
+                            <li>Proporção recomendada: <strong>16:9</strong>.</li>
+                            <li>Tamanho ideal: <strong>1600x900 px</strong> (mínimo 1280x720).</li>
+                            <li>Formato: <strong>JPG</strong> para foto, <strong>PNG/WEBP</strong> para arte com transparência.</li>
+                            <li>Peso sugerido: até <strong>500 KB</strong> para melhor desempenho.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="p-3 rounded border h-100">
+                        <h6 class="fw-bold mb-2">Logo (miniaturas e fallback)</h6>
+                        <ul class="mb-0 ps-3">
+                            <li>Proporção recomendada: <strong>1:1</strong> (quadrada).</li>
+                            <li>Tamanho ideal: <strong>600x600 px</strong>.</li>
+                            <li>Preferir PNG/WEBP com boa definição.</li>
+                            <li>Evitar margens excessivas e texto muito pequeno.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold">Comportamento da home</h5>
+        </div>
+        <div class="card-body">
+            <ul class="mb-0 ps-3">
+                <li>Se <strong>Banner</strong> estiver preenchido, ele é usado no slide principal.</li>
+                <li>Se não houver banner, o sistema usa automaticamente a <strong>Logo</strong>.</li>
+                <li>Se não houver logo, aplica imagem de fallback padrão do sistema.</li>
+                <li>A seção só é exibida para patrocinadores com status <strong>Ativo</strong>.</li>
+                <li>A ordem de apresentação segue o campo <strong>Ordem</strong> em ordem crescente.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold">Checklist de publicação</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col-md-6"><span class="badge bg-light text-dark border w-100 text-start p-2">Logo legível em miniatura lateral</span></div>
+                <div class="col-md-6"><span class="badge bg-light text-dark border w-100 text-start p-2">Banner sem distorção ou cortes críticos</span></div>
+                <div class="col-md-6"><span class="badge bg-light text-dark border w-100 text-start p-2">Telefone e WhatsApp validados</span></div>
+                <div class="col-md-6"><span class="badge bg-light text-dark border w-100 text-start p-2">Ordem e status ativos conferidos</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

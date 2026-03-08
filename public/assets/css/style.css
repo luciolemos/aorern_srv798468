@@ -6,7 +6,7 @@
     left: 0;
     width: 0;
     height: 2px;
-    background: #df6301;  /* Laranja Bombeiros RN */
+    background: #556b2f;  /* Laranja Bombeiros RN */
     transition: width 0.3s ease;
 }
 
@@ -26,7 +26,7 @@
     opacity: 0;
     transform: translateY(100%);
     transition: all 0.3s ease;
-    background: #df6301;  /* Laranja Bombeiros RN */
+    background: #556b2f;  /* Laranja Bombeiros RN */
     color: white;
     border: none;
 }

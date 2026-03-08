@@ -7,6 +7,7 @@ use App\Helpers\Paginator;
 use PDO;
 
 class User {
+    public const USERNAME_REGEX = '/^[a-z]+[0-9]{4}$/';
     private $db;
     private string $table = 'users';
 
@@ -18,6 +19,10 @@ class User {
      * Cria um novo usuário
      */
     public function criar(array $dados): bool {
+        if (isset($dados['username'])) {
+            $dados['username'] = self::normalizeUsername((string) $dados['username']);
+        }
+
         $sql = "INSERT INTO {$this->table} (
             username, email, password, avatar, role, ativo, status
         ) VALUES (
@@ -36,10 +41,20 @@ class User {
         ]);
     }
 
+    public function criarERetornarId(array $dados): ?int
+    {
+        if (!$this->criar($dados)) {
+            return null;
+        }
+
+        return (int) $this->db->lastInsertId();
+    }
+
     /**
      * Busca usuário por username
      */
     public function buscarPorUsername(string $username): ?array {
+        $username = self::normalizeUsername($username);
         $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE username = ?");
         $stmt->execute([$username]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
@@ -87,11 +102,15 @@ class User {
      * Atualiza dados do usuário
      */
     public function atualizar(int $id, array $dados): bool {
+        if (array_key_exists('username', $dados)) {
+            $dados['username'] = self::normalizeUsername((string) $dados['username']);
+        }
+
         $campos = [];
         $params = [':id' => $id];
 
         // Apenas campos permitidos
-        $permitidos = ['username', 'email', 'avatar', 'role', 'ativo', 'status'];
+        $permitidos = ['username', 'email', 'password', 'avatar', 'role', 'ativo', 'status'];
         
         foreach ($permitidos as $campo) {
             if (array_key_exists($campo, $dados)) {
@@ -132,10 +151,28 @@ class User {
      * Verifica se username já existe
      */
     public function usernameExiste(string $username): bool {
+        $username = self::normalizeUsername($username);
         $stmt = $this->db->prepare("SELECT COUNT(*) as total FROM {$this->table} WHERE username = ?");
         $stmt->execute([$username]);
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
         return $resultado['total'] > 0;
+    }
+
+    public static function normalizeUsername(string $username): string
+    {
+        $value = trim($username);
+        if ($value === '') {
+            return '';
+        }
+
+        $value = strtolower($value);
+        return preg_replace('/\s+/', '', $value) ?? '';
+    }
+
+    public static function isValidUsernameFormat(string $username): bool
+    {
+        $normalized = self::normalizeUsername($username);
+        return (bool) preg_match(self::USERNAME_REGEX, $normalized);
     }
 
     /**
@@ -194,34 +231,50 @@ class User {
         ?int $perPage,
         ?string $busca = null,
         ?string $role = null,
-        ?string $status = null
+        ?string $status = null,
+        bool $administrativeOnly = false
     ): array {
         $conditions = [];
         $params = [];
 
         if ($busca) {
-            $conditions[] = '(username LIKE :busca OR email LIKE :busca)';
+            $conditions[] = '(u.username LIKE :busca OR u.email LIKE :busca)';
             $params[':busca'] = '%' . $busca . '%';
         }
 
         if ($role) {
-            $conditions[] = 'role = :role';
+            $conditions[] = 'u.role = :role';
             $params[':role'] = $role;
         }
 
         if ($status) {
-            $conditions[] = 'status = :status';
+            $conditions[] = 'u.status = :status';
             $params[':status'] = $status;
+        }
+
+        if ($administrativeOnly) {
+            $conditions[] = "u.role IN ('admin', 'gerente', 'operador')";
         }
 
         $where = $conditions ? implode(' AND ', $conditions) : '';
 
         return Paginator::paginate(
             $this->db,
-            'id, username, email, avatar, role, ativo, status, ultimo_login, created_at, updated_at',
-            "FROM {$this->table}",
+            'u.id, u.username, u.email, u.avatar, u.role, u.ativo, u.status, u.ultimo_login, u.created_at, u.updated_at, p.nome AS associado_nome, d.cargo_funcao_diretoria',
+            "FROM {$this->table} u
+             LEFT JOIN pessoal p ON p.user_id = u.id
+             LEFT JOIN (
+                SELECT p.user_id,
+                       GROUP_CONCAT(DISTINCT COALESCE(f.nome, bm.cargo) ORDER BY bm.ordem ASC, bm.id ASC SEPARATOR ' | ') AS cargo_funcao_diretoria
+                FROM board_memberships bm
+                INNER JOIN pessoal p ON p.id = bm.pessoal_id
+                LEFT JOIN funcoes f ON f.id = bm.funcao_id
+                WHERE p.user_id IS NOT NULL
+                  AND bm.is_active = 1
+                GROUP BY p.user_id
+             ) d ON d.user_id = u.id",
             $where,
-            'created_at DESC',
+            'u.created_at DESC',
             $params,
             $page,
             $perPage

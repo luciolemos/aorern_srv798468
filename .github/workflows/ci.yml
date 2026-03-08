@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+jobs:
+  quality:
+    name: Lint + PHPUnit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mbstring, pdo_mysql, fileinfo
+          coverage: none
+
+      - name: Validate composer files
+        run: composer validate --no-check-publish
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: PHP lint
+        run: find app -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Run quality gate (unit only)
+        run: bash scripts/run_quality_gate.sh --unit-only
+
+  smoke-membership:
+    name: Smoke - Membership Flow
+    runs-on: ubuntu-latest
+    needs: quality
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: aorern_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mbstring, pdo_mysql, fileinfo
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Prepare .env for CI
+        run: |
+          cat > .env <<'EOF'
+          APP_ENV=test
+          APP_TIMEZONE=UTC
+          APP_URL=http://127.0.0.1:8080
+          SESSION_TIMEOUT=600
+          DB_HOST=127.0.0.1
+          DB_NAME=aorern_test
+          DB_USER=root
+          DB_PASS=root
+          DB_TIMEZONE=+00:00
+          SMTP_HOST=localhost
+          SMTP_PORT=1025
+          SMTP_USER=
+          SMTP_PASS=
+          SMTP_FROM=no-reply@aorern.local
+          SMTP_FROM_NAME=AORE/RN
+          RECAPTCHA_SITE_KEY=dummy
+          RECAPTCHA_SECRET_KEY=dummy
+          TINYMCE_API_KEY=dummy
+          GOOGLE_MAPS_API_KEY=
+          WHATSAPP_PHONE_E164=5584988061000
+          WHATSAPP_PHONE_DISPLAY=+55 84 98806-1000
+          WHATSAPP_MESSAGE_GENERAL=Ola
+          EOF
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            mysql -h127.0.0.1 -uroot -proot -e "SELECT 1;" && exit 0
+            sleep 2
+          done
+          exit 1
+
+      - name: Load schema and base seed
+        run: |
+          mysql -h127.0.0.1 -uroot -proot aorern_test < sql/schema.sql
+          mysql -h127.0.0.1 -uroot -proot aorern_test < sql/seeds/002_aorern_minimal.sql
+
+      - name: Apply migrations
+        run: php migrate migrate
+
+      - name: Start PHP server
+        run: |
+          php -S 127.0.0.1:8080 -t public public/index.php > /tmp/php-server.log 2>&1 &
+          sleep 2
+
+      - name: Run quality gate (CI profile)
+        run: bash scripts/run_quality_gate.sh --base-url http://127.0.0.1:8080 --skip-phpunit

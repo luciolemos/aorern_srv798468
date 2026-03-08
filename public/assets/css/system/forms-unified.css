@@ -1,0 +1,89 @@
+:root {
+    --form-field-radius: 1rem;
+}
+
+.auth-form .form-label {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.45rem;
+}
+
+.form-control:not(.form-control-color),
+.form-select,
+textarea.form-control,
+input.form-control,
+select.form-control {
+    border-radius: var(--form-field-radius) !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea.form-control:focus,
+input.form-control:focus,
+select.form-control:focus {
+    border-color: rgba(85, 107, 47, 0.7) !important;
+    box-shadow: 0 0 0 0.2rem rgba(85, 107, 47, 0.25) !important;
+}
+
+.form-control.is-valid,
+.form-select.is-valid,
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+    border-color: #2f8f4e !important;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid,
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+    border-color: #b4232c !important;
+}
+
+.form-control.is-valid:focus,
+.form-select.is-valid:focus,
+.was-validated .form-control:valid:focus,
+.was-validated .form-select:valid:focus {
+    border-color: #2f8f4e !important;
+    box-shadow: 0 0 0 0.2rem rgba(47, 143, 78, 0.22) !important;
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus,
+.was-validated .form-control:invalid:focus,
+.was-validated .form-select:invalid:focus {
+    border-color: #b4232c !important;
+    box-shadow: 0 0 0 0.2rem rgba(180, 35, 44, 0.22) !important;
+}
+
+.valid-feedback,
+.invalid-feedback,
+.valid-tooltip,
+.invalid-tooltip {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.valid-feedback,
+.valid-tooltip {
+    color: #2f8f4e !important;
+}
+
+.invalid-feedback,
+.invalid-tooltip {
+    color: #b4232c !important;
+}
+
+.input-group > .form-control:not(.form-control-color):not(:last-child),
+.input-group > .form-select:not(:last-child),
+.input-group > .form-control:not(.form-control-color).dropdown-toggle:nth-last-child(n+3) {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.input-group > .form-control:not(.form-control-color):not(:first-child),
+.input-group > .form-select:not(:first-child) {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}

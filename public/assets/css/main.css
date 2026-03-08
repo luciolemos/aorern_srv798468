@@ -1,7 +1,7 @@
 /* === TIPOGRAFIA INSTITUCIONAL === */
 :root {
-    --public-navbar-desktop-height: 75px;
-    --public-navbar-mobile-height: 75px;
+    --public-navbar-desktop-height: 80px;
+    --public-navbar-mobile-height: 80px;
 }
 
 /* html {
@@ -15,9 +15,13 @@
 }
 
 body {
-    font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+    font-family: var(--font-body) !important;
     font-weight: 400;
     letter-spacing: 0.3px;
+}
+
+.site-body {
+    background: var(--site-surface-gradient);
 }
 
 body.has-public-navbar {
@@ -31,7 +35,7 @@ body.has-public-navbar {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Roboto Condensed', 'Roboto', sans-serif !important;
+    font-family: var(--font-heading) !important;
     font-weight: 700;
     letter-spacing: 0.5px;
 }
@@ -47,7 +51,7 @@ h1, h2, h3, h4, h5, h6 {
     min-height: var(--public-navbar-desktop-height);
     height: var(--public-navbar-desktop-height);
     max-height: var(--public-navbar-desktop-height);
-    background-color: #df6301 !important;
+    background-color: var(--brand-primary) !important;
 }
 
 .navbar .container {
@@ -108,7 +112,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar-nav .nav-link {
-    font-family: 'Roboto Condensed', 'Roboto', sans-serif !important;
+    font-family: var(--font-heading) !important;
     font-weight: 500;
     letter-spacing: 1px;
     padding: 0.5rem 1rem;
@@ -117,13 +121,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar-nav .nav-link:hover {
-    color: var(--bombeiros-orange) !important;
+    color: var(--brand-primary) !important;
     transform: translateY(-2px);
 }
 
 .navbar-nav .nav-link.active {
-    color: var(--bombeiros-orange) !important;
-    border-bottom-color: var(--bombeiros-orange) !important;
+    color: var(--brand-primary) !important;
+    border-bottom-color: var(--brand-primary) !important;
 }
 
 .navbar-nav .nav-link i {
@@ -157,7 +161,7 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 991.98px) {
     .navbar-collapse {
         width: 100%;
-        background: linear-gradient(140deg, #df6301 0%, #b54f01 100%);
+        background: var(--site-accent-gradient);
         padding: 1rem;
         margin-top: 0.75rem;
         border-radius: 0.75rem;
@@ -184,7 +188,7 @@ h1, h2, h3, h4, h5, h6 {
         border-radius: 0.4rem;
         padding: 0.75rem 1rem;
         background-color: rgba(0, 0, 0, 0.15);
-        color: #ffffff !important;
+        color: var(--brand-white) !important;
         letter-spacing: 0.6px;
     }
 
@@ -196,14 +200,14 @@ h1, h2, h3, h4, h5, h6 {
     .navbar-nav .nav-link:focus {
         background-color: rgba(0, 0, 0, 0.28);
         transform: translateY(-1px);
-        color: #ffffff !important;
+        color: var(--brand-white) !important;
     }
 
     .navbar-nav .nav-link.active {
         background-color: rgba(0, 0, 0, 0.35);
-        border-left: 4px solid #ffffff;
+        border-left: 4px solid var(--brand-white);
         padding-left: calc(1rem - 4px);
-        color: #ffffff !important;
+        color: var(--brand-white) !important;
     }
 }
 

@@ -1,10 +1,10 @@
 {% extends 'layouts/base.twig' %}
 
-{% block title %}Institucional - CBMRN{% endblock %}
+{% block title %}Institucional - AORE/RN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/institutional.css">
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/institutional.css?v=20260306-2">
 {% endblock %}
 
 {% block content %}
@@ -44,12 +44,12 @@
             <div class="col-lg-5">
                 <div class="inst-spotlight-card">
                     <p class="text-uppercase small fw-semibold text-white-50 mb-2">{{ page.tagline }}</p>
-                    <h3 class="h4 text-white fw-bold mb-3">Portal vivo da instituição</h3>
-                    <p class="text-white-75 mb-4">Cada menu reúne dados oficiais revisados trimestralmente pelos setores responsáveis.</p>
+                    <h3 class="h4 text-white fw-bold mb-3">{{ page.spotlight.title }}</h3>
+                    <p class="text-white-75 mb-4">{{ page.spotlight.description }}</p>
                     <ul class="list-unstyled mb-0 text-white-75">
-                        <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle text-white"></i> Conteúdo alinhado ao Plano Operacional 2025.</li>
-                        <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle text-white"></i> Linguagem unificada com o site e redes sociais.</li>
-                        <li class="d-flex gap-2"><i class="bi bi-check-circle text-white"></i> Acesso rápido a links, manuais e formulários.</li>
+                        {% for item in page.spotlight.items %}
+                            <li class="d-flex gap-2 {{ not loop.last ? 'mb-2' : '' }}"><i class="bi bi-check-circle text-white"></i> {{ item }}</li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -64,7 +64,6 @@
             title: 'Escolha o conteúdo desejado',
             subtitle: 'As seções abaixo foram destacadas no menu do site e agora contam com páginas dedicadas.',
             align: 'center',
-            title_class: 'text-primary',
             extra_class: 'mb-5'
         } %}
         <div class="inst-card-grid">
@@ -90,6 +89,104 @@
     </div>
 </section>
 
+{% if page.featured_manual %}
+<section class="py-5 border-top">
+    <div class="container">
+        {% include 'site/components/section-header.twig' with {
+            kicker: 'Peça principal',
+            title: 'Manual de Identidade Visual',
+            subtitle: 'Documento-base para aplicação da marca institucional, paleta, timbres e cabeçalhos oficiais da AORE/RN.',
+            extra_class: 'mb-4'
+        } %}
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-5">
+                <article class="inst-card h-100">
+                    <div class="rounded-4 border overflow-hidden bg-white mb-3">
+                        <img src="{{ page.featured_manual.preview_image ?: (BASE_URL ~ 'assets/images/brand/aorern-manual-identidade-visual.svg') }}" alt="{{ page.featured_manual.title }}" class="img-fluid w-100 inst-doc-preview inst-doc-preview--manual">
+                    </div>
+                </article>
+            </div>
+            <div class="col-lg-7">
+                <article class="inst-card h-100">
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge rounded-pill bg-inst-soft">{{ page.featured_manual.category }}</span>
+                        <span class="badge rounded-pill bg-light text-dark border">{{ page.featured_manual.order_label }}</span>
+                    </div>
+                    <h3 class="h3 fw-bold">{{ page.featured_manual.title }}</h3>
+                    <p class="text-muted mb-4">{{ page.featured_manual.summary }}</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        {% include 'site/components/button.twig' with {
+                            href: page.featured_manual.url,
+                            label: 'Abrir manual visual',
+                            icon: 'bi-box-arrow-up-right',
+                            variant: 'inst',
+                            size: 'lg',
+                            attrs: {
+                                'target': '_blank',
+                                'rel': 'noopener'
+                            }
+                        } %}
+                        {% include 'site/components/button.twig' with {
+                            href: BASE_URL ~ 'institucional/identidade-visual',
+                            label: 'Ver identidade visual',
+                            icon: 'bi-palette2',
+                            variant: 'outline',
+                            size: 'lg'
+                        } %}
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if page.documents is defined and page.documents|length > 0 %}
+<section class="py-5 border-top">
+    <div class="container">
+        {% include 'site/components/section-header.twig' with {
+            kicker: 'Documentos Oficiais',
+            title: 'Acervo institucional publicado',
+            subtitle: 'Os documentos abaixo já estão vinculados ao novo módulo administrativo e podem ser expandidos pela diretoria.',
+            extra_class: 'mb-4'
+        } %}
+        <div class="inst-card-grid">
+            {% for documento in page.documents %}
+                <article class="inst-card">
+                    <div class="mb-3">
+                        {% if documento.preview_image %}
+                            <div class="rounded-4 border overflow-hidden bg-white">
+                                <img src="{{ documento.preview_image }}" alt="{{ documento.title }}" class="img-fluid w-100 inst-doc-preview">
+                            </div>
+                        {% else %}
+                            <div class="inst-card-icon">
+                                <i class="bi {{ documento.preview_icon }}"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <h3 class="h5 fw-bold">{{ documento.title }}</h3>
+                    <p class="text-muted mb-2">{{ documento.summary }}</p>
+                    <p class="small text-muted text-uppercase mb-3">{{ documento.category }}</p>
+                    {% include 'site/components/button.twig' with {
+                        href: documento.url,
+                        label: 'Abrir documento',
+                        icon: 'bi-box-arrow-up-right',
+                        icon_position: 'end',
+                        variant: 'link',
+                        size: 'md',
+                        button_class: 'text-decoration-none ps-0',
+                        attrs: {
+                            'target': '_blank',
+                            'rel': 'noopener'
+                        }
+                    } %}
+                </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
 <section class="py-5 bg-light">
     <div class="container">
         <div class="row g-4 align-items-stretch">
@@ -114,8 +211,7 @@
             <div class="col-lg-5">
                 {% include 'site/components/section-header.twig' with {
                     title: 'Marcos institucionais recentes',
-                    subtitle: 'Os marcos abaixo ajudam a contar a evolução do 2º SGB/2º GBM e reforçam por que o conteúdo institucional precisa estar sempre atualizado.',
-                    title_class: 'text-primary',
+                    subtitle: 'Os marcos abaixo ajudam a contar a evolução da AORE/RN e reforçam por que o conteúdo institucional precisa estar sempre atualizado.',
                     extra_class: 'mb-4'
                 } %}
                 {% include 'site/components/button.twig' with {
@@ -131,7 +227,11 @@
                     items: page.milestones,
                     label_field: 'year',
                     title_field: 'title',
-                    description_field: 'description'
+                    description_field: 'description',
+                    timeline_class: 'inst-milestones-timeline',
+                    item_class: 'inst-milestones-item',
+                    title_class: 'h6 fw-bold mb-1 text-inst-primary',
+                    description_class: 'mb-0 text-muted'
                 } %}
             </div>
         </div>

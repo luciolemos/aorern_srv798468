@@ -1,4 +1,4 @@
-# 📋 Sistema de Cadastro de Bombeiros - CBMRN
+# 📋 Sistema de Cadastro de Oficiais da Reserva - AORE/RN
 
 ## 🎯 Visão Geral
 

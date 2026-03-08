@@ -1,6 +1,6 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}{{ post.titulo }} - CBMRN{% endblock %}
+{% block title %}{{ post.titulo }} - AORE/RN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
@@ -14,7 +14,7 @@
             <div class="col-12 col-xl-10">
                 <article>
                     <header class="mb-4">
-                        <h1 class="fw-bold mb-3" style="color: #df6301;">{{ post.titulo }}</h1>
+                        <h1 class="fw-bold mb-3" style="color: #556b2f;">{{ post.titulo }}</h1>
                         <div class="text-muted mb-3">
                             <small>
                                 <i class="bi bi-calendar-event"></i> {{ post.criado_em|date('d/m/Y') }}
@@ -23,7 +23,7 @@
                                 {% endif %}
                                 <span class="mx-3">•</span>
                                 {% if post.categoria_nome %}
-                                   {% set categoriaCor = post.categoria_cor|default('#df6301') %}
+                                   {% set categoriaCor = post.categoria_cor|default('#556b2f') %}
                                      
                                          <span class="blog-category-badge blog-category-badge-card" style="background-color: {{ categoriaCor }}; border-color: {{ categoriaCor }}; color: #fff;">
                                            <i class="bi bi-tag me-1"></i>{{ post.categoria_nome }}
@@ -115,7 +115,7 @@
                     </h2>
                     <div class="alert alert-light border shadow-sm mb-0" role="status">
                         Os comentários estão temporariamente indisponíveis enquanto o repositório
-                        <strong>luciolemos/cbmrn_srv798468</strong> não tiver Discussions habilitado e configurado para o Giscus.
+                        <strong>luciolemos/aorern_srv798468</strong> não tiver Discussions habilitado e configurado para o Giscus.
                     </div>
                 </section>
             </div>

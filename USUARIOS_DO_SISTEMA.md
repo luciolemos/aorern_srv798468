@@ -1,4 +1,4 @@
-# 👤 Usuários do Sistema CBMRN - Explicação Completa
+# 👤 Usuários do Sistema AORE/RN - Explicação Completa
 
 ## 🎯 Resumo Executivo
 
@@ -159,7 +159,7 @@ SELECT * FROM users;
 
 Deveria conter: **Credenciais de acesso ao sistema**
 - Username (ex: "paulobombeiro")
-- Email (ex: "paulo@cbmrn.gov.br")
+- Email (ex: "paulo@aorern.org.br")
 - Senha criptografada
 - Papel/permissão (admin, gerente, operador)
 - Data do último login

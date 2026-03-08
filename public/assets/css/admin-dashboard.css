@@ -1,8 +1,8 @@
 /* 🎨 DASHBOARD ADMIN - CORES INSTITUCIONAIS CBMRN */
 :root {
-    --cbmrn-orange: #df6301;
-    --cbmrn-orange-dark: #b54f01;
-    --cbmrn-orange-light: #ff8833;
+    --admin-brand-primary: #556b2f;
+    --admin-brand-primary-dark: #0082c8;
+    --admin-brand-primary-light: #8b1e2d;
 }
 
 /* === CARDS COM GRADIENTES INSTITUCIONAIS === */
@@ -27,8 +27,8 @@
 }
 
 .bg-gradient-primary-light {
-    background: linear-gradient(135deg, rgba(223, 99, 1, 0.08) 0%, rgba(223, 99, 1, 0.02) 100%) !important;
-    border: 1px solid rgba(223, 99, 1, 0.15) !important;
+    background: linear-gradient(135deg, rgba(85, 107, 47, 0.08) 0%, rgba(85, 107, 47, 0.02) 100%) !important;
+    border: 1px solid rgba(85, 107, 47, 0.15) !important;
 }
 
 .bg-gradient-secondary-light {
@@ -58,9 +58,9 @@
 }
 
 .icon-box-primary {
-    background: linear-gradient(135deg, var(--cbmrn-orange) 0%, var(--cbmrn-orange-dark) 100%) !important;
+    background: linear-gradient(135deg, var(--admin-brand-primary) 0%, var(--admin-brand-primary-dark) 100%) !important;
     color: #fff !important;
-    box-shadow: 0 8px 20px rgba(223, 99, 1, 0.25);
+    box-shadow: 0 8px 20px rgba(85, 107, 47, 0.25);
 }
 
 .card:hover .icon-box {
@@ -85,7 +85,7 @@
 
 .hover-effect:hover {
     transform: translateY(-6px);
-    box-shadow: 0 12px 24px rgba(223, 99, 1, 0.15) !important;
+    box-shadow: 0 12px 24px rgba(85, 107, 47, 0.15) !important;
 }
 
 .card.border-0.shadow-sm {
@@ -94,7 +94,7 @@
 
 .card.border-0.shadow-sm:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(223, 99, 1, 0.12) !important;
+    box-shadow: 0 8px 20px rgba(85, 107, 47, 0.12) !important;
 }
 
 /* === BADGES INSTITUCIONAIS === */
@@ -106,9 +106,9 @@
 }
 
 .badge-soft-primary {
-    color: var(--cbmrn-orange-dark);
-    background-color: rgba(223, 99, 1, 0.15);
-    border: 1px solid rgba(223, 99, 1, 0.2);
+    color: var(--admin-brand-primary-dark);
+    background-color: rgba(85, 107, 47, 0.15);
+    border: 1px solid rgba(85, 107, 47, 0.2);
 }
 
 .badge-soft-success {
@@ -131,7 +131,7 @@
 
 /* === BACKGROUNDS LIGHT === */
 .bg-primary-light {
-    background-color: rgba(223, 99, 1, 0.08) !important;
+    background-color: rgba(85, 107, 47, 0.08) !important;
 }
 
 .bg-success-light {
@@ -203,7 +203,7 @@
 .quick-action-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 20px 35px rgba(31, 38, 56, 0.15);
-    border-color: rgba(223, 99, 1, 0.35);
+    border-color: rgba(85, 107, 47, 0.35);
 }
 
 .quick-action-card .icon-box {
@@ -213,7 +213,7 @@
 
 .quick-action-link {
     font-weight: 600;
-    color: var(--cbmrn-orange);
+    color: var(--admin-brand-primary);
     display: inline-flex;
     align-items: center;
     gap: 0.15rem;
@@ -225,8 +225,8 @@
 }
 
 .quick-action-primary {
-    background: linear-gradient(135deg, rgba(223, 99, 1, 0.12), rgba(223, 99, 1, 0.02));
-    border-color: rgba(223, 99, 1, 0.2);
+    background: linear-gradient(135deg, rgba(85, 107, 47, 0.12), rgba(85, 107, 47, 0.02));
+    border-color: rgba(85, 107, 47, 0.2);
 }
 
 .quick-action-success {
@@ -250,7 +250,7 @@
 }
 
 .list-group-item:hover {
-    background-color: rgba(223, 99, 1, 0.03);
+    background-color: rgba(85, 107, 47, 0.03);
 }
 
 /* === STRETCHED LINK === */

@@ -211,7 +211,7 @@ Melhoria: 87% mais rápido
 ### Navbar
 - **Altura:** 56px (consistente desktop/mobile/tablet)
 - **Logo:** 40px desktop → 46px mobile (responsivo)
-- **Cor Site:** #df6301 (laranja CBMRN)
+- **Cor Site:** #556b2f (verde institucional AORE/RN)
 - **Cor Admin:** #212529 (dark)
 - **Texto:** #ffffff (white)
 - **Breakpoints:** 576px, 768px, 1024px
@@ -234,7 +234,7 @@ Melhoria: 87% mais rápido
 ## 🗂️ Estrutura Final
 
 ```
-/var/www/cbmrn/
+/var/www/aorern/
 │
 ├── 📂 app/Views/
 │   ├── 📂 components/                    ← NOVO: Centralizados

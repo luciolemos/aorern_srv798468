@@ -1,0 +1,134 @@
+.associado-hero__logo {
+    max-width: 156px;
+    filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.22));
+}
+
+.associado-hero-actions .btn {
+    min-width: 200px;
+}
+
+.associado-page {
+    background: linear-gradient(180deg, rgba(245, 248, 243, 0.78), rgba(255, 255, 255, 0.92));
+}
+
+.associado-sidebar {
+    align-content: start;
+}
+
+.associado-account-avatar-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.associado-account-avatar {
+    width: 132px;
+    height: 132px;
+    object-fit: cover;
+    border-radius: 0.65rem;
+    border: 2px solid rgba(85, 107, 47, 0.26);
+    background: #fff;
+}
+
+.associado-status {
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.associado-status--provisorio {
+    background: rgba(255, 193, 7, 0.18);
+    color: #8a5a00;
+}
+
+.associado-status--efetivo {
+    background: rgba(25, 135, 84, 0.16);
+    color: #146c43;
+}
+
+.associado-status--honorario {
+    background: rgba(111, 66, 193, 0.16);
+    color: #5a32a3;
+}
+
+.associado-account-meta {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.associado-quick-links .btn {
+    justify-content: flex-start;
+}
+
+.associado-dossier-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(250, 252, 248, 0.95));
+}
+
+.associado-dossier-card__header {
+    padding-bottom: 0.85rem;
+    border-bottom: 1px dashed rgba(63, 79, 34, 0.26);
+}
+
+.associado-dossier-section {
+    padding: 0.95rem 1rem;
+    border: 1px solid rgba(63, 79, 34, 0.14);
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.associado-dossier-section__title {
+    margin: 0 0 0.9rem;
+    font-size: 0.84rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgba(32, 48, 31, 0.9);
+}
+
+.associado-dossier-card .list-group-item {
+    background: transparent;
+}
+
+.associado-security-list > div {
+    line-height: 1.45;
+}
+
+.associado-mobile-footer-action {
+    display: none;
+}
+
+@media (max-width: 991.98px) {
+    .associado-logout-inline {
+        display: none !important;
+    }
+
+    .associado-quick-links-card {
+        display: none !important;
+    }
+
+    .associado-quick-links-inline {
+        display: none !important;
+    }
+
+    .associado-mobile-footer-action {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .associado-mobile-footer-action .btn {
+        width: 100%;
+    }
+}
+
+@media (min-width: 992px) {
+    .associado-sidebar {
+        position: sticky;
+        top: calc(var(--site-navbar-height-desktop, 80px) + 1rem);
+    }
+
+    .associado-account-avatar-wrap {
+        justify-content: flex-start;
+    }
+}

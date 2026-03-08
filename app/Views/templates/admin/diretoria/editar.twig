@@ -1,0 +1,79 @@
+{% extends 'admin/layouts/base_admin.twig' %}
+{% block title %}Editar Composição de Diretoria{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+    <div class="mb-4">
+        <h2 class="fw-bold" style="color: var(--admin-primary);"><i class="bi bi-person-workspace me-2"></i>Editar composição de diretoria</h2>
+        <p class="text-muted mb-0">Atualize o vínculo institucional, o associado e o mandato relacionados.</p>
+        <hr class="my-4">
+    </div>
+
+    <form method="post" action="{{ BASE_URL }}admin/diretoria/atualizar/{{ membro.id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
+        <div class="row g-3">
+            <div class="col-lg-4">
+                <label class="form-label fw-bold">Função base</label>
+                <select name="funcao_id" class="form-select" required>
+                    <option value="">Selecione uma função</option>
+                    {% for funcao in funcoes %}
+                        <option value="{{ funcao.id }}" {% if membro.funcao_id == funcao.id %}selected{% endif %}>{{ funcao.nome|e }}</option>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">O cargo institucional será atualizado automaticamente a partir da função selecionada.</small>
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Grupo</label>
+                <input type="text" name="grupo" class="form-control" value="{{ membro.grupo|default('')|e('html_attr') }}">
+            </div>
+            <div class="col-lg-2">
+                <label class="form-label fw-bold">Ordem</label>
+                <input type="number" name="ordem" class="form-control" min="0" value="{{ membro.ordem }}">
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Mandato</label>
+                <select name="term_id" class="form-select">
+                    <option value="">Sem vínculo</option>
+                    {% for term in terms %}
+                        <option value="{{ term.id }}" {% if membro.term_id == term.id %}selected{% endif %}>{{ term.nome|e }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-6">
+                <label class="form-label fw-bold">Associado</label>
+                <select name="pessoal_id" class="form-select">
+                    <option value="">Não vincular agora</option>
+                    {% for associado in associados %}
+                        <option value="{{ associado.id }}" {% if membro.pessoal_id == associado.id %}selected{% endif %}>{{ associado.nome|e }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-3">
+                <label class="form-label fw-bold">Situação</label>
+                <select name="is_active" class="form-select">
+                    <option value="1" {% if membro.is_active %}selected{% endif %}>Ativo</option>
+                    <option value="0" {% if not membro.is_active %}selected{% endif %}>Inativo</option>
+                </select>
+            </div>
+            <div class="col-lg-5">
+                <label class="form-label fw-bold">Perfil administrativo derivado da função</label>
+                <select name="access_role" class="form-select">
+                    <option value="" {% if not membro.access_role %}selected{% endif %}>Sem perfil administrativo</option>
+                    <option value="operador" {% if membro.access_role == 'operador' %}selected{% endif %}>Equipe de Apoio</option>
+                    <option value="gerente" {% if membro.access_role == 'gerente' %}selected{% endif %}>Diretoria / Secretaria</option>
+                </select>
+                <small class="text-muted">Quando ativo, o perfil administrativo do associado passa a ser derivado deste vínculo institucional.</small>
+            </div>
+            <div class="col-12">
+                <label class="form-label fw-bold">Observações</label>
+                <textarea name="observacoes" rows="4" class="form-control">{{ membro.observacoes|default('')|e }}</textarea>
+            </div>
+        </div>
+        <div class="border-top my-4"></div>
+        <div class="d-flex flex-column flex-md-row gap-2 justify-content-md-end">
+            <a href="{{ BASE_URL }}admin/diretoria" class="btn btn-outline-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-success">Atualizar registro</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

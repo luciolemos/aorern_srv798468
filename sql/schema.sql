@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS funcoes;
 DROP TABLE IF EXISTS categorias_equipamentos;
 DROP TABLE IF EXISTS categorias_posts;
 DROP TABLE IF EXISTS municipios_ibge;
+DROP TABLE IF EXISTS membership_applications;
 DROP TABLE IF EXISTS users;
 
 -- Tabela: users
@@ -135,19 +136,70 @@ CREATE TABLE pessoal (
     nascimento DATE NULL,
     telefone VARCHAR(20) NULL,
     foto VARCHAR(255) NULL,
+    user_id INT UNSIGNED NULL,
     funcao_id INT UNSIGNED NOT NULL,
     obra_id INT UNSIGNED NULL,
     data_admissao DATE NOT NULL,
     status ENUM('Ativo','Afastado','Férias','Demitido') DEFAULT 'Ativo',
+    status_associativo ENUM('provisorio','efetivo','honorario','fundador','benemerito','veterano','aluno') NOT NULL DEFAULT 'provisorio',
     jornada VARCHAR(20) NULL,
     observacoes TEXT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_pessoal_staff (staff_id),
     UNIQUE KEY uq_pessoal_cpf (cpf),
+    KEY idx_pessoal_user (user_id),
     KEY idx_pessoal_funcao (funcao_id),
     KEY idx_pessoal_obra (obra_id),
+    CONSTRAINT fk_pessoal_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
     CONSTRAINT fk_pessoal_funcao FOREIGN KEY (funcao_id) REFERENCES funcoes(id),
     CONSTRAINT fk_pessoal_obra FOREIGN KEY (obra_id) REFERENCES obras(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabela: membership_applications
+CREATE TABLE membership_applications (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome_completo VARCHAR(160) NOT NULL,
+    nome_mae VARCHAR(160) NULL,
+    nome_pai VARCHAR(160) NULL,
+    username_desejado VARCHAR(60) NOT NULL,
+    email VARCHAR(120) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    cpf VARCHAR(14) NOT NULL,
+    cam VARCHAR(40) NULL,
+    rg VARCHAR(40) NULL,
+    data_nascimento DATE NULL,
+    telefone VARCHAR(20) NULL,
+    cidade VARCHAR(120) NULL,
+    uf CHAR(2) NULL,
+    ano_npor VARCHAR(10) NOT NULL,
+    posto_graduacao VARCHAR(60) NULL,
+    numero_militar VARCHAR(30) NULL,
+    nome_guerra VARCHAR(60) NULL,
+    turma_npor VARCHAR(80) NULL,
+    arma_quadro VARCHAR(120) NULL,
+    situacao_militar VARCHAR(120) NULL,
+    avatar VARCHAR(255) NULL,
+    documentos_json LONGTEXT NULL,
+    observacoes TEXT NULL,
+    aceite_termo TINYINT(1) NOT NULL DEFAULT 1,
+    status ENUM('pendente','complementacao','aprovada','rejeitada') NOT NULL DEFAULT 'pendente',
+    status_associativo ENUM('provisorio','efetivo','honorario','fundador','benemerito','veterano','aluno') NOT NULL DEFAULT 'provisorio',
+    user_id INT UNSIGNED NULL,
+    pessoal_id INT UNSIGNED NULL,
+    observacoes_admin TEXT NULL,
+    aprovado_em DATETIME NULL,
+    rejeitado_em DATETIME NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_membership_applications_status (status),
+    KEY idx_membership_applications_email (email),
+    KEY idx_membership_applications_cpf (cpf),
+    KEY idx_membership_applications_uf (uf),
+    KEY idx_membership_applications_username (username_desejado),
+    KEY idx_membership_applications_user (user_id),
+    KEY idx_membership_applications_pessoal (pessoal_id),
+    CONSTRAINT fk_membership_applications_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+    CONSTRAINT fk_membership_applications_pessoal FOREIGN KEY (pessoal_id) REFERENCES pessoal(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Tabela: posts
@@ -385,6 +437,107 @@ CREATE TABLE gallery_images (
     PRIMARY KEY (id),
     KEY idx_gallery_category (category_id),
     CONSTRAINT fk_gallery_images_category FOREIGN KEY (category_id) REFERENCES gallery_categories (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabela: membership_applications
+CREATE TABLE membership_applications (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome_completo VARCHAR(160) NOT NULL,
+    nome_mae VARCHAR(160) NULL,
+    nome_pai VARCHAR(160) NULL,
+    username_desejado VARCHAR(60) NOT NULL,
+    email VARCHAR(120) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    cpf VARCHAR(14) NOT NULL,
+    cam VARCHAR(40) NULL,
+    rg VARCHAR(40) NULL,
+    data_nascimento DATE NULL,
+    telefone VARCHAR(20) NULL,
+    cidade VARCHAR(120) NULL,
+    uf CHAR(2) NULL,
+    ano_npor VARCHAR(10) NOT NULL,
+    posto_graduacao VARCHAR(60) NULL,
+    numero_militar VARCHAR(30) NULL,
+    nome_guerra VARCHAR(60) NULL,
+    turma_npor VARCHAR(80) NULL,
+    arma_quadro VARCHAR(120) NULL,
+    situacao_militar VARCHAR(120) NULL,
+    avatar VARCHAR(255) NULL,
+    observacoes TEXT NULL,
+    aceite_termo TINYINT(1) NOT NULL DEFAULT 1,
+    status ENUM('pendente','aprovada','rejeitada') NOT NULL DEFAULT 'pendente',
+    user_id INT UNSIGNED NULL,
+    pessoal_id INT UNSIGNED NULL,
+    observacoes_admin TEXT NULL,
+    aprovado_em DATETIME NULL,
+    rejeitado_em DATETIME NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_membership_applications_status (status),
+    KEY idx_membership_applications_email (email),
+    KEY idx_membership_applications_cpf (cpf),
+    KEY idx_membership_applications_uf (uf),
+    KEY idx_membership_applications_username (username_desejado),
+    KEY idx_membership_applications_user (user_id),
+    KEY idx_membership_applications_pessoal (pessoal_id),
+    CONSTRAINT fk_membership_applications_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+    CONSTRAINT fk_membership_applications_pessoal FOREIGN KEY (pessoal_id) REFERENCES pessoal(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabela: institutional_documents
+CREATE TABLE institutional_documents (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(180) NOT NULL,
+    slug VARCHAR(190) NOT NULL,
+    tipo ENUM('estatuto','ata','oficio','formulario','politica','termo','marca','outro') NOT NULL DEFAULT 'outro',
+    resumo TEXT NULL,
+    arquivo_url VARCHAR(512) NULL,
+    link_externo VARCHAR(512) NULL,
+    status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
+    publicado_em DATETIME NULL,
+    ordem INT NOT NULL DEFAULT 0,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_institutional_documents_slug (slug),
+    KEY idx_institutional_documents_status (status),
+    KEY idx_institutional_documents_tipo (tipo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabela: board_terms
+CREATE TABLE board_terms (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(160) NOT NULL,
+    status ENUM('planned','active','archived') NOT NULL DEFAULT 'planned',
+    data_inicio DATE NOT NULL,
+    data_fim DATE NULL,
+    observacoes TEXT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_board_terms_status (status),
+    KEY idx_board_terms_inicio (data_inicio)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabela: board_memberships
+CREATE TABLE board_memberships (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    term_id INT UNSIGNED NULL,
+    pessoal_id INT UNSIGNED NULL,
+                funcao_id INT UNSIGNED NULL,
+                cargo VARCHAR(160) NOT NULL,
+                grupo VARCHAR(120) NULL,
+                ordem INT NOT NULL DEFAULT 0,
+                is_active TINYINT(1) NOT NULL DEFAULT 1,
+                access_role ENUM('operador','gerente') NULL,
+                observacoes TEXT NULL,
+                criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_board_memberships_term (term_id),
+    KEY idx_board_memberships_pessoal (pessoal_id),
+    KEY idx_board_memberships_funcao (funcao_id),
+    KEY idx_board_memberships_active (is_active),
+    CONSTRAINT fk_board_memberships_term FOREIGN KEY (term_id) REFERENCES board_terms(id) ON DELETE SET NULL,
+    CONSTRAINT fk_board_memberships_pessoal FOREIGN KEY (pessoal_id) REFERENCES pessoal(id) ON DELETE SET NULL,
+    CONSTRAINT fk_board_memberships_funcao FOREIGN KEY (funcao_id) REFERENCES funcoes(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;

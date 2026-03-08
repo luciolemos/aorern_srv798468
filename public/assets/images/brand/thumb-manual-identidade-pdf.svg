@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+  <rect width="960" height="600" rx="32" fill="#1c3048"/>
+  <rect x="44" y="44" width="872" height="512" rx="22" fill="none" stroke="#d9b54a" stroke-width="4"/>
+  <rect x="612" y="112" width="210" height="280" rx="18" fill="#ffffff"/>
+  <rect x="612" y="112" width="210" height="54" rx="18" fill="#556b2f"/>
+  <line x1="638" y1="206" x2="796" y2="206" stroke="#d7dde5" stroke-width="2"/>
+  <line x1="638" y1="236" x2="796" y2="236" stroke="#d7dde5" stroke-width="2"/>
+  <line x1="638" y1="266" x2="796" y2="266" stroke="#d7dde5" stroke-width="2"/>
+  <line x1="638" y1="296" x2="796" y2="296" stroke="#d7dde5" stroke-width="2"/>
+  <text x="88" y="158" fill="#e7d148" font-size="20" font-family="Arial" font-weight="700" letter-spacing="2">AORERN</text>
+  <text x="88" y="222" fill="#ffffff" font-size="46" font-family="Georgia" font-weight="700">Manual de Identidade Visual</text>
+  <text x="88" y="272" fill="#dbe6f0" font-size="22" font-family="Arial">Versao PDF multipagina para leitura, envio e impressao institucional.</text>
+  <text x="88" y="360" fill="#ffffff" font-size="22" font-family="Arial">• Capa institucional</text>
+  <text x="88" y="396" fill="#ffffff" font-size="22" font-family="Arial">• Uso do selo e area de respiro</text>
+  <text x="88" y="432" fill="#ffffff" font-size="22" font-family="Arial">• Paleta e tipografia</text>
+  <text x="88" y="468" fill="#ffffff" font-size="22" font-family="Arial">• Cabecalhos e timbres oficiais</text>
+</svg>

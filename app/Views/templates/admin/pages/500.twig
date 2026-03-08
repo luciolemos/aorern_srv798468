@@ -1,6 +1,6 @@
 {% extends "admin/layouts/error_admin.twig" %}
 
-{% block title %}Erro interno - Admin CBMRN{% endblock %}
+{% block title %}Erro interno - Admin AORERN{% endblock %}
 
 {% block content %}
     <section class="admin-error-shell">
@@ -24,7 +24,7 @@
                                 </div>
                                 <div class="admin-error-card">
                                     <i class="bi bi-telephone-fill"></i>
-                                    <span>Canal emergencial: {{ institutional_contact.emergency.display }}</span>
+                                    <span>Contato institucional: {{ institutional_contact.phone.display }}</span>
                                 </div>
                             </div>
                             <div class="admin-error-actions">
@@ -37,8 +37,8 @@
                             </div>
                         </div>
                         <div class="col-lg-5 text-center">
-                            <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="Brasao institucional do CBMRN" class="admin-error-badge">
-                            <p class="admin-error-note">Admin CBMRN · Continuidade operacional e controle interno</p>
+                            <img src="{{ BASE_URL }}assets/images/aore1.png" alt="Brasão institucional da AORERN" class="admin-error-badge">
+                            <p class="admin-error-note">Admin AORERN · Continuidade administrativa e controle interno</p>
                         </div>
                     </div>
                 </div>

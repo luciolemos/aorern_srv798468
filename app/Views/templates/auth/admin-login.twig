@@ -1,28 +1,28 @@
 {% extends "layouts/base.twig" %}
 
-{% block title %}Login Admin - CBMRN{% endblock %}
+{% block title %}Login Admin - AORE/RN{% endblock %}
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/auth.css">
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/auth.css?v=20260304-authlight1">
 {% endblock %}
 
 {% block content %}
-    <section class="auth-hero login-hero site-hero">
+    <section class="auth-hero login-hero site-hero hero-form-layout">
         <div class="site-hero-pattern d-none d-lg-block"></div>
         <div class="container position-relative">
             <div class="row align-items-center g-5">
                 <div class="col-lg-6 hero-content d-none d-lg-block">
   {#                   <div class="auth-hero-logo mb-4">
-                        <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="img-fluid">
+                        <img src="{{ BASE_URL }}assets/images/aore1.png" alt="AORE/RN" class="img-fluid">
                     </div> #}
-                    <p class="section-kicker text-white-50 mb-2">Painel de Administração do 2º Subgrupamento de Bombeiros Militar</p>
+                    <p class="section-kicker text-white-50 mb-2">Painel administrativo da plataforma AORE/RN</p>
                     <h1 class="section-title text-white mb-3">Requer privilégios administrativos</h1>
-                    <p class="section-lead text-white-75 mb-4">Esta área integra o mesmo design do portal institucional, mas continua restrita a usuários autorizados. Utilize seu usuário corporativo e senha para acessar indicadores, conteúdos internos e gestão do site.</p>
+                    <p class="section-lead text-white-75 mb-4">Esta área concentra indicadores, conteúdo interno e rotinas de gestão da AORE/RN. O acesso permanece restrito a usuários autorizados com credenciais válidas.</p>
                     <ul class="auth-benefits icon-list text-white-75 mb-4">
                         <li class="icon-list-item">
                             <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-shield-lock"></i></span>
-                            <span>Conexões monitoradas e protegidas pelo CBMRN</span>
+                            <span>Acesso monitorado e protegido pela equipe AORE/RN</span>
                         </li>
                         <li class="icon-list-item">
                             <span class="icon-circle icon-soft" aria-hidden="true"><i class="bi bi-activity"></i></span>
@@ -42,24 +42,27 @@
                             size: 'lg'
                         } %}
                         {% include 'site/components/button.twig' with {
-                            href: institutional_contact.emergency.tel,
-                            label: 'Canal emergencial',
-                            icon: 'bi-telephone',
+                            href: whatsapp.links.general,
+                            label: 'WhatsApp',
+                            icon: 'bi-whatsapp',
                             variant: 'solid',
                             size: 'lg',
-                            button_class: 'fw-bold text-dark'
+                            button_class: 'fw-bold',
+                            target: '_blank'
                         } %}
                     </div>
                 </div>
                 <div class="col-lg-5 ms-lg-auto hero-panel-col">
-                    <div class="auth-card hero-panel hero-panel--dark">
+                    <div class="auth-card auth-card--light hero-panel hero-panel--light">
 {#                         <div class="text-center mb-4">
                             <p class="hero-panel-badge text-white-75"><i class="bi bi-lock-fill me-2"></i>Área restrita</p>
                             <h2 class="h4 fw-bold text-white mb-1">Acesse o painel</h2>
                             <p class="text-white-50 small mb-0">Somente credenciais autorizadas.</p>
                         </div> #}
-                        <div class="auth-hero-logo mb-4">
-                        <img src="{{ BASE_URL }}assets/images/brasao_cbmrn_oficial.png" alt="CBMRN" class="img-fluid">
+                        <div class="d-flex justify-content-start mb-3">
+                            <p class="hero-panel-badge mb-0">
+                                <i class="bi bi-box-arrow-in-right me-2 text-primary"></i>Formulário de login
+                            </p>
                         </div>
 
                         {% if success %}
@@ -82,7 +85,7 @@
                             </div>
                         {% endif %}
 
-                        <form method="POST" action="{{ BASE_URL }}login/authenticate-admin" class="auth-form">
+                        <form method="POST" action="{{ BASE_URL }}login/authenticate-admin" class="auth-form auth-form--light">
                             <div class="mb-3">
                                 <label for="username" class="form-label text-white fw-semibold">Usuário</label>
                                 <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="seu.usuario" required autofocus>
@@ -107,7 +110,7 @@
                             Precisa de suporte? <a href="{{ BASE_URL }}contact" class="text-white fw-semibold text-decoration-none">Fale com o comando</a>
                         </p> #}
                         <p class="text-center text-white-50 small mt-3 mb-0">
-                            Não possui acesso? <a href="{{ BASE_URL }}register" class="text-white fw-semibold text-decoration-none">Solicitar registro</a>
+                            Acesso institucional restrito a usuários autorizados da AORE/RN. Para suporte, <a href="{{ BASE_URL }}contact" class="text-white fw-semibold text-decoration-none">entre em contato com a equipe responsável</a>.
                         </p>
                     </div>
                 </div>

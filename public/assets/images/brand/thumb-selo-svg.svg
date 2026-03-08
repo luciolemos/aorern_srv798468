@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+  <rect width="960" height="600" rx="32" fill="#f7f8f4"/>
+  <rect x="26" y="26" width="908" height="548" rx="26" fill="#ffffff" stroke="#d8dece"/>
+  <circle cx="180" cy="300" r="104" fill="none" stroke="#d9b54a" stroke-width="10"/>
+  <circle cx="180" cy="300" r="86" fill="#19324f"/>
+  <circle cx="180" cy="300" r="62" fill="#ffffff"/>
+  <text x="180" y="288" text-anchor="middle" fill="#19324f" font-size="18" font-family="Arial" font-weight="700">AORERN</text>
+  <text x="180" y="318" text-anchor="middle" fill="#556b2f" font-size="11" font-family="Arial" letter-spacing="1">SVG OFICIAL</text>
+  <text x="320" y="228" fill="#10253f" font-size="36" font-family="Georgia" font-weight="700">Selo institucional</text>
+  <text x="320" y="272" fill="#556b2f" font-size="22" font-family="Arial" font-weight="700">Versao vetorial principal</text>
+  <text x="320" y="332" fill="#46556b" font-size="20" font-family="Arial">Uso recomendado em ambiente web, editorial</text>
+  <text x="320" y="362" fill="#46556b" font-size="20" font-family="Arial">e aplicacoes institucionais com escala flexivel.</text>
+</svg>

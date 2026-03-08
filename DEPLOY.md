@@ -1,120 +1,41 @@
-# 🚀 Guia de Deploy - Componentes Reutilizáveis
+# Deploy (AORE/RN)
 
-## ✅ Pré-Requisitos
+Este guia está alinhado com a stack atual (Twig + migrations + `.env`).
+Para operação contínua, use junto com [`RUNBOOK.md`](/var/www/aorern/RUNBOOK.md).
 
-- [ ] Todos os arquivos foram validados (sintaxe PHP)
-- [ ] Testes manuais foram executados (site + admin)
-- [ ] Documentação foi lida
-- [ ] Checklist de validação foi seguido
+## 1) Pré-deploy
 
-## 📋 Checklist de Deploy
+1. Confirmar branch/release.
+2. Backup:
+   - Banco de dados.
+   - Diretório `public/uploads/` (arquivos enviados).
+3. Verificar `.env` do servidor de destino.
 
-### 1. Backup
-```bash
-# Fazer backup antes de deploy
-cp -r /var/www/cbmrn /var/www/cbmrn.backup.$(date +%Y%m%d)
-```
-
-### 2. Validação Final
-```bash
-# Validar sintaxe de todos os componentes
-for file in app/Views/components/*.php; do
-  php -l "$file" || echo "ERROR: $file"
-done
-
-# Validar arquivos principais
-php -l public/index.php || echo "ERROR: public/index.php"
-php -l app/Views/dash.php || echo "ERROR: app/Views/dash.php"
-```
-
-### 3. Permissões
-```bash
-# Verificar permissões
-chmod 755 app/Views/components/
-chmod 644 app/Views/components/*.php
-chmod 644 public/assets/css/navbar-universal.css
-```
-
-### 4. Cache
-```bash
-# Limpar cache de OPcache (se ativado)
-# Opção 1: Reiniciar PHP-FPM
-sudo systemctl restart php-fpm
-
-# Opção 2: Executar script de limpeza
-php -r "opcache_reset();" 2>/dev/null
-```
-
-### 5. Testes
-```bash
-# Testar endpoints principais
-curl -I http://cbmrn.local/home
-curl -I http://cbmrn.local/admin/dashboard
-curl -I http://cbmrn.local/blog
-```
-
-### 6. Monitoramento
-- [ ] Verificar logs de erro: `tail -f /var/log/apache2/error.log`
-- [ ] Verificar logs de PHP: `tail -f /var/log/php-fpm.log`
-- [ ] Monitorar performance: `top`
-
-## 📊 Rollback Plan
-
-Se algo der errado:
+## 2) Publicação
 
 ```bash
-# Reverter para backup
-rm -rf /var/www/cbmrn
-cp -r /var/www/cbmrn.backup.YYYYMMDD /var/www/cbmrn
-
-# Reiniciar serviços
-sudo systemctl restart apache2 php-fpm
-
-# Limpar cache
-php -r "opcache_reset();"
+git pull
+composer install --no-dev --optimize-autoloader
+php migrate migrate
 ```
 
-## 📈 Monitoramento Pós-Deploy
+## 3) Pós-deploy imediato
 
-### 1ª Hora
-- [ ] Verificar site público em desktop
-- [ ] Verificar site público em mobile
-- [ ] Verificar admin dashboard em desktop
-- [ ] Verificar admin dashboard em mobile
-- [ ] Testar logout (flash message)
-- [ ] Testar CSRF tokens
+```bash
+find app -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+./vendor/bin/phpunit
+bash scripts/smoke_membership_status_flow.sh https://SEU_DOMINIO/aorern
+```
 
-### 24 Horas
-- [ ] Verificar logs de erro
-- [ ] Verificar performance
-- [ ] Testar todos os menus
-- [ ] Testar responsividade
+## 4) Serviços e cache
 
-### Semanal
-- [ ] Análise de performance
-- [ ] Revisão de logs
-- [ ] Feedback de usuários
+- Reiniciar PHP-FPM (ou processo PHP equivalente) para recarregar OPcache.
+- Validar permissões de escrita em `public/uploads/` e `logs/`.
 
-## 🎯 Checklist Final
+## 5) Rollback
 
-- [ ] Componentes sincronizados (navbar, sidebar, footer)
-- [ ] CSS centralizado funcionando
-- [ ] Todas as páginas renderizando corretamente
-- [ ] Mobile responsivo
-- [ ] CSRF validação ativa
-- [ ] Flash messages funcionando
-- [ ] Sem erros no console do navegador
-- [ ] Sem erros nos logs de PHP
+1. Restaurar dump do banco.
+2. Restaurar release anterior.
+3. Reiniciar serviços PHP/web.
+4. Reexecutar validação pós-deploy.
 
-## 📞 Contato em Caso de Problema
-
-1. Consulte `VALIDATION_CHECKLIST.md`
-2. Verifique logs
-3. Revise `DIAGRAMA_ARQUITETURA.md`
-4. Consulte documentação
-
----
-
-**Status:** Pronto para deploy  
-**Data:** 2024  
-**Responsável:** DevOps Team
