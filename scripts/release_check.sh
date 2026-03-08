@@ -101,18 +101,15 @@ echo "- Status: APPROVED"
 echo "- Artefato: ${ARTIFACT_FILE}"
 echo "- Encerrado em: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 
-sha256sum "$ARTIFACT_FILE" > "$ARTIFACT_SHA_FILE"
-
-echo "[release-check] concluído com sucesso."
-echo "[release-check] artefato: ${ARTIFACT_FILE}"
-echo "[release-check] checksum: ${ARTIFACT_SHA_FILE}"
-
 if [[ "$ARTIFACT_KEEP" =~ ^[0-9]+$ ]] && [[ "$ARTIFACT_KEEP" -gt 0 ]]; then
   mapfile -t ARTIFACT_FILES < <(ls -1t "$ARTIFACT_DIR"/release-check-*.md 2>/dev/null || true)
   if [[ "${#ARTIFACT_FILES[@]}" -gt "$ARTIFACT_KEEP" ]]; then
     for old_file in "${ARTIFACT_FILES[@]:$ARTIFACT_KEEP}"; do
       rm -f "$old_file"
+      rm -f "${old_file}.sha256"
       echo "[release-check] artefato removido por rotação: $old_file"
     done
   fi
 fi
+
+sha256sum "$ARTIFACT_FILE" > "$ARTIFACT_SHA_FILE"
