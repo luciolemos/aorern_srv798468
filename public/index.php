@@ -27,7 +27,21 @@ if (isset($_SESSION['last_activity'])) {
 }
 $_SESSION['last_activity'] = time();
 
-// Dispara o app
+// Tenta primeiro rotas declarativas (migração gradual); se não casar, usa fallback legado.
+use App\Core\Router;
+use App\Core\Request;
 use App\Core\App;
+
+$routesFile = __DIR__ . '/../config/routes.php';
+if (is_file($routesFile)) {
+    require_once $routesFile;
+    $request = Request::capture();
+    $handled = Router::dispatch($request);
+    if ($handled) {
+        exit;
+    }
+}
+
+// Fallback legado por convenção de URL.
 $app = new App();
 

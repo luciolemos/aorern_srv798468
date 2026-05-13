@@ -35,7 +35,7 @@ class AlterarSenhaController extends Controller {
             'csrf_token' => CsrfHelper::generateToken()
         ];
 
-        $this->renderTwig('admin/change-password/index', array_merge($data, AdminHelper::getUserData('change-password')));
+        $this->renderTwig('admin/change-password/index', array_merge($data, AdminHelper::getUserData('alterar-senha')));
     }
 
     /**

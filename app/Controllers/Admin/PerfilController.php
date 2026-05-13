@@ -36,7 +36,7 @@ class PerfilController extends Controller {
         $title = 'Meu Perfil';
 
         $this->renderTwig('admin/profile/index', array_merge(
-            AdminHelper::getUserData('profile'),
+            AdminHelper::getUserData('perfil'),
             compact('user', 'csrf_token', 'title')
         ));
     }

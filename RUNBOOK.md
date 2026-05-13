@@ -32,6 +32,9 @@ Este documento é a referência operacional única para subir, validar, operar e
    ```bash
    php migrate migrate
    ```
+6. Definir `APP_URL` conforme ambiente:
+   - Dev subdiretório: `https://srv798468.hstgr.cloud/aorern`
+   - Produção raiz: `https://aorern.org`
 
 ## 3) Validação pós-subida
 
@@ -47,9 +50,17 @@ Este documento é a referência operacional única para subir, validar, operar e
    ```bash
    bash scripts/smoke_membership_status_flow.sh https://SEU_DOMINIO/aorern
    ```
+   Se o deploy estiver em domínio raiz, use sem subdiretório:
+   ```bash
+   bash scripts/smoke_membership_status_flow.sh https://SEU_DOMINIO
+   ```
 4. Quality gate unificado (phpunit + integrações + smoke):
    ```bash
    bash scripts/run_quality_gate.sh https://SEU_DOMINIO/aorern
+   ```
+   Em domínio raiz:
+   ```bash
+   bash scripts/run_quality_gate.sh https://SEU_DOMINIO
    ```
    Modo apenas unitário:
    ```bash

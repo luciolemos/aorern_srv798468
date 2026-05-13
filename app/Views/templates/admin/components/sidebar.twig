@@ -27,10 +27,10 @@
                     <span><i class="bi bi-megaphone me-2"></i> COMUNICAÇÃO</span>
                     <i class="bi bi-chevron-down small"></i>
                 </a>
-                <div class="collapse {{ subRoute in ['posts','post-categories'] ? 'show' : '' }}" id="gestaoCollapse">
+                <div class="collapse {{ subRoute in ['publicacoes','categorias-editoriais','posts','post-categories'] ? 'show' : '' }}" id="gestaoCollapse">
                     <ul class="nav flex-column ms-3">
-                        <li class="nav-item"><a href="{{ BASE_URL }}admin/posts" class="nav-link py-1 px-3 small {{ subRoute == 'posts' ? 'active-brand' : '' }}"><i class="bi bi-journal-text me-1"></i> Publicações</a></li>
-                        <li class="nav-item"><a href="{{ BASE_URL }}admin/post-categories" class="nav-link py-1 px-3 small {{ subRoute == 'post-categories' ? 'active-brand' : '' }}"><i class="bi bi-tags me-1"></i> Categorias editoriais</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/publicacoes" class="nav-link py-1 px-3 small {{ subRoute in ['publicacoes','posts'] ? 'active-brand' : '' }}"><i class="bi bi-journal-text me-1"></i> Publicações</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/categorias-editoriais" class="nav-link py-1 px-3 small {{ subRoute in ['categorias-editoriais','post-categories'] ? 'active-brand' : '' }}"><i class="bi bi-tags me-1"></i> Categorias editoriais</a></li>
                     </ul>
                 </div>
             </li>
@@ -82,12 +82,12 @@
                     <span><i class="bi bi-gear me-2"></i> PLATAFORMA E CONTROLE</span>
                     <i class="bi bi-chevron-down small"></i>
                 </a>
-                <div class="collapse {{ subRoute in ['status','versions','info','guia-usuario'] ? 'show' : '' }}" id="configCollapse">
+                <div class="collapse {{ subRoute in ['status','versoes','informacoes-tecnicas','guia-usuario','configuracoes','perfil','alterar-senha','versions','info','settings','profile','change-password'] ? 'show' : '' }}" id="configCollapse">
                     <ul class="nav flex-column ms-3">
-                        <li class="nav-item"><a href="{{ BASE_URL }}admin/status" class="nav-link py-1 px-3 small {{ subRoute == 'status' ? 'active-brand' : '' }}"><i class="bi bi-check-circle me-1"></i> Status</a></li>
-                        <li class="nav-item"><a href="{{ BASE_URL }}admin/system/guia-usuario" class="nav-link py-1 px-3 small {{ subRoute == 'guia-usuario' ? 'active-brand' : '' }}"><i class="bi bi-journal-bookmark me-1"></i> Guia do usuário</a></li>
-                        <li class="nav-item"><a href="{{ BASE_URL }}admin/system/versions" class="nav-link py-1 px-3 small {{ subRoute == 'versions' ? 'active-brand' : '' }}"><i class="bi bi-code-slash me-1"></i> Versões</a></li>
-                        <li class="nav-item"><a href="{{ BASE_URL }}admin/system/info" class="nav-link py-1 px-3 small {{ subRoute == 'info' ? 'active-brand' : '' }}"><i class="bi bi-info-circle me-1"></i> Informações técnicas</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/plataforma/status" class="nav-link py-1 px-3 small {{ subRoute == 'status' ? 'active-brand' : '' }}"><i class="bi bi-check-circle me-1"></i> Status</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/plataforma/guia-usuario" class="nav-link py-1 px-3 small {{ subRoute == 'guia-usuario' ? 'active-brand' : '' }}"><i class="bi bi-journal-bookmark me-1"></i> Guia do usuário</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/plataforma/versoes" class="nav-link py-1 px-3 small {{ subRoute in ['versoes','versions'] ? 'active-brand' : '' }}"><i class="bi bi-code-slash me-1"></i> Versões</a></li>
+                        <li class="nav-item"><a href="{{ BASE_URL }}admin/plataforma/informacoes-tecnicas" class="nav-link py-1 px-3 small {{ subRoute in ['informacoes-tecnicas','info'] ? 'active-brand' : '' }}"><i class="bi bi-info-circle me-1"></i> Informações técnicas</a></li>
                     </ul>
                 </div>
             </li>

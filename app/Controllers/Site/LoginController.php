@@ -15,6 +15,12 @@ use App\Models\User;
  * 4. Baseado no role, veem conteúdos específicos do admin
  */
 class LoginController extends Controller {
+    private const ADMIN_ROLES = ['admin', 'gerente', 'operador'];
+
+    public static function redirectPathForRole(?string $role): string
+    {
+        return in_array($role, self::ADMIN_ROLES, true) ? 'admin/dashboard' : 'associado';
+    }
     
     /**
      * Exibe formulário de login para administradores/usuários registrados
@@ -23,10 +29,7 @@ class LoginController extends Controller {
     public function admin() {
         // Redireciona se já logado
         if ($_SESSION['user_id'] ?? null) {
-            $adminRoles = ['admin', 'gerente', 'operador'];
-            $redirect = in_array($_SESSION['user_role'] ?? null, $adminRoles, true)
-                ? BASE_URL . "admin/dashboard"
-                : BASE_URL . "associado";
+            $redirect = BASE_URL . self::redirectPathForRole($_SESSION['user_role'] ?? null);
             header("Location: " . $redirect);
             exit;
         }
@@ -102,10 +105,7 @@ class LoginController extends Controller {
         $userModel->registrarUltimoLogin($user['id']);
 
         // Redireciona conforme role
-        $adminRoles = ['admin', 'gerente', 'operador'];
-        $redirect = in_array($user['role'] ?? null, $adminRoles, true)
-            ? BASE_URL . "admin/dashboard"
-            : BASE_URL . "associado";
+        $redirect = BASE_URL . self::redirectPathForRole($user['role'] ?? null);
 
         header("Location: " . $redirect);
         exit;

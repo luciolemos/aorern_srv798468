@@ -40,3 +40,15 @@
 - Criar `config/routes.php` com tabela inicial.
 - Registrar `Router::dispatch()` no `public/index.php` antes do fallback para `App`.
 - Medir cobertura com testes de integracao para login/redirecionamento por role.
+
+## Padronizacao PT-BR (status)
+1. Rotas declarativas principais em PT-BR para comunicacao/plataforma:
+- `admin/publicacoes*`
+- `admin/categorias-editoriais*`
+- `admin/plataforma/*`
+
+2. Compatibilidade sem quebra:
+- aliases legados de `posts`, `post-categories`, `status` e `system/*` permanecem ativos.
+
+3. Governanca de nomenclatura:
+- plano consolidado em `PLANO_NOMENCLATURA_PTBR.md`, incluindo tabela de equivalencia novo/legado.

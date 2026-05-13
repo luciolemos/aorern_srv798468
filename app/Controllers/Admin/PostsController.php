@@ -37,7 +37,7 @@ class PostsController extends Controller {
         [$perPage, $perPageSelection] = PaginationHelper::resolve($perPageRaw, $defaultPerPage);
         $perPageQueryValue = ($perPageRaw !== null && $perPageRaw !== '') ? $perPageSelection : null;
 
-        $userData = AdminHelper::getUserData('posts');
+        $userData = AdminHelper::getUserData('publicacoes');
         $userId = $_SESSION['user_id'] ?? null;
         $userRole = $_SESSION['user_role'] ?? 'usuario';
 
@@ -72,7 +72,7 @@ class PostsController extends Controller {
 
         $posts = $result['data'];
         $pagination = array_merge($result['meta'], [
-            'path' => BASE_URL . 'admin/posts',
+            'path' => BASE_URL . 'admin/publicacoes',
             'query' => array_filter([
                 'q' => $q,
                 'status' => $status,
@@ -88,7 +88,7 @@ class PostsController extends Controller {
         $categories = $this->categories->listar();
         $perPageOptions = PaginationHelper::options($defaultPerPage);
 
-        $this->renderTwig('admin/posts/index', array_merge([
+        $this->renderTwig('admin/publicacoes/index', array_merge([
             'posts' => $posts,
             'q' => $q,
             'status' => $status,
@@ -122,12 +122,12 @@ class PostsController extends Controller {
         $validationErrors = $_SESSION['validation_errors'] ?? [];
         unset($_SESSION['old_input'], $_SESSION['validation_errors']);
         
-        $this->renderTwig('admin/posts/create', array_merge([
+        $this->renderTwig('admin/publicacoes/create', array_merge([
             'categorias' => $categorias,
             'csrf_token' => $csrf,
             'old' => $old,
             'validationErrors' => $validationErrors,
-        ], AdminHelper::getUserData('posts')));
+        ], AdminHelper::getUserData('publicacoes')));
     }
 
     public function store(): void {
@@ -137,7 +137,7 @@ class PostsController extends Controller {
         
         if (!$request->isPost()) {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Método inválido.'];
-            header('Location: ' . BASE_URL . 'admin/posts/create');
+            header('Location: ' . BASE_URL . 'admin/publicacoes/create');
             exit;
         }
         
@@ -162,7 +162,7 @@ class PostsController extends Controller {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Erro de validação. Confira os campos destacados.'];
             $_SESSION['old_input'] = $request->post();
             $_SESSION['validation_errors'] = $validator->errors();
-            header('Location: ' . BASE_URL . 'admin/posts/create');
+            header('Location: ' . BASE_URL . 'admin/publicacoes/create');
             exit;
         }
         
@@ -201,8 +201,8 @@ class PostsController extends Controller {
         unset($_SESSION['old_input'], $_SESSION['validation_errors']);
 
         $redirect = $action === 'save_continue'
-            ? BASE_URL . 'admin/posts/create'
-            : BASE_URL . 'admin/posts';
+            ? BASE_URL . 'admin/publicacoes/create'
+            : BASE_URL . 'admin/publicacoes';
 
         header('Location: ' . $redirect);
         exit;
@@ -215,13 +215,13 @@ class PostsController extends Controller {
         
         if (!$post) {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Post não encontrado.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
         if (!$this->canEditPost($post)) {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Você não pode editar este post.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
@@ -231,13 +231,13 @@ class PostsController extends Controller {
         $validationErrors = $_SESSION['validation_errors'] ?? [];
         unset($_SESSION['old_input'], $_SESSION['validation_errors']);
         
-        $this->renderTwig('admin/posts/edit', array_merge([
+        $this->renderTwig('admin/publicacoes/edit', array_merge([
             'post' => $post,
             'categorias' => $categorias,
             'csrf_token' => $csrf,
             'old' => $old,
             'validationErrors' => $validationErrors,
-        ], AdminHelper::getUserData('posts')));
+        ], AdminHelper::getUserData('publicacoes')));
     }
 
     public function update(int $id): void {
@@ -252,7 +252,7 @@ class PostsController extends Controller {
         $post = $this->post->encontrarPorId($id);
         if (!$post || !$this->canEditPost($post)) {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Permissão negada.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
@@ -275,7 +275,7 @@ class PostsController extends Controller {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Erro de validação. Confira os campos destacados.'];
             $_SESSION['old_input'] = $request->post();
             $_SESSION['validation_errors'] = $validator->errors();
-            header('Location: ' . BASE_URL . 'admin/posts/edit/' . $id);
+            header('Location: ' . BASE_URL . 'admin/publicacoes/edit/' . $id);
             exit;
         }
         
@@ -311,7 +311,7 @@ class PostsController extends Controller {
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => $message];
         unset($_SESSION['old_input'], $_SESSION['validation_errors']);
-        header('Location: ' . BASE_URL . 'admin/posts');
+        header('Location: ' . BASE_URL . 'admin/publicacoes');
         exit;
     }
 
@@ -322,19 +322,19 @@ class PostsController extends Controller {
         
         if (!$post || $post['user_id'] != $_SESSION['user_id'] && $_SESSION['user_role'] !== 'admin') {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Permissão negada.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
         if ($post['status'] !== 'draft') {
             $_SESSION['toast'] = ['type' => 'warning', 'message' => 'Apenas rascunhos podem ser submetidos.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
         $this->post->atualizar($id, ['status' => 'pending']);
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post submetido para revisão.'];
-        header('Location: ' . BASE_URL . 'admin/posts');
+        header('Location: ' . BASE_URL . 'admin/publicacoes');
         exit;
     }
 
@@ -344,7 +344,7 @@ class PostsController extends Controller {
         $post = $this->post->encontrarPorId($id);
         if (!$post || $post['status'] !== 'pending') {
             $_SESSION['toast'] = ['type' => 'warning', 'message' => 'Post inválido para aprovação.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
@@ -354,7 +354,7 @@ class PostsController extends Controller {
         ]);
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post publicado com sucesso.'];
-        header('Location: ' . BASE_URL . 'admin/posts');
+        header('Location: ' . BASE_URL . 'admin/publicacoes');
         exit;
     }
 
@@ -364,7 +364,7 @@ class PostsController extends Controller {
         $post = $this->post->encontrarPorId($id);
         if (!$post || $post['status'] !== 'published') {
             $_SESSION['toast'] = ['type' => 'warning', 'message' => 'Post inválido para ocultar.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
@@ -373,7 +373,7 @@ class PostsController extends Controller {
         ]);
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post ocultado do blog (continua publicado).'];
-        header('Location: ' . BASE_URL . 'admin/posts');
+        header('Location: ' . BASE_URL . 'admin/publicacoes');
         exit;
     }
 
@@ -383,7 +383,7 @@ class PostsController extends Controller {
         $post = $this->post->encontrarPorId($id);
         if (!$post || $post['status'] !== 'published') {
             $_SESSION['toast'] = ['type' => 'warning', 'message' => 'Post inválido para exibir.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
@@ -392,7 +392,7 @@ class PostsController extends Controller {
         ]);
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post visível novamente no blog.'];
-        header('Location: ' . BASE_URL . 'admin/posts');
+        header('Location: ' . BASE_URL . 'admin/publicacoes');
         exit;
     }
 
@@ -402,7 +402,7 @@ class PostsController extends Controller {
         $post = $this->post->encontrarPorId($id);
         if (!$post || $post['status'] !== 'published') {
             $_SESSION['toast'] = ['type' => 'warning', 'message' => 'Post inválido para despublicação.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
@@ -413,7 +413,7 @@ class PostsController extends Controller {
         ]);
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post despublicado e salvo como rascunho.'];
-        header('Location: ' . BASE_URL . 'admin/posts');
+        header('Location: ' . BASE_URL . 'admin/publicacoes');
         exit;
     }
 
@@ -424,7 +424,7 @@ class PostsController extends Controller {
         
         if (!$request->isPost()) {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Método inválido.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
@@ -433,14 +433,14 @@ class PostsController extends Controller {
         $post = $this->post->encontrarPorId($id);
         if (!$post) {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Post não encontrado.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
         $reason = trim($request->post('reject_reason', ''));
         if (empty($reason)) {
             $_SESSION['toast'] = ['type' => 'warning', 'message' => 'Informe um motivo para rejeição.'];
-            header('Location: ' . BASE_URL . 'admin/posts');
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
             exit;
         }
 
@@ -450,7 +450,7 @@ class PostsController extends Controller {
         ]);
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post rejeitado.'];
-        header('Location: ' . BASE_URL . 'admin/posts');
+        header('Location: ' . BASE_URL . 'admin/publicacoes');
         exit;
     }
 
@@ -459,7 +459,7 @@ class PostsController extends Controller {
 
         $this->post->excluir($id);
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post excluído.'];
-        header('Location: ' . BASE_URL . 'admin/posts');
+        header('Location: ' . BASE_URL . 'admin/publicacoes');
         exit;
     }
 

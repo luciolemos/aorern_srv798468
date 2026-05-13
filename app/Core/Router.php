@@ -95,7 +95,7 @@ class Router {
      */
     private static function addRoute(string $method, string $path, $handler, array $middleware): void
     {
-        $path = self::currentGroup . $path;
+        $path = self::$currentGroup . $path;
         $middleware = array_merge(self::$groupMiddleware, $middleware);
 
         self::$routes[$method][$path] = [
@@ -138,16 +138,16 @@ class Router {
      * 
      * @param Request $request
      */
-    public static function dispatch(Request $request): void
+    public static function dispatch(Request $request): bool
     {
         $method = $request->method();
-        $path = '/' . trim($request->path(), '/');
+        $path = self::normalizeRequestPath((string) $request->path());
 
         // Busca rota exata
         if (isset(self::$routes[$method][$path])) {
             $route = self::$routes[$method][$path];
             self::executeRoute($route, $request, []);
-            return;
+            return true;
         }
 
         // Busca rota com parâmetros
@@ -155,11 +155,28 @@ class Router {
             $params = self::matchRoute($pattern, $path);
             if ($params !== false) {
                 self::executeRoute($route, $request, $params);
-                return;
+                return true;
             }
         }
 
         // Rota não encontrada - deixa o App.php atual lidar
+        return false;
+    }
+
+    private static function normalizeRequestPath(string $requestPath): string
+    {
+        $path = '/' . trim($requestPath, '/');
+        $basePath = trim((string) (parse_url(BASE_URL, PHP_URL_PATH) ?? ''), '/');
+
+        if ($basePath !== '') {
+            $prefix = '/' . $basePath;
+            if ($path === $prefix || str_starts_with($path, $prefix . '/')) {
+                $path = substr($path, strlen($prefix));
+                $path = $path === '' ? '/' : $path;
+            }
+        }
+
+        return $path;
     }
 
     /**
@@ -198,12 +215,44 @@ class Router {
         $handler = $route['handler'];
 
         if (is_callable($handler)) {
-            call_user_func_array($handler, array_merge([$request], $params));
+            $arguments = self::resolveCallableArguments($handler, $request, $params);
+            call_user_func_array($handler, $arguments);
         } elseif (is_string($handler) && str_contains($handler, '@')) {
             [$controller, $method] = explode('@', $handler);
             $controllerInstance = new $controller();
-            call_user_func_array([$controllerInstance, $method], array_merge([$request], $params));
+            $callable = [$controllerInstance, $method];
+            $arguments = self::resolveCallableArguments($callable, $request, $params);
+            call_user_func_array($callable, $arguments);
         }
+    }
+
+    private static function resolveCallableArguments(callable $handler, Request $request, array $params): array
+    {
+        $reflection = is_array($handler)
+            ? new \ReflectionMethod($handler[0], $handler[1])
+            : new \ReflectionFunction($handler);
+
+        $total = $reflection->getNumberOfParameters();
+
+        if ($total === 0) {
+            return [];
+        }
+
+        $parameters = $reflection->getParameters();
+        $first = $parameters[0] ?? null;
+        $acceptsRequest = false;
+
+        if ($first !== null) {
+            $type = $first->getType();
+            if ($type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
+                $acceptsRequest = $type->getName() === Request::class || $type->getName() === '\\' . Request::class;
+            } elseif ($first->getName() === 'request') {
+                $acceptsRequest = true;
+            }
+        }
+
+        $arguments = $acceptsRequest ? array_merge([$request], $params) : $params;
+        return array_slice($arguments, 0, $total);
     }
 
     /**
