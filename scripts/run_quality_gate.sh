@@ -49,7 +49,8 @@ run_step() {
 }
 
 if [[ "$SKIP_PHPUNIT" -eq 0 ]]; then
-  run_step "PHPUnit" ./vendor/bin/phpunit --colors=never
+  # Pre-commit/quality gate should not require Xdebug coverage mode.
+  run_step "PHPUnit" ./vendor/bin/phpunit --colors=never --no-coverage
 fi
 
 if [[ "$UNIT_ONLY" -eq 1 ]]; then
