@@ -8,6 +8,15 @@ use PHPUnit\Framework\TestCase;
 
 class AuthRoutingIntegrationTest extends TestCase
 {
+    private static array $dispatchCapture = [];
+
+    public static function setUpBeforeClass(): void
+    {
+        if (!defined('BASE_URL')) {
+            define('BASE_URL', 'https://srv798468.hstgr.cloud/aorern/');
+        }
+    }
+
     protected function setUp(): void
     {
         $this->resetRouterState();
@@ -135,6 +144,79 @@ class AuthRoutingIntegrationTest extends TestCase
         $this->assertSame(['auth'], $routes['GET']['/admin/perfil']['middleware'] ?? null);
         $this->assertSame(['auth'], $routes['GET']['/admin/alterar-senha']['middleware'] ?? null);
         $this->assertSame(['auth'], $routes['GET']['/admin/configuracoes']['middleware'] ?? null);
+    }
+
+    public function testPtBrAndLegacyAliasPairsStaySynchronizedForMiddleware(): void
+    {
+        $routes = Router::routes();
+        $pairs = [
+            ['GET', '/admin/publicacoes', '/admin/posts'],
+            ['GET', '/admin/publicacoes/cadastrar', '/admin/posts/create'],
+            ['POST', '/admin/publicacoes/salvar', '/admin/posts/store'],
+            ['GET', '/admin/publicacoes/editar/{id}', '/admin/posts/edit/{id}'],
+            ['POST', '/admin/publicacoes/atualizar/{id}', '/admin/posts/update/{id}'],
+            ['GET', '/admin/categorias-editoriais', '/admin/post-categories'],
+            ['GET', '/admin/categorias-editoriais/cadastrar', '/admin/post-categories/create'],
+            ['POST', '/admin/categorias-editoriais/salvar', '/admin/post-categories/store'],
+            ['GET', '/admin/plataforma/status', '/admin/status'],
+            ['GET', '/admin/plataforma/guia-usuario', '/admin/system/guia-usuario'],
+            ['GET', '/admin/plataforma/versoes', '/admin/system/versions'],
+            ['GET', '/admin/plataforma/informacoes-tecnicas', '/admin/system/info'],
+            ['GET', '/admin/perfil', '/admin/profile'],
+            ['POST', '/admin/perfil/update', '/admin/profile/update'],
+            ['GET', '/admin/configuracoes', '/admin/settings'],
+            ['POST', '/admin/configuracoes/update', '/admin/settings/update'],
+        ];
+
+        foreach ($pairs as [$method, $newPath, $legacyPath]) {
+            $this->assertArrayHasKey($newPath, $routes[$method], "Rota PT-BR ausente: {$method} {$newPath}");
+            $this->assertArrayHasKey($legacyPath, $routes[$method], "Alias legado ausente: {$method} {$legacyPath}");
+
+            $newMiddleware = $routes[$method][$newPath]['middleware'] ?? null;
+            $legacyMiddleware = $routes[$method][$legacyPath]['middleware'] ?? null;
+
+            $this->assertSame(
+                $newMiddleware,
+                $legacyMiddleware,
+                "Middleware divergente entre {$newPath} e {$legacyPath}"
+            );
+        }
+    }
+
+    public function testRouterDispatchResolvesBasePathAndDynamicParamsInSubdirectoryDeploy(): void
+    {
+        $this->resetRouterState();
+        self::$dispatchCapture = [];
+
+        Router::get('/probe/{id}', function ($request, $id): void {
+            self::$dispatchCapture = [
+                'id' => $id,
+                'path' => $request->path(),
+                'method' => $request->method(),
+            ];
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/aorern/probe/42?origem=teste';
+
+        $handled = Router::dispatch(new \App\Core\Request());
+
+        $this->assertTrue($handled);
+        $this->assertSame('42', self::$dispatchCapture['id'] ?? null);
+        $this->assertSame('/aorern/probe/42', self::$dispatchCapture['path'] ?? null);
+        $this->assertSame('GET', self::$dispatchCapture['method'] ?? null);
+    }
+
+    public function testRouterDispatchReturnsFalseWhenRouteDoesNotExist(): void
+    {
+        $this->resetRouterState();
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/aorern/nao-existe';
+
+        $handled = Router::dispatch(new \App\Core\Request());
+
+        $this->assertFalse($handled);
     }
 
     private function resetRouterState(): void
