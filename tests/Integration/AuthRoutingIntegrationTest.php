@@ -35,6 +35,38 @@ class AuthRoutingIntegrationTest extends TestCase
         $this->assertArrayHasKey('/login/authenticate-admin', $routes['POST']);
     }
 
+    public function testDeclarativeRoutesContainPublicInstitutionalAndContactEndpoints(): void
+    {
+        $routes = Router::routes();
+
+        $this->assertArrayHasKey('/about', $routes['GET']);
+        $this->assertArrayHasKey('/contact', $routes['GET']);
+        $this->assertArrayHasKey('/contact/send', $routes['POST']);
+        $this->assertArrayHasKey('/galeria', $routes['GET']);
+
+        $this->assertArrayHasKey('/institucional', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/missao', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/valores', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/visao', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/brasao', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/hino', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/links', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/identidade-visual', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/documentos', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/downloads-marca', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/governanca', $routes['GET']);
+        $this->assertArrayHasKey('/institucional/busca', $routes['GET']);
+        $this->assertArrayHasKey('/docs', $routes['GET']);
+        $this->assertArrayHasKey('/docs/doc/{slug}', $routes['GET']);
+        $this->assertArrayHasKey('/coverage', $routes['GET']);
+        $this->assertArrayHasKey('/coverage/relatorio', $routes['GET']);
+        $this->assertArrayHasKey('/ocorrencias/mapa-municipios', $routes['GET']);
+        $this->assertArrayHasKey('/esquadrao', $routes['GET']);
+        $this->assertArrayHasKey('/termos', $routes['GET']);
+        $this->assertArrayHasKey('/privacidade', $routes['GET']);
+        $this->assertArrayHasKey('/readme', $routes['GET']);
+    }
+
     public function testDeclarativeRoutesContainAdminAuthAndLegacyAliases(): void
     {
         $routes = Router::routes();
@@ -84,6 +116,16 @@ class AuthRoutingIntegrationTest extends TestCase
         $this->assertSame(['auth'], $routes['GET']['/admin/posts']['middleware'] ?? null);
         $this->assertSame(['auth'], $routes['GET']['/admin/usuarios']['middleware'] ?? null);
         $this->assertSame(['auth'], $routes['GET']['/admin/pessoal']['middleware'] ?? null);
+    }
+
+    public function testDeclarativeRoutesContainAssociadoJourneyEndpoints(): void
+    {
+        $routes = Router::routes();
+
+        $this->assertArrayHasKey('/associado', $routes['GET']);
+        $this->assertArrayHasKey('/associado/update', $routes['POST']);
+        $this->assertArrayHasKey('/associado/change-password', $routes['POST']);
+        $this->assertArrayHasKey('/associado/complementar', $routes['POST']);
     }
 
     public function testRoleRedirectMappingForLoginFlow(): void
@@ -144,6 +186,161 @@ class AuthRoutingIntegrationTest extends TestCase
         $this->assertSame(['auth'], $routes['GET']['/admin/perfil']['middleware'] ?? null);
         $this->assertSame(['auth'], $routes['GET']['/admin/alterar-senha']['middleware'] ?? null);
         $this->assertSame(['auth'], $routes['GET']['/admin/configuracoes']['middleware'] ?? null);
+    }
+
+    public function testDeclarativeRoutesContainLivroOcorrenciasModules(): void
+    {
+        $routes = Router::routes();
+
+        $this->assertArrayHasKey('/admin/livro-tipos', $routes['GET']);
+        $this->assertArrayHasKey('/admin/livro-tipos/create', $routes['GET']);
+        $this->assertArrayHasKey('/admin/livro-tipos/store', $routes['POST']);
+        $this->assertArrayHasKey('/admin/livro-tipos/edit/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/livro-tipos/update/{id}', $routes['POST']);
+        $this->assertArrayHasKey('/admin/livro-tipos/destroy/{id}', $routes['GET']);
+
+        $this->assertArrayHasKey('/admin/livro-ocorrencias', $routes['GET']);
+        $this->assertArrayHasKey('/admin/livro-ocorrencias/create', $routes['GET']);
+        $this->assertArrayHasKey('/admin/livro-ocorrencias/store', $routes['POST']);
+        $this->assertArrayHasKey('/admin/livro-ocorrencias/edit/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/livro-ocorrencias/update/{id}', $routes['POST']);
+        $this->assertArrayHasKey('/admin/livro-ocorrencias/destroy/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/livro-ocorrencias/municipios', $routes['GET']);
+
+        $this->assertSame(['auth'], $routes['GET']['/admin/livro-tipos']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['GET']['/admin/livro-tipos/create']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['POST']['/admin/livro-tipos/store']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['GET']['/admin/livro-tipos/edit/{id}']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['POST']['/admin/livro-tipos/update/{id}']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['GET']['/admin/livro-tipos/destroy/{id}']['middleware'] ?? null);
+
+        $this->assertSame(['auth'], $routes['GET']['/admin/livro-ocorrencias']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['GET']['/admin/livro-ocorrencias/create']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['POST']['/admin/livro-ocorrencias/store']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['GET']['/admin/livro-ocorrencias/edit/{id}']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['POST']['/admin/livro-ocorrencias/update/{id}']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['GET']['/admin/livro-ocorrencias/destroy/{id}']['middleware'] ?? null);
+        $this->assertSame(['auth'], $routes['GET']['/admin/livro-ocorrencias/municipios']['middleware'] ?? null);
+    }
+
+    public function testDeclarativeRoutesContainOperationalLegacyModules(): void
+    {
+        $routes = Router::routes();
+
+        $this->assertArrayHasKey('/admin/categorias', $routes['GET']);
+        $this->assertArrayHasKey('/admin/categorias/cadastrar', $routes['GET']);
+        $this->assertArrayHasKey('/admin/categorias/salvar', $routes['POST']);
+        $this->assertArrayHasKey('/admin/categorias/editar/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/categorias/atualizar/{id}', $routes['POST']);
+        $this->assertArrayHasKey('/admin/categorias/deletar/{id}', $routes['GET']);
+
+        $this->assertArrayHasKey('/admin/funcoes', $routes['GET']);
+        $this->assertArrayHasKey('/admin/funcoes/cadastrar', $routes['GET']);
+        $this->assertArrayHasKey('/admin/funcoes/salvar', $routes['POST']);
+        $this->assertArrayHasKey('/admin/funcoes/editar/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/funcoes/atualizar/{id}', $routes['POST']);
+        $this->assertArrayHasKey('/admin/funcoes/deletar/{id}', $routes['GET']);
+
+        $this->assertArrayHasKey('/admin/equipamentos', $routes['GET']);
+        $this->assertArrayHasKey('/admin/equipamentos/cadastrar', $routes['GET']);
+        $this->assertArrayHasKey('/admin/equipamentos/salvar', $routes['POST']);
+        $this->assertArrayHasKey('/admin/equipamentos/editar/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/equipamentos/atualizar/{id}', $routes['POST']);
+        $this->assertArrayHasKey('/admin/equipamentos/deletar/{id}', $routes['GET']);
+
+        $this->assertArrayHasKey('/admin/obras', $routes['GET']);
+        $this->assertArrayHasKey('/admin/obras/cadastrar', $routes['GET']);
+        $this->assertArrayHasKey('/admin/obras/salvar', $routes['POST']);
+        $this->assertArrayHasKey('/admin/obras/editar/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/obras/atualizar/{id}', $routes['POST']);
+        $this->assertArrayHasKey('/admin/obras/deletar/{id}', $routes['GET']);
+
+        $pathsByMethod = [
+            'GET' => [
+                '/admin/categorias', '/admin/categorias/cadastrar', '/admin/categorias/editar/{id}', '/admin/categorias/deletar/{id}',
+                '/admin/funcoes', '/admin/funcoes/cadastrar', '/admin/funcoes/editar/{id}', '/admin/funcoes/deletar/{id}',
+                '/admin/equipamentos', '/admin/equipamentos/cadastrar', '/admin/equipamentos/editar/{id}', '/admin/equipamentos/deletar/{id}',
+                '/admin/obras', '/admin/obras/cadastrar', '/admin/obras/editar/{id}', '/admin/obras/deletar/{id}',
+            ],
+            'POST' => [
+                '/admin/categorias/salvar', '/admin/categorias/atualizar/{id}',
+                '/admin/funcoes/salvar', '/admin/funcoes/atualizar/{id}',
+                '/admin/equipamentos/salvar', '/admin/equipamentos/atualizar/{id}',
+                '/admin/obras/salvar', '/admin/obras/atualizar/{id}',
+            ],
+        ];
+
+        foreach ($pathsByMethod as $method => $paths) {
+            foreach ($paths as $path) {
+                $this->assertSame(['auth'], $routes[$method][$path]['middleware'] ?? null);
+            }
+        }
+    }
+
+    public function testDeclarativeRoutesContainK9LegacyModules(): void
+    {
+        $routes = Router::routes();
+
+        $this->assertArrayHasKey('/admin/dogs', $routes['GET']);
+        $this->assertArrayHasKey('/admin/dogs/create', $routes['GET']);
+        $this->assertArrayHasKey('/admin/dogs/store', $routes['POST']);
+        $this->assertArrayHasKey('/admin/dogs/edit/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/dogs/update/{id}', $routes['POST']);
+        $this->assertArrayHasKey('/admin/dogs/delete/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/dogs/destroy/{id}', $routes['GET']);
+
+        $this->assertArrayHasKey('/admin/dog-breeds', $routes['GET']);
+        $this->assertArrayHasKey('/admin/dog-breeds/create', $routes['GET']);
+        $this->assertArrayHasKey('/admin/dog-breeds/store', $routes['POST']);
+        $this->assertArrayHasKey('/admin/dog-breeds/edit/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/dog-breeds/update/{id}', $routes['POST']);
+        $this->assertArrayHasKey('/admin/dog-breeds/delete/{id}', $routes['GET']);
+        $this->assertArrayHasKey('/admin/dog-breeds/destroy/{id}', $routes['GET']);
+
+        $authGetPaths = [
+            '/admin/dogs', '/admin/dogs/create', '/admin/dogs/edit/{id}', '/admin/dogs/delete/{id}', '/admin/dogs/destroy/{id}',
+            '/admin/dog-breeds', '/admin/dog-breeds/create', '/admin/dog-breeds/edit/{id}', '/admin/dog-breeds/delete/{id}', '/admin/dog-breeds/destroy/{id}',
+        ];
+        foreach ($authGetPaths as $path) {
+            $this->assertSame(['auth'], $routes['GET'][$path]['middleware'] ?? null);
+        }
+
+        $authPostPaths = [
+            '/admin/dogs/store', '/admin/dogs/update/{id}',
+            '/admin/dog-breeds/store', '/admin/dog-breeds/update/{id}',
+        ];
+        foreach ($authPostPaths as $path) {
+            $this->assertSame(['auth'], $routes['POST'][$path]['middleware'] ?? null);
+        }
+    }
+
+    public function testDeclarativeRoutesContainAdminHubsAndDocsModules(): void
+    {
+        $routes = Router::routes();
+
+        $authGetPaths = [
+            '/admin/institucional',
+            '/admin/memoria',
+            '/admin/eventos',
+            '/admin/docs',
+            '/admin/docs/doc/{slug}',
+            '/admin/docs/estrutura',
+            '/admin/docs/virtualhost',
+            '/admin/docs/composer',
+            '/admin/docs/diagrama',
+            '/admin/docs/caracteristicas',
+            '/admin/docs/fluxomvc',
+            '/admin/docs/fluxopost',
+            '/admin/docs/novofluxomvc',
+            '/admin/docs/blog',
+            '/admin/docs/elements',
+            '/admin/docs/scripts',
+        ];
+
+        foreach ($authGetPaths as $path) {
+            $this->assertArrayHasKey($path, $routes['GET']);
+            $this->assertSame(['auth'], $routes['GET'][$path]['middleware'] ?? null);
+        }
     }
 
     public function testPtBrAndLegacyAliasPairsStaySynchronizedForMiddleware(): void

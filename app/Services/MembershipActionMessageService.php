@@ -12,6 +12,18 @@ class MembershipActionMessageService
         ];
     }
 
+    public function invalidTransition(string $action, ?string $currentStatus = null): array
+    {
+        $statusLabel = $currentStatus !== null && trim($currentStatus) !== ''
+            ? ' (status atual: ' . trim($currentStatus) . ')'
+            : '';
+
+        return [
+            'type' => 'danger',
+            'message' => 'Transição de status inválida para ' . $action . $statusLabel . '.',
+        ];
+    }
+
     public function requestNotAvailableForComplementation(): array
     {
         return [
@@ -33,6 +45,18 @@ class MembershipActionMessageService
         return [
             'type' => 'danger',
             'message' => 'Status associativo inválido para aprovação da solicitação.',
+        ];
+    }
+
+    public function invalidAssociativeStatusTransition(string $fromStatus, string $toStatus): array
+    {
+        return [
+            'type' => 'danger',
+            'message' => sprintf(
+                'Transição de status associativo inválida: %s -> %s.',
+                $fromStatus,
+                $toStatus
+            ),
         ];
     }
 
@@ -64,6 +88,14 @@ class MembershipActionMessageService
         ];
     }
 
+    public function rejectionFailure(): array
+    {
+        return [
+            'type' => 'danger',
+            'message' => 'Não foi possível rejeitar a solicitação.',
+        ];
+    }
+
     public function complementationResult(bool $emailEnviado): array
     {
         return [
@@ -71,6 +103,14 @@ class MembershipActionMessageService
             'message' => $emailEnviado
                 ? 'Solicitação marcada como pendente de complementação documental e e-mail enviado ao solicitante.'
                 : 'Solicitação marcada como pendente de complementação documental, mas o e-mail não pôde ser enviado.',
+        ];
+    }
+
+    public function complementationFailure(): array
+    {
+        return [
+            'type' => 'danger',
+            'message' => 'Não foi possível solicitar complementação documental.',
         ];
     }
 }

@@ -101,6 +101,47 @@ class MembershipApplicationWorkflowServiceTest extends TestCase
         $this->assertNull($applications->lastUpdateData['aprovado_em']);
         $this->assertNull($applications->lastUpdateData['rejeitado_em']);
     }
+
+    public function testApproveThrowsForInvalidStatusTransition(): void
+    {
+        $service = new MembershipApplicationWorkflowService(
+            new FakeMembershipApplicationModel(),
+            new FakePessoalModel(),
+            new FakeFuncaoModel(),
+            new PDO('sqlite::memory:')
+        );
+
+        $solicitacao = [
+            'status' => 'aprovada',
+            'cpf' => '12345678901',
+            'nome_completo' => 'Associado Teste',
+            'ano_npor' => '2020',
+        ];
+
+        $this->expectException(\DomainException::class);
+        $service->approve(1, $solicitacao, 'efetivo');
+    }
+
+    public function testApproveThrowsForInvalidAssociativeStatusTransition(): void
+    {
+        $service = new MembershipApplicationWorkflowService(
+            new FakeMembershipApplicationModel(),
+            new FakePessoalModel(),
+            new FakeFuncaoModel(),
+            new PDO('sqlite::memory:')
+        );
+
+        $solicitacao = [
+            'status' => 'pendente',
+            'status_associativo' => 'efetivo',
+            'cpf' => '12345678901',
+            'nome_completo' => 'Associado Teste',
+            'ano_npor' => '2020',
+        ];
+
+        $this->expectException(\DomainException::class);
+        $service->approve(1, $solicitacao, 'aluno');
+    }
 }
 
 class FakeMembershipApplicationModel extends MembershipApplicationModel

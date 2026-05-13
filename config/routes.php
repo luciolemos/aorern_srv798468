@@ -4,6 +4,18 @@ use App\Core\Router;
 use App\Middleware\AuthMiddleware;
 use App\Controllers\Site\HomeController;
 use App\Controllers\Site\BlogController;
+use App\Controllers\Site\AboutController;
+use App\Controllers\Site\ContactController;
+use App\Controllers\Site\AssociadoController;
+use App\Controllers\Site\GaleriaController as SiteGaleriaController;
+use App\Controllers\Site\InstitucionalController;
+use App\Controllers\Site\DocsController as SiteDocsController;
+use App\Controllers\Site\CoverageController;
+use App\Controllers\Site\OcorrenciasController;
+use App\Controllers\Site\EsquadraoController;
+use App\Controllers\Site\TermosController;
+use App\Controllers\Site\PrivacidadeController;
+use App\Controllers\Site\ReadmeController;
 use App\Controllers\Site\LoginController as SiteLoginController;
 use App\Controllers\Site\RegisterController;
 use App\Controllers\Admin\DashboardController;
@@ -25,6 +37,18 @@ use App\Controllers\Admin\SystemController;
 use App\Controllers\Admin\PerfilController;
 use App\Controllers\Admin\AlterarSenhaController;
 use App\Controllers\Admin\ConfiguracaoController;
+use App\Controllers\Admin\LivroTiposController;
+use App\Controllers\Admin\LivroOcorrenciasController;
+use App\Controllers\Admin\CategoriasController;
+use App\Controllers\Admin\FuncoesController;
+use App\Controllers\Admin\EquipamentosController;
+use App\Controllers\Admin\ObrasController;
+use App\Controllers\Admin\DogsController;
+use App\Controllers\Admin\DogBreedsController;
+use App\Controllers\Admin\InstitucionalController as AdminInstitucionalController;
+use App\Controllers\Admin\MemoriaController;
+use App\Controllers\Admin\EventosController;
+use App\Controllers\Admin\DocsController as AdminDocsController;
 
 /**
  * Rotas declarativas iniciais (migração gradual).
@@ -43,6 +67,33 @@ Router::middleware('auth', function (): bool {
 Router::get('/', fn() => (new HomeController())->index());
 Router::get('/blog', fn() => (new BlogController())->index());
 Router::get('/blog/{slug}', fn($request, $slug) => (new BlogController())->post($slug));
+Router::get('/about', fn() => (new AboutController())->index());
+Router::get('/contact', fn() => (new ContactController())->index());
+Router::post('/contact/send', fn() => (new ContactController())->send());
+Router::get('/galeria', fn() => (new SiteGaleriaController())->index());
+
+// Portal institucional (site)
+Router::get('/institucional', fn() => (new InstitucionalController())->index());
+Router::get('/institucional/missao', fn() => (new InstitucionalController())->missao());
+Router::get('/institucional/valores', fn() => (new InstitucionalController())->valores());
+Router::get('/institucional/visao', fn() => (new InstitucionalController())->visao());
+Router::get('/institucional/brasao', fn() => (new InstitucionalController())->brasao());
+Router::get('/institucional/hino', fn() => (new InstitucionalController())->hino());
+Router::get('/institucional/links', fn() => (new InstitucionalController())->links());
+Router::get('/institucional/identidade-visual', fn() => (new InstitucionalController())->identidadeVisual());
+Router::get('/institucional/documentos', fn() => (new InstitucionalController())->documentos());
+Router::get('/institucional/downloads-marca', fn() => (new InstitucionalController())->downloadsMarca());
+Router::get('/institucional/governanca', fn() => (new InstitucionalController())->governanca());
+Router::get('/institucional/busca', fn() => (new InstitucionalController())->busca());
+Router::get('/docs', fn() => (new SiteDocsController())->index());
+Router::get('/docs/doc/{slug}', fn($request, $slug) => (new SiteDocsController())->doc($slug));
+Router::get('/coverage', fn() => (new CoverageController())->index());
+Router::get('/coverage/relatorio', fn() => (new CoverageController())->relatorio());
+Router::get('/ocorrencias/mapa-municipios', fn() => (new OcorrenciasController())->mapaMunicipios());
+Router::get('/esquadrao', fn() => (new EsquadraoController())->index());
+Router::get('/termos', fn() => (new TermosController())->index());
+Router::get('/privacidade', fn() => (new PrivacidadeController())->index());
+Router::get('/readme', fn() => (new ReadmeController())->index());
 
 // Login público
 Router::get('/login/admin', fn() => (new SiteLoginController())->admin());
@@ -53,6 +104,12 @@ Router::get('/login/logout', fn() => (new SiteLoginController())->logout());
 Router::get('/register', fn() => (new RegisterController())->index());
 Router::post('/register/store', fn() => (new RegisterController())->store());
 Router::get('/register/cidades-por-uf', fn() => (new RegisterController())->cidadesPorUf());
+
+// Area do associado
+Router::get('/associado', fn() => (new AssociadoController())->index());
+Router::post('/associado/update', fn() => (new AssociadoController())->update());
+Router::post('/associado/change-password', fn() => (new AssociadoController())->changePassword());
+Router::post('/associado/complementar', fn() => (new AssociadoController())->complementar());
 
 // Admin crítico
 Router::group('/admin', function (): void {
@@ -217,4 +274,84 @@ Router::group('/admin', function (): void {
     Router::post('/profile/update', fn() => (new PerfilController())->update(), ['auth']);
     Router::get('/settings', fn() => (new ConfiguracaoController())->index(), ['auth']);
     Router::post('/settings/update', fn() => (new ConfiguracaoController())->update(), ['auth']);
+
+    // Livro de ocorrencias (bloco legado operacional)
+    Router::get('/livro-tipos', fn() => (new LivroTiposController())->index(), ['auth']);
+    Router::get('/livro-tipos/create', fn() => (new LivroTiposController())->create(), ['auth']);
+    Router::post('/livro-tipos/store', fn() => (new LivroTiposController())->store(), ['auth']);
+    Router::get('/livro-tipos/edit/{id}', fn($request, $id) => (new LivroTiposController())->edit((int) $id), ['auth']);
+    Router::post('/livro-tipos/update/{id}', fn($request, $id) => (new LivroTiposController())->update((int) $id), ['auth']);
+    Router::get('/livro-tipos/destroy/{id}', fn($request, $id) => (new LivroTiposController())->destroy((int) $id), ['auth']);
+
+    Router::get('/livro-ocorrencias', fn() => (new LivroOcorrenciasController())->index(), ['auth']);
+    Router::get('/livro-ocorrencias/create', fn() => (new LivroOcorrenciasController())->create(), ['auth']);
+    Router::post('/livro-ocorrencias/store', fn() => (new LivroOcorrenciasController())->store(), ['auth']);
+    Router::get('/livro-ocorrencias/edit/{id}', fn($request, $id) => (new LivroOcorrenciasController())->edit((int) $id), ['auth']);
+    Router::post('/livro-ocorrencias/update/{id}', fn($request, $id) => (new LivroOcorrenciasController())->update((int) $id), ['auth']);
+    Router::get('/livro-ocorrencias/destroy/{id}', fn($request, $id) => (new LivroOcorrenciasController())->destroy((int) $id), ['auth']);
+    Router::get('/livro-ocorrencias/municipios', fn() => (new LivroOcorrenciasController())->municipios(), ['auth']);
+
+    // Modulos operacionais legados em uso
+    Router::get('/categorias', fn() => (new CategoriasController())->index(), ['auth']);
+    Router::get('/categorias/cadastrar', fn() => (new CategoriasController())->cadastrar(), ['auth']);
+    Router::post('/categorias/salvar', fn() => (new CategoriasController())->salvar(), ['auth']);
+    Router::get('/categorias/editar/{id}', fn($request, $id) => (new CategoriasController())->editar((int) $id), ['auth']);
+    Router::post('/categorias/atualizar/{id}', fn($request, $id) => (new CategoriasController())->atualizar((int) $id), ['auth']);
+    Router::get('/categorias/deletar/{id}', fn($request, $id) => (new CategoriasController())->deletar((int) $id), ['auth']);
+
+    Router::get('/funcoes', fn() => (new FuncoesController())->index(), ['auth']);
+    Router::get('/funcoes/cadastrar', fn() => (new FuncoesController())->cadastrar(), ['auth']);
+    Router::post('/funcoes/salvar', fn() => (new FuncoesController())->salvar(), ['auth']);
+    Router::get('/funcoes/editar/{id}', fn($request, $id) => (new FuncoesController())->editar((int) $id), ['auth']);
+    Router::post('/funcoes/atualizar/{id}', fn($request, $id) => (new FuncoesController())->atualizar((int) $id), ['auth']);
+    Router::get('/funcoes/deletar/{id}', fn($request, $id) => (new FuncoesController())->deletar((int) $id), ['auth']);
+
+    Router::get('/equipamentos', fn() => (new EquipamentosController())->index(), ['auth']);
+    Router::get('/equipamentos/cadastrar', fn() => (new EquipamentosController())->cadastrar(), ['auth']);
+    Router::post('/equipamentos/salvar', fn() => (new EquipamentosController())->salvar(), ['auth']);
+    Router::get('/equipamentos/editar/{id}', fn($request, $id) => (new EquipamentosController())->editar((int) $id), ['auth']);
+    Router::post('/equipamentos/atualizar/{id}', fn($request, $id) => (new EquipamentosController())->atualizar((int) $id), ['auth']);
+    Router::get('/equipamentos/deletar/{id}', fn($request, $id) => (new EquipamentosController())->deletar((int) $id), ['auth']);
+
+    Router::get('/obras', fn() => (new ObrasController())->index(), ['auth']);
+    Router::get('/obras/cadastrar', fn() => (new ObrasController())->cadastrar(), ['auth']);
+    Router::post('/obras/salvar', fn() => (new ObrasController())->salvar(), ['auth']);
+    Router::get('/obras/editar/{id}', fn($request, $id) => (new ObrasController())->editar((int) $id), ['auth']);
+    Router::post('/obras/atualizar/{id}', fn($request, $id) => (new ObrasController())->atualizar((int) $id), ['auth']);
+    Router::get('/obras/deletar/{id}', fn($request, $id) => (new ObrasController())->deletar((int) $id), ['auth']);
+
+    Router::get('/dogs', fn() => (new DogsController())->index(), ['auth']);
+    Router::get('/dogs/create', fn() => (new DogsController())->create(), ['auth']);
+    Router::post('/dogs/store', fn() => (new DogsController())->store(), ['auth']);
+    Router::get('/dogs/edit/{id}', fn($request, $id) => (new DogsController())->edit((int) $id), ['auth']);
+    Router::post('/dogs/update/{id}', fn($request, $id) => (new DogsController())->update((int) $id), ['auth']);
+    Router::get('/dogs/delete/{id}', fn($request, $id) => (new DogsController())->delete((int) $id), ['auth']);
+    Router::get('/dogs/destroy/{id}', fn($request, $id) => (new DogsController())->destroy((int) $id), ['auth']);
+
+    Router::get('/dog-breeds', fn() => (new DogBreedsController())->index(), ['auth']);
+    Router::get('/dog-breeds/create', fn() => (new DogBreedsController())->create(), ['auth']);
+    Router::post('/dog-breeds/store', fn() => (new DogBreedsController())->store(), ['auth']);
+    Router::get('/dog-breeds/edit/{id}', fn($request, $id) => (new DogBreedsController())->edit((int) $id), ['auth']);
+    Router::post('/dog-breeds/update/{id}', fn($request, $id) => (new DogBreedsController())->update((int) $id), ['auth']);
+    Router::get('/dog-breeds/delete/{id}', fn($request, $id) => (new DogBreedsController())->delete((int) $id), ['auth']);
+    Router::get('/dog-breeds/destroy/{id}', fn($request, $id) => (new DogBreedsController())->destroy((int) $id), ['auth']);
+
+    // Hubs internos e documentacao
+    Router::get('/institucional', fn() => (new AdminInstitucionalController())->index(), ['auth']);
+    Router::get('/memoria', fn() => (new MemoriaController())->index(), ['auth']);
+    Router::get('/eventos', fn() => (new EventosController())->index(), ['auth']);
+
+    Router::get('/docs', fn() => (new AdminDocsController())->index(), ['auth']);
+    Router::get('/docs/doc/{slug}', fn($request, $slug) => (new AdminDocsController())->doc($slug), ['auth']);
+    Router::get('/docs/estrutura', fn() => (new AdminDocsController())->estrutura(), ['auth']);
+    Router::get('/docs/virtualhost', fn() => (new AdminDocsController())->virtualhost(), ['auth']);
+    Router::get('/docs/composer', fn() => (new AdminDocsController())->composer(), ['auth']);
+    Router::get('/docs/diagrama', fn() => (new AdminDocsController())->diagrama(), ['auth']);
+    Router::get('/docs/caracteristicas', fn() => (new AdminDocsController())->caracteristicas(), ['auth']);
+    Router::get('/docs/fluxomvc', fn() => (new AdminDocsController())->fluxomvc(), ['auth']);
+    Router::get('/docs/fluxopost', fn() => (new AdminDocsController())->fluxopost(), ['auth']);
+    Router::get('/docs/novofluxomvc', fn() => (new AdminDocsController())->novofluxomvc(), ['auth']);
+    Router::get('/docs/blog', fn() => (new AdminDocsController())->blog(), ['auth']);
+    Router::get('/docs/elements', fn() => (new AdminDocsController())->elements(), ['auth']);
+    Router::get('/docs/scripts', fn() => (new AdminDocsController())->scripts(), ['auth']);
 });
