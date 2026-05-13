@@ -12,9 +12,10 @@
         <div class="d-flex align-items-center gap-3 ms-auto">
             {% set pendingCount = notifications.pending_users|default(0) %}
             {% set pendingMembershipApplications = notifications.pending_membership_applications|default(0) %}
+            {% set complementationMembershipApplications = notifications.complementation_membership_applications|default(0) %}
             {% set occurrenceCount = notifications.occurrences_in_progress|default(0) %}
             {% set pendingPostsCount = notifications.posts_pending_review|default(0) %}
-            {% set totalAlerts = pendingCount + pendingMembershipApplications + occurrenceCount + pendingPostsCount %}
+            {% set totalAlerts = pendingCount + pendingMembershipApplications + complementationMembershipApplications + occurrenceCount + pendingPostsCount %}
             <div class="dropdown">
                 <button class="btn admin-navbar-action admin-navbar-action--icon position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Abrir notificações" title="Notificações">
                     <i class="bi {{ totalAlerts > 0 ? 'bi-bell-fill text-warning' : 'bi-bell' }} fs-6"></i>
@@ -41,6 +42,16 @@
                             <span><i class="bi bi-person-vcard me-2"></i>Filiações pendentes</span>
                             {% if pendingMembershipApplications > 0 %}
                                 <span class="badge bg-warning text-dark rounded-pill">{{ pendingMembershipApplications }}</span>
+                            {% else %}
+                                <span class="badge bg-success-subtle text-success">OK</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex justify-content-between align-items-center" href="{{ BASE_URL }}admin/solicitacoes-filiacao?status=complementacao">
+                            <span><i class="bi bi-files me-2"></i>Contas em complementação</span>
+                            {% if complementationMembershipApplications > 0 %}
+                                <span class="badge bg-info text-dark rounded-pill">{{ complementationMembershipApplications }}</span>
                             {% else %}
                                 <span class="badge bg-success-subtle text-success">OK</span>
                             {% endif %}
@@ -74,7 +85,8 @@
             <div class="dropdown">
                 <button class="btn admin-navbar-action admin-user-menu dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {% if user.avatar %}
-                        <img src="{{ BASE_URL }}{{ user.avatar }}" alt="{{ user.name }}" class="admin-user-menu__avatar rounded-circle">
+                        {% set userAvatarSrc = user.avatar starts with 'http' ? user.avatar : (BASE_URL ~ user.avatar) %}
+                        <img src="{{ userAvatarSrc|e('html_attr') }}" alt="{{ user.name }}" class="admin-user-menu__avatar rounded-circle">
                     {% else %}
                         <span class="admin-user-menu__avatar admin-user-menu__avatar--fallback rounded-circle d-inline-flex justify-content-center align-items-center bg-white text-dark">
                             {{ user.initial }}

@@ -139,19 +139,46 @@
                         {% set assocStatus = p.status_associativo|default('provisorio') %}
                         {% set assocBadgeClass = assocStatus == 'efetivo' ? 'bg-primary' : (assocStatus == 'honorario' ? 'bg-dark' : (assocStatus == 'fundador' ? 'bg-success' : (assocStatus == 'benemerito' ? 'bg-info text-dark' : (assocStatus == 'veterano' ? 'bg-secondary' : (assocStatus == 'aluno' ? 'bg-light text-dark border' : 'bg-warning text-dark'))))) %}
                         {% set associadoFoto = p.foto|default('') ?: p.user_avatar|default('') %}
+                        {% set associadoFotoSrc = associadoFoto starts with 'http' ? associadoFoto : (BASE_URL ~ associadoFoto) %}
                         <tr>
                             <td class="text-center admin-cell-middle">
                                 {% if associadoFoto is not empty %}
-                                    <img src="{{ BASE_URL }}{{ associadoFoto|e('html_attr') }}"
-                                         alt="{{ p.nome|default('')|e('html_attr') }}"
-                                         class="rounded shadow-sm admin-avatar-square-48">
+                                    <button
+                                        type="button"
+                                        class="btn p-0 border-0 bg-transparent"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#associadoFotoZoomModal"
+                                        data-foto-src="{{ associadoFotoSrc|e('html_attr') }}"
+                                        data-foto-alt="{{ p.nome|default('Associado')|e('html_attr') }}"
+                                        aria-label="Ampliar foto de {{ p.nome|default('Associado')|e('html_attr') }}"
+                                        title="Ampliar foto"
+                                    >
+                                        <img src="{{ associadoFotoSrc|e('html_attr') }}"
+                                             alt="{{ p.nome|default('')|e('html_attr') }}"
+                                             class="rounded shadow-sm admin-avatar-square-48">
+                                    </button>
                                 {% else %}
-                                    <img src="{{ BASE_URL }}assets/images/conscrito.png"
-                                         alt="Imagem padrão de associado"
-                                         class="rounded shadow-sm admin-avatar-square-48">
+                                    <button
+                                        type="button"
+                                        class="btn p-0 border-0 bg-transparent"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#associadoFotoZoomModal"
+                                        data-foto-src="{{ BASE_URL }}assets/images/conscrito.png"
+                                        data-foto-alt="Imagem padrão de associado"
+                                        aria-label="Ampliar imagem padrão do associado"
+                                        title="Ampliar foto"
+                                    >
+                                        <img src="{{ BASE_URL }}assets/images/conscrito.png"
+                                             alt="Imagem padrão de associado"
+                                             class="rounded shadow-sm admin-avatar-square-48">
+                                    </button>
                                 {% endif %}
                             </td>
-                            <td class="admin-cell-middle">{{ p.nome|default('')|e }}</td>
+                            <td class="admin-cell-middle">
+                                <a href="{{ BASE_URL }}admin/pessoal/visualizar/{{ p.id }}" class="fw-semibold text-decoration-none">
+                                    {{ p.nome|default('')|e }}
+                                </a>
+                            </td>
                             <td class="text-center admin-cell-middle">{{ p.cpf|default('')|e }}</td>
                             <td class="admin-cell-middle"><span class="d-block">{{ p.data_admissao|date('d/m/Y') }}</span></td>
                             <td class="admin-cell-middle">{{ p.telefone|default('')|e }}</td>
@@ -287,4 +314,43 @@
     {% endif %}
 
 </div>
+
+<div class="modal fade" id="associadoFotoZoomModal" tabindex="-1" aria-labelledby="associadoFotoZoomModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 bg-transparent">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title text-white" id="associadoFotoZoomModalLabel">Foto do associado</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body text-center pt-2">
+                <img id="associadoFotoZoomModalImage" src="" alt="" class="img-fluid rounded-3 shadow-lg">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fotoZoomModal = document.getElementById('associadoFotoZoomModal');
+            const fotoZoomModalImage = document.getElementById('associadoFotoZoomModalImage');
+            if (!fotoZoomModal || !fotoZoomModalImage) {
+                return;
+            }
+
+            fotoZoomModal.addEventListener('show.bs.modal', function (event) {
+                const trigger = event.relatedTarget;
+                if (!trigger) {
+                    return;
+                }
+
+                const src = trigger.getAttribute('data-foto-src') || '';
+                const alt = trigger.getAttribute('data-foto-alt') || 'Foto do associado';
+                fotoZoomModalImage.setAttribute('src', src);
+                fotoZoomModalImage.setAttribute('alt', alt);
+            });
+        });
+    </script>
 {% endblock %}

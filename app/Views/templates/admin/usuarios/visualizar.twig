@@ -31,8 +31,9 @@
             <div class="row g-3">
                 <div class="col-12 col-lg-3 text-center">
                     {% if usuario.avatar %}
+                        {% set usuarioAvatarSrc = usuario.avatar starts with 'http' ? usuario.avatar : (BASE_URL ~ usuario.avatar) %}
                         <img
-                            src="{{ BASE_URL }}{{ usuario.avatar }}"
+                            src="{{ usuarioAvatarSrc|e('html_attr') }}"
                             alt="{{ usuario.username|default('Usuário')|e('html_attr') }}"
                             class="rounded shadow-sm admin-avatar-square-220"
                         >

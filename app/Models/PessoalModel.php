@@ -252,4 +252,316 @@ class PessoalModel {
             $perPage
         );
     }
+
+    public function listarParaCarometro(array $filters = []): array
+    {
+                $sql = "SELECT
+                    p.id,
+                    p.staff_id,
+                    p.nome,
+                    p.foto,
+                    p.status_associativo,
+                    COALESCE(ma_p.posto_graduacao, ma_c.posto_graduacao, '') AS posto_graduacao,
+                    COALESCE(ma_p.nome_guerra, ma_c.nome_guerra, '') AS nome_guerra,
+                    COALESCE(ma_p.ano_npor, ma_c.ano_npor, '') AS ano_npor,
+                    COALESCE(ma_p.numero_militar, ma_c.numero_militar, '') AS numero_militar
+                FROM {$this->table} p
+                LEFT JOIN (
+                    SELECT ma1.*
+                    FROM membership_applications ma1
+                    INNER JOIN (
+                        SELECT pessoal_id, MAX(id) AS max_id
+                        FROM membership_applications
+                        WHERE pessoal_id IS NOT NULL
+                        GROUP BY pessoal_id
+                    ) latest_pid ON latest_pid.max_id = ma1.id
+                ) ma_p ON ma_p.pessoal_id = p.id
+                LEFT JOIN (
+                    SELECT ma1.*
+                    FROM membership_applications ma1
+                    INNER JOIN (
+                        SELECT cpf, MAX(id) AS max_id
+                        FROM membership_applications
+                        GROUP BY cpf
+                    ) latest_cpf ON latest_cpf.max_id = ma1.id
+                ) ma_c ON ma_c.cpf = p.cpf";
+
+        $conditions = [
+            "p.status = 'Ativo'",
+            "p.status_associativo = 'efetivo'",
+            "EXISTS (
+                SELECT 1
+                FROM membership_applications ma_ok
+                WHERE ma_ok.status = 'aprovada'
+                  AND (
+                    ma_ok.pessoal_id = p.id
+                    OR ma_ok.cpf = p.cpf
+                  )
+            )",
+        ];
+        $params = [];
+
+        $q = trim((string) ($filters['q'] ?? ''));
+        if ($q !== '') {
+            $conditions[] = "(p.nome LIKE :q OR COALESCE(ma_p.nome_guerra, ma_c.nome_guerra, '') LIKE :q OR COALESCE(ma_p.numero_militar, ma_c.numero_militar, '') LIKE :q OR COALESCE(ma_p.ano_npor, ma_c.ano_npor, '') LIKE :q OR COALESCE(ma_p.posto_graduacao, ma_c.posto_graduacao, '') LIKE :q)";
+            $params[':q'] = '%' . $q . '%';
+        }
+
+        $ano = trim((string) ($filters['ano_npor'] ?? ''));
+        if ($ano !== '') {
+            $conditions[] = "COALESCE(ma_p.ano_npor, ma_c.ano_npor, '') = :ano_npor";
+            $params[':ano_npor'] = $ano;
+        }
+
+        $where = implode(' AND ', $conditions);
+        $sql .= " WHERE {$where}
+                  ORDER BY
+                    CAST(NULLIF(COALESCE(ma_p.ano_npor, ma_c.ano_npor, ''), '') AS UNSIGNED) DESC,
+                    CAST(NULLIF(COALESCE(ma_p.numero_militar, ma_c.numero_militar, ''), '') AS UNSIGNED) ASC,
+                    p.nome ASC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function paginarParaCarometro(
+        int $page = 1,
+        int $perPage = 20,
+        array $filters = [],
+        string $sortBy = 'numero_militar',
+        string $sortDir = 'asc'
+    ): array {
+        $page = max(1, $page);
+        $perPage = max(1, min(100, $perPage));
+        $offset = ($page - 1) * $perPage;
+
+        $allowedSorts = [
+            'nome' => 'p.nome',
+            'nome_guerra' => "COALESCE(ma_p.nome_guerra, ma_c.nome_guerra, '')",
+            'ano_npor' => "CAST(NULLIF(COALESCE(ma_p.ano_npor, ma_c.ano_npor, ''), '') AS UNSIGNED)",
+            'numero_militar' => "CAST(NULLIF(COALESCE(ma_p.numero_militar, ma_c.numero_militar, ''), '') AS UNSIGNED)",
+            'posto_graduacao' => "COALESCE(ma_p.posto_graduacao, ma_c.posto_graduacao, '')",
+            'data_nascimento' => "COALESCE(p.nascimento, ma_p.data_nascimento, ma_c.data_nascimento)",
+            'uf' => "COALESCE(ma_p.uf, ma_c.uf, '')",
+            'cidade' => "COALESCE(ma_p.cidade, ma_c.cidade, '')",
+        ];
+
+        $sortBy = array_key_exists($sortBy, $allowedSorts) ? $sortBy : 'numero_militar';
+        $sortDir = strtolower($sortDir) === 'desc' ? 'desc' : 'asc';
+        $primaryOrder = $allowedSorts[$sortBy] . ' ' . strtoupper($sortDir);
+
+        $from = "FROM {$this->table} p
+                LEFT JOIN (
+                    SELECT ma1.*
+                    FROM membership_applications ma1
+                    INNER JOIN (
+                        SELECT pessoal_id, MAX(id) AS max_id
+                        FROM membership_applications
+                        WHERE pessoal_id IS NOT NULL
+                        GROUP BY pessoal_id
+                    ) latest_pid ON latest_pid.max_id = ma1.id
+                ) ma_p ON ma_p.pessoal_id = p.id
+                LEFT JOIN (
+                    SELECT ma1.*
+                    FROM membership_applications ma1
+                    INNER JOIN (
+                        SELECT cpf, MAX(id) AS max_id
+                        FROM membership_applications
+                        GROUP BY cpf
+                    ) latest_cpf ON latest_cpf.max_id = ma1.id
+                ) ma_c ON ma_c.cpf = p.cpf";
+
+        $conditions = [
+            "p.status = 'Ativo'",
+            "p.status_associativo = 'efetivo'",
+            "EXISTS (
+                SELECT 1
+                FROM membership_applications ma_ok
+                WHERE ma_ok.status = 'aprovada'
+                  AND (
+                    ma_ok.pessoal_id = p.id
+                    OR ma_ok.cpf = p.cpf
+                  )
+            )",
+        ];
+        $params = [];
+
+        $q = trim((string) ($filters['q'] ?? ''));
+        if ($q !== '') {
+            $conditions[] = "(p.nome LIKE :q OR COALESCE(ma_p.nome_guerra, ma_c.nome_guerra, '') LIKE :q OR COALESCE(ma_p.numero_militar, ma_c.numero_militar, '') LIKE :q OR COALESCE(ma_p.ano_npor, ma_c.ano_npor, '') LIKE :q OR COALESCE(ma_p.posto_graduacao, ma_c.posto_graduacao, '') LIKE :q OR COALESCE(ma_p.cidade, ma_c.cidade, '') LIKE :q OR COALESCE(ma_p.uf, ma_c.uf, '') LIKE :q)";
+            $params[':q'] = '%' . $q . '%';
+        }
+
+        $ano = trim((string) ($filters['ano_npor'] ?? ''));
+        if ($ano !== '') {
+            $conditions[] = "COALESCE(ma_p.ano_npor, ma_c.ano_npor, '') = :ano_npor";
+            $params[':ano_npor'] = $ano;
+        }
+
+        $where = implode(' AND ', $conditions);
+        $orderBy = "{$primaryOrder},
+                    CAST(NULLIF(COALESCE(ma_p.ano_npor, ma_c.ano_npor, ''), '') AS UNSIGNED) DESC,
+                    p.nome ASC";
+
+        $countStmt = $this->db->prepare("SELECT COUNT(*) {$from} WHERE {$where}");
+        $countStmt->execute($params);
+        $total = (int) $countStmt->fetchColumn();
+
+        $select = "SELECT
+                    p.id,
+                    p.staff_id,
+                    p.nome,
+                    p.foto,
+                    p.status_associativo,
+                    COALESCE(ma_p.posto_graduacao, ma_c.posto_graduacao, '') AS posto_graduacao,
+                    COALESCE(ma_p.arma_quadro, ma_c.arma_quadro, '') AS arma_quadro,
+                    COALESCE(ma_p.nome_guerra, ma_c.nome_guerra, '') AS nome_guerra,
+                    COALESCE(ma_p.ano_npor, ma_c.ano_npor, '') AS ano_npor,
+                    COALESCE(ma_p.numero_militar, ma_c.numero_militar, '') AS numero_militar,
+                    COALESCE(ma_p.turma_npor, ma_c.turma_npor, '') AS turma_npor,
+                    COALESCE(p.nascimento, ma_p.data_nascimento, ma_c.data_nascimento) AS data_nascimento,
+                    COALESCE(ma_p.uf, ma_c.uf, '') AS uf,
+                    COALESCE(ma_p.cidade, ma_c.cidade, '') AS cidade";
+
+        $stmt = $this->db->prepare("{$select} {$from} WHERE {$where} ORDER BY {$orderBy} LIMIT :limit OFFSET :offset");
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value, PDO::PARAM_STR);
+        }
+        $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $lastPage = max(1, (int) ceil($total / $perPage));
+        $fromRow = $total === 0 ? 0 : ($offset + 1);
+        $toRow = min($offset + $perPage, $total);
+
+        return [
+            'data' => $data,
+            'meta' => [
+                'total' => $total,
+                'per_page' => $perPage,
+                'current_page' => $page,
+                'last_page' => $lastPage,
+                'from' => $fromRow,
+                'to' => $toRow,
+            ],
+        ];
+    }
+
+    public function listarAnosCarometro(): array
+    {
+        $stmt = $this->db->query(
+            "SELECT anos.ano_npor
+             FROM (
+                SELECT DISTINCT COALESCE(ma_p.ano_npor, ma_c.ano_npor, '') AS ano_npor
+                FROM {$this->table} p
+                LEFT JOIN (
+                    SELECT ma1.*
+                    FROM membership_applications ma1
+                    INNER JOIN (
+                        SELECT pessoal_id, MAX(id) AS max_id
+                        FROM membership_applications
+                        WHERE pessoal_id IS NOT NULL
+                        GROUP BY pessoal_id
+                    ) latest_pid ON latest_pid.max_id = ma1.id
+                ) ma_p ON ma_p.pessoal_id = p.id
+                LEFT JOIN (
+                    SELECT ma1.*
+                    FROM membership_applications ma1
+                    INNER JOIN (
+                        SELECT cpf, MAX(id) AS max_id
+                        FROM membership_applications
+                        GROUP BY cpf
+                    ) latest_cpf ON latest_cpf.max_id = ma1.id
+                ) ma_c ON ma_c.cpf = p.cpf
+                WHERE p.status = 'Ativo'
+                  AND p.status_associativo = 'efetivo'
+                  AND EXISTS (
+                        SELECT 1
+                        FROM membership_applications ma_ok
+                        WHERE ma_ok.status = 'aprovada'
+                          AND (
+                            ma_ok.pessoal_id = p.id
+                            OR ma_ok.cpf = p.cpf
+                          )
+                    )
+                  AND COALESCE(ma_p.ano_npor, ma_c.ano_npor, '') <> ''
+             ) anos
+             ORDER BY CAST(anos.ano_npor AS UNSIGNED) DESC"
+        );
+
+        return array_map(
+            static fn(array $row): string => (string) $row['ano_npor'],
+            $stmt->fetchAll(PDO::FETCH_ASSOC)
+        );
+    }
+
+    public function listarAniversariantesDoDia(?string $monthDay = null, int $limit = 12): array
+    {
+        $monthDay = $monthDay ?: date('m-d');
+        $limit = max(1, min($limit, 50));
+
+                $sql = "SELECT
+                    p.id,
+                    p.staff_id,
+                    p.nome,
+                    p.foto,
+                    p.nascimento,
+                    p.telefone,
+                    u.avatar AS user_avatar,
+                    u.email AS user_email,
+                    COALESCE(ma_p.nome_guerra, ma_c.nome_guerra, '') AS nome_guerra,
+                    COALESCE(ma_p.ano_npor, ma_c.ano_npor, '') AS ano_npor,
+                    COALESCE(ma_p.numero_militar, ma_c.numero_militar, '') AS numero_militar,
+                    COALESCE(ma_p.cidade, ma_c.cidade, '') AS cidade,
+                    COALESCE(ma_p.uf, ma_c.uf, '') AS uf
+                FROM {$this->table} p
+                LEFT JOIN users u ON u.id = p.user_id
+                LEFT JOIN (
+                    SELECT ma1.*
+                    FROM membership_applications ma1
+                    INNER JOIN (
+                        SELECT pessoal_id, MAX(id) AS max_id
+                        FROM membership_applications
+                        WHERE pessoal_id IS NOT NULL
+                        GROUP BY pessoal_id
+                    ) latest_pid ON latest_pid.max_id = ma1.id
+                ) ma_p ON ma_p.pessoal_id = p.id
+                LEFT JOIN (
+                    SELECT ma1.*
+                    FROM membership_applications ma1
+                    INNER JOIN (
+                        SELECT cpf, MAX(id) AS max_id
+                        FROM membership_applications
+                        GROUP BY cpf
+                    ) latest_cpf ON latest_cpf.max_id = ma1.id
+                ) ma_c ON ma_c.cpf = p.cpf
+                WHERE p.status = 'Ativo'
+                  AND p.status_associativo = 'efetivo'
+                  AND p.nascimento IS NOT NULL
+                  AND DATE_FORMAT(p.nascimento, '%m-%d') = :month_day
+                  AND EXISTS (
+                        SELECT 1
+                        FROM membership_applications ma_ok
+                        WHERE ma_ok.status = 'aprovada'
+                          AND (
+                            ma_ok.pessoal_id = p.id
+                            OR ma_ok.cpf = p.cpf
+                          )
+                    )
+                ORDER BY
+                    DAY(p.nascimento) ASC,
+                    MONTH(p.nascimento) ASC,
+                    p.nome ASC
+                LIMIT :limit";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':month_day', $monthDay, PDO::PARAM_STR);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

@@ -41,6 +41,7 @@
                 'title': 'Acesso rápido',
                 'items': [
                     {'slug': 'institucional/busca', 'label': 'Busca institucional', 'icon': 'bi-search', 'url': BASE_URL ~ 'institucional/busca'},
+                    {'slug': 'institucional/carometro', 'label': 'Carômetro', 'icon': 'bi-people-fill', 'url': BASE_URL ~ 'institucional/carometro'},
                     {'slug': 'institucional/links', 'label': 'Links úteis', 'icon': 'bi-link-45deg', 'url': BASE_URL ~ 'institucional/links'}
                 ]
             }
@@ -57,6 +58,7 @@
             {'slug': 'docs', 'label': 'Documentação técnica', 'icon': 'bi-journal-text', 'url': BASE_URL ~ 'docs', 'restricted_admin': true},
             {'slug': 'institucional/governanca', 'label': 'Governança', 'icon': 'bi-diagram-3', 'url': BASE_URL ~ 'institucional/governanca'},
             {'slug': 'institucional/busca', 'label': 'Busca Institucional', 'icon': 'bi-search', 'url': BASE_URL ~ 'institucional/busca'},
+            {'slug': 'institucional/carometro', 'label': 'Carômetro', 'icon': 'bi-people-fill', 'url': BASE_URL ~ 'institucional/carometro'},
             {'slug': 'institucional/links', 'label': 'Links Úteis', 'icon': 'bi-link-45deg', 'url': BASE_URL ~ 'institucional/links'},
             {'slug': 'privacidade', 'label': 'Privacidade', 'icon': 'bi-shield-lock', 'url': BASE_URL ~ 'privacidade'},
             {'slug': 'termos', 'label': 'Termos de Uso', 'icon': 'bi-file-earmark-text', 'url': BASE_URL ~ 'termos'}
@@ -190,15 +192,15 @@
                                 <i class="bi bi-chevron-down navbar-site__dropdown-indicator" aria-hidden="true"></i>
                             </span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end navbar-site__dropdown-menu" aria-labelledby="dropdown-associe-se">
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2 {{ currentRoute starts with 'register' ? 'active' : '' }}" href="{{ BASE_URL }}register">
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end dropdown-menu-institucional navbar-site__dropdown-menu" aria-labelledby="dropdown-associe-se">
+                            <li class="dropdown-item-full">
+                                <a class="dropdown-item d-flex align-items-center gap-2" href="{{ BASE_URL }}register">
                                     <i class="bi bi-mortarboard"></i>
                                     <span class="fw-semibold">Sou ex-aluno do NPOR do 16º BI Mtz</span>
                                 </a>
                             </li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2 {{ currentRoute starts with 'error/temporariamente-indisponivel' ? 'active' : '' }}" href="{{ BASE_URL }}error/temporariamente-indisponivel">
+                            <li class="dropdown-item-full">
+                                <a class="dropdown-item d-flex align-items-center gap-2" href="{{ BASE_URL }}error/temporariamente-indisponivel">
                                     <i class="bi bi-envelope"></i>
                                     <span class="fw-semibold">Não sou ex-aluno de NPOR</span>
                                 </a>
@@ -213,13 +215,13 @@
                         <div class="collapse mobile-subnav" id="mobile-subnav-associe-se" data-mobile-subnav>
                             <ul class="list-unstyled mb-0">
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center gap-2 {{ currentRoute starts with 'register' ? 'active' : '' }}" href="{{ BASE_URL }}register">
+                                    <a class="dropdown-item d-flex align-items-center gap-2" href="{{ BASE_URL }}register">
                                         <i class="bi bi-mortarboard"></i>
                                         <span class="fw-semibold">Sou ex-aluno do NPOR do 16º BI Mtz</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center gap-2 {{ currentRoute starts with 'error/temporariamente-indisponivel' ? 'active' : '' }}" href="{{ BASE_URL }}error/temporariamente-indisponivel">
+                                    <a class="dropdown-item d-flex align-items-center gap-2" href="{{ BASE_URL }}error/temporariamente-indisponivel">
                                         <i class="bi bi-envelope"></i>
                                         <span class="fw-semibold">Não sou ex-aluno de NPOR</span>
                                     </a>

@@ -12,6 +12,7 @@ use App\Core\Controller;
 use App\Core\Request;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\PermissionMiddleware;
+use App\Models\DigitalCardModel;
 use App\Models\BoardMembershipModel;
 use App\Models\PessoalModel;
 use App\Models\FuncaoModel;
@@ -25,6 +26,7 @@ class PessoalController extends Controller {
 
     private PessoalModel $model;
     private BoardMembershipModel $boardMemberships;
+    private DigitalCardModel $cards;
     private User $users;
     private MembershipApplicationModel $applications;
     private const PESSOAL_FOTO_DIR = 'uploads/pessoal/';
@@ -34,6 +36,7 @@ class PessoalController extends Controller {
     public function __construct() {
         $this->model = new PessoalModel();
         $this->boardMemberships = new BoardMembershipModel();
+        $this->cards = new DigitalCardModel();
         $this->users = new User();
         $this->applications = new MembershipApplicationModel();
         AuthMiddleware::requireAuth();
@@ -187,9 +190,10 @@ class PessoalController extends Controller {
         if (!empty($registro['cpf'])) {
             $filiacao = $this->applications->buscarMaisRecentePorCpf((string) $registro['cpf']);
         }
+        $carteirinha = $this->cards->isAvailable() ? $this->cards->buscarUltimaPorPessoal((int) $registro['id']) : null;
         $csrf_token = CsrfHelper::generateToken();
         $this->renderTwig('admin/pessoal/visualizar', array_merge(
-            compact('registro', 'roleLabels', 'accessDefaults', 'csrf_token', 'filiacao'),
+            compact('registro', 'roleLabels', 'accessDefaults', 'csrf_token', 'filiacao', 'carteirinha'),
             AdminHelper::getUserData('pessoal')
         ));
     }
@@ -356,6 +360,102 @@ class PessoalController extends Controller {
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Credencial básica liberada com sucesso para o associado.'];
 
+        header('Location: ' . $returnPath);
+        exit;
+    }
+
+    public function emitirCarteirinha(int $id): void
+    {
+        PermissionMiddleware::authorize('pessoal:edit');
+        CsrfHelper::verifyOrDie();
+        $returnPath = BASE_URL . 'admin/pessoal/visualizar/' . $id;
+
+        if (!$this->cards->isAvailable()) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Módulo de carteirinha indisponível. Execute as migrations pendentes.'];
+            header('Location: ' . $returnPath);
+            exit;
+        }
+
+        $registro = $this->model->buscar($id);
+        if (!$registro) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Associado não encontrado.'];
+            header('Location: ' . BASE_URL . 'admin/pessoal');
+            exit;
+        }
+
+        if (($registro['status'] ?? '') !== 'Ativo' || ($registro['status_associativo'] ?? '') !== 'efetivo') {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Somente associados Ativos e Sócios Efetivos podem receber carteirinha digital.'];
+            header('Location: ' . $returnPath);
+            exit;
+        }
+
+        $filiacao = $this->applications->buscarMaisRecentePorCpf((string) ($registro['cpf'] ?? ''));
+        if (!$filiacao || ($filiacao['status'] ?? '') !== 'aprovada') {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Não há solicitação aprovada para emissão da carteirinha digital.'];
+            header('Location: ' . $returnPath);
+            exit;
+        }
+
+        $this->cards->revogarAtivaPorPessoal((int) $id, 'Substituída por nova emissão');
+
+        $anoNpor = (string) ($filiacao['ano_npor'] ?? '');
+        $numeroMilitar = preg_replace('/\D/', '', (string) ($filiacao['numero_militar'] ?? ''));
+        $numeroMilitar = str_pad((string) ($numeroMilitar !== '' ? $numeroMilitar : '0'), 2, '0', STR_PAD_LEFT);
+        try {
+            $token = bin2hex(random_bytes(24));
+        } catch (\Throwable $exception) {
+            $token = sha1((string) microtime(true) . '-' . (string) $id . '-' . (string) random_int(1000, 999999));
+        }
+        $cardCode = sprintf('%s-%s', date('YmdHis'), substr($token, 0, 6));
+        $validadeAte = date('Y-m-d H:i:s', strtotime('+1 year'));
+
+        $snapshot = [
+            'staff_id' => (string) ($registro['staff_id'] ?? ''),
+            'nome' => (string) ($registro['nome'] ?? ''),
+            'cpf' => (string) ($registro['cpf'] ?? ''),
+            'rg' => (string) ($filiacao['rg'] ?? ''),
+            'foto' => (string) ($registro['foto'] ?? ''),
+            'nome_mae' => (string) ($filiacao['nome_mae'] ?? ''),
+            'nome_pai' => (string) ($filiacao['nome_pai'] ?? ''),
+            'posto_graduacao' => (string) ($filiacao['posto_graduacao'] ?? ''),
+            'nome_guerra' => (string) ($filiacao['nome_guerra'] ?? ''),
+            'arma_quadro' => (string) ($filiacao['arma_quadro'] ?? ''),
+            'ano_npor' => $anoNpor,
+            'numero_militar' => $numeroMilitar,
+            'turma_npor' => (string) ($filiacao['turma_npor'] ?? ''),
+            'data_nascimento' => (string) ($filiacao['data_nascimento'] ?? ($registro['nascimento'] ?? '')),
+            'cidade' => (string) ($filiacao['cidade'] ?? ''),
+            'uf' => (string) ($filiacao['uf'] ?? ''),
+            'status_associativo' => (string) ($registro['status_associativo'] ?? ''),
+        ];
+
+        $ok = $this->cards->emitir((int) $id, $cardCode, $token, $snapshot, $validadeAte);
+        if (!$ok) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Não foi possível emitir a carteirinha digital.'];
+            header('Location: ' . $returnPath);
+            exit;
+        }
+
+        $_SESSION['toast'] = ['type' => 'success', 'message' => 'Carteirinha digital emitida com sucesso.'];
+        header('Location: ' . $returnPath);
+        exit;
+    }
+
+    public function revogarCarteirinha(int $id): void
+    {
+        PermissionMiddleware::authorize('pessoal:edit');
+        CsrfHelper::verifyOrDie();
+        $returnPath = BASE_URL . 'admin/pessoal/visualizar/' . $id;
+
+        if (!$this->cards->isAvailable()) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Módulo de carteirinha indisponível. Execute as migrations pendentes.'];
+            header('Location: ' . $returnPath);
+            exit;
+        }
+
+        $motivo = trim((string) ($_POST['motivo_revogacao'] ?? 'Revogada pela administração'));
+        $this->cards->revogarAtivaPorPessoal((int) $id, $motivo);
+        $_SESSION['toast'] = ['type' => 'success', 'message' => 'Carteirinha digital revogada com sucesso.'];
         header('Location: ' . $returnPath);
         exit;
     }

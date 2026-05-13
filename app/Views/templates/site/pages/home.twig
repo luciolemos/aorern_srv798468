@@ -73,6 +73,46 @@
 
     <section class="home-about home-section py-5">
         <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-xl-10">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4 p-lg-5">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                                <div>
+                                    <p class="text-uppercase small fw-semibold text-muted mb-2">Comunidade AORE/RN</p>
+                                    <h2 class="h4 fw-bold text-primary mb-1">Aniversariantes de hoje</h2>
+                                    <p class="text-muted mb-0">Associados celebrados nesta data na base institucional.</p>
+                                </div>
+                                <span class="badge text-bg-light border">{{ 'now'|date('d/m') }}</span>
+                            </div>
+                            {% if aniversariantes_hoje is not empty %}
+                                <div class="row g-3">
+                                    {% for aniversariante in aniversariantes_hoje %}
+                                        <div class="col-md-6 col-xl-3">
+                                            <div class="border rounded-4 h-100 p-3 bg-light-subtle">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <img src="{{ aniversariante.foto_url|e('html_attr') }}" alt="{{ aniversariante.nome|e('html_attr') }}" class="rounded-3 shadow-sm" style="width:64px;height:64px;object-fit:cover;">
+                                                    <div class="min-w-0">
+                                                        <div class="fw-semibold text-truncate">{{ aniversariante.nome }}</div>
+                                                        <div class="small text-muted text-truncate">Al {{ aniversariante.numero_militar }}/{{ aniversariante.ano_npor }} · {{ aniversariante.nome_guerra }}</div>
+                                                        <div class="small text-success-emphasis">{{ aniversariante.idade is not null ? aniversariante.idade ~ ' anos' : 'Data confirmada' }}</div>
+                                                        {% if aniversariante.localidade %}
+                                                            <div class="small text-muted text-truncate">{{ aniversariante.localidade }}</div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-light border mb-0">Nao ha aniversariantes cadastrados para hoje na base associativa.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row align-items-center g-4">
                 <div class="col-lg-7">
                     {% include 'site/components/section-header.twig' with {

@@ -133,6 +133,9 @@ class TwigEngine {
                 'line_1' => INSTITUTIONAL_ADDRESS_LINE_1 ?? '',
                 'line_2' => INSTITUTIONAL_ADDRESS_LINE_2 ?? '',
             ],
+            'social' => [
+                'instagram' => INSTITUTIONAL_INSTAGRAM_URL ?? '',
+            ],
         ];
     }
 

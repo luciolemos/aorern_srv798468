@@ -18,6 +18,7 @@
     </div>
 
     {% set associadoFoto = registro.foto|default('') ?: registro.user_avatar|default('') %}
+    {% set associadoFotoSrc = associadoFoto starts with 'http' ? associadoFoto : (BASE_URL ~ associadoFoto) %}
     {% set status = registro.status|default('Ativo') %}
     {% set assocStatus = registro.status_associativo|default('provisorio') %}
 
@@ -34,7 +35,7 @@
                     <div class="row g-3">
                         <div class="col-12 col-lg-3 text-center">
                             {% if associadoFoto is not empty %}
-                                <img src="{{ BASE_URL }}{{ associadoFoto|e('html_attr') }}"
+                                <img src="{{ associadoFotoSrc|e('html_attr') }}"
                                      alt="{{ registro.nome|default('Associado')|e('html_attr') }}"
                                      class="rounded shadow-sm admin-avatar-square-220">
                             {% else %}
@@ -237,6 +238,60 @@
                                 </button>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-bold admin-section-title">
+                        <i class="bi bi-person-vcard me-2"></i>Carteirinha digital
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if carteirinha %}
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Código</label>
+                                <input type="text" class="form-control" value="{{ carteirinha.card_code|default('-')|e('html_attr') }}" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Status</label>
+                                <input type="text" class="form-control" value="{{ carteirinha.status|default('-')|capitalize }}" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Emitida em</label>
+                                <input type="text" class="form-control" value="{{ carteirinha.emitida_em ? carteirinha.emitida_em|date('d/m/Y H:i') : '-' }}" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Validade</label>
+                                <input type="text" class="form-control" value="{{ carteirinha.validade_ate ? carteirinha.validade_ate|date('d/m/Y') : 'Indeterminada' }}" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Validação pública</label>
+                                <input type="text" class="form-control" value="{{ BASE_URL }}carteirinha/validar/{{ carteirinha.token|default('')|e('html_attr') }}" readonly>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-light border mb-3">
+                            Nenhuma carteirinha digital emitida para este associado.
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        <form method="post" action="{{ BASE_URL }}admin/pessoal/emitir-carteirinha/{{ registro.id }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <button type="submit" class="btn btn-theme">
+                                <i class="bi bi-patch-check me-1"></i>{{ carteirinha and carteirinha.status == 'ativa' ? 'Reemitir carteirinha' : 'Emitir carteirinha' }}
+                            </button>
+                        </form>
+                        <form method="post" action="{{ BASE_URL }}admin/pessoal/revogar-carteirinha/{{ registro.id }}" onsubmit="return confirm('Confirma a revogação da carteirinha ativa?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <input type="hidden" name="motivo_revogacao" value="Revogada manualmente no painel administrativo">
+                            <button type="submit" class="btn btn-outline-danger" {% if not carteirinha or carteirinha.status != 'ativa' %}disabled{% endif %}>
+                                <i class="bi bi-x-octagon me-1"></i>Revogar carteirinha
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -29,12 +29,13 @@
                     </div>
                     <div class="card-body">
                         {% set associadoFoto = registro.foto|default('') ?: registro.user_avatar|default('') %}
+                        {% set associadoFotoSrc = associadoFoto starts with 'http' ? associadoFoto : (BASE_URL ~ associadoFoto) %}
                         <div class="row g-3">
                             <div class="col-12 col-lg-3 text-center">
                                 <div class="mt-2" id="fotoPreviewContainer">
                                     <img
                                         id="fotoPreview"
-                                        src="{{ associadoFoto is not empty ? (BASE_URL ~ associadoFoto) : (BASE_URL ~ 'assets/images/conscrito.png') }}"
+                                        src="{{ associadoFoto is not empty ? associadoFotoSrc : (BASE_URL ~ 'assets/images/conscrito.png') }}"
                                         alt="Preview"
                                         class="rounded shadow-sm admin-avatar-square-220"
                                     >

@@ -34,7 +34,7 @@
 }
 
 .post-share-card {
-    background: var(--site-surface-soft-gradient);
+    background: linear-gradient(180deg, #f6fbf7 0%, #edf5ef 100%);
     border-radius: 1.25rem;
     border: 1px solid rgba(85, 107, 47, 0.12);
 }
@@ -70,7 +70,7 @@
     justify-content: center;
     color: #fff;
     font-size: 1.25rem;
-    background: var(--site-accent-gradient);
+    background: linear-gradient(135deg, #556b2f 0%, #6f8650 100%);
     box-shadow: 0 12px 24px rgba(85, 107, 47, 0.25);
     transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
 }
@@ -88,22 +88,22 @@
 }
 
 .post-share-card .share-btn-facebook {
-    background: #1877f2;
+    background: #556b2f;
     color: #fff;
 }
 
 .post-share-card .share-btn-twitter {
-    background: #1d9bf0;
+    background: #647b39;
     color: #fff;
 }
 
 .post-share-card .share-btn-whatsapp {
-    background: #25d366;
-    color: #0b4624;
+    background: #738949;
+    color: #fff;
 }
 
 .post-share-card .share-btn-linkedin {
-    background: #0a66c2;
+    background: #485b28;
     color: #fff;
 }
 

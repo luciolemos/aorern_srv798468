@@ -36,7 +36,7 @@ body.bg-light {
     opacity: 1;
     background-color: var(--bs-primary);
     border-color: var(--bs-primary);
-    color: #fff;
+    color: var(--color-white);
     filter: none;
 }
 
@@ -106,7 +106,7 @@ body.bg-light {
 
 .admin-content-area .required-indicator {
     font-weight: 700;
-    color: #dc3545;
+    color: var(--color-danger);
     font-size: 0.95em;
     line-height: 1;
 }
@@ -195,23 +195,23 @@ body.bg-light {
     height: 48px;
     border: 2px solid rgba(255, 255, 255, 0.7);
     border-radius: 0.5rem;
-    color: #fff;
+    color: var(--color-white);
     background-color: transparent;
     transition: var(--admin-transition);
 }
 
 .admin-navbar #sidebarCollapseBtn:hover,
 .admin-navbar #sidebarCollapseBtn:focus {
-    border-color: #fff;
+    border-color: var(--color-white);
     background-color: rgba(255, 255, 255, 0.12);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .admin-navbar-action {
     min-height: 44px;
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 999px;
-    color: #fff;
+    color: var(--color-white);
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(8px);
     box-shadow: none;
@@ -221,7 +221,7 @@ body.bg-light {
 .admin-navbar-action:hover,
 .admin-navbar-action:focus,
 .admin-navbar-action.show {
-    color: #fff;
+    color: var(--color-white);
     border-color: rgba(255, 255, 255, 0.38);
     background: rgba(255, 255, 255, 0.14);
 }
@@ -701,7 +701,7 @@ body.bg-light {
     transition: var(--admin-transition);   /* Suaviza hover e active */
     margin-bottom: 2px;                    /* Espaçamento vertical */
     border-radius: 0.375rem;               /* Arredonda levemente */
-    color: #fff3e6 !important; /* Branco creme */
+    color: var(--color-cream-100) !important; /* Branco creme */
     font-weight: 400;
     position: relative;
     overflow: hidden;
@@ -709,9 +709,9 @@ body.bg-light {
 
 .admin-sidebar .nav-link:hover:not(.active):not(.active-brand) {
     background-color: rgba(255, 255, 255, 0.1);
-    color: #ffffff !important; /* Branco puro no hover */
+    color: var(--color-white) !important; /* Branco puro no hover */
     transform: translateX(3px);
-    box-shadow: inset 4px 0 0 #ffffff;
+    box-shadow: inset 4px 0 0 var(--color-white);
 }
 
 .admin-sidebar .nav-link.active,
@@ -719,8 +719,8 @@ body.bg-light {
 .admin-sidebar .nav-link.active-brand {
     background: rgba(0, 0, 0, 0.25) !important;
     font-weight: 600;
-    border-left: 3px solid #ffffff;
-    color: #ffffff !important;
+    border-left: 3px solid var(--color-white);
+    color: var(--color-white) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -733,7 +733,7 @@ body.bg-light {
 /* ▼ Animação para o ícone de seta do menu colapsável */
 .admin-sidebar .nav-item .bi-chevron-down {
     transition: transform var(--admin-transition);
-    color: #fff3e6;
+    color: var(--color-cream-100);
 }
 .admin-sidebar .nav-item .collapsed .bi-chevron-down {
     transform: rotate(-90deg);        /* Seta rotacionada */
@@ -745,21 +745,21 @@ body.bg-light {
     border-left: 2px solid rgba(255, 255, 255, 0.2);
     margin-left: 0.5rem;
     padding-left: 1rem !important;
-    color: #fff3e6 !important;
+    color: var(--color-cream-100) !important;
 }
 
 .admin-sidebar .collapse .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    border-left-color: #ffffff;
-    color: #ffffff !important;
+    border-left-color: var(--color-white);
+    color: var(--color-white) !important;
 }
 
 .admin-sidebar .collapse .nav-link.bg-secondary,
 .admin-sidebar .collapse .nav-link.active-brand {
     background: rgba(0, 0, 0, 0.25) !important;
-    border-left: 3px solid #ffffff !important;
+    border-left: 3px solid var(--color-white) !important;
     font-weight: 600;
-    color: #ffffff !important;
+    color: var(--color-white) !important;
 }
 
 /* 🔻 Collapse transition for sidebar menus */
@@ -873,14 +873,14 @@ body.bg-light {
 }
 
 .admin-user-toggle {
-    color: #fff !important;
+    color: var(--color-white) !important;
     border-color: rgba(255, 255, 255, 0.5) !important;
 }
 
 .admin-user-toggle:hover,
 .admin-user-toggle:focus {
     background-color: rgba(255, 255, 255, 0.1) !important;
-    border-color: #fff !important;
+    border-color: var(--color-white) !important;
 }
 
 .admin-user-avatar,
@@ -912,12 +912,12 @@ body.bg-light {
 
 .admin-user-initial,
 .admin-user-initial-lg {
-    color: #fff;
+    color: var(--color-white);
     font-weight: 700;
 }
 
 .admin-user-initial-lg {
-    color: #0082c8;
+    color: var(--color-secondary);
 }
 
 .admin-user-dropdown-header {
@@ -926,7 +926,7 @@ body.bg-light {
 
 .admin-user-role {
     background-color: rgba(85, 107, 47, 0.15) !important;
-    color: #0082c8 !important;
+    color: var(--color-secondary) !important;
 }
 
 .admin-user-dropdown .dropdown-item {
@@ -937,16 +937,16 @@ body.bg-light {
 
 .admin-user-dropdown .dropdown-item:hover {
     background-color: rgba(85, 107, 47, 0.08);
-    color: #556b2f;
+    color: var(--color-primary);
 }
 
 .admin-user-dropdown .dropdown-item.text-danger {
-    color: #dc3545 !important;
+    color: var(--color-danger) !important;
 }
 
 .admin-user-dropdown .dropdown-item.text-danger:hover {
     background-color: rgba(220, 53, 69, 0.12);
-    color: #dc3545 !important;
+    color: var(--color-danger) !important;
 }
 
 /* 🌓 OVERLAY ESCURO PARA MENU MOBILE */
@@ -989,7 +989,7 @@ body.bg-light {
 }
 
 .post-form .input-group-text {
-    background-color: #f8f9fa;
+    background-color: var(--admin-surface);
     font-size: 0.9rem;
 }
 

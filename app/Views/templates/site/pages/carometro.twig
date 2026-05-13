@@ -1,0 +1,433 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Carômetro - AORE/RN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/carometro.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section class="carometro-hero site-hero">
+        <div class="site-hero-pattern"></div>
+        <div class="container position-relative">
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
+                    <p class="section-kicker text-white-50 mb-2">Institucional</p>
+                    <h1 class="section-title text-white mb-3">Carômetro AORE/RN</h1>
+                    <p class="section-lead text-white-75 mb-0">
+                        Consulta pública de associados por identificação, ano de formação NPOR e número na turma.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-light border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h2 class="h5 mb-0"><i class="bi bi-funnel me-2"></i>Busca avançada</h2>
+                    {% if q or ano_npor %}
+                        <a href="{{ BASE_URL }}institucional/carometro" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>Limpar filtros
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <form method="GET" class="row g-3 align-items-end">
+                        <div class="col-12 col-lg-8">
+                            <label for="carometroQ" class="form-label small fw-semibold mb-1">Busca</label>
+                            <input
+                                id="carometroQ"
+                                type="text"
+                                class="form-control"
+                                name="q"
+                                value="{{ q|default('')|e('html_attr') }}"
+                                placeholder="Nome, nome de guerra, ano NPOR ou número"
+                            >
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-2">
+                            <label for="carometroAno" class="form-label small fw-semibold mb-1">Ano NPOR</label>
+                            <select id="carometroAno" name="ano_npor" class="form-select">
+                                <option value="">Todos</option>
+                                {% for ano in anos_disponiveis %}
+                                    <option value="{{ ano|e('html_attr') }}" {% if ano_npor == ano %}selected{% endif %}>{{ ano }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="hidden" name="sort_by" value="{{ sort_by|default('numero_militar')|e('html_attr') }}">
+                        <input type="hidden" name="sort_dir" value="{{ sort_dir|default('asc')|e('html_attr') }}">
+                        <div class="col-12 col-sm-6 col-lg-2 d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-search me-1"></i>Buscar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <p class="text-muted mb-0">
+                    <strong>{{ total_associados }}</strong> associado(s) encontrado(s)
+                </p>
+                <form method="GET" class="d-flex align-items-center gap-2 mb-0">
+                    <input type="hidden" name="q" value="{{ q|default('')|e('html_attr') }}">
+                    <input type="hidden" name="ano_npor" value="{{ ano_npor|default('')|e('html_attr') }}">
+                    <input type="hidden" name="sort_by" value="{{ sort_by|default('numero_militar')|e('html_attr') }}">
+                    <input type="hidden" name="sort_dir" value="{{ sort_dir|default('asc')|e('html_attr') }}">
+                    <label for="carometroPerPage" class="text-muted small mb-0">Por página</label>
+                    <select id="carometroPerPage" name="per_page" class="form-select form-select-sm" onchange="this.form.submit()">
+                        {% for option in per_page_options %}
+                            <option value="{{ option }}" {% if per_page == option %}selected{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            {% if associados is empty %}
+                <div class="alert alert-info border-0 shadow-sm">
+                    <i class="bi bi-info-circle me-2"></i>Nenhum associado encontrado com os filtros informados.
+                </div>
+            {% else %}
+                <div class="table-responsive carometro-table-wrap d-none d-md-block">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center carometro-col-foto">Foto</th>
+                                <th class="carometro-col-guerra-alt d-none d-md-table-cell d-lg-none">
+                                    <a href="{{ sort_links.nome_guerra }}" class="carometro-sort-link {{ sort_by == 'nome_guerra' ? 'active' : '' }}">
+                                        Nome de guerra
+                                        <i class="bi {{ sort_by == 'nome_guerra' ? (sort_dir == 'asc' ? 'bi-sort-alpha-down' : 'bi-sort-alpha-up') : 'bi-arrow-down-up' }}"></i>
+                                    </a>
+                                </th>
+                                <th class="text-center carometro-col-codigo">Código</th>
+                                <th class="carometro-col-posto">
+                                    <a href="{{ sort_links.posto_graduacao }}" class="carometro-sort-link {{ sort_by == 'posto_graduacao' ? 'active' : '' }}">
+                                        Posto/Grad
+                                        <i class="bi {{ sort_by == 'posto_graduacao' ? (sort_dir == 'asc' ? 'bi-sort-alpha-down' : 'bi-sort-alpha-up') : 'bi-arrow-down-up' }}"></i>
+                                    </a>
+                                </th>
+                                <th class="text-center carometro-col-numero">
+                                    <a href="{{ sort_links.numero_militar }}" class="carometro-sort-link justify-content-center {{ sort_by == 'numero_militar' ? 'active' : '' }}">
+                                        Nº
+                                        <i class="bi {{ sort_by == 'numero_militar' ? (sort_dir == 'asc' ? 'bi-sort-numeric-down' : 'bi-sort-numeric-up') : 'bi-arrow-down-up' }}"></i>
+                                    </a>
+                                </th>
+                                <th class="carometro-col-nome">
+                                    <a href="{{ sort_links.nome }}" class="carometro-sort-link {{ sort_by == 'nome' ? 'active' : '' }}">
+                                        Nome
+                                        <i class="bi {{ sort_by == 'nome' ? (sort_dir == 'asc' ? 'bi-sort-alpha-down' : 'bi-sort-alpha-up') : 'bi-arrow-down-up' }}"></i>
+                                    </a>
+                                </th>
+                                <th class="carometro-col-guerra">
+                                    <a href="{{ sort_links.nome_guerra }}" class="carometro-sort-link {{ sort_by == 'nome_guerra' ? 'active' : '' }}">
+                                        Nome de guerra
+                                        <i class="bi {{ sort_by == 'nome_guerra' ? (sort_dir == 'asc' ? 'bi-sort-alpha-down' : 'bi-sort-alpha-up') : 'bi-arrow-down-up' }}"></i>
+                                    </a>
+                                </th>
+                                <th class="text-center carometro-col-ano">
+                                    <a href="{{ sort_links.ano_npor }}" class="carometro-sort-link justify-content-center {{ sort_by == 'ano_npor' ? 'active' : '' }}">
+                                        Ano NPOR
+                                        <i class="bi {{ sort_by == 'ano_npor' ? (sort_dir == 'asc' ? 'bi-sort-numeric-down' : 'bi-sort-numeric-up') : 'bi-arrow-down-up' }}"></i>
+                                    </a>
+                                </th>
+                                <th class="text-center carometro-col-nascimento">
+                                    <a href="{{ sort_links.data_nascimento }}" class="carometro-sort-link justify-content-center {{ sort_by == 'data_nascimento' ? 'active' : '' }}">
+                                        Nascimento
+                                        <i class="bi {{ sort_by == 'data_nascimento' ? (sort_dir == 'asc' ? 'bi-sort-numeric-down' : 'bi-sort-numeric-up') : 'bi-arrow-down-up' }}"></i>
+                                    </a>
+                                </th>
+                                <th class="text-center carometro-col-uf">
+                                    <a href="{{ sort_links.uf }}" class="carometro-sort-link justify-content-center {{ sort_by == 'uf' ? 'active' : '' }}">
+                                        UF
+                                        <i class="bi {{ sort_by == 'uf' ? (sort_dir == 'asc' ? 'bi-sort-alpha-down' : 'bi-sort-alpha-up') : 'bi-arrow-down-up' }}"></i>
+                                    </a>
+                                </th>
+                                <th class="carometro-col-cidade">
+                                    <a href="{{ sort_links.cidade }}" class="carometro-sort-link {{ sort_by == 'cidade' ? 'active' : '' }}">
+                                        Cidade
+                                        <i class="bi {{ sort_by == 'cidade' ? (sort_dir == 'asc' ? 'bi-sort-alpha-down' : 'bi-sort-alpha-up') : 'bi-arrow-down-up' }}"></i>
+                                    </a>
+                                </th>
+                                <th class="text-center carometro-col-acoes">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for associado in associados %}
+                                <tr>
+                                    <td class="text-center carometro-col-foto">
+                                        <button
+                                            type="button"
+                                            class="carometro-avatar-trigger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#carometroFotoModal"
+                                            data-foto-src="{{ associado.foto_url|e('html_attr') }}"
+                                            data-foto-alt="{{ associado.nome|default('Associado')|e('html_attr') }}"
+                                            title="Ampliar foto"
+                                            aria-label="Ampliar foto de {{ associado.nome|default('Associado')|e('html_attr') }}"
+                                        >
+                                            <img
+                                                src="{{ associado.foto_url|e('html_attr') }}"
+                                                alt="{{ associado.nome|default('Associado')|e('html_attr') }}"
+                                                class="carometro-avatar"
+                                            >
+                                        </button>
+                                    </td>
+                                    <td class="carometro-col-guerra-alt d-none d-md-table-cell d-lg-none">
+                                        <div class="fw-semibold">{{ associado.nome|default('-')|e }}</div>
+                                        <div class="small text-muted">
+                                            Al {{ associado.numero_formatado|e }} {{ associado.nome_guerra_exibicao|e }}/{{ associado.ano_npor_exibicao|e }} · {{ associado.data_nascimento_exibicao|e }} · {{ associado.cidade_exibicao|e }}/{{ associado.uf_exibicao|e }}
+                                        </div>
+                                    </td>
+                                    <td class="text-center carometro-col-codigo">{{ associado.staff_id|default('-')|e }}</td>
+                                    <td class="carometro-col-posto">{{ associado.posto_graduacao_exibicao|e }}</td>
+                                    <td class="text-center carometro-col-numero">{{ associado.numero_formatado|e }}</td>
+                                    <td class="fw-semibold carometro-col-nome">{{ associado.nome|default('-')|e }}</td>
+                                    <td class="carometro-col-guerra">{{ associado.nome_guerra_exibicao|e }}</td>
+                                    <td class="text-center carometro-col-ano">{{ associado.ano_npor_exibicao|e }}</td>
+                                    <td class="text-center carometro-col-nascimento">{{ associado.data_nascimento_exibicao|e }}</td>
+                                    <td class="text-center carometro-col-uf">{{ associado.uf_exibicao|e }}</td>
+                                    <td class="carometro-col-cidade">{{ associado.cidade_exibicao|e }}</td>
+                                    <td class="text-center carometro-col-acoes">
+                                        <a
+                                            href="#"
+                                            class="carometro-action-link"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#carometroDetalheModal"
+                                            data-foto-src="{{ associado.foto_url|e('html_attr') }}"
+                                            data-foto-alt="{{ associado.nome|default('Associado')|e('html_attr') }}"
+                                            data-resumo-nome="{{ associado.nome|default('-')|e('html_attr') }}"
+                                            data-resumo-posto="{{ associado.posto_graduacao_exibicao|e('html_attr') }}"
+                                            data-resumo-socio="{{ associado.staff_id|default('-')|e('html_attr') }}"
+                                            data-resumo-numero="{{ associado.numero_formatado|e('html_attr') }}"
+                                            data-resumo-guerra="{{ associado.nome_guerra_exibicao|e('html_attr') }}"
+                                            data-resumo-ano="{{ associado.ano_npor_exibicao|e('html_attr') }}"
+                                            data-resumo-arma="{{ associado.arma_quadro_exibicao|e('html_attr') }}"
+                                            data-resumo-turma="{{ associado.turma_exibicao|e('html_attr') }}"
+                                            data-resumo-nascimento="{{ associado.data_nascimento_exibicao|e('html_attr') }}"
+                                            data-resumo-uf="{{ associado.uf_exibicao|e('html_attr') }}"
+                                            data-resumo-cidade="{{ associado.cidade_exibicao|e('html_attr') }}"
+                                            title="Visualizar associado"
+                                            aria-label="Visualizar associado {{ associado.nome|default('')|e('html_attr') }}"
+                                        >
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="carometro-mobile-list d-md-none">
+                    {% for associado in associados %}
+                        <article class="carometro-mobile-item">
+                            <button
+                                type="button"
+                                class="carometro-avatar-trigger"
+                                data-bs-toggle="modal"
+                                data-bs-target="#carometroDetalheModal"
+                                data-foto-src="{{ associado.foto_url|e('html_attr') }}"
+                                data-foto-alt="{{ associado.nome|default('Associado')|e('html_attr') }}"
+                                data-resumo-nome="{{ associado.nome|default('-')|e('html_attr') }}"
+                                data-resumo-posto="{{ associado.posto_graduacao_exibicao|e('html_attr') }}"
+                                data-resumo-socio="{{ associado.staff_id|default('-')|e('html_attr') }}"
+                                data-resumo-numero="{{ associado.numero_formatado|e('html_attr') }}"
+                                data-resumo-guerra="{{ associado.nome_guerra_exibicao|e('html_attr') }}"
+                                data-resumo-ano="{{ associado.ano_npor_exibicao|e('html_attr') }}"
+                                data-resumo-arma="{{ associado.arma_quadro_exibicao|e('html_attr') }}"
+                                data-resumo-turma="{{ associado.turma_exibicao|e('html_attr') }}"
+                                data-resumo-nascimento="{{ associado.data_nascimento_exibicao|e('html_attr') }}"
+                                data-resumo-uf="{{ associado.uf_exibicao|e('html_attr') }}"
+                                data-resumo-cidade="{{ associado.cidade_exibicao|e('html_attr') }}"
+                                title="Ver resumo do associado"
+                                aria-label="Ver resumo de {{ associado.nome|default('Associado')|e('html_attr') }}"
+                            >
+                                <img
+                                    src="{{ associado.foto_url|e('html_attr') }}"
+                                    alt="{{ associado.nome|default('Associado')|e('html_attr') }}"
+                                    class="carometro-avatar"
+                                >
+                            </button>
+                            <div class="carometro-mobile-label mb-0">
+                                <p class="carometro-mobile-name mb-0">{{ associado.nome|default('-')|e }}</p>
+                                <p class="carometro-mobile-id mb-0">Al {{ associado.numero_formatado|e }} {{ associado.nome_guerra_exibicao|e }}/{{ associado.ano_npor_exibicao|e }}</p>
+                                <p class="carometro-mobile-meta mb-0">{{ associado.data_nascimento_exibicao|e }} · {{ associado.cidade_exibicao|e }}/{{ associado.uf_exibicao|e }}</p>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if pagination and pagination.last_page > 1 %}
+                {% set current = pagination.current_page|default(1) %}
+                {% set last = pagination.last_page|default(1) %}
+                {% set range = 2 %}
+                {% set start = max(1, current - range) %}
+                {% set end = min(last, current + range) %}
+
+                {% set queryPairs = [] %}
+                {% for key, value in pagination_query|default({}) %}
+                    {% set queryPairs = queryPairs|merge([key ~ '=' ~ value|url_encode]) %}
+                {% endfor %}
+                {% set baseQueryString = queryPairs ? queryPairs|join('&') ~ '&' : '' %}
+
+                <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
+                    <p class="text-muted small mb-0">
+                        Exibindo {{ pagination.from|default(0) }}–{{ pagination.to|default(0) }} de {{ pagination.total|default(0) }}
+                    </p>
+                </div>
+
+                <nav aria-label="Paginação do carômetro" class="mt-2">
+                    <ul class="pagination justify-content-center mb-0">
+                        <li class="page-item {% if current <= 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{% if current <= 1 %}#{% else %}{{ pagination_path }}?{{ baseQueryString }}page={{ current - 1 }}{% endif %}" tabindex="-1" aria-disabled="{% if current <= 1 %}true{% else %}false{% endif %}">&laquo;</a>
+                        </li>
+
+                        {% if start > 1 %}
+                            <li class="page-item"><a class="page-link" href="{{ pagination_path }}?{{ baseQueryString }}page=1">1</a></li>
+                            {% if start > 2 %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% for p in start..end %}
+                            <li class="page-item {% if p == current %}active{% endif %}">
+                                <a class="page-link" href="{{ pagination_path }}?{{ baseQueryString }}page={{ p }}">{{ p }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if end < last %}
+                            {% if end < last - 1 %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                            <li class="page-item"><a class="page-link" href="{{ pagination_path }}?{{ baseQueryString }}page={{ last }}">{{ last }}</a></li>
+                        {% endif %}
+
+                        <li class="page-item {% if current >= last %}disabled{% endif %}">
+                            <a class="page-link" href="{% if current >= last %}#{% else %}{{ pagination_path }}?{{ baseQueryString }}page={{ current + 1 }}{% endif %}" aria-disabled="{% if current >= last %}true{% else %}false{% endif %}">&raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </section>
+
+    <div class="modal fade" id="carometroFotoModal" tabindex="-1" aria-labelledby="carometroFotoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content border-0 bg-transparent">
+                <div class="modal-header border-0 pb-0">
+                    <h2 class="h6 text-white mb-0" id="carometroFotoModalLabel">Foto do associado</h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body text-center pt-2">
+                    <img id="carometroFotoModalImage" src="" alt="" class="img-fluid rounded-3 shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="carometroDetalheModal" tabindex="-1" aria-labelledby="carometroDetalheModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered carometro-modal-dialog-compact">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="h6 mb-0" id="carometroDetalheModalLabel">Resumo dos dados do associado AORE/RN</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body carometro-modal-body-compact">
+                    <div class="carometro-id-card">
+                        <header class="carometro-id-card__header">
+                            <img src="{{ BASE_URL }}assets/images/aore1.png" alt="AORE/RN" class="carometro-id-card__logo">
+                            <div class="carometro-id-card__title-wrap">
+                                <p class="carometro-id-card__kicker mb-0">Associação dos Oficiais da Reserva do Exército</p>
+                                <h3 class="carometro-id-card__title mb-0">AORE/RN</h3>
+                                <p class="carometro-id-card__subtitle mb-0">Perpetuum Officium erga Patriam</p>
+                            </div>
+                        </header>
+
+                        <div class="carometro-id-card__body">
+                            <div class="carometro-id-card__photo-wrap text-center">
+                                <img id="carometroDetalheModalImage" src="" alt="" class="img-fluid rounded-3 shadow-sm carometro-id-card__photo">
+                            </div>
+                            <div class="carometro-id-card__info">
+                                <div class="carometro-id-card__row carometro-id-card__row--first mb-1">
+                                    <p class="mb-0"><span>Número de sócio</span><strong id="carometroResumoSocio">-</strong></p>
+                                    <div class="carometro-id-card__cell-empty" aria-hidden="true"></div>
+                                </div>
+                                <div class="carometro-id-card__row carometro-id-card__row--posto-nome mb-1">
+                                    <p class="mb-0"><span>Posto/Grad</span><strong id="carometroResumoPosto">-</strong></p>
+                                    <p class="mb-0"><span>Nome completo</span><strong id="carometroResumoNome">-</strong></p>
+                                </div>
+                                <div class="carometro-id-card__row carometro-id-card__row--duo mb-0">
+                                    <p class="mb-0"><span>Identificação</span><strong>Al <span id="carometroResumoNumero">-</span> <span id="carometroResumoGuerra">-</span>/<span id="carometroResumoAno">-</span></strong></p>
+                                    <p class="mb-0"><span>Arma/Quadro/Serviço</span><strong id="carometroResumoArma">-</strong></p>
+                                </div>
+                                <div class="carometro-id-card__row carometro-id-card__row--duo mb-0 mt-1">
+                                    <p class="mb-0"><span>Nascimento</span><strong id="carometroResumoNascimento">-</strong></p>
+                                    <p class="mb-0"><span>Local</span><strong><span id="carometroResumoCidade">-</span>/<span id="carometroResumoUf">-</span></strong></p>
+                                </div>
+                                <p class="mb-0 mt-1"><span>Nome da turma</span><strong id="carometroResumoTurma">-</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fotoModal = document.getElementById('carometroFotoModal');
+            const fotoModalImage = document.getElementById('carometroFotoModalImage');
+            const detalheModal = document.getElementById('carometroDetalheModal');
+            const detalheModalImage = document.getElementById('carometroDetalheModalImage');
+            const resumoNome = document.getElementById('carometroResumoNome');
+            const resumoPosto = document.getElementById('carometroResumoPosto');
+            const resumoSocio = document.getElementById('carometroResumoSocio');
+            const resumoNumero = document.getElementById('carometroResumoNumero');
+            const resumoGuerra = document.getElementById('carometroResumoGuerra');
+            const resumoAno = document.getElementById('carometroResumoAno');
+            const resumoArma = document.getElementById('carometroResumoArma');
+            const resumoTurma = document.getElementById('carometroResumoTurma');
+            const resumoNascimento = document.getElementById('carometroResumoNascimento');
+            const resumoUf = document.getElementById('carometroResumoUf');
+            const resumoCidade = document.getElementById('carometroResumoCidade');
+            if (!fotoModal || !fotoModalImage || !detalheModal || !detalheModalImage) return;
+
+            fotoModal.addEventListener('show.bs.modal', function (event) {
+                const trigger = event.relatedTarget;
+                if (!trigger) return;
+
+                const src = trigger.getAttribute('data-foto-src') || '';
+                const alt = trigger.getAttribute('data-foto-alt') || 'Foto do associado';
+                fotoModalImage.setAttribute('src', src);
+                fotoModalImage.setAttribute('alt', alt);
+            });
+
+            detalheModal.addEventListener('show.bs.modal', function (event) {
+                const trigger = event.relatedTarget;
+                if (!trigger) return;
+
+                const src = trigger.getAttribute('data-foto-src') || '';
+                const alt = trigger.getAttribute('data-foto-alt') || 'Foto do associado';
+                detalheModalImage.setAttribute('src', src);
+                detalheModalImage.setAttribute('alt', alt);
+                if (resumoNome) resumoNome.textContent = trigger.getAttribute('data-resumo-nome') || '-';
+                if (resumoPosto) resumoPosto.textContent = trigger.getAttribute('data-resumo-posto') || '-';
+                if (resumoSocio) resumoSocio.textContent = trigger.getAttribute('data-resumo-socio') || '-';
+                if (resumoNumero) resumoNumero.textContent = trigger.getAttribute('data-resumo-numero') || '-';
+                if (resumoGuerra) resumoGuerra.textContent = trigger.getAttribute('data-resumo-guerra') || '-';
+                if (resumoAno) resumoAno.textContent = trigger.getAttribute('data-resumo-ano') || '-';
+                if (resumoArma) resumoArma.textContent = trigger.getAttribute('data-resumo-arma') || '-';
+                if (resumoTurma) resumoTurma.textContent = trigger.getAttribute('data-resumo-turma') || '-';
+                if (resumoNascimento) resumoNascimento.textContent = trigger.getAttribute('data-resumo-nascimento') || '-';
+                if (resumoUf) resumoUf.textContent = trigger.getAttribute('data-resumo-uf') || '-';
+                if (resumoCidade) resumoCidade.textContent = trigger.getAttribute('data-resumo-cidade') || '-';
+            });
+        });
+    </script>
+{% endblock %}

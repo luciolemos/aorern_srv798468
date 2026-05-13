@@ -8,6 +8,7 @@ use App\Models\BoardMembershipModel;
 use App\Models\BoardTermModel;
 use App\Models\InstitutionalDocumentModel;
 use App\Models\MembershipApplicationModel;
+use App\Models\PessoalModel;
 use App\Models\Post;
 
 class InstitucionalController extends Controller
@@ -256,6 +257,13 @@ class InstitucionalController extends Controller
                 'icon' => 'bi-search',
                 'url' => BASE_URL . 'institucional/busca',
             ],
+            [
+                'slug' => 'carometro',
+                'title' => 'Carômetro',
+                'description' => 'Consulta pública da base associativa por ano, número e identificação militar.',
+                'icon' => 'bi-people-fill',
+                'url' => BASE_URL . 'institucional/carometro',
+            ],
         ];
     }
 
@@ -276,14 +284,14 @@ class InstitucionalController extends Controller
             ],
             'menuItems' => $this->menuItems(),
             'page' => [
-                'title' => 'AORERN Institucional',
+                'title' => 'AORE/RN Institucional',
                 'tagline' => 'Transparência, memória e planejamento contínuo.',
-                'lead' => 'O portal institucional reúne a identidade visual, a missão, os valores e os referenciais que orientam a atuação associativa da AORERN. Cada seção foi organizada para facilitar o acesso de associados, parceiros e visitantes às informações oficiais da entidade.',
+                'lead' => 'O portal institucional reúne a identidade visual, a missão, os valores e os referenciais que orientam a atuação associativa da AORE/RN. Cada seção foi organizada para facilitar o acesso de associados, parceiros e visitantes às informações oficiais da entidade.',
                 'spotlight' => [
                     'title' => 'Portal vivo da associação',
-                    'description' => 'Este espaço consolida os fundamentos institucionais da AORERN, preserva sua memória associativa e organiza conteúdos oficiais de referência para consulta permanente.',
+                    'description' => 'Este espaço consolida os fundamentos institucionais da AORE/RN, preserva sua memória associativa e organiza conteúdos oficiais de referência para consulta permanente.',
                     'items' => [
-                        'Conteúdo alinhado à natureza associativa, cívica e institucional da AORERN.',
+                        'Conteúdo alinhado à natureza associativa, cívica e institucional da AORE/RN.',
                         'Linguagem unificada com a marca, os símbolos e os canais oficiais da entidade.',
                         'Acesso rápido a páginas institucionais, arquivos oficiais e canais de contato.',
                     ],
@@ -293,7 +301,7 @@ class InstitucionalController extends Controller
                 'pillars' => [
                     [
                         'title' => 'Identidade preservada',
-                        'description' => 'Diretrizes para uso do selo, das cores e da identidade visual da AORERN em materiais oficiais.',
+                        'description' => 'Diretrizes para uso do selo, das cores e da identidade visual da AORE/RN em materiais oficiais.',
                         'icon' => 'bi-palette',
                     ],
                     [
@@ -310,7 +318,7 @@ class InstitucionalController extends Controller
                 'milestones' => [
                     [
                         'year' => '2024',
-                        'title' => 'Consolidação institucional da AORERN',
+                        'title' => 'Consolidação institucional da AORE/RN',
                         'description' => 'Reorganização da presença institucional e fortalecimento da identidade visual e associativa da entidade.',
                     ],
                     [
@@ -406,7 +414,7 @@ class InstitucionalController extends Controller
             'title' => 'Valores Institucionais',
             'badge' => 'Valores',
             'tagline' => 'Princípios que sustentam a vida associativa e a conduta dos oficiais da reserva.',
-            'lead' => 'Os valores da AORERN orientam sua cultura institucional, sua forma de representação e o modo como a associação preserva a honra, a disciplina e o compromisso cívico dos oficiais da reserva.',
+            'lead' => 'Os valores da AORE/RN orientam sua cultura institucional, sua forma de representação e o modo como a associação preserva a honra, a disciplina e o compromisso cívico dos oficiais da reserva.',
             'hero_highlights' => [
                 ['value' => '06', 'label' => 'Valores centrais'],
                 ['value' => 'Associativo', 'label' => 'Compromisso institucional'],
@@ -454,8 +462,8 @@ class InstitucionalController extends Controller
         $this->renderPage('visao', [
             'title' => 'Visão de Futuro',
             'badge' => 'Planejamento 2030',
-            'tagline' => 'Consolidar a AORERN como referência associativa da reserva no Rio Grande do Norte.',
-            'lead' => 'A visão de futuro da AORERN aponta para o fortalecimento de sua presença institucional, a ampliação da integração entre oficiais da reserva e a consolidação de um legado associativo sólido, respeitado e permanente.',
+            'tagline' => 'Consolidar a AORE/RN como referência associativa da reserva no Rio Grande do Norte.',
+            'lead' => 'A visão de futuro da AORE/RN aponta para o fortalecimento de sua presença institucional, a ampliação da integração entre oficiais da reserva e a consolidação de um legado associativo sólido, respeitado e permanente.',
             'hero_highlights' => [
                 ['value' => '2030', 'label' => 'Horizonte estratégico'],
                 ['value' => 'Mais integração', 'label' => 'Reserva e sociedade'],
@@ -469,7 +477,7 @@ class InstitucionalController extends Controller
                     'items' => [
                         'Consolidação de uma comunicação institucional estável, clara e reconhecível.',
                         'Ampliação da produção de conteúdos oficiais, históricos e simbólicos da associação.',
-                        'Fortalecimento da imagem pública da AORERN como entidade representativa da reserva.',
+                        'Fortalecimento da imagem pública da AORE/RN como entidade representativa da reserva.',
                     ],
                 ],
                 [
@@ -484,7 +492,7 @@ class InstitucionalController extends Controller
                 ],
                 [
                     'title' => 'Memória e continuidade',
-                    'description' => 'O futuro da AORERN depende da preservação organizada de sua história e de seus marcos institucionais.',
+                    'description' => 'O futuro da AORE/RN depende da preservação organizada de sua história e de seus marcos institucionais.',
                     'icon' => 'bi-journal-bookmark',
                     'items' => [
                         'Preservação documental de símbolos, homenagens, atos e registros relevantes da associação.',
@@ -508,8 +516,8 @@ class InstitucionalController extends Controller
     public function brasao(): void
     {
         $this->renderPage('brasao', [
-            'title' => 'AORERN - Selo Institucional',
-            'badge' => 'Identidade Visual da AORERN',
+            'title' => 'AORE/RN - Selo Institucional',
+            'badge' => 'Identidade Visual da AORE/RN',
             'tagline' => 'Descrição heráldica, esmaltes e interpretação simbólica oficial.',
             'lead' => 'Selo da Associação dos Oficiais da Reserva do Exército – Rio Grande do Norte, conforme descrição heráldica institucional.',
             'hero_highlights' => [
@@ -559,7 +567,7 @@ class InstitucionalController extends Controller
             'media' => [
                 'type' => 'image',
                 'src' => BASE_URL . 'assets/images/aore1.png',
-                'alt' => 'Selo oficial da AORERN',
+                'alt' => 'Selo oficial da AORE/RN',
                 'caption' => 'Utilizar apenas versões autorizadas pela Diretoria de Comunicação Social.',
                 'download_url' => BASE_URL . 'assets/images/aore1.png',
                 'download_name' => 'aore1.png',
@@ -726,7 +734,7 @@ class InstitucionalController extends Controller
         $this->renderPage('links', [
             'title' => 'Links Úteis',
             'badge' => 'Serviços e Portais',
-            'tagline' => 'Acesso rápido a portais, referências militares e canais institucionais relacionados à AORERN.',
+            'tagline' => 'Acesso rápido a portais, referências militares e canais institucionais relacionados à AORE/RN.',
             'lead' => 'Reunimos aqui links de referência para consulta institucional, relacionamento associativo e acesso a ambientes oficiais de interesse dos oficiais da reserva.',
             'hero_highlights' => [
                 ['value' => '06', 'label' => 'Referências selecionadas'],
@@ -735,10 +743,10 @@ class InstitucionalController extends Controller
             ],
             'links' => [
                 [
-                    'label' => 'Portal Institucional AORERN',
+                    'label' => 'Portal Institucional AORE/RN',
                     'description' => 'Canal principal de comunicação institucional da associação.',
                     'url' => rtrim(BASE_URL, '/'),
-                    'tag' => 'AORERN',
+                    'tag' => 'AORE/RN',
                 ],
                 [
                     'label' => 'Exército Brasileiro',
@@ -748,7 +756,7 @@ class InstitucionalController extends Controller
                 ],
                 [
                     'label' => '16º Batalhão de Infantaria Motorizado',
-                    'description' => 'Referência à organização militar vinculada ao ambiente institucional da AORERN.',
+                    'description' => 'Referência à organização militar vinculada ao ambiente institucional da AORE/RN.',
                     'url' => 'https://www.instagram.com/16bimtz/',
                     'tag' => 'Organização militar',
                 ],
@@ -772,7 +780,7 @@ class InstitucionalController extends Controller
                 ],
             ],
             'resources' => [
-                ['label' => 'Contato da AORERN', 'type' => 'Canal institucional', 'url' => BASE_URL . 'contact', 'external' => false],
+                ['label' => 'Contato da AORE/RN', 'type' => 'Canal institucional', 'url' => BASE_URL . 'contact', 'external' => false],
                 ['label' => 'Conhecer a associação', 'type' => 'Página institucional', 'url' => BASE_URL . 'about', 'external' => false],
             ],
         ]);
@@ -791,12 +799,12 @@ class InstitucionalController extends Controller
         $this->renderPage('identidade-visual', [
             'title' => 'Identidade Visual',
             'badge' => 'Marca oficial',
-            'tagline' => 'Selo, timbres e peças institucionais da AORERN.',
-            'lead' => 'A identidade visual da AORERN foi organizada em um acervo oficial para uso consistente em materiais digitais, documentos, comunicações e aplicações institucionais.',
+            'tagline' => 'Selo, timbres e peças institucionais da AORE/RN.',
+            'lead' => 'A identidade visual da AORE/RN foi organizada em um acervo oficial para uso consistente em materiais digitais, documentos, comunicações e aplicações institucionais.',
             'media' => [
                 'type' => 'image',
                 'src' => BASE_URL . 'assets/images/aore1.png',
-                'alt' => 'Selo institucional da AORERN',
+                'alt' => 'Selo institucional da AORE/RN',
                 'caption' => 'Arquivo principal da marca institucional em uso no portal.',
             ],
             'spotlight' => [
@@ -822,7 +830,7 @@ class InstitucionalController extends Controller
                 ['label' => 'Ver todos os documentos oficiais', 'type' => 'Acervo institucional', 'url' => BASE_URL . 'institucional/documentos', 'external' => false],
                 ['label' => 'Solicitar aplicação específica da marca', 'type' => 'Contato institucional', 'url' => BASE_URL . 'contact', 'external' => false],
             ],
-            'cta' => ['label' => 'Falar com a AORERN', 'url' => BASE_URL . 'contact'],
+            'cta' => ['label' => 'Falar com a AORE/RN', 'url' => BASE_URL . 'contact'],
         ]);
     }
 
@@ -852,7 +860,7 @@ class InstitucionalController extends Controller
         $this->renderPage('documentos', [
             'title' => 'Documentos Oficiais',
             'badge' => 'Acervo oficial',
-            'tagline' => 'Referências institucionais públicas da AORERN.',
+            'tagline' => 'Referências institucionais públicas da AORE/RN.',
             'lead' => 'Esta seção reúne documentos e materiais institucionais publicados para consulta pública, incluindo referências normativas, peças institucionais e documentos permanentes da associação.',
             'hero_highlights' => [
                 ['value' => count($documentos), 'label' => 'Documentos publicados'],
@@ -892,7 +900,7 @@ class InstitucionalController extends Controller
                     'external' => true,
                 ];
             }, $documentos),
-            'cta' => ['label' => 'Falar com a AORERN', 'url' => BASE_URL . 'contact'],
+            'cta' => ['label' => 'Falar com a AORE/RN', 'url' => BASE_URL . 'contact'],
         ]);
     }
 
@@ -919,8 +927,8 @@ class InstitucionalController extends Controller
         $this->renderPage('downloads-marca', [
             'title' => 'Downloads de Marca',
             'badge' => 'Acervo visual',
-            'tagline' => 'Peças oficiais de identidade visual da AORERN.',
-            'lead' => 'Esta área reúne os downloads visuais oficiais da AORERN, incluindo selo institucional, manual visual, timbres e cabeçalhos aprovados para uso institucional.',
+            'tagline' => 'Peças oficiais de identidade visual da AORE/RN.',
+            'lead' => 'Esta área reúne os downloads visuais oficiais da AORE/RN, incluindo selo institucional, manual visual, timbres e cabeçalhos aprovados para uso institucional.',
             'hero_highlights' => [
                 ['value' => count($cards), 'label' => 'Peças visuais'],
                 ['value' => 'Marca', 'label' => 'Categoria fixa'],
@@ -945,7 +953,7 @@ class InstitucionalController extends Controller
                 ['label' => 'Ver identidade visual', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/identidade-visual', 'external' => false],
                 ['label' => 'Ver documentos oficiais', 'type' => 'Acervo completo', 'url' => BASE_URL . 'institucional/documentos?categoria=marca', 'external' => false],
             ],
-            'cta' => ['label' => 'Falar com a AORERN', 'url' => BASE_URL . 'contact'],
+            'cta' => ['label' => 'Falar com a AORE/RN', 'url' => BASE_URL . 'contact'],
         ]);
     }
 
@@ -1175,6 +1183,117 @@ class InstitucionalController extends Controller
         ]);
     }
 
+    public function carometro(): void
+    {
+        $request = Request::capture();
+        $q = trim((string) $request->query('q', ''));
+        $anoNpor = trim((string) $request->query('ano_npor', ''));
+        $page = max(1, (int) $request->query('page', 1));
+        $perPageRaw = (int) $request->query('per_page', 20);
+        $perPageAllowed = [10, 20, 50, 100];
+        $perPage = in_array($perPageRaw, $perPageAllowed, true) ? $perPageRaw : 20;
+        $sortBy = (string) $request->query('sort_by', 'numero_militar');
+        $sortDir = strtolower((string) $request->query('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $pessoalModel = new PessoalModel();
+        $filtros = [
+            'q' => $q,
+            'ano_npor' => $anoNpor,
+        ];
+
+        $result = $pessoalModel->paginarParaCarometro($page, $perPage, $filtros, $sortBy, $sortDir);
+        $associados = $result['data'] ?? [];
+        $pagination = $result['meta'] ?? [
+            'total' => 0,
+            'per_page' => $perPage,
+            'current_page' => 1,
+            'last_page' => 1,
+            'from' => 0,
+            'to' => 0,
+        ];
+        $anosDisponiveis = $pessoalModel->listarAnosCarometro();
+
+        foreach ($associados as &$associado) {
+            $foto = trim((string) ($associado['foto'] ?? ''));
+            $associado['foto_url'] = $this->resolveAssetUrl($foto) ?: BASE_URL . 'assets/images/conscrito.png';
+            $associado['numero_formatado'] = preg_match('/^\d+$/', (string) $associado['numero_militar'])
+                ? str_pad((string) $associado['numero_militar'], 2, '0', STR_PAD_LEFT)
+                : (string) ($associado['numero_militar'] ?? '-');
+            $associado['nome_guerra_exibicao'] = trim((string) ($associado['nome_guerra'] ?? '')) !== ''
+                ? (string) $associado['nome_guerra']
+                : '-';
+            $associado['posto_graduacao_exibicao'] = trim((string) ($associado['posto_graduacao'] ?? '')) !== ''
+                ? $this->formatPostoGraduacao((string) $associado['posto_graduacao'])
+                : '-';
+            $associado['ano_npor_exibicao'] = trim((string) ($associado['ano_npor'] ?? '')) !== ''
+                ? (string) $associado['ano_npor']
+                : '-';
+            $associado['arma_quadro_exibicao'] = trim((string) ($associado['arma_quadro'] ?? '')) !== ''
+                ? (string) $associado['arma_quadro']
+                : 'NÃO INFORMADO';
+            $associado['data_nascimento_exibicao'] = !empty($associado['data_nascimento'])
+                ? date('d/m/Y', strtotime((string) $associado['data_nascimento']))
+                : '-';
+            $associado['uf_exibicao'] = trim((string) ($associado['uf'] ?? '')) !== ''
+                ? strtoupper((string) $associado['uf'])
+                : '-';
+            $associado['cidade_exibicao'] = trim((string) ($associado['cidade'] ?? '')) !== ''
+                ? (string) $associado['cidade']
+                : '-';
+            $associado['turma_exibicao'] = trim((string) ($associado['turma_npor'] ?? '')) !== ''
+                ? (string) $associado['turma_npor']
+                : '-';
+        }
+        unset($associado);
+
+        $baseParams = array_filter([
+            'q' => $q !== '' ? $q : null,
+            'ano_npor' => $anoNpor !== '' ? $anoNpor : null,
+            'per_page' => $perPage,
+        ], static fn($value) => $value !== null && $value !== '');
+
+        $buildUrl = static function (array $extra) use ($baseParams): string {
+            $params = array_merge($baseParams, $extra);
+            return BASE_URL . 'institucional/carometro?' . http_build_query($params);
+        };
+
+        $nextSortDir = static function (string $column) use ($sortBy, $sortDir): string {
+            return ($sortBy === $column && $sortDir === 'asc') ? 'desc' : 'asc';
+        };
+
+        $sortLinks = [
+            'posto_graduacao' => $buildUrl(['sort_by' => 'posto_graduacao', 'sort_dir' => $nextSortDir('posto_graduacao'), 'page' => 1]),
+            'numero_militar' => $buildUrl(['sort_by' => 'numero_militar', 'sort_dir' => $nextSortDir('numero_militar'), 'page' => 1]),
+            'nome' => $buildUrl(['sort_by' => 'nome', 'sort_dir' => $nextSortDir('nome'), 'page' => 1]),
+            'nome_guerra' => $buildUrl(['sort_by' => 'nome_guerra', 'sort_dir' => $nextSortDir('nome_guerra'), 'page' => 1]),
+            'ano_npor' => $buildUrl(['sort_by' => 'ano_npor', 'sort_dir' => $nextSortDir('ano_npor'), 'page' => 1]),
+            'data_nascimento' => $buildUrl(['sort_by' => 'data_nascimento', 'sort_dir' => $nextSortDir('data_nascimento'), 'page' => 1]),
+            'uf' => $buildUrl(['sort_by' => 'uf', 'sort_dir' => $nextSortDir('uf'), 'page' => 1]),
+            'cidade' => $buildUrl(['sort_by' => 'cidade', 'sort_dir' => $nextSortDir('cidade'), 'page' => 1]),
+        ];
+
+        $paginationQuery = array_merge($baseParams, [
+            'sort_by' => $sortBy,
+            'sort_dir' => $sortDir,
+        ]);
+
+        $this->renderTwig('site/pages/carometro', [
+            'q' => $q,
+            'ano_npor' => $anoNpor,
+            'anos_disponiveis' => $anosDisponiveis,
+            'associados' => $associados,
+            'total_associados' => (int) ($pagination['total'] ?? 0),
+            'pagination' => $pagination,
+            'per_page' => $perPage,
+            'per_page_options' => $perPageAllowed,
+            'sort_by' => $sortBy,
+            'sort_dir' => $sortDir,
+            'sort_links' => $sortLinks,
+            'pagination_query' => $paginationQuery,
+            'pagination_path' => BASE_URL . 'institucional/carometro',
+        ]);
+    }
+
     private function resolveAssetUrl(?string $path): ?string
     {
         $value = trim((string) $path);
@@ -1187,5 +1306,64 @@ class InstitucionalController extends Controller
         }
 
         return BASE_URL . ltrim($value, '/');
+    }
+
+    private function formatPostoGraduacao(string $value): string
+    {
+        $normalized = mb_strtolower(trim($value), 'UTF-8');
+        $normalized = str_replace(
+            ['-'],
+            ' ',
+            $normalized
+        );
+        $normalized = preg_replace('/\s+/', ' ', $normalized) ?? $normalized;
+
+        $map = [
+            'general de exercito' => 'Gen Ex',
+            'gen ex' => 'Gen Ex',
+            'general de divisao' => 'Gen Div',
+            'gen div' => 'Gen Div',
+            'general de brigada' => 'Gen Bda',
+            'gen bda' => 'Gen Bda',
+            'coronel' => 'Cel',
+            'cel' => 'Cel',
+            'tenente coronel' => 'Ten Cel',
+            'ten cel' => 'Ten Cel',
+            'major' => 'Maj',
+            'maj' => 'Maj',
+            'capitao' => 'Cap',
+            'cap' => 'Cap',
+            'primeiro tenente' => '1º Ten',
+            '1o ten' => '1º Ten',
+            '1º ten' => '1º Ten',
+            'segundo tenente' => '2º Ten',
+            '2o ten' => '2º Ten',
+            '2º ten' => '2º Ten',
+            'aspirante a oficial' => 'Asp Of',
+            'asp of' => 'Asp Of',
+            'aluno cpor' => 'Al CPOR',
+            'al cpor' => 'Al CPOR',
+            'aluno npor' => 'Al NPOR',
+            'al npor' => 'Al NPOR',
+            'aluno cfgs' => 'Al CFGS',
+            'al cfgs' => 'Al CFGS',
+            'subtenente' => 'ST',
+            'st' => 'ST',
+            'primeiro sargento' => '1º Sgt',
+            '1o sgt' => '1º Sgt',
+            '1º sgt' => '1º Sgt',
+            'segundo sargento' => '2º Sgt',
+            '2o sgt' => '2º Sgt',
+            '2º sgt' => '2º Sgt',
+            'terceiro sargento' => '3º Sgt',
+            '3o sgt' => '3º Sgt',
+            '3º sgt' => '3º Sgt',
+            'cabo' => 'Cb',
+            'cb' => 'Cb',
+            'soldado' => 'Sd',
+            'sd' => 'Sd',
+        ];
+
+        return $map[$normalized] ?? $value;
     }
 }

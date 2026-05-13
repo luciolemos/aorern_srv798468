@@ -3,6 +3,7 @@
 namespace App\Controllers\Site;
 
 use App\Core\Controller;
+use App\Models\MembershipApplicationModel;
 use App\Models\User;
 
 /**
@@ -75,9 +76,42 @@ class LoginController extends Controller {
         }
 
         $userModel = new User();
+        $applicationModel = new MembershipApplicationModel();
         $user = $userModel->buscarPorUsername($username);
+        if (!$user && filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            $user = $userModel->buscarPorEmail($username);
+        }
 
-        if (!$user || !password_verify($password, $user['password'])) {
+        if (!$user) {
+            $solicitacao = $applicationModel->buscarParaAutenticacao($username);
+            if ($solicitacao && password_verify($password, (string) ($solicitacao['password_hash'] ?? ''))) {
+                $existingByEmail = $userModel->buscarPorEmail((string) ($solicitacao['email'] ?? ''));
+                if ($existingByEmail) {
+                    $user = $existingByEmail;
+                } else {
+                    $newUserId = $userModel->criarERetornarId([
+                        'username' => (string) ($solicitacao['username_desejado'] ?? ''),
+                        'email' => (string) ($solicitacao['email'] ?? ''),
+                        'password' => (string) ($solicitacao['password_hash'] ?? ''),
+                        'avatar' => $solicitacao['avatar'] ?? null,
+                        'role' => 'usuario',
+                        'ativo' => 1,
+                        'status' => 'pendente',
+                    ]);
+
+                    if ($newUserId) {
+                        $applicationModel->atualizar((int) $solicitacao['id'], ['user_id' => $newUserId]);
+                        $user = $userModel->buscarPorId($newUserId);
+                    }
+                }
+
+                if ($user && empty($solicitacao['user_id'])) {
+                    $applicationModel->atualizar((int) $solicitacao['id'], ['user_id' => (int) $user['id']]);
+                }
+            }
+        }
+
+        if (!$user || !password_verify($password, (string) ($user['password'] ?? ''))) {
             header("Location: " . BASE_URL . "login/admin?error=admin_invalid_credentials");
             exit;
         }

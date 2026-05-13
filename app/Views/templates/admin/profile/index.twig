@@ -107,7 +107,8 @@
                 <div class="card-body text-center">
                     <div class="mb-3">
                         {% if user.avatar %}
-                            <img src="{{ BASE_URL }}{{ user.avatar }}" alt="{{ user.username }}" class="rounded-circle shadow admin-avatar-circle-150 admin-avatar-frame-brand">
+                            {% set userAvatarSrc = user.avatar starts with 'http' ? user.avatar : (BASE_URL ~ user.avatar) %}
+                            <img src="{{ userAvatarSrc|e('html_attr') }}" alt="{{ user.username }}" class="rounded-circle shadow admin-avatar-circle-150 admin-avatar-frame-brand">
                         {% else %}
                             <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center text-white fs-1 fw-bold admin-avatar-circle-150 admin-avatar-frame-brand">
                                 {{ user.username ? user.username[0]|upper : 'U' }}

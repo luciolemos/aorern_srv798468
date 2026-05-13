@@ -7,6 +7,7 @@ Plataforma MVC em PHP/Twig para gestão pública do site e painel administrativo
 - Operação e incidentes: [`RUNBOOK.md`](/var/www/aorern/RUNBOOK.md)
 - Processo de deploy: [`DEPLOY.md`](/var/www/aorern/DEPLOY.md)
 - Configuração de ambiente: [`.env.example`](/var/www/aorern/.env.example)
+- Governança visual CSS: [`CSS_GUIDELINES.md`](/var/www/aorern/CSS_GUIDELINES.md)
 
 ---
 
