@@ -3,7 +3,7 @@
 ## 📁 Estrutura de Diretórios
 
 ```
-mvc/
+aorern/
 ├── app/
 │   ├── Controllers/
 │   │   ├── Admin/          # Controllers administrativos
@@ -306,7 +306,7 @@ Controller → View (htmlspecialchars automático) → HTML
 APP_ENV=dev
 
 DB_HOST=localhost
-DB_NAME=mvc_db
+DB_NAME=aorern_db
 DB_USER=root
 DB_PASS=
 

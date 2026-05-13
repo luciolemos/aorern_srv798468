@@ -1,6 +1,6 @@
-# Estrutura do Projeto OPUS (MVC)
+# Estrutura do Projeto AORE/RN (MVC)
 
-    mvc/
+    aorern/
     ├── app/
     │   ├── Controllers/
     │   │   ├── Admin/

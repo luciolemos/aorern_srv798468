@@ -130,7 +130,13 @@ class PermissionMiddleware
 
     private static function isAdminRequest(): bool
     {
-        $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
-        return preg_match('#/(cbmrn/)?admin(?:/|$)#', (string) $path) === 1;
+        $path = trim((string) (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/'), '/');
+        $basePath = trim((string) (parse_url(BASE_URL, PHP_URL_PATH) ?? ''), '/');
+
+        if ($basePath !== '' && ($path === $basePath || str_starts_with($path, $basePath . '/'))) {
+            $path = trim(substr($path, strlen($basePath)), '/');
+        }
+
+        return $path === 'admin' || str_starts_with($path, 'admin/');
     }
 }

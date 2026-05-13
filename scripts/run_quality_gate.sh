@@ -49,7 +49,7 @@ run_step() {
 }
 
 if [[ "$SKIP_PHPUNIT" -eq 0 ]]; then
-  run_step "PHPUnit" ./vendor/bin/phpunit --colors=never
+  run_step "PHPUnit" ./vendor/bin/phpunit --colors=never --no-coverage
 fi
 
 if [[ "$UNIT_ONLY" -eq 1 ]]; then
