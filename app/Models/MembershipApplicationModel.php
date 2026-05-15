@@ -342,7 +342,12 @@ class MembershipApplicationModel
 
     public function buscarPorUserId(int $userId): ?array
     {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE user_id = :user_id LIMIT 1");
+        $stmt = $this->db->prepare(
+            "SELECT * FROM {$this->table}
+             WHERE user_id = :user_id
+             ORDER BY COALESCE(aprovado_em, atualizado_em, criado_em) DESC, id DESC
+             LIMIT 1"
+        );
         $stmt->execute([':user_id' => $userId]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
