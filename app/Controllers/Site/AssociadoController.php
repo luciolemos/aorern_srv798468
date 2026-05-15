@@ -91,7 +91,7 @@ class AssociadoController extends Controller
             'comunicados_institucionais' => $institutionalPosts,
             'documentos' => $documentos,
             'associadoAvatarUrl' => $this->resolveAssetUrl($avatarPath) ?: (BASE_URL . 'assets/images/conscrito.png'),
-            'statusAssociativoLabel' => $this->formatAssociativeStatus($solicitacao['status_associativo'] ?? $associado['status_associativo'] ?? 'provisorio'),
+            'statusAssociativoLabel' => $this->formatAssociativeStatus($associado['status_associativo'] ?? $solicitacao['status_associativo'] ?? 'provisorio'),
             'csrf_token' => CsrfHelper::generateToken(),
         ]);
     }
