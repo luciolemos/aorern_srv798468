@@ -36,7 +36,7 @@
 
     <hr class="my-4">
     <div data-aos="fade-up">
-        <form method="post" action="{{ BASE_URL }}admin/posts/update/{{ post.id }}" class="post-form">
+        <form method="post" action="{{ BASE_URL }}admin/publicacoes/update/{{ post.id }}" class="post-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
             <div class="row g-3">
                 <div class="col-12 col-lg-8">
@@ -69,7 +69,7 @@
             </div>
             <div class="border-top my-4"></div>
             <div class="action-buttons d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-end py-2">
-                <a href="{{ BASE_URL }}admin/posts" class="btn btn-outline-secondary">
+                <a href="{{ BASE_URL }}admin/publicacoes" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left me-1"></i> Voltar
                 </a>
                 
@@ -92,11 +92,11 @@
                         <i class="bi bi-pencil-square me-1"></i> Atualizar Publicado
                     </button>
                     {% if post.is_hidden|default(0) == 0 %}
-                        <a href="{{ BASE_URL }}admin/posts/hide/{{ post.id }}" class="btn btn-outline-warning flex-grow-1 flex-md-grow-0" onclick="return confirm('Ocultar este post do blog? Ele continuará publicado.');">
+                        <a href="{{ BASE_URL }}admin/publicacoes/hide/{{ post.id }}" class="btn btn-outline-warning flex-grow-1 flex-md-grow-0" onclick="return confirm('Ocultar este post do blog? Ele continuará publicado.');">
                             <i class="bi bi-eye-slash me-1"></i> Ocultar do Blog
                         </a>
                     {% else %}
-                        <a href="{{ BASE_URL }}admin/posts/show/{{ post.id }}" class="btn btn-outline-success flex-grow-1 flex-md-grow-0" onclick="return confirm('Reexibir este post no blog?');">
+                        <a href="{{ BASE_URL }}admin/publicacoes/show/{{ post.id }}" class="btn btn-outline-success flex-grow-1 flex-md-grow-0" onclick="return confirm('Reexibir este post no blog?');">
                             <i class="bi bi-eye me-1"></i> Exibir no Blog
                         </a>
                     {% endif %}
@@ -113,5 +113,5 @@
 {% endblock %}
 
 {% block scripts %}
-    {% include 'admin/posts/partials/editor_scripts.twig' %}
+    {% include 'admin/publicacoes/partials/editor_scripts.twig' %}
 {% endblock %}

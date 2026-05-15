@@ -28,7 +28,7 @@ class ConfiguracaoController extends Controller {
             'user_id' => $user_id
         ];
 
-        $this->renderTwig('admin/settings/index', array_merge($data, AdminHelper::getUserData('settings')));
+        $this->renderTwig('admin/settings/index', array_merge($data, AdminHelper::getUserData('configuracoes')));
     }
 
     /**

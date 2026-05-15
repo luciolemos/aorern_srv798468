@@ -1,10 +1,9 @@
 {
-  "name": "luciolemos/cbmrn_srv798468",
+  "name": "luciolemos/aorern_srv798468",
   "description": "Projeto MVC com PHP e MySQL",
   "type": "project",
   "license": "MIT",
-  "version": "1.0.0",
-  "homepage": "https://github.com/luciolemos/cbmrn_srv798468",
+  "homepage": "https://github.com/luciolemos/aorern_srv798468",
   "minimum-stability": "stable",
   "authors": [
     {
@@ -26,7 +25,7 @@
     "vlucas/phpdotenv": "^5.5",
     "phpmailer/phpmailer": "^6.8",
     "ext-pdo": "*",
-    "ckeditor/ckeditor": "4.25.1",
+    "ckeditor/ckeditor": "^4.25.1",
     "twig/twig": "^3.0"
   },
   "require-dev": {

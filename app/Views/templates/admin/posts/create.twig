@@ -8,11 +8,11 @@
     </div>
     <hr class="my-4">
     <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
-            <a href="{{ BASE_URL }}admin/posts" class="btn btn-primary text-white">
+            <a href="{{ BASE_URL }}admin/publicacoes" class="btn btn-primary text-white">
                <i class="bi bi-journal-text"></i> Posts
             </a>
 
-            <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-primary">
+            <a href="{{ BASE_URL }}admin/categorias-editoriais" class="btn btn-outline-primary">
                 <i class="bi bi-tags"></i> Categorias
             </a>
 
@@ -22,7 +22,7 @@
     </div>
 
     <div>
-        <form action="{{ BASE_URL }}admin/posts/store" method="post" class="post-form">
+        <form action="{{ BASE_URL }}admin/publicacoes/store" method="post" class="post-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
             <div class="row g-3">
                 <div class="col-12 col-lg-8">
@@ -62,7 +62,7 @@
             </div>
             <div class="border-top my-4"></div>
             <div class="action-buttons d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-end py-2">
-                <a href="{{ BASE_URL }}admin/posts" class="btn btn-outline-danger order-md-1">
+                <a href="{{ BASE_URL }}admin/publicacoes" class="btn btn-outline-danger order-md-1">
                     <i class="bi bi-x-circle me-1"></i> Cancelar
                 </a>
                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#previewModal">
@@ -91,5 +91,5 @@
 {% endblock %}
 
 {% block scripts %}
-    {% include 'admin/posts/partials/editor_scripts.twig' %}
+    {% include 'admin/publicacoes/partials/editor_scripts.twig' %}
 {% endblock %}

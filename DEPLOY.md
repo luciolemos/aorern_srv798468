@@ -2,6 +2,18 @@
 
 Este guia está alinhado com a stack atual (Twig + migrations + `.env`).
 Para operação contínua, use junto com [`RUNBOOK.md`](/var/www/aorern/RUNBOOK.md).
+Checklist específico Hostinger: [`CHECKLIST_DEPLOY_HOSTINGER.md`](/var/www/aorern/CHECKLIST_DEPLOY_HOSTINGER.md).
+
+## Ambiente e URL base
+
+Defina `APP_URL` explicitamente no `.env` conforme o cenário:
+
+- Desenvolvimento em subdiretório:
+  - `APP_URL=https://srv798468.hstgr.cloud/aorern`
+- Produção em domínio raiz:
+  - `APP_URL=https://aorern.org`
+
+Evite depender de detecção automática de path em hospedagem compartilhada.
 
 ## 1) Pré-deploy
 
@@ -38,4 +50,3 @@ bash scripts/smoke_membership_status_flow.sh https://SEU_DOMINIO/aorern
 2. Restaurar release anterior.
 3. Reiniciar serviços PHP/web.
 4. Reexecutar validação pós-deploy.
-

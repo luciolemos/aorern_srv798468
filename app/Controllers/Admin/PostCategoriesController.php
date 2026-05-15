@@ -35,7 +35,7 @@ class PostCategoriesController extends Controller
         $result = $this->model->paginar($page, $perPage, $q ?: null);
         $categorias = $result['data'];
         $pagination = array_merge($result['meta'], [
-            'path' => BASE_URL . 'admin/post-categories',
+            'path' => BASE_URL . 'admin/categorias-editoriais',
             'query' => array_filter([
                 'q' => $q,
                 'per_page' => $perPageQueryValue,
@@ -46,7 +46,7 @@ class PostCategoriesController extends Controller
 
         $this->renderTwig('admin/post_categories/index', array_merge(
             compact('categorias', 'q', 'pagination', 'perPageOptions', 'perPageSelection'),
-            AdminHelper::getUserData('post-categories')
+            AdminHelper::getUserData('categorias-editoriais')
         ));
     }
 
@@ -54,7 +54,7 @@ class PostCategoriesController extends Controller
     {
         PermissionMiddleware::authorize('post_categories:create');
         $csrf = CsrfHelper::generateToken();
-        $this->renderTwig('admin/post_categories/create', array_merge(['csrf_token' => $csrf], AdminHelper::getUserData('post-categories')));
+        $this->renderTwig('admin/post_categories/create', array_merge(['csrf_token' => $csrf], AdminHelper::getUserData('categorias-editoriais')));
     }
 
     public function store(): void
@@ -76,7 +76,7 @@ class PostCategoriesController extends Controller
         ];
         $this->model->salvar($dados);
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Categoria criada com sucesso!'];
-        header('Location: ' . BASE_URL . 'admin/post-categories');
+        header('Location: ' . BASE_URL . 'admin/categorias-editoriais');
         exit;
     }
 
@@ -86,11 +86,11 @@ class PostCategoriesController extends Controller
         $categoria = $this->model->buscar($id);
         if (!$categoria) {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Categoria não encontrada.'];
-            header('Location: ' . BASE_URL . 'admin/post-categories');
+            header('Location: ' . BASE_URL . 'admin/categorias-editoriais');
             exit;
         }
         $csrf = CsrfHelper::generateToken();
-        $this->renderTwig('admin/post_categories/edit', array_merge(compact('categoria'), ['csrf_token' => $csrf], AdminHelper::getUserData('post-categories')));
+        $this->renderTwig('admin/post_categories/edit', array_merge(compact('categoria'), ['csrf_token' => $csrf], AdminHelper::getUserData('categorias-editoriais')));
     }
 
     public function update(int $id): void
@@ -101,7 +101,7 @@ class PostCategoriesController extends Controller
         $categoria = $this->model->buscar($id);
         if (!$categoria) {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Categoria não encontrada.'];
-            header('Location: ' . BASE_URL . 'admin/post-categories');
+            header('Location: ' . BASE_URL . 'admin/categorias-editoriais');
             exit;
         }
 
@@ -117,7 +117,7 @@ class PostCategoriesController extends Controller
         ];
         $this->model->atualizar($id, $dados);
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Categoria atualizada com sucesso!'];
-        header('Location: ' . BASE_URL . 'admin/post-categories');
+        header('Location: ' . BASE_URL . 'admin/categorias-editoriais');
         exit;
     }
 
@@ -126,13 +126,13 @@ class PostCategoriesController extends Controller
         PermissionMiddleware::authorize('post_categories:delete');
         if ($this->model->possuiPosts($id)) {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Não é possível excluir: existem posts vinculados a esta categoria.'];
-            header('Location: ' . BASE_URL . 'admin/post-categories');
+            header('Location: ' . BASE_URL . 'admin/categorias-editoriais');
             exit;
         }
 
         $this->model->deletar($id);
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Categoria removida com sucesso!'];
-        header('Location: ' . BASE_URL . 'admin/post-categories');
+        header('Location: ' . BASE_URL . 'admin/categorias-editoriais');
         exit;
 }
 

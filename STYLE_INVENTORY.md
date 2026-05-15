@@ -1,7 +1,7 @@
 # Inventário Visual Público — Dez/2025
 
 ## Layout base
-- `layouts/base.twig` injeta `bombeiros-theme.css`, `navbar-universal.css`, `footer-robust.css` e `main.css`, além das folhas específicas carregadas via `{% block styles %}` em cada página.
+- `layouts/base.twig` injeta `system/variables.css`, `system/components.css`, `institutional-theme.css`, `navbar-universal.css`, `footer-robust.css` e `main.css`, além das folhas específicas carregadas via `{% block styles %}` em cada página.
 - Componentes globais disponíveis: `components/navbar.twig` e `components/footer.twig`.
 - Hero, cards e breadcrumbs variam entre páginas, cada uma com seu próprio CSS.
 

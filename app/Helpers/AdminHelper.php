@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Config\AdminGovernance;
 use App\Models\User;
 use App\Models\LivroOcorrenciaModel;
 use App\Models\MembershipApplicationModel;
@@ -90,7 +91,10 @@ class AdminHelper {
         $userName = $_SESSION['user_name'] ?? 'Usuário';
         $userEmail = $_SESSION['user_email'] ?? '';
         $userAvatar = $_SESSION['user_avatar'] ?? '';
+        $userRole = (string) ($_SESSION['user_role'] ?? 'usuario');
         $initial = function_exists('mb_substr') ? mb_substr($userName, 0, 1, 'UTF-8') : substr($userName, 0, 1);
+        $legacySubRoutes = AdminGovernance::legacySubRoutes();
+        $legacyNavItems = AdminGovernance::legacyNavItemsForRole($userRole);
         
         return [
             'user' => [
@@ -100,6 +104,11 @@ class AdminHelper {
                 'avatar' => $userAvatar
             ],
             'subRoute' => $subRoute,
+            'legacy' => [
+                'enabled' => AdminGovernance::isLegacyModulesEnabled(),
+                'is_legacy_sub_route' => in_array($subRoute, $legacySubRoutes, true),
+                'nav_items' => $legacyNavItems,
+            ],
             'notifications' => [
                 'pending_users' => self::pendingUsersCount(),
                 'pending_membership_applications' => self::pendingMembershipApplicationsCount(),

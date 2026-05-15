@@ -10,10 +10,10 @@
         <hr class="my-4">
 
         <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto justify-content-md-start mb-4">
-            <a href="{{ BASE_URL }}admin/posts/create" class="btn btn-primary text-white">
+            <a href="{{ BASE_URL }}admin/publicacoes/create" class="btn btn-primary text-white">
                 <i class="bi bi-plus-circle me-1"></i> Novo post
             </a>
-            <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-primary">
+            <a href="{{ BASE_URL }}admin/categorias-editoriais" class="btn btn-outline-primary">
                 <i class="bi bi-tags me-1"></i> Categorias
             </a>
             <a href="{{ BASE_URL }}admin" class="btn btn-outline-secondary">
@@ -29,7 +29,7 @@
                 <h5 class="mb-0"><i class="bi bi-funnel me-2"></i> <strong>Busca Avançada</strong></h5>
                 {% set hasActiveFilters = q or status or category or author or visibility %}
                 {% if hasActiveFilters %}
-                    <a href="{{ BASE_URL }}admin/posts" class="btn btn-sm btn-outline-danger">
+                    <a href="{{ BASE_URL }}admin/publicacoes" class="btn btn-sm btn-outline-danger">
                         <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar Filtros
                     </a>
                 {% endif %}
@@ -196,12 +196,12 @@
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         {% if post.status == 'draft' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
                                             <li>
-                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}">
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/publicacoes/edit/{{ post.id }}">
                                                     <i class="bi bi-pencil-square me-2"></i> Editar Rascunho
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/submit/{{ post.id }}">
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/publicacoes/submit/{{ post.id }}">
                                                     <i class="bi bi-send me-2"></i> Submeter para Revisão
                                                 </a>
                                             </li>
@@ -214,7 +214,7 @@
                                             </li>
                                             {% if userRole == 'admin' %}
                                                 <li>
-                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/approve/{{ post.id }}">
+                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/publicacoes/approve/{{ post.id }}">
                                                         <i class="bi bi-check-circle me-2"></i> Aprovar e Publicar
                                                     </a>
                                                 </li>
@@ -227,38 +227,38 @@
 
                                         {% elseif post.status == 'published' and userRole == 'admin' %}
                                             <li>
-                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}">
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/publicacoes/edit/{{ post.id }}">
                                                     <i class="bi bi-pencil-square me-2"></i> Editar Post
                                                 </a>
                                             </li>
                                             {% if post.is_hidden|default(0) == 0 %}
                                                 <li>
-                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/hide/{{ post.id }}" onclick="return confirm('Ocultar este post do blog?');">
+                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/publicacoes/hide/{{ post.id }}" onclick="return confirm('Ocultar este post do blog?');">
                                                         <i class="bi bi-eye-slash me-2"></i> Ocultar do Blog
                                                     </a>
                                                 </li>
                                             {% else %}
                                                 <li>
-                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/show/{{ post.id }}" onclick="return confirm('Reexibir este post no blog?');">
+                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/publicacoes/show/{{ post.id }}" onclick="return confirm('Reexibir este post no blog?');">
                                                         <i class="bi bi-eye me-2"></i> Exibir no Blog
                                                     </a>
                                                 </li>
                                             {% endif %}
                                             <li>
-                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/delete/{{ post.id }}" onclick="return confirm('Deseja excluir este post permanentemente?')">
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/publicacoes/delete/{{ post.id }}" onclick="return confirm('Deseja excluir este post permanentemente?')">
                                                     <i class="bi bi-trash me-2"></i> Deletar
                                                 </a>
                                             </li>
 
                                         {% elseif post.status == 'rejected' and (userRole == 'admin' or (userRole == 'usuario' and post.user_id == user_id)) %}
                                             <li>
-                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/edit/{{ post.id }}">
+                                                <a class="dropdown-item" href="{{ BASE_URL }}admin/publicacoes/edit/{{ post.id }}">
                                                     <i class="bi bi-pencil-square me-2"></i> Reabrir e Corrigir
                                                 </a>
                                             </li>
                                             {% if userRole == 'admin' %}
                                                 <li>
-                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/posts/delete/{{ post.id }}" onclick="return confirm('Deseja excluir este post permanentemente?')">
+                                                    <a class="dropdown-item" href="{{ BASE_URL }}admin/publicacoes/delete/{{ post.id }}" onclick="return confirm('Deseja excluir este post permanentemente?')">
                                                         <i class="bi bi-trash me-2"></i> Deletar
                                                     </a>
                                                 </li>
@@ -297,7 +297,7 @@
                             <div class="modal-footer border-top">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                                 {% if userRole == 'admin' %}
-                                    <a href="{{ BASE_URL }}admin/posts/approve/{{ post.id }}" class="btn btn-success">
+                                    <a href="{{ BASE_URL }}admin/publicacoes/approve/{{ post.id }}" class="btn btn-success">
                                         <i class="bi bi-check-circle me-1"></i> Aprovar
                                     </a>
                                 {% endif %}
@@ -319,7 +319,7 @@
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                             </div>
-                            <form method="POST" action="{{ BASE_URL }}admin/posts/reject/{{ post.id }}">
+                            <form method="POST" action="{{ BASE_URL }}admin/publicacoes/reject/{{ post.id }}">
                                 <div class="modal-body">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token|default('') }}">
                                     <p class="mb-3"><strong>Post:</strong> {{ post.titulo|e }}</p>

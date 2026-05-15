@@ -46,4 +46,31 @@ class MembershipActionMessageServiceTest extends TestCase
         $this->assertSame('danger', $toast['type']);
         $this->assertStringContainsString('Status associativo inválido', $toast['message']);
     }
+
+    public function testInvalidAssociativeStatusTransitionMessageIsDanger(): void
+    {
+        $service = new MembershipActionMessageService();
+        $toast = $service->invalidAssociativeStatusTransition('efetivo', 'aluno');
+
+        $this->assertSame('danger', $toast['type']);
+        $this->assertStringContainsString('efetivo -> aluno', $toast['message']);
+    }
+
+    public function testRejectionFailureMessageIsDanger(): void
+    {
+        $service = new MembershipActionMessageService();
+        $toast = $service->rejectionFailure();
+
+        $this->assertSame('danger', $toast['type']);
+        $this->assertStringContainsString('Não foi possível rejeitar', $toast['message']);
+    }
+
+    public function testComplementationFailureMessageIsDanger(): void
+    {
+        $service = new MembershipActionMessageService();
+        $toast = $service->complementationFailure();
+
+        $this->assertSame('danger', $toast['type']);
+        $this->assertStringContainsString('Não foi possível solicitar complementação', $toast['message']);
+    }
 }

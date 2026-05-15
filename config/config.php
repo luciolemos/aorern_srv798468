@@ -18,7 +18,7 @@ $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $requestPath = (string) (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/');
 $basePath = '/';
 
-foreach (['/aorern', '/cbmrn', '/mvc'] as $prefix) {
+foreach (['/aorern'] as $prefix) {
     if (str_starts_with($requestPath, $prefix)) {
         $basePath = $prefix . '/';
         break;

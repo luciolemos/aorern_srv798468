@@ -12,10 +12,12 @@ use App\Models\FuncaoModel;
 use App\Models\MembershipApplicationModel;
 use App\Models\PessoalModel;
 use App\Services\MembershipActionMessageService;
+use App\Services\MembershipAssociativeStatusStateMachine;
 use App\Services\MembershipApplicationWorkflowService;
 use App\Services\MembershipModerationRequestValidator;
 use App\Services\MembershipNotificationService;
 use App\Services\MembershipPresentationService;
+use App\Services\MembershipStatusStateMachine;
 
 class SolicitacoesFiliacaoController extends Controller
 {
@@ -25,6 +27,8 @@ class SolicitacoesFiliacaoController extends Controller
     private MembershipPresentationService $presentation;
     private MembershipActionMessageService $messages;
     private MembershipModerationRequestValidator $validator;
+    private MembershipStatusStateMachine $statusStateMachine;
+    private MembershipAssociativeStatusStateMachine $associativeStatusStateMachine;
 
     public function __construct()
     {
@@ -38,6 +42,8 @@ class SolicitacoesFiliacaoController extends Controller
         $this->presentation = new MembershipPresentationService();
         $this->messages = new MembershipActionMessageService();
         $this->validator = new MembershipModerationRequestValidator();
+        $this->statusStateMachine = new MembershipStatusStateMachine();
+        $this->associativeStatusStateMachine = new MembershipAssociativeStatusStateMachine();
         AuthMiddleware::requireAuth();
     }
 
@@ -103,7 +109,13 @@ class SolicitacoesFiliacaoController extends Controller
         PermissionMiddleware::authorize('users:approve');
 
         $solicitacao = $this->applications->buscar($id);
-        if (!$solicitacao || !in_array(($solicitacao['status'] ?? null), ['pendente', 'complementacao'], true)) {
+        if (
+            !$solicitacao
+            || !$this->statusStateMachine->canTransition(
+                (string) ($solicitacao['status'] ?? ''),
+                MembershipStatusStateMachine::STATUS_APROVADA
+            )
+        ) {
             $_SESSION['toast'] = $this->messages->requestNotFoundOrProcessed();
             header('Location: ' . BASE_URL . 'admin/solicitacoes-filiacao');
             exit;
@@ -119,6 +131,13 @@ class SolicitacoesFiliacaoController extends Controller
 
         $adminNote = $validation['data']['observacoes_admin'];
         $statusAssociativo = $validation['data']['status_associativo'];
+        $statusAssociativoAtual = (string) ($solicitacao['status_associativo'] ?? MembershipAssociativeStatusStateMachine::PROVISORIO);
+
+        if (!$this->associativeStatusStateMachine->canTransition($statusAssociativoAtual, $statusAssociativo)) {
+            $_SESSION['toast'] = $this->messages->invalidAssociativeStatusTransition($statusAssociativoAtual, $statusAssociativo);
+            header('Location: ' . BASE_URL . 'admin/solicitacoes-filiacao');
+            exit;
+        }
 
         try {
             $this->workflow->approve($id, $solicitacao, $statusAssociativo, $adminNote ?? null);
@@ -140,7 +159,13 @@ class SolicitacoesFiliacaoController extends Controller
         PermissionMiddleware::authorize('users:approve');
 
         $solicitacao = $this->applications->buscar($id);
-        if (!$solicitacao || !in_array(($solicitacao['status'] ?? null), ['pendente', 'complementacao'], true)) {
+        if (
+            !$solicitacao
+            || !$this->statusStateMachine->canTransition(
+                (string) ($solicitacao['status'] ?? ''),
+                MembershipStatusStateMachine::STATUS_REJEITADA
+            )
+        ) {
             $_SESSION['toast'] = $this->messages->requestNotFoundOrProcessed();
             header('Location: ' . BASE_URL . 'admin/solicitacoes-filiacao');
             exit;
@@ -149,12 +174,18 @@ class SolicitacoesFiliacaoController extends Controller
         $request = Request::capture();
         $validation = $this->validator->validateRejection($request);
         $adminNote = $validation['data']['observacoes_admin'];
-        $this->workflow->reject($id, $adminNote);
+        try {
+            $this->workflow->reject($id, $adminNote, (string) ($solicitacao['status'] ?? ''));
 
-        [$emailEnviado, $emailErro] = $this->notifications->sendRejection($solicitacao, $adminNote ?? '');
-        $this->registrarStatusNotificacao($id, 'rejeicao', $emailEnviado, $emailErro);
+            [$emailEnviado, $emailErro] = $this->notifications->sendRejection($solicitacao, $adminNote ?? '');
+            $this->registrarStatusNotificacao($id, 'rejeicao', $emailEnviado, $emailErro);
 
-        $_SESSION['toast'] = $this->messages->rejectionResult($emailEnviado);
+            $_SESSION['toast'] = $this->messages->rejectionResult($emailEnviado);
+        } catch (\Throwable $exception) {
+            error_log('Erro ao rejeitar solicitação de filiação: ' . $exception->getMessage());
+            $_SESSION['toast'] = $this->messages->rejectionFailure();
+        }
+
         header('Location: ' . BASE_URL . 'admin/solicitacoes-filiacao');
         exit;
     }
@@ -164,7 +195,13 @@ class SolicitacoesFiliacaoController extends Controller
         PermissionMiddleware::authorize('users:approve');
 
         $solicitacao = $this->applications->buscar($id);
-        if (!$solicitacao || !in_array(($solicitacao['status'] ?? null), ['pendente', 'complementacao'], true)) {
+        if (
+            !$solicitacao
+            || !$this->statusStateMachine->canTransition(
+                (string) ($solicitacao['status'] ?? ''),
+                MembershipStatusStateMachine::STATUS_COMPLEMENTACAO
+            )
+        ) {
             $_SESSION['toast'] = $this->messages->requestNotAvailableForComplementation();
             header('Location: ' . BASE_URL . 'admin/solicitacoes-filiacao');
             exit;
@@ -179,12 +216,18 @@ class SolicitacoesFiliacaoController extends Controller
         }
 
         $adminNote = $validation['data']['observacoes_admin'];
-        $this->workflow->requestComplementation($id, $adminNote);
+        try {
+            $this->workflow->requestComplementationFromStatus($id, $adminNote, (string) ($solicitacao['status'] ?? ''));
 
-        [$emailEnviado, $emailErro] = $this->notifications->sendComplementation($solicitacao, $adminNote);
-        $this->registrarStatusNotificacao($id, 'complementacao', $emailEnviado, $emailErro);
+            [$emailEnviado, $emailErro] = $this->notifications->sendComplementation($solicitacao, $adminNote);
+            $this->registrarStatusNotificacao($id, 'complementacao', $emailEnviado, $emailErro);
 
-        $_SESSION['toast'] = $this->messages->complementationResult($emailEnviado);
+            $_SESSION['toast'] = $this->messages->complementationResult($emailEnviado);
+        } catch (\Throwable $exception) {
+            error_log('Erro ao solicitar complementação de filiação: ' . $exception->getMessage());
+            $_SESSION['toast'] = $this->messages->complementationFailure();
+        }
+
         header('Location: ' . BASE_URL . 'admin/solicitacoes-filiacao');
         exit;
     }

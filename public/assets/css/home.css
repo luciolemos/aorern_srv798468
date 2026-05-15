@@ -350,7 +350,13 @@
 }
 
 .home-sponsors-subtitle-nowrap {
-    white-space: nowrap;
+    white-space: normal;
+}
+
+@media (min-width: 768px) {
+    .home-sponsors-subtitle-nowrap {
+        white-space: nowrap;
+    }
 }
 
 @media (max-width: 767.98px) {

@@ -7,7 +7,7 @@
         <p class="text-muted mb-0">Atualize as informações desta categoria de post.</p>
     </div>
     <hr class="my-4">
-    <form method="post" action="{{ BASE_URL }}admin/post-categories/update/{{ categoria.id }}">
+    <form method="post" action="{{ BASE_URL }}admin/categorias-editoriais/update/{{ categoria.id }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token|e }}">
         <div class="row g-3">
             <div class="col-md-8">
@@ -45,7 +45,7 @@
         </div>
         <div class="border-top my-4"></div>
         <div class="d-flex flex-column flex-md-row gap-2 justify-content-md-end">
-            <a href="{{ BASE_URL }}admin/post-categories" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Voltar</a>
+            <a href="{{ BASE_URL }}admin/categorias-editoriais" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Voltar</a>
             <button type="submit" class="btn btn-warning"><i class="bi bi-save me-1"></i> Atualizar</button>
         </div>
     </form>

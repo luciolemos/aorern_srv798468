@@ -85,14 +85,14 @@ class InstitucionalController extends Controller
                         'title' => 'Publicações institucionais',
                         'description' => 'Gerencie notícias, comunicados e conteúdos que alimentam o portal público da associação.',
                         'icon' => 'bi-journal-text',
-                        'href' => BASE_URL . 'admin/posts',
+                        'href' => BASE_URL . 'admin/publicacoes',
                         'label' => 'Abrir publicações',
                     ],
                     [
                         'title' => 'Categorias editoriais',
                         'description' => 'Organize os temas do portal para separar notícias, memória, notas e informes institucionais.',
                         'icon' => 'bi-tags',
-                        'href' => BASE_URL . 'admin/post-categories',
+                        'href' => BASE_URL . 'admin/categorias-editoriais',
                         'label' => 'Abrir categorias',
                     ],
                     [

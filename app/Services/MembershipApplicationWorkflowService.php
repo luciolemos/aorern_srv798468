@@ -16,7 +16,9 @@ class MembershipApplicationWorkflowService
         private readonly MembershipApplicationModel $applications,
         private readonly PessoalModel $pessoal,
         private readonly FuncaoModel $funcoes,
-        private readonly ?PDO $db = null
+        private readonly ?PDO $db = null,
+        private readonly ?MembershipStatusStateMachine $statusStateMachine = null,
+        private readonly ?MembershipAssociativeStatusStateMachine $associativeStatusStateMachine = null
     ) {
     }
 
@@ -27,6 +29,16 @@ class MembershipApplicationWorkflowService
      */
     public function approve(int $solicitacaoId, array $solicitacao, string $statusAssociativo, ?string $adminNote = null): array
     {
+        $currentStatus = trim((string) ($solicitacao['status'] ?? ''));
+        if ($currentStatus !== '') {
+            $this->statusStateMachine()
+                ->assertTransition($currentStatus, MembershipStatusStateMachine::STATUS_APROVADA, 'aprovação');
+        }
+
+        $currentAssociativeStatus = trim((string) ($solicitacao['status_associativo'] ?? MembershipAssociativeStatusStateMachine::PROVISORIO));
+        $this->associativeStatusStateMachine()
+            ->assertTransition($currentAssociativeStatus, $statusAssociativo);
+
         $db = $this->db ?? Database::connect();
 
         try {
@@ -89,8 +101,13 @@ class MembershipApplicationWorkflowService
         }
     }
 
-    public function reject(int $solicitacaoId, ?string $adminNote = null): void
+    public function reject(int $solicitacaoId, ?string $adminNote = null, ?string $currentStatus = null): void
     {
+        if ($currentStatus !== null && trim($currentStatus) !== '') {
+            $this->statusStateMachine()
+                ->assertTransition(trim($currentStatus), MembershipStatusStateMachine::STATUS_REJEITADA, 'rejeição');
+        }
+
         $note = $adminNote !== null && trim($adminNote) !== '' ? trim($adminNote) : null;
 
         $this->applications->atualizar($solicitacaoId, [
@@ -103,6 +120,16 @@ class MembershipApplicationWorkflowService
 
     public function requestComplementation(int $solicitacaoId, string $adminNote): void
     {
+        $this->requestComplementationFromStatus($solicitacaoId, $adminNote, null);
+    }
+
+    public function requestComplementationFromStatus(int $solicitacaoId, string $adminNote, ?string $currentStatus = null): void
+    {
+        if ($currentStatus !== null && trim($currentStatus) !== '') {
+            $this->statusStateMachine()
+                ->assertTransition(trim($currentStatus), MembershipStatusStateMachine::STATUS_COMPLEMENTACAO, 'complementação');
+        }
+
         $note = trim($adminNote);
         if ($note === '') {
             throw new \InvalidArgumentException('Observação para complementação é obrigatória.');
@@ -114,6 +141,16 @@ class MembershipApplicationWorkflowService
             'aprovado_em' => null,
             'rejeitado_em' => null,
         ]);
+    }
+
+    private function statusStateMachine(): MembershipStatusStateMachine
+    {
+        return $this->statusStateMachine ?? new MembershipStatusStateMachine();
+    }
+
+    private function associativeStatusStateMachine(): MembershipAssociativeStatusStateMachine
+    {
+        return $this->associativeStatusStateMachine ?? new MembershipAssociativeStatusStateMachine();
     }
 
     private function ensureAssociadoRoleId(): int

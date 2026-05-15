@@ -91,6 +91,8 @@ Sistema MVC moderno construído em **PHP puro** (sem frameworks), oferecendo:
 
 ## 🏗️ Arquitetura
 
+> Nota de governança: no estado atual, o fluxo principal de roteamento em produção está em `app/Core/App.php` (convenção por URL). O `app/Core/Router.php` permanece disponível para migração gradual para rotas declarativas.
+
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │                       REQUISIÇÃO HTTP                          │
@@ -156,7 +158,7 @@ composer install
 ```php
 // Database
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'luciolemos_mvc');
+define('DB_NAME', 'aorern_db');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 
@@ -169,16 +171,16 @@ define('SITE_URL', 'http://localhost/aorern/');
 ```bash
 # MySQL
 mysql -u root -p
-> CREATE DATABASE luciolemos_mvc;
-> USE luciolemos_mvc;
+> CREATE DATABASE aorern_db;
+> USE aorern_db;
 > source sql/schema.sql;
 > source sql/seeds/001_base_data.sql;
 
 Ou execute diretamente apontando o banco já criado:
 
 ```bash
-mysql -u luciolemos -p mvc < sql/schema.sql
-mysql -u luciolemos -p mvc < sql/seeds/001_base_data.sql
+mysql -u luciolemos -p aorern_db < sql/schema.sql
+mysql -u luciolemos -p aorern_db < sql/seeds/001_base_data.sql
 ```
 ```
 
@@ -797,7 +799,7 @@ php run-tests.sh
 ## 📁 Estrutura de Pastas
 
 ```
-mvc/
+aorern/
 ├── app/
 │   ├── Config/
 │   │   ├── Permissions.php          # ACL rules
@@ -957,7 +959,7 @@ mvc/
 
 5. **SSL (Let's Encrypt)**
    ```bash
-   certbot certonly --apache -d mvc.example.com
+   certbot certonly --apache -d aorern.example.com
    ```
 
 ---

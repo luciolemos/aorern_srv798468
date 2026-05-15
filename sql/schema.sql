@@ -439,51 +439,6 @@ CREATE TABLE gallery_images (
     CONSTRAINT fk_gallery_images_category FOREIGN KEY (category_id) REFERENCES gallery_categories (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Tabela: membership_applications
-CREATE TABLE membership_applications (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    nome_completo VARCHAR(160) NOT NULL,
-    nome_mae VARCHAR(160) NULL,
-    nome_pai VARCHAR(160) NULL,
-    username_desejado VARCHAR(60) NOT NULL,
-    email VARCHAR(120) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    cpf VARCHAR(14) NOT NULL,
-    cam VARCHAR(40) NULL,
-    rg VARCHAR(40) NULL,
-    data_nascimento DATE NULL,
-    telefone VARCHAR(20) NULL,
-    cidade VARCHAR(120) NULL,
-    uf CHAR(2) NULL,
-    ano_npor VARCHAR(10) NOT NULL,
-    posto_graduacao VARCHAR(60) NULL,
-    numero_militar VARCHAR(30) NULL,
-    nome_guerra VARCHAR(60) NULL,
-    turma_npor VARCHAR(80) NULL,
-    arma_quadro VARCHAR(120) NULL,
-    situacao_militar VARCHAR(120) NULL,
-    avatar VARCHAR(255) NULL,
-    observacoes TEXT NULL,
-    aceite_termo TINYINT(1) NOT NULL DEFAULT 1,
-    status ENUM('pendente','aprovada','rejeitada') NOT NULL DEFAULT 'pendente',
-    user_id INT UNSIGNED NULL,
-    pessoal_id INT UNSIGNED NULL,
-    observacoes_admin TEXT NULL,
-    aprovado_em DATETIME NULL,
-    rejeitado_em DATETIME NULL,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    KEY idx_membership_applications_status (status),
-    KEY idx_membership_applications_email (email),
-    KEY idx_membership_applications_cpf (cpf),
-    KEY idx_membership_applications_uf (uf),
-    KEY idx_membership_applications_username (username_desejado),
-    KEY idx_membership_applications_user (user_id),
-    KEY idx_membership_applications_pessoal (pessoal_id),
-    CONSTRAINT fk_membership_applications_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
-    CONSTRAINT fk_membership_applications_pessoal FOREIGN KEY (pessoal_id) REFERENCES pessoal(id) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 -- Tabela: institutional_documents
 CREATE TABLE institutional_documents (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
