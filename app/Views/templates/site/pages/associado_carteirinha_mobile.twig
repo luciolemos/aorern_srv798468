@@ -1,0 +1,569 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Carteirinha Digital (Mobile) - AORE/RN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <style>
+        .navbar-site,
+        .site-footer {
+            display: none !important;
+        }
+
+        body.has-public-navbar.site-body {
+            padding-top: 0 !important;
+            background: linear-gradient(180deg, #eef6f1 0%, #ffffff 100%);
+        }
+
+        .mobile-id-shell {
+            min-height: 100vh;
+            padding: 1rem 0 5.25rem;
+        }
+
+        .mobile-id-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .mobile-id-deck {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .mobile-id-deck .tab-pane {
+            display: none;
+            opacity: 1 !important;
+            transition: none !important;
+        }
+
+        .mobile-id-deck .tab-pane.active,
+        .mobile-id-deck .tab-pane.show.active {
+            display: block;
+        }
+
+        .mobile-id-card {
+            width: 100%;
+            aspect-ratio: 85.6 / 53.98;
+            border: 2px solid rgba(15, 81, 50, 0.35);
+            border-radius: 14px;
+            overflow: hidden;
+            background: #edf9f2;
+            box-shadow: 0 10px 26px rgba(23, 46, 33, 0.14);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-id-header,
+        .mobile-id-footer {
+            background: #edf9f2;
+            color: #1e2a23;
+            text-align: center;
+            padding: 0.38rem 1.1rem;
+            flex: 0 0 auto;
+        }
+
+        .mobile-id-header-main {
+            display: grid;
+            grid-template-columns: 34px 1fr 32px;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .mobile-id-header-main img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .mobile-id-header-main > img:first-child {
+            justify-self: end;
+            transform: translateX(30px);
+        }
+
+        .mobile-id-header-main > img:last-child {
+            justify-self: start;
+            transform: translateX(-30px);
+        }
+
+        .mobile-id-headline-1 {
+            font-size: 0.46rem;
+            font-weight: 700;
+            line-height: 1.08;
+            text-transform: uppercase;
+        }
+
+        .mobile-id-headline-2 {
+            font-size: 0.40rem;
+            font-weight: 600;
+            line-height: 1.08;
+            text-transform: uppercase;
+        }
+
+        .mobile-id-headline-3 {
+            font-size: 0.38rem;
+            font-weight: 600;
+            line-height: 1.08;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .mobile-id-subheader {
+            background: #edf9f2;
+            color: #1e2a23;
+            text-align: center;
+            padding: 0.1rem 1.06rem 0.18rem;
+            margin-bottom: 0.24rem;
+            font-size: 0.34rem;
+            line-height: 1.05;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-weight: 700;
+            flex: 0 0 auto;
+        }
+
+        .mobile-id-body {
+            padding: 0.4rem 1.14rem;
+            flex: 1 1 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        #back-pane .mobile-id-body {
+            justify-content: flex-start;
+        }
+
+        .mobile-id-front-grid {
+            display: grid;
+            grid-template-columns: 84px 1fr;
+            gap: 0.5rem;
+            align-items: start;
+        }
+
+        .mobile-id-photo {
+            width: 84px;
+            height: 106px;
+            object-fit: cover;
+            border-radius: 3px;
+            border: 1px solid rgba(15, 81, 50, 0.24);
+            background: #fff;
+        }
+
+        .mobile-id-fields {
+            display: grid;
+            gap: 0.36rem;
+        }
+
+        .mobile-id-field {
+            display: grid;
+            gap: 0.12rem;
+        }
+
+        .mobile-id-label {
+            font-size: 0.41rem;
+            font-weight: 700;
+            color: #0f5132;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            line-height: 1.05;
+        }
+
+        .mobile-id-value {
+            font-size: 0.40rem;
+            line-height: 1.14;
+            color: #1e2a23;
+            border: 1px solid rgba(15, 81, 50, 0.2);
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.58);
+            padding: 0.18rem 0.24rem;
+            min-height: 1.55em;
+        }
+
+        .mobile-id-fields-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.34rem;
+        }
+
+        .mobile-id-fields-name-rank {
+            grid-template-columns: 1.65fr 0.85fr;
+        }
+
+        .mobile-id-fields-birth-location-nat {
+            grid-template-columns: 0.7fr 1.35fr 0.75fr;
+        }
+
+        .mobile-id-fields-issue-valid-status {
+            grid-template-columns: 1.2fr 0.85fr 0.65fr;
+        }
+
+        .mobile-id-back-grid {
+            flex: 1 1 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 0;
+        }
+
+        .mobile-id-qr {
+            width: 82px;
+            height: 82px;
+            border: 1px solid rgba(15, 81, 50, 0.24);
+            border-radius: 8px;
+            background: #fff;
+            padding: 0.12rem;
+        }
+
+        .mobile-id-sign {
+            margin-top: 0;
+            border: 1px dashed rgba(15, 81, 50, 0.32);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.4);
+            padding: 0.18rem 0.22rem;
+        }
+
+        #back-pane .mobile-id-sign {
+            margin-top: auto;
+        }
+
+        .mobile-id-sign p {
+            margin: 0 0 0.08rem;
+            font-size: 0.33rem;
+            line-height: 1.12;
+        }
+
+        .mobile-id-sign p:last-child {
+            margin-bottom: 0;
+        }
+
+        .mobile-id-footer {
+            font-size: 0.36rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        @media (max-width: 420px) {
+            .mobile-id-card {
+                aspect-ratio: 85.6 / 53.98;
+            }
+
+            .mobile-id-front-grid {
+                grid-template-columns: 66px 1fr;
+                gap: 0.35rem;
+            }
+
+            .mobile-id-photo {
+                width: 66px;
+                height: 84px;
+            }
+
+            .mobile-id-fields {
+                gap: 0.24rem;
+            }
+
+            .mobile-id-field {
+                gap: 0.12rem;
+            }
+
+            .mobile-id-label {
+                font-size: 0.34rem;
+                letter-spacing: 0.03em;
+            }
+
+            .mobile-id-value {
+                font-size: 0.33rem;
+                line-height: 1.02;
+                min-height: 1.5em;
+                padding: 0.16rem 0.16rem;
+            }
+
+            .mobile-id-fields-name-rank {
+                grid-template-columns: 1.5fr 0.9fr;
+            }
+
+            .mobile-id-fields-birth-location-nat {
+                grid-template-columns: 0.66fr 1.3fr 0.74fr;
+            }
+
+            .mobile-id-fields-issue-valid-status {
+                grid-template-columns: 1.15fr 0.82fr 0.63fr;
+            }
+
+            .mobile-id-body {
+                padding: 0.28rem 0.88rem;
+            }
+
+            .mobile-id-back-grid {
+                justify-content: center;
+            }
+
+            .mobile-id-footer {
+                padding-top: 0.22rem;
+                padding-bottom: 0.22rem;
+                font-size: 0.31rem;
+            }
+
+            .mobile-id-header,
+            .mobile-id-subheader {
+                padding-left: 0.4rem;
+                padding-right: 0.4rem;
+            }
+
+            .mobile-id-headline-1 {
+                font-size: 0.40rem;
+            }
+
+            .mobile-id-headline-2 {
+                font-size: 0.34rem;
+            }
+
+            .mobile-id-headline-3 {
+                font-size: 0.32rem;
+            }
+
+            .mobile-id-header-main > img:first-child {
+                transform: translateX(24px);
+            }
+
+            .mobile-id-header-main > img:last-child {
+                transform: translateX(-24px);
+            }
+
+            .mobile-id-subheader {
+                font-size: 0.30rem;
+                padding-top: 0.06rem;
+                padding-bottom: 0.12rem;
+                margin-bottom: 0.2rem;
+            }
+
+            .mobile-id-qr {
+                width: 70px;
+                height: 70px;
+            }
+
+            .mobile-id-sign {
+                margin-top: 0.15rem;
+                padding: 0.16rem 0.2rem;
+            }
+
+            .mobile-id-sign p {
+                font-size: 0.28rem;
+                line-height: 1.04;
+                margin-bottom: 0.04rem;
+            }
+        }
+
+        .mobile-id-tabs .nav-link {
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.35rem 0.85rem;
+        }
+
+        .mobile-id-bottombar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1040;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(6px);
+            border-top: 1px solid rgba(15, 81, 50, 0.12);
+            padding: 0.45rem 0.75rem calc(0.45rem + env(safe-area-inset-bottom, 0px));
+        }
+
+        .mobile-id-bottombar .btn {
+            flex: 1 1 0;
+            min-width: 0;
+        }
+
+        @media (min-width: 768px) {
+            .mobile-id-shell {
+                min-height: auto;
+                padding-bottom: 2rem;
+            }
+
+            .mobile-id-bottombar {
+                display: none;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="mobile-id-shell">
+        <div class="container">
+            <div class="mobile-id-topbar">
+                <a href="{{ BASE_URL }}associado" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i>Voltar
+                </a>
+                <a href="{{ BASE_URL }}associado/carteirinha-impressao" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                    <i class="bi bi-printer me-1"></i>Imprimir
+                </a>
+            </div>
+
+            <ul class="nav nav-pills justify-content-center mb-3 mobile-id-tabs" id="mobileIdTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="front-tab" data-bs-toggle="tab" data-bs-target="#front-pane" type="button" role="tab" aria-controls="front-pane" aria-selected="true">Frente</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="back-tab" data-bs-toggle="tab" data-bs-target="#back-pane" type="button" role="tab" aria-controls="back-pane" aria-selected="false">Verso</button>
+                </li>
+            </ul>
+
+            <div class="tab-content mobile-id-deck" id="mobileIdTabContent">
+                <div class="tab-pane show active" id="front-pane" role="tabpanel" aria-labelledby="front-tab">
+                    <article class="mobile-id-card">
+                        <header class="mobile-id-header">
+                            <div class="mobile-id-header-main">
+                                <img src="{{ BASE_URL }}assets/images/brasaooficialcolorido.png" alt="Selo nacional">
+                                <div>
+                                    <div class="mobile-id-headline-1">República Federativa do Brasil</div>
+                                    <div class="mobile-id-headline-2">Associação de Oficiais da Reserva do Exército - AORE/RN</div>
+                                    <div class="mobile-id-headline-3">Rio Grande do Norte</div>
+                                </div>
+                                <img src="{{ BASE_URL }}assets/images/aore1.png" alt="AORE/RN">
+                            </div>
+                        </header>
+                        <div class="mobile-id-subheader">Carteira de Identificação de Oficial R/2</div>
+                        <div class="mobile-id-body">
+                            <div class="mobile-id-front-grid">
+                                <img src="{{ avatarUrl|e('html_attr') }}" alt="{{ snapshot.nome|default('Associado')|e('html_attr') }}" class="mobile-id-photo">
+                                <div class="mobile-id-fields">
+                                    <div class="mobile-id-fields-2col">
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Nº do cartão de identificação</div>
+                                            <div class="mobile-id-value">{{ card.card_code|default('-')|e }}</div>
+                                        </div>
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Nº de sócio</div>
+                                            <div class="mobile-id-value">{{ snapshot.staff_id|default('-')|e }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-id-fields-2col mobile-id-fields-name-rank">
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Nome</div>
+                                            <div class="mobile-id-value">{{ snapshot.nome|default('-')|e }}</div>
+                                        </div>
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Posto/Grad</div>
+                                            <div class="mobile-id-value">{{ snapshot.posto_graduacao|default('-')|e }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-id-fields-2col">
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">RG</div>
+                                            <div class="mobile-id-value">{{ snapshot.rg|default('-')|e }}</div>
+                                        </div>
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">CPF</div>
+                                            <div class="mobile-id-value">{{ snapshot.cpf|default('-')|e }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-id-fields-2col mobile-id-fields-birth-location-nat">
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Data nasc.</div>
+                                            <div class="mobile-id-value">{{ snapshot.data_nascimento ? snapshot.data_nascimento|date('d/m/Y') : '-' }}</div>
+                                        </div>
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Naturalidade</div>
+                                            <div class="mobile-id-value">{{ snapshot.cidade|default('-')|e }}/{{ snapshot.uf|default('-')|e }}</div>
+                                        </div>
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Nacionalidade</div>
+                                            <div class="mobile-id-value">Brasileira</div>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-id-fields-2col">
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Filiação (mãe)</div>
+                                            <div class="mobile-id-value">{{ snapshot.nome_mae|default('-')|e }}</div>
+                                        </div>
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Filiação (pai)</div>
+                                            <div class="mobile-id-value">{{ snapshot.nome_pai|default('-')|e }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-id-fields-2col mobile-id-fields-issue-valid-status">
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Expedição</div>
+                                            <div class="mobile-id-value">Natal/RN, {{ card.emitida_em ? card.emitida_em|date('d/m/Y') : '-' }}</div>
+                                        </div>
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Validade</div>
+                                            <div class="mobile-id-value">{{ card.validade_ate ? card.validade_ate|date('d/m/Y') : 'Indeterminada' }}</div>
+                                        </div>
+                                        <div class="mobile-id-field">
+                                            <div class="mobile-id-label">Status</div>
+                                            <div class="mobile-id-value">{{ card.status|default('inativa')|capitalize }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mobile-id-footer">Perpetuum Officium erga Patriam</div>
+                    </article>
+                </div>
+
+                <div class="tab-pane" id="back-pane" role="tabpanel" aria-labelledby="back-tab">
+                    <article class="mobile-id-card">
+                        <div class="mobile-id-body">
+                            <div class="mobile-id-back-grid">
+                                <div class="text-center">
+                                    <img src="{{ qrUrl|e('html_attr') }}" alt="QR de validação da carteirinha" class="mobile-id-qr">
+                                </div>
+                            </div>
+                            <div class="mobile-id-sign">
+                                <p><strong>Assinatura eletrônica institucional</strong></p>
+                                <p><strong>Assinado por:</strong> {{ signature.signer|default('Presidente AORE/RN')|e }}</p>
+                                <p><strong>Data/hora:</strong> {{ signature.signed_at_label is not empty ? signature.signed_at_label|e : (card.emitida_em ? card.emitida_em|date('d/m/Y H:i') : '-') }}</p>
+                                <p><strong>Código de integridade:</strong> {{ signature.hash|default('-')|e }}</p>
+                            </div>
+                        </div>
+                        <div class="mobile-id-footer">Válida em todo o território nacional</div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="mobile-id-bottombar d-flex gap-2 d-md-none">
+        <button type="button" class="btn btn-outline-primary btn-sm" data-mobile-id-action="front">
+            Frente
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" data-mobile-id-action="back">
+            Verso
+        </button>
+        <a href="{{ BASE_URL }}associado" class="btn btn-outline-secondary btn-sm">Voltar</a>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const frontBtn = document.querySelector('[data-mobile-id-action="front"]');
+            const backBtn = document.querySelector('[data-mobile-id-action="back"]');
+            const frontTab = document.getElementById('front-tab');
+            const backTab = document.getElementById('back-tab');
+
+            if (frontBtn && frontTab) {
+                frontBtn.addEventListener('click', function () {
+                    frontTab.click();
+                });
+            }
+
+            if (backBtn && backTab) {
+                backBtn.addEventListener('click', function () {
+                    backTab.click();
+                });
+            }
+        });
+    </script>
+{% endblock %}

@@ -105,7 +105,8 @@
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     {% if usuario.avatar %}
-                                        <img src="{{ BASE_URL }}{{ usuario.avatar }}" alt="{{ usuario.username }}" class="rounded admin-avatar-square-48">
+                                        {% set usuarioAvatarSrc = usuario.avatar starts with 'http' ? usuario.avatar : (BASE_URL ~ usuario.avatar) %}
+                                        <img src="{{ usuarioAvatarSrc|e('html_attr') }}" alt="{{ usuario.username }}" class="rounded admin-avatar-square-48">
                                     {% else %}
                                         <div class="rounded bg-primary d-inline-flex justify-content-center align-items-center text-white admin-avatar-square-48">
                                             {{ usuario.username[0]|upper }}

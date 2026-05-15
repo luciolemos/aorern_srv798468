@@ -22,7 +22,7 @@
 
 .auth-benefits .icon-circle {
     background: rgba(255,255,255,0.15);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .auth-benefits .icon-list-item {
@@ -46,14 +46,14 @@
     border-radius: 1rem;
     border: 1px solid rgba(255,255,255,0.35);
     background: rgba(255,255,255,0.08);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .auth-form .form-control:focus {
     border-color: rgba(85,107,47,0.7);
     box-shadow: 0 0 0 0.2rem rgba(85,107,47,0.25);
     background: rgba(15,23,42,0.9);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .auth-form .form-label {
@@ -61,7 +61,7 @@
 }
 
 .auth-form .form-label .required-mark {
-    color: #d6e3b6;
+    color: var(--navbar-site-accent);
     margin-left: 0.2rem;
 }
 
@@ -78,20 +78,20 @@
 .auth-card--light .text-white,
 .auth-card--light .hero-panel-title,
 .auth-card--light .hero-panel-item-title {
-    color: #fff !important;
+    color: var(--color-white) !important;
 }
 
 .auth-form--light .form-control {
     background: rgba(255, 255, 255, 0.9);
     border-color: rgba(255, 255, 255, 0.95);
-    color: #1f2f16;
+    color: var(--color-olive-900);
 }
 
 .auth-form--light .form-control:focus {
-    background: #ffffff;
+    background: var(--color-white);
     border-color: rgba(85,107,47,0.75);
     box-shadow: 0 0 0 0.2rem rgba(85,107,47,0.25);
-    color: #1f2f16;
+    color: var(--color-olive-900);
 }
 
 .auth-form--light .form-control::placeholder {
@@ -107,7 +107,7 @@
 .auth-form--light select:-webkit-autofill,
 .auth-form--light select:-webkit-autofill:hover,
 .auth-form--light select:-webkit-autofill:focus {
-    -webkit-text-fill-color: #1f2f16 !important;
+    -webkit-text-fill-color: var(--color-olive-900) !important;
     -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.9) inset !important;
     box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.9) inset !important;
     transition: background-color 9999s ease-in-out 0s;
@@ -194,12 +194,12 @@
 .register-form-card p,
 .register-form-card .form-label,
 .register-form-card .form-check-label {
-    color: #fff;
+    color: var(--color-white);
 }
 
 .register-form-card .hero-panel-badge {
     background: rgba(255, 255, 255, 0.95);
-    color: #0f1f33;
+    color: var(--color-ink-900);
 }
 
 .register-form-card .hero-panel-badge i {
@@ -211,13 +211,13 @@
 }
 
 .register-form-card a {
-    color: #fff;
+    color: var(--color-white);
 }
 
 .register-form-card .auth-form--light .form-label,
 .register-form-card .auth-form--light .form-check-label,
 .register-form-card .auth-form--light .form-text {
-    color: #fff !important;
+    color: var(--color-white) !important;
 }
 
 .register-form-card .auth-form--light .form-control,
@@ -227,14 +227,14 @@
 .register-form-card .auth-form--light select.form-control {
     background: rgba(255, 255, 255, 0.9) !important;
     border-color: rgba(255, 255, 255, 0.95) !important;
-    color: #1f2f16 !important;
+    color: var(--color-olive-900) !important;
 }
 
 .register-form-card .auth-form--light input,
 .register-form-card .auth-form--light textarea,
 .register-form-card .auth-form--light select {
     background-color: rgba(255, 255, 255, 0.9) !important;
-    color: #1f2f16 !important;
+    color: var(--color-olive-900) !important;
 }
 
 .register-form-card .auth-form--light .form-control:focus,
@@ -242,17 +242,17 @@
 .register-form-card .auth-form--light textarea.form-control:focus,
 .register-form-card .auth-form--light input.form-control:focus,
 .register-form-card .auth-form--light select.form-control:focus {
-    background: #ffffff !important;
+    background: var(--color-white) !important;
     border-color: rgba(85,107,47,0.75) !important;
     box-shadow: 0 0 0 0.2rem rgba(85,107,47,0.25) !important;
-    color: #1f2f16 !important;
+    color: var(--color-olive-900) !important;
 }
 
 .register-form-card .auth-form--light input:focus,
 .register-form-card .auth-form--light textarea:focus,
 .register-form-card .auth-form--light select:focus {
-    background-color: #ffffff !important;
-    color: #1f2f16 !important;
+    background-color: var(--color-white) !important;
+    color: var(--color-olive-900) !important;
 }
 
 .register-form-card .auth-form--light input:-webkit-autofill,
@@ -264,7 +264,7 @@
 .register-form-card .auth-form--light select:-webkit-autofill,
 .register-form-card .auth-form--light select:-webkit-autofill:hover,
 .register-form-card .auth-form--light select:-webkit-autofill:focus {
-    -webkit-text-fill-color: #1f2f16 !important;
+    -webkit-text-fill-color: var(--color-olive-900) !important;
     -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.9) inset !important;
     box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.9) inset !important;
     transition: background-color 9999s ease-in-out 0s;
@@ -275,7 +275,23 @@
 }
 
 .register-form-card .form-check-input {
+    width: 1.1rem;
+    height: 1.1rem;
     margin-top: 0.2rem;
+    border: 2px solid rgba(36, 54, 22, 0.95);
+    background-color: #fff;
+    box-shadow: none;
+    accent-color: var(--color-primary, #0f5132);
+}
+
+.register-form-card .form-check-input:checked {
+    background-color: #0f5132;
+    border-color: #0f5132;
+}
+
+.register-form-card .form-check-input:focus {
+    border-color: var(--color-primary, #0f5132);
+    box-shadow: 0 0 0 0.2rem rgba(15, 81, 50, 0.25);
 }
 
 .register-form-card #aceite_termo.form-check-input {
@@ -326,19 +342,19 @@
 
 .register-step:hover {
     background: rgba(255, 255, 255, 0.12);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .register-step.is-active {
     background: rgba(255, 255, 255, 0.94);
-    color: #0f1f33;
+    color: var(--color-ink-900);
     border-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 14px 28px rgba(8, 18, 31, 0.16);
 }
 
 .register-step.is-complete {
     background: rgba(255, 255, 255, 0.12);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .register-step__number {
@@ -428,14 +444,14 @@
 .register-step-actions .register-step-prev {
     background: rgba(255, 255, 255, 0.14);
     border-color: rgba(255, 255, 255, 0.42);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .register-step-actions .register-step-prev:hover,
 .register-step-actions .register-step-prev:focus-visible {
     background: rgba(255, 255, 255, 0.22);
     border-color: rgba(255, 255, 255, 0.6);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .register-review-card {
@@ -463,7 +479,7 @@
 
 .register-review-card__item p {
     margin-bottom: 0;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .register-review-list {
@@ -488,7 +504,7 @@
 
 .register-review-list__row dd {
     margin: 0;
-    color: #fff;
+    color: var(--color-white);
     line-height: 1.4;
     word-break: break-word;
 }
@@ -498,7 +514,7 @@
     border: 1px solid rgba(63, 79, 34, 0.18);
     border-radius: 1rem;
     padding: 1.35rem;
-    color: #273325;
+    color: var(--color-neutral-700);
 }
 
 .register-review-document__header {
@@ -521,7 +537,7 @@
     object-fit: cover;
     border-radius: 0.5rem;
     border: 2px solid rgba(63, 79, 34, 0.28);
-    background: #fff;
+    background: var(--color-white);
 }
 
 .register-review-document__photo-caption {
@@ -549,7 +565,7 @@
     font-weight: 800;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #20301f;
+    color: var(--color-olive-950);
 }
 
 .register-review-document__brand p {
@@ -591,7 +607,7 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     font-weight: 700;
-    color: #20301f;
+    color: var(--color-olive-950);
 }
 
 .register-review-document__annexes p,
@@ -654,6 +670,7 @@
     }
 
     .register-form-logo {
+        order: -1;
         justify-content: center;
     }
 

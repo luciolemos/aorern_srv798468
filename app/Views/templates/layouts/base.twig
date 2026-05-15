@@ -4,6 +4,30 @@
     <meta charset="UTF-8">
     <title>{% block title %}AORE/RN{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if meta_description is defined and meta_description %}
+        <meta name="description" content="{{ meta_description|e('html_attr') }}">
+    {% endif %}
+    {% if meta_canonical is defined and meta_canonical %}
+        <link rel="canonical" href="{{ meta_canonical|e('html_attr') }}">
+    {% endif %}
+    {% if meta_og_title is defined and meta_og_title %}
+        <meta property="og:title" content="{{ meta_og_title|e('html_attr') }}">
+    {% endif %}
+    {% if meta_og_description is defined and meta_og_description %}
+        <meta property="og:description" content="{{ meta_og_description|e('html_attr') }}">
+    {% endif %}
+    {% if meta_og_url is defined and meta_og_url %}
+        <meta property="og:url" content="{{ meta_og_url|e('html_attr') }}">
+    {% endif %}
+    {% if meta_og_type is defined and meta_og_type %}
+        <meta property="og:type" content="{{ meta_og_type|e('html_attr') }}">
+    {% endif %}
+    {% if meta_og_image is defined and meta_og_image %}
+        <meta property="og:image" content="{{ meta_og_image|e('html_attr') }}">
+    {% endif %}
+    {% if fb_app_id is defined and fb_app_id %}
+        <meta property="fb:app_id" content="{{ fb_app_id|e('html_attr') }}">
+    {% endif %}
     <link rel="icon" type="image/png" href="{{ BASE_URL }}assets/images/aorern-medalhao-verde-aorer6-oficial-3200_1.png">
     <link rel="apple-touch-icon" href="{{ BASE_URL }}assets/images/aorern-medalhao-verde-aorer6-oficial-3200_1.png">
     <link rel="shortcut icon" href="{{ BASE_URL }}assets/images/aorern-medalhao-verde-aorer6-oficial-3200_1.png">

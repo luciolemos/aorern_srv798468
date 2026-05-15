@@ -218,6 +218,53 @@ class User {
         return (int) $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     }
 
+    public function contarPorStatusERoles(string $status, array $roles): int
+    {
+        if ($roles === []) {
+            return 0;
+        }
+
+        $placeholders = [];
+        $params = [':status' => $status];
+        foreach (array_values($roles) as $idx => $role) {
+            $key = ':role_' . $idx;
+            $placeholders[] = $key;
+            $params[$key] = $role;
+        }
+
+        $sql = "SELECT COUNT(*) as total
+                FROM {$this->table}
+                WHERE status = :status
+                  AND role IN (" . implode(', ', $placeholders) . ")";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return (int) $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+
+    public function contarPorRoles(array $roles): int
+    {
+        if ($roles === []) {
+            return 0;
+        }
+
+        $placeholders = [];
+        $params = [];
+        foreach (array_values($roles) as $idx => $role) {
+            $key = ':role_' . $idx;
+            $placeholders[] = $key;
+            $params[$key] = $role;
+        }
+
+        $sql = "SELECT COUNT(*) as total
+                FROM {$this->table}
+                WHERE role IN (" . implode(', ', $placeholders) . ")";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return (int) $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+
     /**
      * Lista usuários com filtros
      */

@@ -1,0 +1,57 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Validação de Carteirinha - AORE/RN{% endblock %}
+
+{% block content %}
+    <section class="site-hero py-5">
+        <div class="site-hero-pattern"></div>
+        <div class="container position-relative">
+            <h1 class="section-title text-white mb-2">Validação de Carteira Digital do Oficial da Reserva de 2ª Classe</h1>
+            <p class="section-lead text-white-75 mb-0">Confirmação pública de autenticidade da credencial de associado.</p>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            {% if card %}
+                {% set isValid = status == 'ativa' %}
+                <div class="card border-0 shadow-sm mx-auto" style="max-width: 860px;">
+                    <div class="card-header {{ isValid ? 'bg-success' : 'bg-danger' }} text-white">
+                        <h2 class="h5 mb-0">
+                            <i class="bi {{ isValid ? 'bi-patch-check' : 'bi-x-octagon' }} me-2"></i>
+                            {{ isValid ? 'Carteira digital válida' : 'Carteirinha inválida/revogada' }}
+                        </h2>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-4 align-items-start">
+                            <div class="col-md-4 text-center">
+                                <img src="{{ avatarUrl|e('html_attr') }}" alt="{{ snapshot.nome|default(card.associado_nome)|default('Associado')|e('html_attr') }}" class="img-fluid rounded-3 shadow-sm" style="max-width: 220px; width: 100%; aspect-ratio: 4/5; object-fit: cover;">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row g-3 small">
+                                    <div class="col-sm-6"><strong>Nº do cartão de identificação:</strong><br>{{ card.card_code|default('-')|e }}</div>
+                                    <div class="col-sm-6"><strong>Status</strong><br>{{ status|capitalize }}</div>
+                                    <div class="col-sm-6"><strong>Nº de sócio</strong><br>{{ snapshot.staff_id|default(card.associado_staff_id)|default('-')|e }}</div>
+                                    <div class="col-sm-6"><strong>Nome</strong><br>{{ snapshot.nome|default(card.associado_nome)|default('-')|e }}</div>
+                                    <div class="col-sm-6"><strong>Emitida em</strong><br>{{ card.emitida_em ? card.emitida_em|date('d/m/Y H:i') : '-' }}</div>
+                                    <div class="col-sm-6"><strong>Validade</strong><br>{{ card.validade_ate ? card.validade_ate|date('d/m/Y') : 'Indeterminada' }}</div>
+                                    {% if card.revogada_em %}
+                                        <div class="col-12"><strong>Revogada em</strong><br>{{ card.revogada_em|date('d/m/Y H:i') }}</div>
+                                    {% endif %}
+                                    {% if card.motivo_revogacao %}
+                                        <div class="col-12"><strong>Motivo</strong><br>{{ card.motivo_revogacao|e }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-danger border-0 shadow-sm mx-auto" style="max-width: 860px;">
+                    <i class="bi bi-x-octagon me-2"></i>
+                    Token de carteirinha inexistente ou inválido.
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

@@ -181,4 +181,20 @@ class BoardMembershipModel
 
         return (bool) $stmt->fetchColumn();
     }
+
+    public function listarPorMandato(int $termId, bool $onlyActive = true): array
+    {
+        $sql = $this->selectBase() . " WHERE bm.term_id = :term_id";
+        $params = [':term_id' => $termId];
+
+        if ($onlyActive) {
+            $sql .= " AND bm.is_active = 1";
+        }
+
+        $sql .= " ORDER BY bm.ordem ASC, bm.id ASC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
 }

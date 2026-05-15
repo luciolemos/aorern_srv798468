@@ -5,6 +5,35 @@
 {% block styles %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ BASE_URL }}assets/css/associado.css?v=20260306-3">
+    <style>
+        .birthday-contact-icon {
+            width: 2rem;
+            height: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: 1px solid currentColor;
+            border-radius: 0.5rem;
+            line-height: 1;
+            text-decoration: none;
+            background: transparent;
+        }
+
+        .birthday-contact-icon.is-whatsapp {
+            color: var(--bs-success);
+        }
+
+        .birthday-contact-icon.is-email {
+            color: var(--bs-primary);
+        }
+
+        .birthday-contact-icon.is-disabled {
+            color: var(--bs-secondary);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -67,10 +96,73 @@
                             </div>
                         </div>
 
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+                                    <h2 class="h6 fw-bold mb-0">Aniversariantes de hoje</h2>
+                                    <span class="badge text-bg-light border">{{ 'now'|date('d/m') }}</span>
+                                </div>
+                                {% if aniversariantes_hoje is not empty %}
+                                    <div class="d-grid gap-3">
+                                        {% for aniversariante in aniversariantes_hoje %}
+                                            <div class="d-flex align-items-center justify-content-between gap-3">
+                                                <img src="{{ aniversariante.foto_url|e('html_attr') }}" alt="{{ aniversariante.nome|e('html_attr') }}" class="rounded-3 shadow-sm" style="width:52px;height:52px;object-fit:cover;">
+                                                <div class="small min-w-0 flex-grow-1">
+                                                    <div class="fw-semibold text-body text-truncate">{{ aniversariante.nome }}</div>
+                                                    <div class="text-muted text-truncate">Al {{ aniversariante.numero_militar }}/{{ aniversariante.ano_npor }} · {{ aniversariante.nome_guerra }}</div>
+                                                    <div class="text-success-emphasis">{{ aniversariante.idade is not null ? aniversariante.idade ~ ' anos' : 'Parabens' }}</div>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                    {% if aniversariante.whatsapp_link %}
+                                                        <a href="{{ aniversariante.whatsapp_link|e('html_attr') }}"
+                                                           target="_blank"
+                                                           rel="noopener"
+                                                           class="birthday-contact-icon is-whatsapp"
+                                                           title="Chamar no WhatsApp {{ aniversariante.telefone_formatado ? '(' ~ aniversariante.telefone_formatado ~ ')' : '' }}">
+                                                            <i class="bi bi-whatsapp"></i>
+                                                        </a>
+                                                    {% else %}
+                                                        <span class="birthday-contact-icon is-disabled"
+                                                              aria-disabled="true"
+                                                              title="Telefone nao informado">
+                                                            <i class="bi bi-whatsapp"></i>
+                                                        </span>
+                                                    {% endif %}
+                                                    {% if aniversariante.email %}
+                                                        <button type="button"
+                                                                class="birthday-contact-icon is-email"
+                                                                title="Enviar saudação institucional para {{ aniversariante.email|e('html_attr') }}"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#memberBirthdayGreetingModal"
+                                                                data-recipient-id="{{ aniversariante.id }}"
+                                                                data-recipient-name="{{ aniversariante.nome|e('html_attr') }}"
+                                                                data-recipient-email="{{ aniversariante.email|e('html_attr') }}">
+                                                            <i class="bi bi-envelope-heart"></i>
+                                                        </button>
+                                                    {% else %}
+                                                        <span class="birthday-contact-icon is-disabled"
+                                                              aria-disabled="true"
+                                                              title="E-mail nao informado">
+                                                            <i class="bi bi-envelope"></i>
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p class="small text-muted mb-0">Nao ha aniversariantes do dia cadastrados na base associativa.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
                         <div class="card border-0 shadow-sm associado-quick-links-card">
                             <div class="card-body p-4">
                                 <h2 class="h6 fw-bold mb-3">Atalhos</h2>
                                 <div class="d-grid gap-2 associado-quick-links associado-quick-links-inline">
+                                    <a href="{{ BASE_URL }}associado/carteirinha" data-mobile-url="{{ BASE_URL }}associado/carteirinha-mobile" class="btn btn-outline-success btn-sm js-carteirinha-link {{ carteirinha ? '' : 'disabled' }}" {% if not carteirinha %}aria-disabled="true" tabindex="-1"{% endif %}>
+                                        <i class="bi bi-person-vcard me-1"></i>Carteirinha digital
+                                    </a>
                                     <a href="{{ BASE_URL }}contact" class="btn btn-primary btn-sm">
                                         <i class="bi bi-envelope me-1"></i>Falar com a secretaria
                                     </a>
@@ -78,6 +170,49 @@
                                         <i class="bi bi-diagram-3 me-1"></i>Consultar governança
                                     </a>
                                 </div>
+                                {% if carteirinha %}
+                                    <p class="text-muted small mt-3 mb-0">
+                                        Carteirinha ativa: <strong>{{ carteirinha.card_code|default('-')|e }}</strong><br>
+                                        Emitida em {{ carteirinha.emitida_em ? carteirinha.emitida_em|date('d/m/Y H:i') : '-' }}.
+                                    </p>
+                                {% else %}
+                                    <p class="text-muted small mt-3 mb-0">
+                                        Sua carteirinha digital ainda não foi emitida pela administração.
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+                                    <div>
+                                        <h2 class="h6 fw-bold mb-0">Diretoria vigente</h2>
+                                        <p class="small text-muted mb-0">
+                                            {% if mandato_vigente %}
+                                                {{ mandato_vigente.nome|e }}
+                                            {% else %}
+                                                Composição institucional não publicada
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <a href="{{ BASE_URL }}institucional/governanca" class="small text-decoration-none">Ver governança</a>
+                                </div>
+                                {% if diretoria_vigente is not empty %}
+                                    <div class="d-grid gap-3">
+                                        {% for membro in diretoria_vigente %}
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img src="{{ membro.foto_url|e('html_attr') }}" alt="{{ membro.nome|e('html_attr') }}" class="rounded-3 shadow-sm" style="width:52px;height:52px;object-fit:cover;">
+                                                <div class="small min-w-0">
+                                                    <div class="fw-semibold text-body text-truncate">{{ membro.nome }}</div>
+                                                    <div class="text-muted text-truncate">{{ membro.cargo }}</div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p class="small text-muted mb-0">A diretoria vigente ainda não foi publicada no painel institucional.</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -98,6 +233,7 @@
                                         <div class="row g-3 small">
                                             <div class="col-md-6"><strong>Nome:</strong> {{ solicitacao.nome_completo|e }}</div>
                                             <div class="col-md-6"><strong>CPF:</strong> {{ solicitacao.cpf|e }}</div>
+                                            <div class="col-md-6"><strong>Data de nascimento:</strong> {{ solicitacao.data_nascimento ? solicitacao.data_nascimento|date('d/m/Y') : '-' }}</div>
                                             <div class="col-md-6"><strong>Nome da mãe:</strong> {{ solicitacao.nome_mae|default('-')|e }}</div>
                                             <div class="col-md-6"><strong>Nome do pai:</strong> {{ solicitacao.nome_pai|default('-')|e }}</div>
                                             <div class="col-md-6"><strong>CAM:</strong> {{ solicitacao.cam|default('-')|e }}</div>
@@ -134,6 +270,7 @@
                                             <div class="card-body p-4">
                                                 <h3 class="h6 fw-bold mb-3">Complementar proposta de filiação</h3>
                                                 <p class="text-muted small mb-3">Atualize os dados solicitados e anexe novos documentos. Após envio, sua solicitação volta para análise.</p>
+                                                <p class="text-muted small mb-3">Para atualizar foto, usuário ou e-mail, use a seção <strong>Minha conta</strong>.</p>
                                                 <form method="POST" action="{{ BASE_URL }}associado/complementar" enctype="multipart/form-data" class="row g-3">
                                                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                                                     <div class="col-md-4">
@@ -171,10 +308,6 @@
                                                     <div class="col-md-6">
                                                         <label class="form-label small fw-semibold">Arma/Quadro</label>
                                                         <input type="text" name="arma_quadro" class="form-control" value="{{ solicitacao.arma_quadro|default('')|e('html_attr') }}">
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <label class="form-label small fw-semibold">Atualizar foto (opcional)</label>
-                                                        <input type="file" name="avatar" class="form-control" accept="image/jpeg,image/png,image/webp">
                                                     </div>
                                                     <div class="col-12">
                                                         <label class="form-label small fw-semibold">Anexar novos documentos (opcional)</label>
@@ -217,7 +350,7 @@
                         </div>
 
                         <div class="row g-4">
-                            <div class="col-lg-6">
+                            <div class="col-lg-6" id="minha-conta">
                                 <div class="card border-0 shadow-sm h-100">
                                     <div class="card-body p-4">
                                         <h2 class="h5 fw-bold mb-3">Minha conta</h2>
@@ -249,6 +382,38 @@
                                         </form>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+                                    <div>
+                                        <h2 class="h5 fw-bold mb-1">Comunicados institucionais</h2>
+                                        <p class="text-muted mb-0">Publicações recentes do portal institucional da AORE/RN.</p>
+                                    </div>
+                                    <a href="{{ BASE_URL }}blog" class="btn btn-outline-secondary btn-sm">Ver blog</a>
+                                </div>
+
+                                {% if comunicados_institucionais is not empty %}
+                                    <div class="d-grid gap-3">
+                                        {% for comunicado in comunicados_institucionais %}
+                                            <article class="border rounded-4 p-3">
+                                                <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-2">
+                                                    <div>
+                                                        <div class="small text-uppercase text-muted fw-semibold">{{ comunicado.categoria|e }}</div>
+                                                        <h3 class="h6 fw-bold mb-1">{{ comunicado.titulo|e }}</h3>
+                                                    </div>
+                                                    <span class="small text-muted">{{ comunicado.data ? comunicado.data|date('d/m/Y') : '-' }}</span>
+                                                </div>
+                                                <p class="small text-muted mb-3">{{ comunicado.resumo|default('Conteúdo institucional disponível no portal.')|e }}</p>
+                                                <a href="{{ comunicado.url|e('html_attr') }}" class="small fw-semibold text-decoration-none">Ler comunicado</a>
+                                            </article>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p class="text-muted mb-0">Ainda não há comunicados institucionais publicados.</p>
+                                {% endif %}
                             </div>
                         </div>
 
@@ -289,6 +454,9 @@
                 </div>
             </div>
             <div class="associado-mobile-footer-action mt-4">
+                <a href="{{ BASE_URL }}associado/carteirinha" data-mobile-url="{{ BASE_URL }}associado/carteirinha-mobile" class="btn btn-outline-success js-carteirinha-link {{ carteirinha ? '' : 'disabled' }}" {% if not carteirinha %}aria-disabled="true" tabindex="-1"{% endif %}>
+                    <i class="bi bi-person-vcard me-1"></i>Carteirinha digital
+                </a>
                 <a href="{{ BASE_URL }}contact" class="btn btn-primary">
                     <i class="bi bi-envelope me-1"></i>Falar com a secretaria
                 </a>
@@ -301,33 +469,122 @@
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="memberBirthdayGreetingModal" tabindex="-1" aria-labelledby="memberBirthdayGreetingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <form method="post" action="{{ BASE_URL }}associado/enviar-saudacao-aniversariante">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="memberBirthdayGreetingModalLabel">Enviar saudação institucional</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token|e('html_attr') }}">
+                        <input type="hidden" name="pessoal_id" id="memberBirthdayGreetingRecipientId">
+                        <p class="small text-muted mb-3">A mensagem será enviada pelo e-mail institucional da AORE/RN, identificando você como remetente.</p>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Destinatário</label>
+                            <div class="form-control bg-light" id="memberBirthdayGreetingRecipientLabel">-</div>
+                        </div>
+                        <div class="mb-0">
+                            <label for="memberBirthdayGreetingMessage" class="form-label small fw-semibold">Mensagem de saudação</label>
+                            <textarea class="form-control" id="memberBirthdayGreetingMessage" name="message" rows="9" maxlength="1000" required>Nesta data especial, desejamos saúde, felicidade, realizações e contínuo sucesso em sua trajetória pessoal e profissional, mantendo sempre vivos os valores de honra, disciplina, camaradagem e compromisso com a Pátria, que marcam a formação do oficial da reserva.
+
+Receba o reconhecimento e o abraço fraterno de todos que integram a família AORE/RN.
+
+Parabéns e muitas felicidades!
+
+Administração
+AORE/RN – Associação dos Oficiais da Reserva do Exército
+
+Perpetuum Officium erga Patriam
+(Dever permanente para com a Pátria)</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Enviar saudação</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
     {{ parent() }}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const input = document.getElementById('associadoAvatarInput');
-            const preview = document.getElementById('associadoAvatarPreview');
-            let previewUrl = null;
-
-            if (!input || !preview) {
-                return;
+            const isMobileViewport = window.matchMedia('(max-width: 767.98px)').matches;
+            if (isMobileViewport) {
+                document.querySelectorAll('.js-carteirinha-link[data-mobile-url]').forEach(function (el) {
+                    const mobileUrl = el.getAttribute('data-mobile-url');
+                    if (mobileUrl) {
+                        el.setAttribute('href', mobileUrl);
+                    }
+                });
             }
 
-            input.addEventListener('change', function () {
-                const file = this.files && this.files[0] ? this.files[0] : null;
-                if (!file || !file.type.startsWith('image/')) {
+            const binds = [
+                {
+                    input: document.getElementById('associadoAvatarInput'),
+                    preview: document.getElementById('associadoAvatarPreview'),
+                }
+            ];
+
+            binds.forEach(function (pair) {
+                if (!pair.input || !pair.preview) {
                     return;
                 }
 
-                if (previewUrl) {
-                    URL.revokeObjectURL(previewUrl);
-                }
+                let previewUrl = null;
+                pair.input.addEventListener('change', function () {
+                    const file = this.files && this.files[0] ? this.files[0] : null;
+                    if (!file || !file.type.startsWith('image/')) {
+                        return;
+                    }
 
-                previewUrl = URL.createObjectURL(file);
-                preview.src = previewUrl;
+                    if (previewUrl) {
+                        URL.revokeObjectURL(previewUrl);
+                    }
+
+                    previewUrl = URL.createObjectURL(file);
+                    pair.preview.src = previewUrl;
+                });
             });
+
+            const birthdayModal = document.getElementById('memberBirthdayGreetingModal');
+            if (birthdayModal) {
+                const recipientId = document.getElementById('memberBirthdayGreetingRecipientId');
+                const recipientLabel = document.getElementById('memberBirthdayGreetingRecipientLabel');
+                const messageField = document.getElementById('memberBirthdayGreetingMessage');
+                const defaultMessage = `Nesta data especial, desejamos saúde, felicidade, realizações e contínuo sucesso em sua trajetória pessoal e profissional, mantendo sempre vivos os valores de honra, disciplina, camaradagem e compromisso com a Pátria, que marcam a formação do oficial da reserva.
+
+Receba o reconhecimento e o abraço fraterno de todos que integram a família AORE/RN.
+
+Parabéns e muitas felicidades!
+
+Administração
+AORE/RN – Associação dos Oficiais da Reserva do Exército
+
+Perpetuum Officium erga Patriam
+(Dever permanente para com a Pátria)`;
+
+                birthdayModal.addEventListener('show.bs.modal', function (event) {
+                    const trigger = event.relatedTarget;
+                    if (!trigger) {
+                        return;
+                    }
+
+                    const id = trigger.getAttribute('data-recipient-id') || '';
+                    const name = trigger.getAttribute('data-recipient-name') || 'Associado';
+                    const email = trigger.getAttribute('data-recipient-email') || '';
+
+                    recipientId.value = id;
+                    recipientLabel.textContent = email ? (name + ' <' + email + '>') : name;
+                    messageField.value = defaultMessage;
+                });
+            }
         });
     </script>
 {% endblock %}

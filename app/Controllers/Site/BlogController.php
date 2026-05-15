@@ -73,6 +73,7 @@ class BlogController extends Controller {
 
         $referenceDate = $post['published_at'] ?? $post['criado_em'];
         $postId = (int) ($post['id'] ?? 0);
+        $canonicalUrl = BASE_URL . 'blog/' . rawurlencode((string) ($post['slug'] ?? ''));
 
         $previousPost = $postModel->encontrarAnterior($referenceDate, $postId);
         $nextPost = $postModel->encontrarProximo($referenceDate, $postId);
@@ -81,6 +82,52 @@ class BlogController extends Controller {
             'post' => $post,
             'previousPost' => $previousPost,
             'nextPost' => $nextPost,
+            'meta_canonical' => $canonicalUrl,
+            'meta_og_url' => $canonicalUrl,
+            'meta_og_type' => 'article',
+            'meta_description' => $this->buildMetaDescription($post),
+            'meta_og_title' => (string) ($post['titulo'] ?? 'AORE/RN'),
+            'meta_og_description' => $this->buildMetaDescription($post),
+            'meta_og_image' => $this->resolveAbsoluteUrl((string) ($post['capa_url'] ?? '')),
+            'fb_app_id' => defined('FACEBOOK_APP_ID') ? FACEBOOK_APP_ID : '',
         ]);
+    }
+
+    private function buildMetaDescription(array $post): string
+    {
+        $source = trim(strip_tags((string) ($post['conteudo'] ?? '')));
+        if ($source === '') {
+            return 'Conteúdo institucional publicado no portal da AORE/RN.';
+        }
+
+        if (function_exists('mb_substr')) {
+            $description = mb_substr($source, 0, 180, 'UTF-8');
+            if (mb_strlen($source, 'UTF-8') > 180) {
+                $description .= '...';
+            }
+
+            return $description;
+        }
+
+        $description = substr($source, 0, 180);
+        if (strlen($source) > 180) {
+            $description .= '...';
+        }
+
+        return $description;
+    }
+
+    private function resolveAbsoluteUrl(string $url): string
+    {
+        $value = trim($url);
+        if ($value === '') {
+            return '';
+        }
+
+        if (preg_match('#^https?://#i', $value)) {
+            return $value;
+        }
+
+        return BASE_URL . ltrim($value, '/');
     }
 }

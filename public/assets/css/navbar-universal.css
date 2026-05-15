@@ -11,7 +11,7 @@
     --nav-brand-primary: var(--brand-primary);
     --nav-brand-primary-dark: var(--brand-primary-dark);
     --nav-brand-primary-hover: var(--brand-accent);
-    --nav-brand-primary-light: #6f8650;
+    --nav-brand-primary-light: var(--navbar-site-surface-light);
     --nav-brand-primary-shadow: rgba(63, 79, 34, 0.28);
     --nav-brand-white: var(--brand-white);
     --nav-brand-dark: var(--color-neutral-800);
@@ -377,7 +377,7 @@
 .navbar-site .nav-link.active,
 .navbar-site .nav-link:hover,
 .navbar-site .nav-link:focus-visible {
-    color: #fff !important;
+    color: var(--color-white) !important;
     background-color: transparent !important;
 }
 
@@ -430,7 +430,7 @@
 .navbar-site .dropdown-item:hover,
 .navbar-site .dropdown-item:focus-visible {
     background: rgba(255,255,255,0.12);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .navbar-site .dropdown-item.active {
@@ -480,14 +480,14 @@
 .navbar-site__cta {
     min-height: var(--button-height-sm);
     border-radius: var(--button-radius-md);
-    color: #253a17;
+    color: var(--color-primary-deep);
     box-shadow: 0 12px 28px rgba(7, 16, 10, 0.18);
 }
 
 .navbar-site__cta:hover,
 .navbar-site__cta:focus-visible {
-    color: #1f3114;
-    background: #ffffff;
+    color: var(--color-primary-deeper);
+    background: var(--color-white);
     transform: translateY(-1px);
 }
 
@@ -609,7 +609,7 @@
         border: 1px solid rgba(255,255,255,0.12);
         border-left: 4px solid transparent;
         background: rgba(255,255,255,0.05) !important;
-        color: #fff !important;
+        color: var(--color-white) !important;
         padding: 0.78rem var(--button-padding-x-md) !important;
         text-transform: uppercase;
         font-weight: 600;
@@ -711,7 +711,7 @@
     .navbar-site .mobile-subnav .dropdown-item:focus-visible,
     .navbar-site .mobile-subnav .dropdown-item.active {
         background: rgba(255,255,255,0.10);
-        color: #fff;
+        color: var(--color-white);
         transform: none;
     }
 
@@ -732,8 +732,8 @@
     }
 
     .navbar-site .nav-item-auth-mobile .btn-light {
-        background: #fff;
-        color: #253a17;
+        background: var(--color-white);
+        color: var(--color-primary-deep);
     }
 }
 

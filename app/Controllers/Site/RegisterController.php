@@ -10,7 +10,7 @@ use App\Models\User;
 class RegisterController extends Controller {
     private const USER_AVATAR_DIR = 'uploads/users/';
     private const MEMBERSHIP_DOCUMENTS_DIR = 'uploads/filiacao/';
-    private const DEFAULT_POSTO_GRADUACAO = 'Aspirante a Oficial';
+    private const DEFAULT_POSTO_GRADUACAO = 'Asp Of';
     private const DEFAULT_ARMA_QUADRO = 'Infantaria';
     private const UF_OPTIONS = [
         'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
@@ -51,10 +51,14 @@ class RegisterController extends Controller {
             'email_already_exists' => 'Email já cadastrado.',
             'invalid_cpf' => 'CPF inválido.',
             'invalid_numero_militar' => 'Campo Nº inválido. Informe exatamente 2 dígitos.',
+            'invalid_nome_guerra' => 'Nome de guerra inválido. Use apenas letras, espaços e ponto.',
             'invalid_ano_npor' => 'Ano NPOR inválido.',
             'invalid_location' => 'Selecione UF e cidade válidas (ou deixe ambos em branco).',
             'missing_acceptance' => 'É necessário aceitar o termo de solicitação de filiação.',
             'application_already_exists' => 'Já existe uma solicitação ativa com esses dados.',
+            'missing_avatar' => 'A foto de perfil é obrigatória para concluir o registro.',
+            'invalid_avatar' => 'A foto enviada é inválida. Use apenas JPG, PNG ou WEBP.',
+            'missing_documents' => 'Envie pelo menos um documento comprobatório.',
             'invalid_documents' => 'Envie apenas PDFs ou imagens JPG, PNG ou WEBP nos comprovantes.',
             'documents_upload_failed' => 'Não foi possível salvar os documentos comprobatórios enviados.',
         ];
@@ -151,6 +155,11 @@ class RegisterController extends Controller {
             exit;
         }
 
+        if (!preg_match('/^[\p{L}\s\.]+$/u', $nomeGuerra)) {
+            header("Location: " . BASE_URL . "register?error=invalid_nome_guerra");
+            exit;
+        }
+
         $currentYear = (int) date('Y');
         if (!ctype_digit($anoNpor) || (int) $anoNpor < self::ANO_NPOR_MIN || (int) $anoNpor > $currentYear) {
             header("Location: " . BASE_URL . "register?error=invalid_ano_npor");
@@ -196,22 +205,35 @@ class RegisterController extends Controller {
             exit;
         }
 
-        // Avatar opcional
-        $avatarPath = null;
-        if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
-            $avatarPath = $this->processAvatar($_FILES['avatar']);
+        // Foto obrigatória
+        if (!isset($_FILES['avatar']) || (int) ($_FILES['avatar']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+            header("Location: " . BASE_URL . "register?error=missing_avatar");
+            exit;
         }
 
-        $documentosJson = null;
-        if (isset($_FILES['documentos'])) {
-            try {
-                $documentos = $this->processSupportingDocuments($_FILES['documentos']);
-                $documentosJson = $documentos !== [] ? json_encode($documentos, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : null;
-            } catch (\InvalidArgumentException $exception) {
-                $errorCode = $exception->getMessage() === 'upload_failed' ? 'documents_upload_failed' : 'invalid_documents';
-                header("Location: " . BASE_URL . "register?error={$errorCode}");
+        $avatarPath = $this->processAvatar($_FILES['avatar']);
+        if (!$avatarPath) {
+            header("Location: " . BASE_URL . "register?error=invalid_avatar");
+            exit;
+        }
+
+        // Documento comprobatório obrigatório
+        if (!isset($_FILES['documentos'])) {
+            header("Location: " . BASE_URL . "register?error=missing_documents");
+            exit;
+        }
+
+        try {
+            $documentos = $this->processSupportingDocuments($_FILES['documentos']);
+            if ($documentos === []) {
+                header("Location: " . BASE_URL . "register?error=missing_documents");
                 exit;
             }
+            $documentosJson = json_encode($documentos, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        } catch (\InvalidArgumentException $exception) {
+            $errorCode = $exception->getMessage() === 'upload_failed' ? 'documents_upload_failed' : 'invalid_documents';
+            header("Location: " . BASE_URL . "register?error={$errorCode}");
+            exit;
         }
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);

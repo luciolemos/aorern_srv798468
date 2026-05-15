@@ -2,6 +2,43 @@
 
 {% block title %}Painel Institucional{% endblock %}
 
+{% block styles %}
+    {{ parent() }}
+    <style>
+        .birthday-contact-icon {
+            width: 2rem;
+            height: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: 1px solid currentColor;
+            border-radius: 0.5rem;
+            line-height: 1;
+            text-decoration: none;
+            background: transparent;
+        }
+
+        .birthday-contact-icon.is-whatsapp {
+            color: var(--bs-success);
+        }
+
+        .birthday-contact-icon.is-email {
+            color: var(--bs-primary);
+        }
+
+        .birthday-contact-icon.is-disabled {
+            color: var(--bs-secondary);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .birthday-contact-icon.is-trigger {
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid px-3 px-md-4 py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -112,6 +149,122 @@
                     <h4 class="fw-bold mb-1 admin-kpi-value">{{ total_ocorrencias|default(0) }}</h4>
                     <p class="text-muted mb-0 small">Registros herdados monitorados</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-5">
+        <div class="card-header bg-white border-bottom admin-card-header-tint-brand">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <h5 class="mb-0 admin-card-heading-strong">
+                        <i class="bi bi-gift me-2 admin-page-icon-brand"></i> Aniversariantes de hoje
+                    </h5>
+                    <p class="text-muted small mb-0">Associados celebrados hoje na base institucional.</p>
+                </div>
+                <span class="badge bg-light text-dark border">{{ 'now'|date('d/m') }}</span>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if aniversariantes_hoje is not empty %}
+                <div class="list-group list-group-flush">
+                    {% for aniversariante in aniversariantes_hoje %}
+                        <div class="list-group-item px-0 py-3 border-start-0 border-end-0">
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="{{ aniversariante.foto_url|e('html_attr') }}"
+                                     alt="{{ aniversariante.nome|e('html_attr') }}"
+                                     class="rounded-3 shadow-sm flex-shrink-0"
+                                     style="width:60px;height:60px;object-fit:cover;">
+                                <div class="min-w-0 flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+                                        <div class="min-w-0">
+                                            <div class="fw-semibold text-truncate">{{ aniversariante.nome }}</div>
+                                            <div class="small text-muted text-truncate">Al {{ aniversariante.numero_militar }}/{{ aniversariante.ano_npor }} · {{ aniversariante.nome_guerra }}</div>
+                                            <div class="small text-success-emphasis">{{ aniversariante.idade is not null ? aniversariante.idade ~ ' anos' : 'Parabens' }}</div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                            {% if aniversariante.whatsapp_link %}
+                                                <a href="{{ aniversariante.whatsapp_link|e('html_attr') }}"
+                                                   target="_blank"
+                                                   rel="noopener"
+                                                   class="birthday-contact-icon is-whatsapp"
+                                                   title="Chamar no WhatsApp {{ aniversariante.telefone_formatado ? '(' ~ aniversariante.telefone_formatado ~ ')' : '' }}">
+                                                    <i class="bi bi-whatsapp"></i>
+                                                </a>
+                                            {% else %}
+                                                <span class="birthday-contact-icon is-disabled"
+                                                      aria-disabled="true"
+                                                      title="Telefone nao informado">
+                                                    <i class="bi bi-whatsapp"></i>
+                                                </span>
+                                            {% endif %}
+                                            {% if aniversariante.email %}
+                                                <button type="button"
+                                                        class="birthday-contact-icon is-email is-trigger"
+                                                        title="Enviar saudação institucional para {{ aniversariante.email|e('html_attr') }}"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#birthdayGreetingModal"
+                                                        data-recipient-id="{{ aniversariante.id }}"
+                                                        data-recipient-name="{{ aniversariante.nome|e('html_attr') }}"
+                                                        data-recipient-email="{{ aniversariante.email|e('html_attr') }}">
+                                                    <i class="bi bi-envelope-heart"></i>
+                                                </button>
+                                            {% else %}
+                                                <span class="birthday-contact-icon is-disabled"
+                                                      aria-disabled="true"
+                                                      title="E-mail nao informado">
+                                                    <i class="bi bi-envelope"></i>
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted mb-0">Nao ha aniversariantes do dia cadastrados na base associativa.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="birthdayGreetingModal" tabindex="-1" aria-labelledby="birthdayGreetingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <form method="post" action="{{ BASE_URL }}admin/dashboard/enviar-saudacao-aniversariante">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="birthdayGreetingModalLabel">Enviar saudação institucional</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token|e('html_attr') }}">
+                        <input type="hidden" name="pessoal_id" id="birthdayGreetingRecipientId">
+                        <p class="small text-muted mb-3">O e-mail será enviado pelo SMTP institucional da AORE/RN.</p>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Destinatário</label>
+                            <div class="form-control bg-light" id="birthdayGreetingRecipientLabel">-</div>
+                        </div>
+                        <div class="mb-0">
+                            <label for="birthdayGreetingMessage" class="form-label small fw-semibold">Mensagem de saudação</label>
+                            <textarea class="form-control" id="birthdayGreetingMessage" name="message" rows="9" maxlength="1000" required>Nesta data especial, desejamos saúde, felicidade, realizações e contínuo sucesso em sua trajetória pessoal e profissional, mantendo sempre vivos os valores de honra, disciplina, camaradagem e compromisso com a Pátria, que marcam a formação do oficial da reserva.
+
+Receba o reconhecimento e o abraço fraterno de todos que integram a família AORE/RN.
+
+Parabéns e muitas felicidades!
+
+Administração
+AORE/RN – Associação dos Oficiais da Reserva do Exército
+
+Perpetuum Officium erga Patriam
+(Dever permanente para com a Pátria)</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Enviar saudação</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -301,4 +454,46 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('birthdayGreetingModal');
+            if (!modal) {
+                return;
+            }
+
+            const recipientId = document.getElementById('birthdayGreetingRecipientId');
+            const recipientLabel = document.getElementById('birthdayGreetingRecipientLabel');
+            const messageField = document.getElementById('birthdayGreetingMessage');
+            const defaultMessage = `Nesta data especial, desejamos saúde, felicidade, realizações e contínuo sucesso em sua trajetória pessoal e profissional, mantendo sempre vivos os valores de honra, disciplina, camaradagem e compromisso com a Pátria, que marcam a formação do oficial da reserva.
+
+Receba o reconhecimento e o abraço fraterno de todos que integram a família AORE/RN.
+
+Parabéns e muitas felicidades!
+
+Administração
+AORE/RN – Associação dos Oficiais da Reserva do Exército
+
+Perpetuum Officium erga Patriam
+(Dever permanente para com a Pátria)`;
+
+            modal.addEventListener('show.bs.modal', function (event) {
+                const trigger = event.relatedTarget;
+                if (!trigger) {
+                    return;
+                }
+
+                const id = trigger.getAttribute('data-recipient-id') || '';
+                const name = trigger.getAttribute('data-recipient-name') || 'Associado';
+                const email = trigger.getAttribute('data-recipient-email') || '';
+
+                recipientId.value = id;
+                recipientLabel.textContent = email ? (name + ' <' + email + '>') : name;
+                messageField.value = defaultMessage;
+            });
+        });
+    </script>
 {% endblock %}

@@ -27,6 +27,27 @@
 
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold">Validação de duplicidade no registro</h5>
+        </div>
+        <div class="card-body">
+            <p class="mb-2">Tem, em dois níveis no fluxo de register:</p>
+            <p class="mb-2"><strong>Primeiro bloqueia se já existir em users:</strong></p>
+            <ul class="mb-3 ps-3">
+                <li><code>usernameExiste($username)</code> em <code>RegisterController.php</code> (line 193)</li>
+                <li><code>emailExiste($email)</code> em <code>RegisterController.php</code> (line 197)</li>
+                <li>Métodos em <code>User.php</code> (line 153) e <code>User.php</code> (line 181)</li>
+            </ul>
+            <p class="mb-2"><strong>Depois bloqueia solicitação duplicada “ativa” em membership_applications por username OU email OU cpf:</strong></p>
+            <ul class="mb-3 ps-3">
+                <li>Chamada em <code>RegisterController.php</code> (line 203)</li>
+                <li>Regra em <code>MembershipApplicationModel.php</code> (line 327): considera status <code>pendente</code>, <code>complementacao</code> e <code>aprovada</code>.</li>
+            </ul>
+            <p class="mb-0">Além disso, no banco, <code>users.username</code> e <code>users.email</code> também são <code>UNIQUE</code>, então existe proteção extra por índice.</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom">
             <h5 class="mb-0 fw-bold">Padrão de imagens recomendado</h5>
         </div>
         <div class="card-body">
@@ -54,6 +75,84 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold">Saudação de aniversariantes por e-mail institucional</h5>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">O sistema passou a permitir o envio de saudação de aniversário por e-mail institucional em dois contextos: <strong>dashboard admin</strong> e <strong>área do associado</strong>.</p>
+            <p class="mb-2"><strong>O que mudou:</strong></p>
+            <ul class="mb-3 ps-3">
+                <li>Foi criado o serviço <code>BirthdayGreetingService.php</code> para envio via SMTP institucional.</li>
+                <li>No dashboard admin, o antigo <code>mailto:</code> foi substituído por modal interno com envio real no backend.</li>
+                <li>Na área do associado, foi aplicado o mesmo padrão para manter o comportamento consistente.</li>
+                <li>O fluxo usa <code>reply-to</code> do operador/admin ou do próprio associado, quando houver e-mail válido.</li>
+            </ul>
+            <p class="mb-2"><strong>Comportamento atual:</strong></p>
+            <ul class="mb-0 ps-3">
+                <li>O botão de <strong>WhatsApp</strong> continua abrindo externamente.</li>
+                <li>O ícone de <strong>e-mail</strong> agora abre um modal interno no portal.</li>
+                <li>A mensagem é enviada pelo SMTP da <strong>AORE/RN</strong>, não pelo cliente de e-mail do aparelho.</li>
+                <li>O aniversariante recebe o e-mail institucional e pode responder para o remetente quando houver <code>reply-to</code> válido.</li>
+                <li>O mapeamento dos aniversariantes foi ampliado para carregar <strong>id</strong>, <strong>e-mail</strong> e <strong>telefone</strong>, necessários para esse fluxo.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold">Carteirinha digital: padrão técnico adotado</h5>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">
+                A carteirinha digital da AORE/RN foi padronizada com base na norma <strong>ISO/IEC 7810</strong>, formato <strong>ID-1</strong>, para manter proporção consistente com cartões de identificação.
+            </p>
+            <div class="row g-3">
+                <div class="col-lg-6">
+                    <div class="p-3 rounded border h-100">
+                        <h6 class="fw-bold mb-2">Dimensão física de referência (ID-1)</h6>
+                        <ul class="mb-0 ps-3">
+                            <li><strong>85,60 mm × 53,98 mm</strong> (8,56 cm × 5,398 cm)</li>
+                            <li>Proporção aplicada no layout web com <code>aspect-ratio: 85.6 / 53.98</code></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="p-3 rounded border h-100">
+                        <h6 class="fw-bold mb-2">Resolução sugerida para arte</h6>
+                        <ul class="mb-0 ps-3">
+                            <li><strong>Web preview:</strong> 856 × 540 px</li>
+                            <li><strong>Impressão (300 DPI):</strong> 1011 × 638 px</li>
+                            <li><strong>Impressão alta (600 DPI):</strong> 2021 × 1276 px</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold">Assinatura eletrônica institucional (trilha mínima)</h5>
+        </div>
+        <div class="card-body">
+            <p class="mb-3">Significa que a carteirinha mostra um registro de emissão com trilha mínima de auditoria.</p>
+            <ul class="mb-3 ps-3">
+                <li><strong>Assinatura eletrônica institucional:</strong> marca que este documento foi emitido no sistema com metadados de controle.</li>
+                <li><strong>Assinado por: Presidente AORE/RN:</strong> identificador do responsável institucional (neste piloto, valor fixo).</li>
+                <li><strong>Data/hora:</strong> momento de referência da assinatura/emissão da carteirinha no sistema.</li>
+                <li><strong>Código de integridade:</strong> hash resumido dos dados-chave do cartão; serve para detectar alteração de conteúdo entre emissão e validação.</li>
+            </ul>
+            <div class="p-3 rounded border bg-light mb-3">
+                <div><strong>Exemplo:</strong></div>
+                <div><strong>Assinado por:</strong> Presidente AORE/RN</div>
+                <div><strong>Data/hora:</strong> 09/03/2026 12:40</div>
+                <div><strong>Código de integridade:</strong> 346A00670656AB43</div>
+            </div>
+            <p class="mb-0"><strong>Importante:</strong> isso é controle interno/auditoria (opção 2), não assinatura digital ICP-Brasil.</p>
         </div>
     </div>
 
@@ -87,4 +186,3 @@
     </div>
 </div>
 {% endblock %}
-

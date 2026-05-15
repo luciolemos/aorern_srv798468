@@ -1,0 +1,496 @@
+{% extends "layouts/base.twig" %}
+
+{% block title %}Carteirinha Digital (Impressão) - AORE/RN{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <style>
+        .navbar-site,
+        .site-footer {
+            display: none !important;
+        }
+
+        body.has-public-navbar {
+            padding-top: 0 !important;
+            background: #fff !important;
+        }
+
+        .print-sheet {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 8mm 0;
+        }
+
+        .print-cards-row {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            gap: 1px;
+            width: max-content;
+            margin: 0 auto;
+        }
+
+        .print-card {
+            width: 85.6mm;
+            height: 53.98mm;
+            margin: 0;
+            flex: 0 0 85.6mm;
+            border: 0.45mm solid rgba(15, 81, 50, 0.35);
+            border-radius: 3.2mm;
+            overflow: hidden;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-rows: 11mm 1fr 8mm;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            background: #edf9f2;
+        }
+
+        .print-card.print-card--front {
+            position: relative;
+        }
+
+        .print-card.print-card--back-no-header {
+            grid-template-rows: 1fr 8mm;
+        }
+
+        .print-docline {
+            position: absolute;
+            top: 12.3mm;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+            font-size: 5.8px;
+            line-height: 1;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #1e2a23;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .print-card__header {
+            background: #edf9f2;
+            color: #1e2a23;
+            padding: 2.4mm 3.4mm 2.8mm;
+            display: grid;
+            grid-template-columns: 11mm 1fr 10mm;
+            align-items: center;
+            column-gap: 1.8mm;
+        }
+
+        .print-card__header > div {
+            text-align: center;
+        }
+
+        .print-card__header img {
+            width: 100%;
+            height: auto;
+            max-height: 10mm;
+            object-fit: contain;
+        }
+
+        .print-card--front .print-card__header > img:first-child {
+            margin-left: 2.4mm;
+        }
+
+        .print-card--front .print-card__header > img:last-child {
+            margin-right: 2.4mm;
+        }
+
+        .print-card__title-1 {
+            margin: 0;
+            font-size: 7.4px;
+            line-height: 1.03;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .print-card__title-2 {
+            margin: 0.6mm 0 0;
+            font-size: 6px;
+            line-height: 1.03;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .print-card__title-3 {
+            margin: 0.6mm 0 0.4mm;
+            font-size: 5.7px;
+            line-height: 1.03;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .print-card__body {
+            padding: 2.3mm 2.6mm;
+            overflow: hidden;
+            color: #1e2a23;
+            font-size: 6.6px;
+            line-height: 1.08;
+        }
+
+        .print-card.print-card--back-no-header .print-card__body {
+            padding-top: 1.8mm;
+        }
+
+        .print-card__body strong {
+            color: #0f5132;
+            font-weight: 700;
+        }
+
+        .print-front-grid {
+            display: grid;
+            grid-template-columns: 18.5mm 1fr;
+            column-gap: 2mm;
+            height: 100%;
+            align-items: center;
+        }
+
+        .print-photo {
+            width: 18.5mm;
+            height: 23.5mm;
+            object-fit: cover;
+            border-radius: 1.1mm;
+            border: 0.2mm solid #d7dfd9;
+        }
+
+        .print-qr {
+            width: 16mm;
+            height: 16mm;
+            object-fit: contain;
+            border: 0.2mm solid #d7dfd9;
+            border-radius: 1mm;
+            background: #fff;
+            padding: 0.6mm;
+        }
+
+        .print-qr-back {
+            width: 18mm;
+            height: 18mm;
+        }
+
+        .print-fields {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 0.8mm 1.4mm;
+        }
+
+        .print-field {
+            min-width: 0;
+            grid-column: span 6;
+        }
+
+        .print-field strong {
+            display: block;
+            margin-bottom: 0.45mm;
+            line-height: 1.05;
+        }
+
+        .print-field--full {
+            grid-column: 1 / -1;
+        }
+
+        .print-field--wide {
+            grid-column: span 8;
+        }
+
+        .print-field--narrow {
+            grid-column: span 4;
+        }
+
+        .print-field--compact {
+            grid-column: span 3;
+        }
+
+        .print-field--expanded {
+            grid-column: span 9;
+        }
+
+        .print-field-value {
+            border: 0.2mm solid rgba(15, 81, 50, 0.28);
+            border-radius: 0.9mm;
+            background: rgba(255, 255, 255, 0.52);
+            padding: 0.5mm 0.85mm;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .print-field-value--code {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .print-back-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 0.8mm 1.4mm;
+            padding-top: 2.2mm;
+        }
+
+        .print-back-grid .print-col-left {
+            grid-column: span 8;
+        }
+
+        .print-back-grid .print-col-right {
+            grid-column: span 4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .print-back-grid .print-col-left .print-field {
+            grid-column: 1 / -1;
+        }
+
+        .print-back-grid .print-col-left-bottom {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0.8mm 1.4mm;
+            margin-top: 0.8mm;
+        }
+
+        .print-back-grid .print-col-left-bottom .print-field {
+            grid-column: auto;
+        }
+
+        .print-back-grid .print-col-signature {
+            grid-column: 1 / -1;
+        }
+
+        .print-back-grid .print-col-issue {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0.8mm 1.4mm;
+        }
+
+        .print-back-grid .print-col-issue .print-field {
+            grid-column: auto;
+        }
+
+        .print-signature {
+            margin-top: 0.55mm;
+            border: 0.2mm dashed rgba(15, 81, 50, 0.35);
+            border-radius: 0.9mm;
+            background: rgba(255, 255, 255, 0.42);
+            padding: 0.45mm 0.75mm;
+            font-size: 5.4px;
+            line-height: 1.12;
+            color: #1e2a23;
+        }
+
+        .print-signature__title {
+            color: #0f5132;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.25mm;
+        }
+
+        .print-signature__line {
+            margin: 0;
+        }
+
+        .print-signature__line strong {
+            display: inline !important;
+            margin: 0 !important;
+            line-height: inherit !important;
+        }
+
+        .print-card__footer {
+            background: #edf9f2;
+            color: #1e2a23 !important;
+            padding: 1.2mm 2.2mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 5.6px;
+            line-height: 1.12;
+            text-transform: uppercase;
+            letter-spacing: 0.015em;
+            font-weight: 700;
+            min-height: 8mm;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            position: relative;
+            z-index: 3;
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+
+            html,
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                background: #fff !important;
+            }
+
+            .print-toolbar {
+                display: none !important;
+            }
+
+            .print-cards-row {
+                gap: 1px !important;
+            }
+        }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="print-sheet">
+        <div class="print-toolbar d-flex justify-content-center gap-2 mb-3">
+            <a href="{{ BASE_URL }}associado/carteirinha" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left me-1"></i>Voltar
+            </a>
+            <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">
+                <i class="bi bi-printer me-1"></i>Imprimir
+            </button>
+        </div>
+
+        <div class="print-cards-row">
+        <article class="print-card print-card--front">
+            <header class="print-card__header">
+                <img src="{{ BASE_URL }}assets/images/brasaooficialcolorido.png" alt="Selo nacional">
+                <div>
+                    <p class="print-card__title-1">República Federativa do Brasil</p>
+                    <p class="print-card__title-2">Associação de Oficiais da Reserva do Exército - AORE/RN</p>
+                    <p class="print-card__title-3">Rio Grande do Norte</p>
+                </div>
+                <img src="{{ BASE_URL }}assets/images/aore1.png" alt="AORE/RN">
+            </header>
+            <div class="print-docline">Carteira de Identificação de Oficial R/2</div>
+            <div class="print-card__body">
+                <div class="print-front-grid">
+                    <div class="text-center">
+                        <img src="{{ avatarUrl|e('html_attr') }}" alt="{{ snapshot.nome|default('Associado')|e('html_attr') }}" class="print-photo">
+                    </div>
+                    <div class="print-fields">
+                        <div class="print-field print-field--wide">
+                            <strong>Nº do cartão de identificação:</strong>
+                            <div class="print-field-value print-field-value--code">{{ card.card_code|default('-')|e }}</div>
+                        </div>
+                        <div class="print-field print-field--narrow">
+                            <strong>Nº de sócio:</strong>
+                            <div class="print-field-value">{{ snapshot.staff_id|default('-')|e }}</div>
+                        </div>
+                        <div class="print-field print-field--expanded">
+                            <strong>Nome:</strong>
+                            <div class="print-field-value">{{ snapshot.nome|default('-')|e }}</div>
+                        </div>
+                        <div class="print-field print-field--compact">
+                            <strong>Posto/Grad:</strong>
+                            <div class="print-field-value">{{ snapshot.posto_graduacao|default('-')|e }}</div>
+                        </div>
+                        <div class="print-field">
+                            <strong>RG:</strong>
+                            <div class="print-field-value">{{ snapshot.rg|default('-')|e }}</div>
+                        </div>
+                        <div class="print-field">
+                            <strong>CPF:</strong>
+                            <div class="print-field-value">{{ snapshot.cpf|default('-')|e }}</div>
+                        </div>
+                        <div class="print-field print-field--narrow">
+                            <strong>Data nasc.:</strong>
+                            <div class="print-field-value">{{ snapshot.data_nascimento ? snapshot.data_nascimento|date('d/m/Y') : '-' }}</div>
+                        </div>
+                        <div class="print-field print-field--wide">
+                            <strong>Naturalidade:</strong>
+                            <div class="print-field-value">{{ snapshot.cidade|default('-')|e }}/{{ snapshot.uf|default('-')|e }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="print-card__footer">
+                <span style="font-style: italic; font-size: 5.2px; letter-spacing: 0.01em; color: rgba(30, 42, 35, 0.72); text-transform: none;">Perpetuum Officium erga Patriam</span>
+            </div>
+        </article>
+
+        <article class="print-card print-card--back-no-header">
+            <div class="print-card__body">
+                <div class="print-back-grid">
+                    <div class="print-col-left">
+                        <div class="print-fields">
+                            <div class="print-field print-field--full">
+                                <strong>Filiação (mãe):</strong>
+                                <div class="print-field-value">{{ snapshot.nome_mae|default('-')|e }}</div>
+                            </div>
+                            <div class="print-field print-field--full">
+                                <strong>Filiação (pai):</strong>
+                                <div class="print-field-value">{{ snapshot.nome_pai|default('-')|e }}</div>
+                            </div>
+                        </div>
+                        <div class="print-col-left-bottom">
+                            <div class="print-field">
+                                <strong>Nacionalidade:</strong>
+                                <div class="print-field-value">Brasileira</div>
+                            </div>
+                            <div class="print-field">
+                                <strong>Status:</strong>
+                                <div class="print-field-value">{{ card.status|default('inativa')|capitalize }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="print-col-right">
+                        <img src="{{ qrUrl|e('html_attr') }}" alt="QR de validação da carteirinha" class="print-qr print-qr-back">
+                    </div>
+                    <div class="print-col-issue">
+                        <div class="print-field">
+                            <strong>Local/Data expedição:</strong>
+                            <div class="print-field-value">Natal/RN, {{ card.emitida_em ? card.emitida_em|date('d/m/Y') : '-' }}</div>
+                        </div>
+                        <div class="print-field">
+                            <strong>Validade:</strong>
+                            <div class="print-field-value">{{ card.validade_ate ? card.validade_ate|date('d/m/Y') : 'Indeterminada' }}</div>
+                        </div>
+                    </div>
+                    <div class="print-col-signature">
+                        <div class="print-signature">
+                            <div class="print-signature__title">Assinatura eletrônica institucional</div>
+                            <p class="print-signature__line"><strong>Assinado por:</strong> {{ signature.signer|default('Presidente AORE/RN')|e }}</p>
+                            <p class="print-signature__line"><strong>Data/hora:</strong> {{ signature.signed_at_label|default('-')|e }}</p>
+                            <p class="print-signature__line"><strong>Código de integridade:</strong> {{ signature.hash|default('-')|e }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="print-card__footer">
+                <span>Válida em todo o território nacional</span>
+            </div>
+        </article>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                window.print();
+            }, 120);
+        });
+    </script>
+{% endblock %}

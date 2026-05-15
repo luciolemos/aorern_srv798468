@@ -1,12 +1,32 @@
 :root {
     --color-primary: #556b2f;
     --color-primary-dark: #3f4f22;
+    --color-primary-hover: #647c38;
+    --color-primary-deep: #253a17;
+    --color-primary-deeper: #1f3114;
     --color-primary-light: #dbe4cf;
     --color-secondary: #0082c8;
     --color-accent: #8b1e2d;
+    --color-success: #198754;
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+    --color-info: #0dcaf0;
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-cream-100: #fff3e6;
+    --color-blue-300: #8ecbff;
+    --color-slate-500: #64748b;
+    --color-ink-900: #0f1f33;
+    --color-ink-800: #173047;
+    --color-olive-700: #3e5320;
+    --color-olive-900: #1f2f16;
+    --color-olive-950: #20301f;
+    --color-primary-contrast: #f8fafd;
     --color-neutral-900: #0f0f10;
     --color-neutral-800: #1c1c1e;
     --color-neutral-700: #2f3033;
+    --color-neutral-600: #6c757d;
+    --color-neutral-500: #868e96;
     --color-neutral-200: #e6e6ea;
     --color-neutral-100: #f7f7f9;
 
@@ -19,6 +39,16 @@
     --radius-sm: 0.6rem;
     --radius-md: 1rem;
     --radius-lg: 1.5rem;
+    --radius-pill: 999px;
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4rem;
 
     --button-height-sm: 2.5rem;
     --button-height-md: 3rem;
@@ -42,6 +72,7 @@
 
     --site-title-color: #152036;
     --site-text-color: #2b3440;
+    --site-text-strong: #212529;
     --site-text-muted: #5f6b79;
 
     --site-hero-linear-gradient: linear-gradient(135deg, #253a17 0%, #3b5323 52%, #556b2f 100%);
@@ -93,7 +124,7 @@
     --brand-primary-light: var(--color-primary-light);
     --brand-secondary: var(--color-secondary);
     --brand-accent: var(--color-accent);
-    --brand-white: #ffffff;
+    --brand-white: var(--color-white);
     --brand-surface: var(--surface-elevated);
     --brand-surface-muted: var(--surface-muted);
     --brand-text: var(--site-text-color);
@@ -106,6 +137,12 @@
     --navbar-site-panel-border: rgba(255, 255, 255, 0.12);
     --navbar-site-panel-shadow: 0 16px 40px rgba(1, 10, 45, 0.28);
     --navbar-site-accent: #d6e3b6;
+    --navbar-site-surface-light: #6f8650;
+    --navbar-site-foreground: rgba(255, 255, 255, 0.85);
+    --navbar-site-foreground-strong: rgba(255, 255, 255, 0.95);
+    --navbar-site-layer-1: rgba(255, 255, 255, 0.05);
+    --navbar-site-layer-2: rgba(255, 255, 255, 0.12);
+    --navbar-site-layer-3: rgba(255, 255, 255, 0.18);
 
     /* Sidebar/admin */
     --admin-sidebar-width: 320px;
@@ -129,4 +166,20 @@
     --inst-bg: var(--surface-muted);
     --inst-muted: var(--site-text-muted);
     --inst-hero-gradient: var(--site-hero-background);
+
+    /* Carteirinha digital */
+    --idcard-brand-900: #0f5132;
+    --idcard-brand-800: #174f39;
+    --idcard-brand-700: #1f6a49;
+    --idcard-border: rgba(15, 81, 50, 0.30);
+    --idcard-surface-0: #fcfdfc;
+    --idcard-surface-1: #f6f8f6;
+    --idcard-footer-surface: #f1f4f2;
+    --idcard-body-text: #1e2a23;
+    --idcard-label-text: #0f5132;
+    --idcard-qr-border: #d7dfd9;
+    --idcard-header-gradient: linear-gradient(135deg, #556b2f 0%, #556b2f 100%);
+    --idcard-title-color: #f7fbf8;
+    --idcard-subtitle-color: rgba(247, 251, 248, 0.92);
+    --idcard-footer-text: #5f6b79;
 }

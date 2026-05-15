@@ -8,19 +8,21 @@ use App\Core\Database;
 
 $pdo = Database::connect();
 
-$names = [
-    'Augusto Cesar de Oliveira',
-    'Bruno Ricardo Tavares',
-    'Caio Henrique Medeiros',
-    'Diego Alexandre Nunes',
-    'Eduardo Luiz Fernandes',
-    'Fabio Roberto de Carvalho',
-    'Geraldo Henrique Paiva',
-    'Helio Marcio Bezerra',
-    'Igor Vinicius Freitas',
-    'Julio Cesar de Melo',
-    'Kleber Augusto Dantas',
-    'Leandro Jose Barreto',
+$totalRequests = 50;
+$firstNames = [
+    'Augusto', 'Bruno', 'Caio', 'Diego', 'Eduardo',
+    'Fabio', 'Geraldo', 'Helio', 'Igor', 'Julio',
+    'Kleber', 'Leandro', 'Marcelo', 'Nelson', 'Otavio',
+    'Paulo', 'Rafael', 'Sergio', 'Thiago', 'Walter',
+];
+$middleNames = [
+    'Cesar', 'Ricardo', 'Henrique', 'Alexandre', 'Luiz',
+    'Roberto', 'Vinicius', 'Marcio', 'Andre', 'Nunes',
+];
+$lastNames = [
+    'de Oliveira', 'Tavares', 'Medeiros', 'Fernandes', 'de Carvalho',
+    'Paiva', 'Bezerra', 'Freitas', 'de Melo', 'Dantas',
+    'Barreto', 'Rocha', 'Monteiro', 'Barros', 'Almeida',
 ];
 
 $cities = ['Natal'];
@@ -67,6 +69,60 @@ $documentos = json_encode([
     ]
 ], JSON_UNESCAPED_SLASHES);
 
+/**
+ * @return string[]
+ */
+function fetchRandomUserPhotoUrls(int $count): array
+{
+    if ($count <= 0) {
+        return [];
+    }
+
+    $photos = [];
+    $attempts = 0;
+    $maxAttempts = 5;
+
+    while (count($photos) < $count && $attempts < $maxAttempts) {
+        $attempts++;
+        $remaining = $count - count($photos);
+        $batch = max(10, min(100, $remaining * 2));
+        $url = sprintf('https://randomuser.me/api/?results=%d&gender=male', $batch);
+
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'timeout' => 8,
+                'ignore_errors' => true,
+                'header' => "Accept: application/json\r\nUser-Agent: AORE-RN-Seed/1.0\r\n",
+            ],
+        ]);
+
+        $raw = @file_get_contents($url, false, $context);
+        if (!is_string($raw) || $raw === '') {
+            continue;
+        }
+
+        $json = json_decode($raw, true);
+        if (!is_array($json) || !isset($json['results']) || !is_array($json['results'])) {
+            continue;
+        }
+
+        foreach ($json['results'] as $item) {
+            $photo = trim((string) (($item['picture']['large'] ?? '')));
+            if ($photo !== '' && str_contains($photo, '/portraits/men/')) {
+                $photos[] = $photo;
+                if (count($photos) >= $count) {
+                    break;
+                }
+            }
+        }
+    }
+
+    return array_slice($photos, 0, $count);
+}
+
+$randomUserPhotos = fetchRandomUserPhotoUrls($totalRequests);
+
 $pdo->beginTransaction();
 
 try {
@@ -84,7 +140,13 @@ try {
         )"
     );
 
-    foreach ($names as $index => $name) {
+    for ($index = 0; $index < $totalRequests; $index++) {
+        $name = sprintf(
+            '%s %s %s',
+            $firstNames[$index % count($firstNames)],
+            $middleNames[$index % count($middleNames)],
+            $lastNames[$index % count($lastNames)]
+        );
         $sequence = $index + 1;
         $username = sprintf('solpend%04d', $sequence);
         $email = sprintf('%s@aorern.local', $username);
@@ -92,9 +154,24 @@ try {
         $birthYear = 1972 + ($index % 15);
         $birthMonth = (($index % 12) + 1);
         $birthDay = (($index % 28) + 1);
-        $anoNpor = (string) (2005 + $index);
+        $anoNpor = (string) (2009 + intdiv($index, 5));
         $numeroMilitar = sprintf('%02d', $sequence);
         $nomeGuerra = strtoupper((string) explode(' ', $name)[0]);
+        if ($index < 30) {
+            $status = 'pendente';
+        } elseif ($index < 40) {
+            $status = 'complementacao';
+        } else {
+            $status = 'rejeitada';
+        }
+
+        $seedAvatar = $avatar;
+        if (isset($randomUserPhotos[$index])) {
+            $remotePhoto = trim((string) $randomUserPhotos[$index]);
+            if ($remotePhoto !== '' && preg_match('#^https?://#i', $remotePhoto)) {
+                $seedAvatar = $remotePhoto;
+            }
+        }
 
         $stmt->execute([
             ':nome_completo' => $name,
@@ -117,18 +194,19 @@ try {
             ':turma_npor' => $turmas[$index % count($turmas)],
             ':arma_quadro' => $armas[$index % count($armas)],
             ':situacao_militar' => $militaryStatuses[$index % count($militaryStatuses)],
-            ':avatar' => $avatar,
+            ':avatar' => $seedAvatar,
             ':documentos_json' => $documentos,
             ':observacoes' => 'Solicitação de teste gerada automaticamente para validação da fila de análise.',
             ':aceite_termo' => 1,
-            ':status' => 'pendente',
+            ':status' => $status,
             ':status_associativo' => 'efetivo',
             ':observacoes_admin' => null,
         ]);
     }
 
     $pdo->commit();
-    echo count($names) . " solicitações pendentes geradas com sucesso.\n";
+    echo "{$totalRequests} solicitações geradas com sucesso (30 pendente, 10 complementacao, 10 rejeitada).\n";
+    echo count($randomUserPhotos) . " foto(s) recebida(s) do RandomUser; fallback automático aplicado quando necessário.\n";
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();

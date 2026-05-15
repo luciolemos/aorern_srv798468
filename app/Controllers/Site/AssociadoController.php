@@ -5,9 +5,14 @@ namespace App\Controllers\Site;
 use App\Core\Controller;
 use App\Helpers\CsrfHelper;
 use App\Middleware\AuthMiddleware;
+use App\Models\BoardMembershipModel;
+use App\Models\BoardTermModel;
+use App\Models\DigitalCardModel;
 use App\Models\MembershipApplicationModel;
 use App\Models\PessoalModel;
+use App\Models\Post;
 use App\Models\User;
+use App\Services\BirthdayGreetingService;
 
 class AssociadoController extends Controller
 {
@@ -16,6 +21,7 @@ class AssociadoController extends Controller
     private User $users;
     private MembershipApplicationModel $applications;
     private PessoalModel $pessoal;
+    private DigitalCardModel $cards;
 
     public function __construct()
     {
@@ -23,6 +29,7 @@ class AssociadoController extends Controller
         $this->users = new User();
         $this->applications = new MembershipApplicationModel();
         $this->pessoal = new PessoalModel();
+        $this->cards = new DigitalCardModel();
     }
 
     public function index(): void
@@ -61,15 +68,137 @@ class AssociadoController extends Controller
             $avatarPath = (string) $solicitacao['avatar'];
         }
 
+        $carteirinha = null;
+        if ($associado && $this->cards->isAvailable()) {
+            $carteirinha = $this->cards->buscarAtivaPorPessoal((int) $associado['id']);
+        }
+
+        $aniversariantes = array_map(
+            fn(array $item): array => $this->mapBirthdayMember($item),
+            $this->pessoal->listarAniversariantesDoDia(date('m-d'), 8)
+        );
+        $boardSection = $this->buildBoardSection();
+        $institutionalPosts = $this->buildInstitutionalPosts();
+
         $this->renderTwig('site/pages/associado', [
             'user' => $user,
             'solicitacao' => $solicitacao,
             'associado' => $associado,
+            'carteirinha' => $carteirinha,
+            'aniversariantes_hoje' => $aniversariantes,
+            'diretoria_vigente' => $boardSection['members'],
+            'mandato_vigente' => $boardSection['term'],
+            'comunicados_institucionais' => $institutionalPosts,
             'documentos' => $documentos,
             'associadoAvatarUrl' => $this->resolveAssetUrl($avatarPath) ?: (BASE_URL . 'assets/images/conscrito.png'),
             'statusAssociativoLabel' => $this->formatAssociativeStatus($solicitacao['status_associativo'] ?? $associado['status_associativo'] ?? 'provisorio'),
             'csrf_token' => CsrfHelper::generateToken(),
         ]);
+    }
+
+    public function carteirinha(): void
+    {
+        $data = $this->buildCarteirinhaViewData();
+        if ($data === null) {
+            $_SESSION['toast'] = ['type' => 'warning', 'message' => 'Carteirinha digital indisponível no momento.'];
+            header('Location: ' . BASE_URL . 'associado');
+            exit;
+        }
+
+        $data['print_mode'] = false;
+        $this->renderTwig('site/pages/associado_carteirinha', $data);
+    }
+
+    public function carteirinhaImpressao(): void
+    {
+        $data = $this->buildCarteirinhaViewData();
+        if ($data === null) {
+            $_SESSION['toast'] = ['type' => 'warning', 'message' => 'Carteirinha digital indisponível no momento.'];
+            header('Location: ' . BASE_URL . 'associado');
+            exit;
+        }
+
+        $this->renderTwig('site/pages/associado_carteirinha_print', $data);
+    }
+
+    public function carteirinhaMobile(): void
+    {
+        $data = $this->buildCarteirinhaViewData();
+        if ($data === null) {
+            $_SESSION['toast'] = ['type' => 'warning', 'message' => 'Carteirinha digital indisponível no momento.'];
+            header('Location: ' . BASE_URL . 'associado');
+            exit;
+        }
+
+        $this->renderTwig('site/pages/associado_carteirinha_mobile', $data);
+    }
+
+    private function buildCarteirinhaViewData(): ?array
+    {
+        $user = $this->getAuthenticatedMemberUser();
+        $solicitacao = $this->applications->buscarPorUserId((int) $user['id']);
+        $associado = null;
+        if ($solicitacao && !empty($solicitacao['pessoal_id'])) {
+            $associado = $this->pessoal->buscar((int) $solicitacao['pessoal_id']);
+        }
+
+        if (!$associado || !$this->cards->isAvailable()) {
+            return null;
+        }
+
+        $card = $this->cards->buscarAtivaPorPessoal((int) $associado['id']);
+        if (!$card) {
+            return null;
+        }
+
+        $snapshot = [];
+        if (!empty($card['snapshot_json'])) {
+            $decoded = json_decode((string) $card['snapshot_json'], true);
+            if (is_array($decoded)) {
+                $snapshot = $decoded;
+            }
+        }
+
+        // Modelo 1 (documento): carteirinha renderiza apenas dados congelados no snapshot da emissão.
+        $avatarPath = (string) ($snapshot['foto'] ?? '');
+        $avatarUrl = $this->resolveAssetUrl($avatarPath) ?: (BASE_URL . 'assets/images/conscrito.png');
+        $verificationUrl = BASE_URL . 'carteirinha/validar/' . rawurlencode((string) $card['token']);
+        $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=' . rawurlencode($verificationUrl);
+        $issuedAtRaw = (string) ($card['emitida_em'] ?? '');
+        $createdAtRaw = (string) ($card['criado_em'] ?? '');
+        $signedAtRaw = $issuedAtRaw !== '' ? $issuedAtRaw : $createdAtRaw;
+        $signedAtLabel = '-';
+        if ($signedAtRaw !== '') {
+            $signedAtTs = strtotime($signedAtRaw);
+            if ($signedAtTs !== false) {
+                $signedAtLabel = date('d/m/Y H:i', $signedAtTs);
+            }
+        }
+        $snapshotRaw = (string) ($card['snapshot_json'] ?? '');
+        $signaturePayload = implode('|', [
+            (string) ($card['card_code'] ?? ''),
+            (string) ($card['token'] ?? ''),
+            $snapshotRaw,
+            $signedAtRaw,
+        ]);
+        $signatureHash = strtoupper(substr(hash('sha256', $signaturePayload), 0, 16));
+
+        return [
+            'user' => $user,
+            'solicitacao' => $solicitacao,
+            'associado' => $associado,
+            'card' => $card,
+            'snapshot' => $snapshot,
+            'avatarUrl' => $avatarUrl,
+            'verificationUrl' => $verificationUrl,
+            'qrUrl' => $qrUrl,
+            'signature' => [
+                'signer' => 'Presidente AORE/RN',
+                'signed_at' => $signedAtRaw,
+                'signed_at_label' => $signedAtLabel,
+                'hash' => $signatureHash,
+            ],
+        ];
     }
 
     public function update(): void
@@ -120,6 +249,11 @@ class AssociadoController extends Controller
                 $registroAssociado = $this->pessoal->buscarPorUserId((int) $user['id']);
                 if ($registroAssociado) {
                     $this->pessoal->atualizarFoto((int) $registroAssociado['id'], $avatarPath);
+                }
+
+                $solicitacaoVinculada = $this->applications->buscarPorUserId((int) $user['id']);
+                if ($solicitacaoVinculada) {
+                    $this->applications->atualizar((int) $solicitacaoVinculada['id'], ['avatar' => $avatarPath]);
                 }
             } else {
                 $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Não foi possível atualizar a foto. Envie um arquivo JPG, PNG ou WebP válido.'];
@@ -251,6 +385,11 @@ class AssociadoController extends Controller
 
         $nomeGuerra = trim((string) ($_POST['nome_guerra'] ?? ''));
         if ($nomeGuerra !== '') {
+            if (!preg_match('/^[\p{L}\s\.]+$/u', $nomeGuerra)) {
+                $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Nome de guerra inválido. Use apenas letras, espaços e ponto.'];
+                header('Location: ' . BASE_URL . 'associado');
+                exit;
+            }
             $updatePayload['nome_guerra'] = $nomeGuerra;
         }
 
@@ -309,6 +448,62 @@ class AssociadoController extends Controller
         } else {
             $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Não foi possível enviar a complementação. Tente novamente.'];
         }
+
+        header('Location: ' . BASE_URL . 'associado');
+        exit;
+    }
+
+    public function enviarSaudacaoAniversariante(): void
+    {
+        CsrfHelper::verifyOrDie();
+        $user = $this->getAuthenticatedMemberUser();
+
+        $pessoalId = (int) ($_POST['pessoal_id'] ?? 0);
+        $message = trim((string) ($_POST['message'] ?? ''));
+
+        if ($pessoalId <= 0) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Associado aniversariante inválido para envio da saudação.'];
+            header('Location: ' . BASE_URL . 'associado');
+            exit;
+        }
+
+        if ($message === '') {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Digite a mensagem de saudação antes de enviar.'];
+            header('Location: ' . BASE_URL . 'associado');
+            exit;
+        }
+
+        if (strlen($message) > 1000) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'A saudação deve ter no máximo 1000 caracteres.'];
+            header('Location: ' . BASE_URL . 'associado');
+            exit;
+        }
+
+        $recipient = $this->findBirthdayRecipient($pessoalId);
+        if (!$recipient) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'O associado selecionado não está na lista de aniversariantes de hoje.'];
+            header('Location: ' . BASE_URL . 'associado');
+            exit;
+        }
+
+        $service = new BirthdayGreetingService();
+        [$sent, $error] = $service->send(
+            [
+                'name' => (string) ($recipient['nome'] ?? 'Associado'),
+                'email' => (string) ($recipient['user_email'] ?? ''),
+            ],
+            [
+                'display_name' => $this->resolveMemberSenderName($user),
+                'context_label' => 'Area restrita do associado no portal AORE/RN',
+                'reply_to_email' => trim((string) ($user['email'] ?? '')),
+                'reply_to_name' => $this->resolveMemberSenderName($user),
+            ],
+            $message
+        );
+
+        $_SESSION['toast'] = $sent
+            ? ['type' => 'success', 'message' => 'Saudação enviada com sucesso pelo e-mail institucional da AORE/RN.']
+            : ['type' => 'danger', 'message' => 'Não foi possível enviar a saudação. ' . ($error ?: 'Verifique a configuração SMTP.')];
 
         header('Location: ' . BASE_URL . 'associado');
         exit;
@@ -556,5 +751,168 @@ class AssociadoController extends Controller
         }
 
         return BASE_URL . ltrim($value, '/');
+    }
+
+    private function mapBirthdayMember(array $item): array
+    {
+        $birthDate = trim((string) ($item['nascimento'] ?? ''));
+        $age = null;
+        if ($birthDate !== '') {
+            try {
+                $born = new \DateTimeImmutable($birthDate);
+                $age = $born->diff(new \DateTimeImmutable('today'))->y;
+            } catch (\Throwable $exception) {
+                $age = null;
+            }
+        }
+
+        return [
+            'id' => (int) ($item['id'] ?? 0),
+            'nome' => (string) ($item['nome'] ?? ''),
+            'nome_guerra' => trim((string) ($item['nome_guerra'] ?? '')) ?: 'Associado',
+            'numero_militar' => trim((string) ($item['numero_militar'] ?? '')) ?: '-',
+            'ano_npor' => trim((string) ($item['ano_npor'] ?? '')) ?: '-',
+            'idade' => $age,
+            'foto_url' => $this->resolveAssetUrl((string) (($item['foto'] ?? '') ?: ($item['user_avatar'] ?? ''))) ?: (BASE_URL . 'assets/images/conscrito.png'),
+            'email' => trim((string) ($item['user_email'] ?? '')),
+            'telefone_formatado' => $this->formatPhone((string) ($item['telefone'] ?? '')),
+            'birthday_salutation' => $this->buildBirthdaySalutation($item),
+            'whatsapp_link' => $this->buildWhatsappLink(
+                (string) ($item['telefone'] ?? ''),
+                $this->buildBirthdaySalutation($item)
+            ),
+        ];
+    }
+
+    private function findBirthdayRecipient(int $pessoalId): ?array
+    {
+        $items = $this->pessoal->listarAniversariantesDoDia(date('m-d'), 50);
+        foreach ($items as $item) {
+            if ((int) ($item['id'] ?? 0) === $pessoalId) {
+                return $item;
+            }
+        }
+
+        return null;
+    }
+
+    private function resolveMemberSenderName(array $user): string
+    {
+        $associado = $this->pessoal->buscarPorUserId((int) ($user['id'] ?? 0));
+        if ($associado && trim((string) ($associado['nome'] ?? '')) !== '') {
+            return trim((string) $associado['nome']);
+        }
+
+        $solicitacao = $this->applications->buscarPorUserId((int) ($user['id'] ?? 0));
+        if ($solicitacao && trim((string) ($solicitacao['nome_completo'] ?? '')) !== '') {
+            return trim((string) $solicitacao['nome_completo']);
+        }
+
+        return trim((string) ($user['username'] ?? 'Associado AORE/RN'));
+    }
+
+    private function formatPhone(string $value): string
+    {
+        $digits = preg_replace('/\D+/', '', $value);
+        if ($digits === '') {
+            return '';
+        }
+
+        if (strlen($digits) === 11) {
+            return sprintf('(%s) %s-%s', substr($digits, 0, 2), substr($digits, 2, 5), substr($digits, 7, 4));
+        }
+
+        if (strlen($digits) === 10) {
+            return sprintf('(%s) %s-%s', substr($digits, 0, 2), substr($digits, 2, 4), substr($digits, 6, 4));
+        }
+
+        return $value;
+    }
+
+    private function buildWhatsappLink(string $value, string $salutation): ?string
+    {
+        $digits = preg_replace('/\D+/', '', $value);
+        if ($digits === '') {
+            return null;
+        }
+
+        if (!str_starts_with($digits, '55')) {
+            $digits = '55' . $digits;
+        }
+
+        $message = rawurlencode(
+            trim($salutation) . ' Nesta data especial, receba os votos de saúde, felicidade e um excelente novo ciclo da comunidade AORE/RN. Parabéns pelo seu aniversário.'
+        );
+        return 'https://wa.me/' . $digits . '?text=' . $message;
+    }
+
+    private function buildBirthdaySalutation(array $item): string
+    {
+        $numero = trim((string) ($item['numero_militar'] ?? ''));
+        $nomeGuerra = trim((string) ($item['nome_guerra'] ?? ''));
+        $ano = trim((string) ($item['ano_npor'] ?? ''));
+
+        if ($numero !== '' && $numero !== '-' && $nomeGuerra !== '' && $nomeGuerra !== 'Associado' && $ano !== '' && $ano !== '-') {
+            return sprintf('Olá Al %s %s/%s!!!', $numero, $nomeGuerra, $ano);
+        }
+
+        $nome = trim((string) ($item['nome'] ?? 'Associado'));
+        return 'Olá, ' . $nome . '!';
+    }
+
+    private function buildBoardSection(): array
+    {
+        $termModel = new BoardTermModel();
+        $membershipModel = new BoardMembershipModel();
+
+        $activeTerm = $termModel->buscarMandatoAtivo();
+        if (!$activeTerm) {
+            return ['term' => null, 'members' => []];
+        }
+
+        $members = array_map(function (array $item): array {
+            $avatarPath = trim((string) ($item['associado_foto'] ?: ($item['associado_user_avatar'] ?: '')));
+            $cargo = trim((string) ($item['cargo'] ?? ''));
+            $funcao = trim((string) ($item['funcao_nome'] ?? ''));
+
+            return [
+                'nome' => trim((string) ($item['associado_nome'] ?? '')) ?: 'Associado não vinculado',
+                'cargo' => $cargo !== '' ? $cargo : ($funcao !== '' ? $funcao : 'Função institucional'),
+                'foto_url' => $this->resolveAssetUrl($avatarPath) ?: (BASE_URL . 'assets/images/conscrito.png'),
+            ];
+        }, $membershipModel->listarPorMandato((int) $activeTerm['id'], true));
+
+        return [
+            'term' => $activeTerm,
+            'members' => array_slice($members, 0, 6),
+        ];
+    }
+
+    private function buildInstitutionalPosts(): array
+    {
+        $result = (new Post())->listarPublico(null, null, 1, 3);
+        $posts = $result['data'] ?? [];
+
+        return array_map(function (array $item): array {
+            $summary = trim(strip_tags((string) ($item['resumo'] ?? '')));
+            if ($summary === '') {
+                $summary = trim(strip_tags((string) ($item['conteudo'] ?? '')));
+            }
+
+            if ($summary !== '' && function_exists('mb_substr')) {
+                $summary = mb_substr($summary, 0, 140, 'UTF-8');
+                if (mb_strlen($summary, 'UTF-8') >= 140) {
+                    $summary .= '...';
+                }
+            }
+
+            return [
+                'titulo' => (string) ($item['titulo'] ?? 'Comunicado institucional'),
+                'categoria' => (string) ($item['categoria_nome'] ?? 'Institucional'),
+                'data' => (string) ($item['published_at'] ?? $item['criado_em'] ?? ''),
+                'resumo' => $summary,
+                'url' => BASE_URL . 'blog/' . rawurlencode((string) ($item['slug'] ?? '')),
+            ];
+        }, $posts);
     }
 }

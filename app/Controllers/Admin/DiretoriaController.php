@@ -177,4 +177,13 @@ class DiretoriaController extends Controller
             'funcoes' => $this->funcoes->listar(),
         ], AdminHelper::getUserData('diretoria')));
     }
+
+    private function sanitizeInteger(?string $value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return ctype_digit($value) ? (int) $value : null;
+    }
 }

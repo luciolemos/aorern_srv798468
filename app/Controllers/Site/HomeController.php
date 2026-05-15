@@ -5,6 +5,7 @@ namespace App\Controllers\Site;
 use App\Core\Controller;
 use App\Models\InstitutionalDocumentModel;
 use App\Models\PatrocinadorModel;
+use App\Models\PessoalModel;
 
 class HomeController extends Controller
 {
@@ -42,9 +43,15 @@ class HomeController extends Controller
             $colaboradores = [];
         }
 
+        $aniversariantes = array_map(
+            fn(array $item): array => $this->mapBirthdayMember($item),
+            (new PessoalModel())->listarAniversariantesDoDia(date('m-d'), 8)
+        );
+
         $this->renderTwig('site/pages/home', [
             'official_documents' => $documents,
             'colaboradores' => $colaboradores,
+            'aniversariantes_hoje' => $aniversariantes,
         ]);
     }
 
@@ -84,7 +91,7 @@ class HomeController extends Controller
     {
         $value = trim($value);
         if ($value === '') {
-            return 'https://www.instagram.com/aore.rn/';
+            return INSTITUTIONAL_INSTAGRAM_URL !== '' ? INSTITUTIONAL_INSTAGRAM_URL : 'https://www.instagram.com/aore.rn/';
         }
 
         if (preg_match('#^https?://#i', $value)) {
@@ -94,9 +101,51 @@ class HomeController extends Controller
         $username = ltrim($value, '@');
         $username = preg_replace('/[^a-zA-Z0-9._]/', '', $username) ?? '';
         if ($username === '') {
-            return 'https://www.instagram.com/aore.rn/';
+            return INSTITUTIONAL_INSTAGRAM_URL !== '' ? INSTITUTIONAL_INSTAGRAM_URL : 'https://www.instagram.com/aore.rn/';
         }
 
         return 'https://www.instagram.com/' . $username . '/';
+    }
+
+    private function mapBirthdayMember(array $item): array
+    {
+        $birthDate = trim((string) ($item['nascimento'] ?? ''));
+        $age = null;
+        if ($birthDate !== '') {
+            try {
+                $born = new \DateTimeImmutable($birthDate);
+                $age = $born->diff(new \DateTimeImmutable('today'))->y;
+            } catch (\Throwable $exception) {
+                $age = null;
+            }
+        }
+
+        $avatarPath = trim((string) ($item['foto'] ?? '')) ?: trim((string) ($item['user_avatar'] ?? ''));
+        $location = trim((string) ($item['cidade'] ?? ''));
+        $uf = strtoupper(trim((string) ($item['uf'] ?? '')));
+
+        return [
+            'nome' => (string) ($item['nome'] ?? ''),
+            'nome_guerra' => trim((string) ($item['nome_guerra'] ?? '')) ?: 'Associado',
+            'numero_militar' => trim((string) ($item['numero_militar'] ?? '')) ?: '-',
+            'ano_npor' => trim((string) ($item['ano_npor'] ?? '')) ?: '-',
+            'idade' => $age,
+            'foto_url' => $this->resolveAssetUrl($avatarPath) ?: (BASE_URL . 'assets/images/conscrito.png'),
+            'localidade' => $location !== '' ? $location . ($uf !== '' ? '/' . $uf : '') : ($uf !== '' ? $uf : ''),
+        ];
+    }
+
+    private function resolveAssetUrl(?string $path): ?string
+    {
+        $value = trim((string) $path);
+        if ($value === '') {
+            return null;
+        }
+
+        if (preg_match('#^https?://#i', $value)) {
+            return $value;
+        }
+
+        return BASE_URL . ltrim($value, '/');
     }
 }

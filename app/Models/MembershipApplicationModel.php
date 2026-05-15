@@ -347,6 +347,19 @@ class MembershipApplicationModel
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
+    public function buscarParaAutenticacao(string $identifier): ?array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT * FROM {$this->table}
+             WHERE status IN ('pendente', 'complementacao', 'aprovada')
+               AND (username_desejado = :identifier OR email = :identifier)
+             ORDER BY COALESCE(atualizado_em, criado_em) DESC, id DESC
+             LIMIT 1"
+        );
+        $stmt->execute([':identifier' => trim($identifier)]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+
     public function buscarMaisRecentePorCpf(string $cpf): ?array
     {
         $stmt = $this->db->prepare(

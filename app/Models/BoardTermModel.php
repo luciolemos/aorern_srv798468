@@ -100,4 +100,17 @@ class BoardTermModel
             $perPage
         );
     }
+
+    public function buscarMandatoAtivo(): ?array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT * FROM {$this->table}
+             WHERE status = :status
+             ORDER BY data_inicio DESC, id DESC
+             LIMIT 1"
+        );
+        $stmt->execute([':status' => 'active']);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
 }

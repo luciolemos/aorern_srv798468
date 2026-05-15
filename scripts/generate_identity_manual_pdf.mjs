@@ -12,10 +12,10 @@ const doc = new PDFDocument({
   size: 'A4',
   margin: 48,
   info: {
-    Title: 'Manual de Identidade Visual da AORERN',
-    Author: 'AORERN',
+    Title: 'Manual de Identidade Visual da AORE/RN',
+    Author: 'AORE/RN',
     Subject: 'Manual visual institucional multipagina',
-    Keywords: 'AORERN, identidade visual, manual, timbre, cabecalho',
+    Keywords: 'AORE/RN, identidade visual, manual, timbre, cabecalho',
   },
 });
 
@@ -59,7 +59,7 @@ function colorChip(x, y, color, label, code) {
 
 function footer(pageNumber) {
   doc.moveTo(48, pageH - 42).lineTo(pageW - 48, pageH - 42).lineWidth(1).strokeColor('#d5dde6').stroke();
-  doc.fillColor(colors.text).font('Helvetica').fontSize(9).text(`Manual de Identidade Visual da AORERN`, 48, pageH - 30);
+  doc.fillColor(colors.text).font('Helvetica').fontSize(9).text(`Manual de Identidade Visual da AORE/RN`, 48, pageH - 30);
   doc.text(`Pagina ${pageNumber}`, pageW - 110, pageH - 30, { width: 62, align: 'right' });
 }
 
@@ -71,7 +71,7 @@ SVGtoPDF(doc, coverSvg, 36, 36, {
 footer(1);
 
 doc.addPage({ size: 'A4', margin: 48 });
-pageTitle('1. Uso da marca institucional', 'Orientacoes basicas para aplicacao da marca oficial da AORERN.');
+pageTitle('1. Uso da marca institucional', 'Orientacoes basicas para aplicacao da marca oficial da AORE/RN.');
 doc.roundedRect(48, 136, 190, 190, 20).fill(colors.soft).stroke('#d5dde6');
 doc.fillColor(colors.navy).font('Helvetica-Bold').fontSize(22).text('MARCA', 92, 214);
 doc.fontSize(12).fillColor(colors.olive).text('VERSAO OFICIAL', 88, 246);

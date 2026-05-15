@@ -133,12 +133,20 @@ if (!defined('INSTITUTIONAL_ADDRESS_LINE_2')) {
     define('INSTITUTIONAL_ADDRESS_LINE_2', (string) ($_ENV['INSTITUTIONAL_ADDRESS_LINE_2'] ?? ''));
 }
 
+if (!defined('INSTITUTIONAL_INSTAGRAM_URL')) {
+    define('INSTITUTIONAL_INSTAGRAM_URL', (string) ($_ENV['INSTITUTIONAL_INSTAGRAM_URL'] ?? ''));
+}
+
 if (!defined('WHATSAPP_PHONE_E164')) {
     define('WHATSAPP_PHONE_E164', preg_replace('/\D+/', '', (string) ($_ENV['WHATSAPP_PHONE_E164'] ?? '')));
 }
 
 if (!defined('WHATSAPP_PHONE_DISPLAY')) {
     define('WHATSAPP_PHONE_DISPLAY', (string) ($_ENV['WHATSAPP_PHONE_DISPLAY'] ?? ''));
+}
+
+if (!defined('FACEBOOK_APP_ID')) {
+    define('FACEBOOK_APP_ID', (string) ($_ENV['FACEBOOK_APP_ID'] ?? ''));
 }
 
 if (!defined('WHATSAPP_MESSAGES')) {

@@ -11,6 +11,7 @@ use App\Models\Post;
 class AdminHelper {
     private static ?int $pendingUsersCache = null;
     private static ?int $pendingMembershipApplicationsCache = null;
+    private static ?int $complementationMembershipApplicationsCache = null;
     private static ?int $occurrencesInProgressCache = null;
     private static ?int $postsPendingReviewCache = null;
 
@@ -18,7 +19,7 @@ class AdminHelper {
         if (self::$pendingUsersCache === null) {
             try {
                 $userModel = new User();
-                self::$pendingUsersCache = $userModel->contarPorStatus('pendente');
+                self::$pendingUsersCache = $userModel->contarPorStatusERoles('pendente', ['admin', 'gerente', 'operador']);
             } catch (\Throwable $th) {
                 error_log('AdminHelper pending count error: ' . $th->getMessage());
                 self::$pendingUsersCache = 0;
@@ -54,6 +55,20 @@ class AdminHelper {
         }
 
         return self::$pendingMembershipApplicationsCache;
+    }
+
+    private static function complementationMembershipApplicationsCount(): int {
+        if (self::$complementationMembershipApplicationsCache === null) {
+            try {
+                $model = new MembershipApplicationModel();
+                self::$complementationMembershipApplicationsCache = $model->contarPorStatus('complementacao');
+            } catch (\Throwable $th) {
+                error_log('AdminHelper membership complementation count error: ' . $th->getMessage());
+                self::$complementationMembershipApplicationsCache = 0;
+            }
+        }
+
+        return self::$complementationMembershipApplicationsCache;
     }
 
     private static function postsPendingReviewCount(): int {
@@ -97,6 +112,7 @@ class AdminHelper {
             'notifications' => [
                 'pending_users' => self::pendingUsersCount(),
                 'pending_membership_applications' => self::pendingMembershipApplicationsCount(),
+                'complementation_membership_applications' => self::complementationMembershipApplicationsCount(),
                 'occurrences_in_progress' => self::occurrencesInProgressCount(),
                 'posts_pending_review' => self::postsPendingReviewCount(),
             ],

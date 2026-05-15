@@ -4,7 +4,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/auth.css?v=20260306-register7">
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/auth.css?v=20260309-register8">
 {% endblock %}
 
 {% block content %}
@@ -208,8 +208,8 @@
                                                    title="Informe o telefone com DDD no formato (00) 00000-0000.">
                                         </div>
                                         <div class="col-lg-4">
-                                            <label for="avatar" class="form-label">Foto de perfil (opcional)</label>
-                                            <input type="file" class="form-control form-control-lg" id="avatar" name="avatar" accept="image/jpeg,image/png,image/webp">
+                                            <label for="avatar" class="form-label">Foto de perfil<span class="required-mark">*</span></label>
+                                            <input type="file" class="form-control form-control-lg" id="avatar" name="avatar" accept="image/jpeg,image/png,image/webp" required>
                                         </div>
                                     </div>
                                     <div class="register-step-actions">
@@ -229,25 +229,25 @@
                                             <label for="posto_graduacao" class="form-label">Posto/Graduação<span class="required-mark">*</span></label>
                                             <select class="form-select form-select-lg" id="posto_graduacao" name="posto_graduacao" required>
                                                 <option value="">Selecione</option>
-                                                <option value="General de Exército">General de Exército</option>
-                                                <option value="General de Divisão">General de Divisão</option>
-                                                <option value="General de Brigada">General de Brigada</option>
-                                                <option value="Coronel">Coronel</option>
-                                                <option value="Tenente-Coronel">Tenente-Coronel</option>
-                                                <option value="Major">Major</option>
-                                                <option value="Capitão">Capitão</option>
-                                                <option value="Primeiro-Tenente">Primeiro-Tenente</option>
-                                                <option value="Segundo-Tenente">Segundo-Tenente</option>
-                                                <option value="Aspirante a Oficial" selected>Aspirante a Oficial</option>
-                                                <option value="Aluno CPOR">Aluno CPOR</option>
-                                                <option value="Aluno NPOR">Aluno NPOR</option>
-                                                <option value="Aluno CFGS">Aluno CFGS</option>
-                                                <option value="Subtenente">Subtenente</option>
-                                                <option value="Primeiro-Sargento">Primeiro-Sargento</option>
-                                                <option value="Segundo-Sargento">Segundo-Sargento</option>
-                                                <option value="Terceiro-Sargento">Terceiro-Sargento</option>
-                                                <option value="Cabo">Cabo</option>
-                                                <option value="Soldado">Sd</option>
+                                                <option value="Gen Ex">Gen Ex</option>
+                                                <option value="Gen Div">Gen Div</option>
+                                                <option value="Gen Bda">Gen Bda</option>
+                                                <option value="Cel">Cel</option>
+                                                <option value="Ten Cel">Ten Cel</option>
+                                                <option value="Maj">Maj</option>
+                                                <option value="Cap">Cap</option>
+                                                <option value="1º Ten">1º Ten</option>
+                                                <option value="2º Ten">2º Ten</option>
+                                                <option value="Asp Of" selected>Asp Of</option>
+                                                <option value="Al CPOR">Al CPOR</option>
+                                                <option value="Al NPOR">Al NPOR</option>
+                                                <option value="Al CFGS">Al CFGS</option>
+                                                <option value="ST">ST</option>
+                                                <option value="1º Sgt">1º Sgt</option>
+                                                <option value="2º Sgt">2º Sgt</option>
+                                                <option value="3º Sgt">3º Sgt</option>
+                                                <option value="Cb">Cb</option>
+                                                <option value="Sd">Sd</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6 col-lg-3">
@@ -266,7 +266,9 @@
                                             <input type="text" class="form-control form-control-lg" id="nome_guerra" name="nome_guerra" required
                                                    placeholder="Ex.: SILVA"
                                                    autocomplete="off"
-                                                   maxlength="60">
+                                                   maxlength="60"
+                                                   pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\\s\\.]+$"
+                                                   title="Use apenas letras, espaços e ponto.">
                                         </div>
                                         <div class="col-md-6 col-lg-3">
                                             <label for="arma_quadro" class="form-label">Arma / quadro / serviço<span class="required-mark">*</span></label>
@@ -292,9 +294,9 @@
                                                    placeholder="Ex.: Turma Aspirante X">
                                         </div>
                                         <div class="col-lg-6">
-                                            <label for="documentos" class="form-label">Documentos comprobatórios</label>
-                                            <input type="file" class="form-control form-control-lg" id="documentos" name="documentos[]" accept="application/pdf,image/jpeg,image/png,image/webp" multiple>
-                                            <div class="form-text">Envie comprovantes que ajudem a diretoria a validar sua filiação, como identidade, certificado, declaração ou documento equivalente.</div>
+                                            <label for="documentos" class="form-label">Documentos comprobatórios<span class="required-mark">*</span></label>
+                                            <input type="file" class="form-control form-control-lg" id="documentos" name="documentos[]" accept="application/pdf,image/jpeg,image/png,image/webp" multiple required>
+                                            <div class="form-text">Envie comprovantes que ajudem a diretoria a validar sua filiação, como identidade, certificado, declaração ou documento equivalente, obrigatoriamente contendo foto do solicitante.</div>
                                         </div>
                                         <div class="col-lg-6">
                                             <label for="observacoes" class="form-label">Observações</label>
@@ -415,6 +417,8 @@
             const form = document.querySelector('.auth-form');
             const cpfInput = document.getElementById('cpf');
             const phoneInput = document.getElementById('telefone');
+            const nomeInput = document.getElementById('nome');
+            const nomeGuerraInput = document.getElementById('nome_guerra');
             const ufSelect = document.getElementById('uf');
             const cidadeSelect = document.getElementById('cidade');
             const passwordInput = document.getElementById('password');
@@ -472,6 +476,25 @@
                 return digits
                     .replace(/(\d{2})(\d)/, '($1) $2')
                     .replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+            };
+
+            const bindUppercaseInput = (input) => {
+                if (!input) {
+                    return;
+                }
+
+                input.addEventListener('input', function () {
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    const upper = this.value.toLocaleUpperCase('pt-BR');
+                    if (this.value !== upper) {
+                        this.value = upper;
+                        if (start !== null && end !== null) {
+                            this.setSelectionRange(start, end);
+                        }
+                    }
+                    updateReview();
+                });
             };
 
             const isValidCpf = (value) => {
@@ -796,6 +819,9 @@
                 passwordInput.addEventListener('input', validatePasswordConfirmation);
                 passwordConfirmInput.addEventListener('input', validatePasswordConfirmation);
             }
+
+            bindUppercaseInput(nomeInput);
+            bindUppercaseInput(nomeGuerraInput);
 
             form?.querySelectorAll('input, textarea, select').forEach((field) => {
                 if (field === cpfInput || field === phoneInput) {
