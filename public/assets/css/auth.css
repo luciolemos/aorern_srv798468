@@ -278,6 +278,27 @@
     margin-top: 0.2rem;
 }
 
+.register-form-card #aceite_termo.form-check-input {
+    width: 1.15rem;
+    height: 1.15rem;
+    border: 2px solid #5a6f3a;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.register-form-card #aceite_termo.form-check-input:checked {
+    background-color: #ffffff !important;
+    border-color: #1f2f16 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%231f2f16' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m4 10 4 4 8-8'/%3e%3c/svg%3e") !important;
+    background-size: 0.85rem 0.85rem !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.register-form-card #aceite_termo.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(54, 90, 29, 0.28);
+}
+
 .register-form-card .btn.w-lg-auto {
     width: 100%;
 }
