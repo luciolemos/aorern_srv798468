@@ -4,6 +4,11 @@
     --public-navbar-mobile-height: 80px;
 }
 
+html,
+body {
+    overflow-x: hidden;
+}
+
 /* html {
     overflow-y: scroll;  /* Reserva espaço para scrollbar, evita shift ao abrir dropdowns */
 } */
@@ -18,6 +23,7 @@ body {
     font-family: var(--font-body) !important;
     font-weight: 400;
     letter-spacing: 0.3px;
+    overflow-x: clip;
 }
 
 .site-body {

@@ -40,12 +40,6 @@ class AssociadoController extends Controller
             exit;
         }
 
-        $role = $_SESSION['user_role'] ?? 'usuario';
-        if (in_array($role, ['admin', 'gerente', 'operador'], true)) {
-            header('Location: ' . BASE_URL . 'admin/dashboard');
-            exit;
-        }
-
         $user = $this->users->buscarPorId($userId);
         $solicitacao = $this->applications->buscarPorUserId($userId);
         $associado = null;
@@ -598,9 +592,7 @@ class AssociadoController extends Controller
     private function getAuthenticatedMemberUser(): array
     {
         $userId = (int) ($_SESSION['user_id'] ?? 0);
-        $role = $_SESSION['user_role'] ?? 'usuario';
-
-        if ($userId <= 0 || in_array($role, ['admin', 'gerente', 'operador'], true)) {
+        if ($userId <= 0) {
             header('Location: ' . BASE_URL . 'login/admin');
             exit;
         }

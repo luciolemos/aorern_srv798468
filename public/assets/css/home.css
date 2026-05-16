@@ -58,12 +58,12 @@
 
 @media (max-width: 991.98px) {
     .home-hero.site-hero {
-        min-height: calc(100dvh - var(--public-navbar-mobile-height, 75px));
+        min-height: calc(100svh - var(--public-navbar-mobile-height, 75px));
         padding-top: clamp(1.25rem, 4vw, 2rem);
         padding-bottom: clamp(3rem, 8vw, 4rem);
     }
 
-    @supports not (height: 100dvh) {
+    @supports not (height: 100svh) {
         .home-hero.site-hero {
             min-height: calc(100vh - var(--public-navbar-mobile-height, 75px));
         }
@@ -197,6 +197,63 @@
 
 .home-section {
     position: relative;
+}
+
+.home-bimtz-banner-card {
+    position: relative;
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    border-radius: 0.9rem;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 24px rgba(7, 16, 10, 0.08);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.home-bimtz-banner-image {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    display: block;
+    aspect-ratio: 21 / 7;
+    object-fit: cover;
+}
+
+.home-bimtz-banner-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.home-bimtz-banner-overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 0.7rem 1rem;
+    background: linear-gradient(180deg, rgba(7, 16, 10, 0.06) 0%, rgba(7, 16, 10, 0.7) 100%);
+}
+
+.home-bimtz-banner-text {
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.35;
+    font-size: clamp(0.82rem, 1.1vw, 0.95rem);
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 575.98px) {
+    .home-bimtz-banner-card {
+        border-radius: 0.8rem;
+    }
+
+    .home-bimtz-banner-image {
+        aspect-ratio: 16 / 8;
+    }
+
+    .home-bimtz-banner-overlay {
+        padding: 0.55rem 0.7rem;
+    }
 }
 
 .home-section + .home-section {

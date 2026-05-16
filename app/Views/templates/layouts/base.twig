@@ -28,9 +28,10 @@
     {% if fb_app_id is defined and fb_app_id %}
         <meta property="fb:app_id" content="{{ fb_app_id|e('html_attr') }}">
     {% endif %}
-    <link rel="icon" type="image/png" href="{{ BASE_URL }}assets/images/aorern-medalhao-verde-aorer6-oficial-3200_1.png">
-    <link rel="apple-touch-icon" href="{{ BASE_URL }}assets/images/aorern-medalhao-verde-aorer6-oficial-3200_1.png">
-    <link rel="shortcut icon" href="{{ BASE_URL }}assets/images/aorern-medalhao-verde-aorer6-oficial-3200_1.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ BASE_URL }}assets/images/favicon/aorern/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ BASE_URL }}assets/images/favicon/aorern/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ BASE_URL }}assets/images/favicon/aorern/apple-touch-icon.png">
+    <link rel="shortcut icon" href="{{ BASE_URL }}assets/images/favicon/aorern/favicon.ico">
     
     <!-- CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,9 +43,9 @@
     <link rel="stylesheet" href="{{ BASE_URL }}assets/css/system/variables.css">
     <link rel="stylesheet" href="{{ BASE_URL }}assets/css/system/components.css">
     <link rel="stylesheet" href="{{ BASE_URL }}assets/css/institutional-theme.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/navbar-universal.css') }}?v=20260516-navbar-active-1">
+    <link rel="stylesheet" href="{{ asset('assets/css/navbar-universal.css') }}?v=20260516-navbar-active-2">
     <link rel="stylesheet" href="{{ BASE_URL }}assets/css/footer-robust.css">
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/main.css">
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/main.css?v=20260516-overflow-fix-1">
     
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ BASE_URL }}assets/css/system/forms-unified.css">
