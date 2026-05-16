@@ -78,13 +78,13 @@
                                         {% include 'site/components/button.twig' with {
                                             href: page.media.download_png_url|default(page.media.src),
                                             label: page.media.download_png_label|default('Download do selo (PNG)'),
-                                            icon: 'bi-filetype-png',
+                                            icon: page.media.download_png_icon|default('bi-filetype-png'),
                                             variant: 'light-outline',
                                             size: 'md',
                                             button_class: 'fw-semibold opacity-75',
                                             attrs: {
                                                 'download': page.media.download_png_name|default('selo-aorern.png'),
-                                                'aria-label': 'Baixar imagem PNG do selo da AORE/RN'
+                                                'aria-label': page.media.download_png_aria_label|default('Baixar imagem adicional do selo da AORE/RN')
                                             }
                                         } %}
                                     {% endif %}

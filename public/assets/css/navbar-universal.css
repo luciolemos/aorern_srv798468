@@ -441,7 +441,7 @@
 
 .navbar-site .dropdown-menu-institucional--mega {
     width: min(1080px, 96vw);
-    min-width: 980px;
+    min-width: min(980px, calc(100vw - 2rem));
     border-radius: 1rem;
     overflow: hidden;
 }

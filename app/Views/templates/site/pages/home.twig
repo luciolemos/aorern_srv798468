@@ -4,7 +4,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/home.css?v=20260307-sponsors1">     
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/home.css?v=20260516-bimtz-banner4">     
 {% endblock %}
 
 {% block scripts %}
@@ -41,7 +41,7 @@
                 <div class="col-xl-9 col-lg-10">
                     <div class="hero-content text-center home-hero-intro">
                         <div class="home-hero-logo mb-4">
-                            <img src="{{ BASE_URL }}assets/images/aorern-medalhao-verde-aorer6-oficial-3200_1.png" alt="Identidade visual da AORE/RN" class="img-fluid home-hero-logo-image">
+                            <img src="{{ BASE_URL }}assets/images/aorern-medalhao-verde-aorer6-oficial-800.webp" alt="Identidade visual da AORE/RN" class="img-fluid home-hero-logo-image">
                         </div>
                         {# <p class="home-hero-subtitle text-white mb-2">Associação dos Oficiais da Reserva do Exército</p> #}
                         <h1 class="home-hero-title text-white mb-3">AORE/RN</h1>
@@ -68,6 +68,33 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section class="home-bimtz-banner home-section py-3 py-md-4">
+        <div class="container">
+            <article class="home-bimtz-banner-card">
+                <a
+                    href="{{ BASE_URL }}assets/images/om_full-1672.webp"
+                    target="_blank"
+                    rel="noopener"
+                    class="home-bimtz-banner-link"
+                    aria-label="Abrir imagem completa do banner"
+                    title="Abrir imagem completa"
+                >
+                    <img
+                        src="{{ BASE_URL }}assets/images/om-1600.webp"
+                        alt="16º Batalhão de Infantaria Motorizado"
+                        class="home-bimtz-banner-image"
+                        loading="lazy"
+                    >
+                </a>
+                <div class="home-bimtz-banner-overlay">
+                    <p class="home-bimtz-banner-text mb-0">
+                        16º Batalhão de Infantaria Motorizado - Casa do Oficial R/2 Potiguar.
+                    </p>
+                </div>
+            </article>
         </div>
     </section>
 
