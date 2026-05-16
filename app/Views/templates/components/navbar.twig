@@ -239,7 +239,7 @@
                     {% set authAreaActive = isAdminSession ? (currentRoute starts with 'admin') : (currentRoute starts with 'associado') %}
                     <li class="nav-item d-none d-lg-block">
                         <a class="nav-link text-uppercase fw-semibold {{ authAreaActive ? 'active' : '' }}" href="{{ isAdminSession ? BASE_URL ~ 'admin' : BASE_URL ~ 'associado' }}">
-                            <span class="navbar-site__nav-label"><i class="bi {{ isAdminSession ? 'bi-speedometer2' : 'bi-person-badge' }} me-2"></i>{{ isAdminSession ? 'Painel' : 'Área do associado' }}</span>
+                            <span class="navbar-site__nav-label"><i class="bi {{ isAdminSession ? 'bi-speedometer2' : 'bi-person-badge' }} me-2"></i>{{ isAdminSession ? 'Painel' : 'Área do sócio' }}</span>
                         </a>
                     </li>
                     <li class="nav-item d-none d-lg-block">
@@ -249,7 +249,7 @@
                     </li>
                     <li class="nav-item nav-item-auth-mobile d-lg-none">
                         <a class="btn btn-outline-light btn-sm text-uppercase fw-bold navbar-mobile-action {{ authAreaActive ? 'active' : '' }}" href="{{ isAdminSession ? BASE_URL ~ 'admin' : BASE_URL ~ 'associado' }}">
-                            <i class="bi {{ isAdminSession ? 'bi-speedometer2' : 'bi-person-badge' }} me-1"></i>{{ isAdminSession ? 'Admin' : 'Associado' }}
+                            <i class="bi {{ isAdminSession ? 'bi-speedometer2' : 'bi-person-badge' }} me-1"></i>{{ isAdminSession ? 'Admin' : 'Sócio' }}
                         </a>
                     </li>
                     <li class="nav-item nav-item-auth-mobile d-lg-none ms-lg-3">
