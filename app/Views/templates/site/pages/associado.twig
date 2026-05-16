@@ -424,15 +424,30 @@
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                                 <div class="col-12">
                                     <label class="form-label small fw-semibold">Senha atual</label>
-                                    <input type="password" name="current_password" class="form-control" required>
+                                    <div class="input-group">
+                                        <input type="password" id="current_password" name="current_password" class="form-control" required>
+                                        <button type="button" class="password-visibility-toggle js-toggle-password" data-target="current_password" aria-label="Mostrar senha atual" aria-pressed="false">
+                                            <i class="bi bi-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small fw-semibold">Nova senha</label>
-                                    <input type="password" name="new_password" class="form-control" required>
+                                    <div class="input-group">
+                                        <input type="password" id="new_password" name="new_password" class="form-control" required>
+                                        <button type="button" class="password-visibility-toggle js-toggle-password" data-target="new_password" aria-label="Mostrar nova senha" aria-pressed="false">
+                                            <i class="bi bi-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label small fw-semibold">Confirmar nova senha</label>
-                                    <input type="password" name="confirm_password" class="form-control" required>
+                                    <div class="input-group">
+                                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                                        <button type="button" class="password-visibility-toggle js-toggle-password" data-target="confirm_password" aria-label="Mostrar confirmação da nova senha" aria-pressed="false">
+                                            <i class="bi bi-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="col-12 d-grid">
                                     <button type="submit" class="btn btn-outline-secondary btn-sm">
@@ -585,6 +600,30 @@ Perpetuum Officium erga Patriam
                     messageField.value = defaultMessage;
                 });
             }
+
+            document.querySelectorAll('.js-toggle-password').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    const targetId = button.getAttribute('data-target');
+                    if (!targetId) {
+                        return;
+                    }
+
+                    const input = document.getElementById(targetId);
+                    if (!input) {
+                        return;
+                    }
+
+                    const showing = input.type === 'text';
+                    input.type = showing ? 'password' : 'text';
+                    button.setAttribute('aria-pressed', showing ? 'false' : 'true');
+
+                    const icon = button.querySelector('i');
+                    if (icon) {
+                        icon.classList.toggle('bi-eye', showing);
+                        icon.classList.toggle('bi-eye-slash', !showing);
+                    }
+                });
+            });
         });
     </script>
 {% endblock %}

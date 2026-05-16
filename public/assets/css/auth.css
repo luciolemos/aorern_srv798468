@@ -319,6 +319,47 @@
     width: 100%;
 }
 
+.password-visibility-toggle {
+    min-width: 2.75rem;
+    padding: 0 0.75rem;
+    border-radius: 0 0.6rem 0.6rem 0;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    color: var(--color-white);
+    box-shadow: 0 15px 30px rgba(85, 107, 47, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.password-visibility-toggle:hover,
+.password-visibility-toggle:focus-visible {
+    color: var(--color-white);
+    filter: brightness(1.05);
+}
+
+.password-visibility-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(85, 107, 47, 0.28);
+}
+
+.password-visibility-toggle i {
+    font-size: 1rem;
+}
+
+@media (max-width: 575.98px) {
+    .password-visibility-toggle {
+        min-width: 2.5rem;
+        padding: 0 0.6rem;
+        border-radius: 0 0.5rem 0.5rem 0;
+        box-shadow: none;
+    }
+
+    .password-visibility-toggle i {
+        font-size: 0.95rem;
+    }
+}
+
 .register-stepper {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
