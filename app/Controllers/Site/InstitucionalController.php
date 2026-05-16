@@ -223,6 +223,13 @@ class InstitucionalController extends Controller
                 'url' => BASE_URL . 'institucional/hino',
             ],
             [
+                'slug' => 'npor-patrono',
+                'title' => 'NPOR - Patrono',
+                'description' => 'Referência histórica da formação de oficiais da reserva.',
+                'icon' => 'bi-award',
+                'url' => BASE_URL . 'institucional/npor/patrono',
+            ],
+            [
                 'slug' => 'links',
                 'title' => 'Links Úteis',
                 'description' => 'Portais oficiais, legislações e serviços.',
@@ -731,6 +738,71 @@ class InstitucionalController extends Controller
             ],
             'download_pdf_url' => $this->publishedDocumentUrl('hino-aorern-pdf', 'outro', BASE_URL . 'assets/docs/hino-aorern.pdf'),
             'download_pdf_name' => 'hino-aorern.pdf',
+        ]);
+    }
+
+    public function patrono(): void
+    {
+        $this->renderPage('npor-patrono', [
+            'title' => 'NPOR - Patrono',
+            'badge' => 'NPOR',
+            'tagline' => 'Tenente-Coronel Correia Lima e o legado da formação de Oficiais da Reserva (R/2).',
+            'lead' => 'No dia 4 de novembro celebra-se o Dia do Oficial da Reserva (R/2) do Exército Brasileiro. A data remete à trajetória do Tenente-Coronel Correia Lima, nome historicamente associado à estruturação da formação de oficiais da reserva no País.',
+            'sections' => [
+                [
+                    'title' => 'Dados biográficos e trajetória',
+                    'description' => 'José Pessoa Cavalcanti de Albuquerque Correia Lima, conhecido como Correia Lima, é apresentado na tradição institucional do Exército como referência da formação dos oficiais da reserva.',
+                    'icon' => 'bi-award',
+                    'items' => [
+                        'Nascido em Porto Alegre, destacou-se no debate sobre modernização da formação militar no período entre-guerras.',
+                        'Atuou como defensor de uma reserva mobilizável de oficiais com sólida preparação intelectual, técnica e moral.',
+                        'É reconhecido como figura inspiradora na consolidação do sistema de Oficiais da Reserva (R/2).',
+                    ],
+                ],
+                [
+                    'title' => 'CPOR e NPOR: base do sistema R/2',
+                    'description' => 'O modelo de formação da reserva se apoia em organizações específicas, voltadas à preparação de lideranças para situações de mobilização nacional.',
+                    'icon' => 'bi-building-check',
+                    'items' => [
+                        'CPOR: Centro de Preparação de Oficiais da Reserva.',
+                        'NPOR: Núcleo de Preparação de Oficiais da Reserva.',
+                        'Essas organizações formam Oficiais da Reserva de 2ª Classe, em geral a partir de jovens em serviço militar com aptidão para liderança.',
+                        'A criação do primeiro CPOR, em 1927, consolidou um padrão de formação que permanece como referência histórica no Exército Brasileiro.',
+                    ],
+                ],
+                [
+                    'title' => 'Contribuições para a doutrina de formação',
+                    'description' => 'No processo de profissionalização do Exército, Correia Lima esteve associado a diretrizes que aproximaram a formação militar do ambiente civil e universitário.',
+                    'icon' => 'bi-patch-check',
+                    'items' => [
+                        'Valorização da formação intelectual e técnica do oficial temporário.',
+                        'Aproximação entre o meio civil universitário e a Força Terrestre.',
+                        'Fortalecimento de uma reserva mobilizável de oficiais preparados para emprego em crises.',
+                        'Ênfase em liderança, disciplina, patriotismo e compromisso institucional.',
+                    ],
+                ],
+                [
+                    'title' => 'Importância histórica e atualidade',
+                    'description' => 'O legado de Correia Lima permanece na cultura institucional do CPOR/NPOR e na valorização do Oficial da Reserva.',
+                    'icon' => 'bi-clock-history',
+                    'items' => [
+                        'Seu nome é frequentemente lembrado em pavilhões, turmas, homenagens e referências históricas do ensino militar.',
+                        'Os oficiais R/2 abrangem diversas áreas: Infantaria, Cavalaria, Artilharia, Engenharia, Comunicações, Material Bélico, Intendência, Administração, Comunicação Social, Saúde, Magistério, entre outras.',
+                        'Mesmo fora do serviço ativo, mantêm compromisso com a Pátria e podem ser convocados em situações excepcionais.',
+                        'Seu papel inclui apoio à instrução, consultoria técnica, logística, projetos e atividades de saúde operacional e assistencial.',
+                    ],
+                ],
+            ],
+            'media' => [
+                'type' => 'image',
+                'src' => BASE_URL . 'assets/images/patrono-correia-lima.jpg',
+                'alt' => 'Tenente-Coronel Correia Lima, patrono dos oficiais da reserva',
+                'caption' => 'Fonte: Exército Brasileiro (Flickr oficial) - Tenente Coronel Correia Lima.',
+            ],
+            'resources' => [
+                ['label' => 'Selo Institucional', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/brasao', 'external' => false],
+                ['label' => 'Hino da AORE/RN', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/hino', 'external' => false],
+            ],
         ]);
     }
 

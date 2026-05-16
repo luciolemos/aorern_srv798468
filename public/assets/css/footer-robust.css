@@ -51,6 +51,35 @@ footer {
     opacity: 0.85;
 }
 
+.site-footer__bottom {
+    color: rgba(255, 255, 255, 0.86);
+}
+
+.site-footer__copyright {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.site-footer__rights {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.site-footer__credits {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.site-footer__credits-link {
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.site-footer__credits-link:hover,
+.site-footer__credits-link:focus-visible {
+    border-bottom-color: rgba(255, 255, 255, 0.95);
+    opacity: 1;
+}
+
 .footer-social {
     display: flex;
     gap: 0.6rem;

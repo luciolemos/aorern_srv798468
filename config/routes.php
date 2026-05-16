@@ -85,6 +85,7 @@ Router::get('/institucional/documentos', fn() => (new InstitucionalController())
 Router::get('/institucional/downloads-marca', fn() => (new InstitucionalController())->downloadsMarca());
 Router::get('/institucional/governanca', fn() => (new InstitucionalController())->governanca());
 Router::get('/institucional/busca', fn() => (new InstitucionalController())->busca());
+Router::get('/institucional/npor/patrono', fn() => (new InstitucionalController())->patrono());
 Router::get('/docs', fn() => (new SiteDocsController())->index());
 Router::get('/docs/doc/{slug}', fn($request, $slug) => (new SiteDocsController())->doc($slug));
 Router::get('/coverage', fn() => (new CoverageController())->index());
