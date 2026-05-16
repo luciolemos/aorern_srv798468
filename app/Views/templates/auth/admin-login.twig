@@ -93,7 +93,19 @@
                             </div>
                             <div class="mb-4">
                                 <label for="password" class="form-label text-white fw-semibold">Senha</label>
-                                <input type="password" class="form-control form-control-lg" id="password" name="password" required>
+                                <div class="input-group input-group-lg">
+                                    <input type="password" class="form-control form-control-lg" id="password" name="password" required>
+                                    <button
+                                        class="password-visibility-toggle"
+                                        type="button"
+                                        id="togglePasswordVisibility"
+                                        aria-label="Mostrar senha"
+                                        aria-controls="password"
+                                        aria-pressed="false"
+                                    >
+                                        <i class="bi bi-eye" aria-hidden="true"></i>
+                                    </button>
+                                </div>
                             </div>
                             {% include 'site/components/button.twig' with {
                                 label: 'Entrar no painel',
@@ -117,4 +129,30 @@
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInput = document.getElementById('password');
+            const toggleButton = document.getElementById('togglePasswordVisibility');
+            if (!passwordInput || !toggleButton) {
+                return;
+            }
+
+            toggleButton.addEventListener('click', function () {
+                const showing = passwordInput.type === 'text';
+                passwordInput.type = showing ? 'password' : 'text';
+                toggleButton.setAttribute('aria-pressed', showing ? 'false' : 'true');
+                toggleButton.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
+
+                const icon = toggleButton.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('bi-eye', showing);
+                    icon.classList.toggle('bi-eye-slash', !showing);
+                }
+            });
+        });
+    </script>
 {% endblock %}

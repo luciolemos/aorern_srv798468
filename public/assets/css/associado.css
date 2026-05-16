@@ -132,3 +132,36 @@
         justify-content: flex-start;
     }
 }
+.password-visibility-toggle {
+    min-width: 2.5rem;
+    padding: 0 0.6rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    border: 1px solid rgba(85, 107, 47, 0.38);
+    background: rgba(85, 107, 47, 0.08);
+    color: #365520;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.password-visibility-toggle:hover,
+.password-visibility-toggle:focus-visible {
+    background: rgba(85, 107, 47, 0.16);
+    color: #1f2f16;
+}
+
+.password-visibility-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(85, 107, 47, 0.22);
+}
+
+.password-visibility-toggle i {
+    font-size: 0.95rem;
+}
+
+@media (max-width: 575.98px) {
+    .password-visibility-toggle {
+        min-width: 2.35rem;
+        padding: 0 0.5rem;
+    }
+}

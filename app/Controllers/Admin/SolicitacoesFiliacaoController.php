@@ -22,6 +22,7 @@ use App\Services\MembershipStatusStateMachine;
 class SolicitacoesFiliacaoController extends Controller
 {
     private MembershipApplicationModel $applications;
+    private PessoalModel $pessoal;
     private MembershipApplicationWorkflowService $workflow;
     private MembershipNotificationService $notifications;
     private MembershipPresentationService $presentation;
@@ -33,9 +34,10 @@ class SolicitacoesFiliacaoController extends Controller
     public function __construct()
     {
         $this->applications = new MembershipApplicationModel();
+        $this->pessoal = new PessoalModel();
         $this->workflow = new MembershipApplicationWorkflowService(
             $this->applications,
-            new PessoalModel(),
+            $this->pessoal,
             new FuncaoModel()
         );
         $this->notifications = new MembershipNotificationService();
@@ -88,6 +90,7 @@ class SolicitacoesFiliacaoController extends Controller
             AdminHelper::getUserData('solicitacoes-filiacao'),
             [
                 'solicitacoes' => array_map(function (array $solicitacao): array {
+                    $solicitacao = $this->syncAssociativeStatusFromPessoal($solicitacao);
                     return $this->presentation->enrichForList($solicitacao);
                 }, $result['data']),
                 'pagination' => $pagination,
@@ -240,6 +243,52 @@ class SolicitacoesFiliacaoController extends Controller
             'last_notification_at' => date('Y-m-d H:i:s'),
             'last_notification_error' => $erro,
         ]);
+    }
+
+    private function syncAssociativeStatusFromPessoal(array $solicitacao): array
+    {
+        $statusAtual = trim((string) ($solicitacao['status_associativo'] ?? ''));
+        $statusSolicitacao = trim((string) ($solicitacao['status'] ?? ''));
+        $pessoal = null;
+
+        // Regra de negócio: enquanto a solicitação não estiver aprovada,
+        // o status associativo exibido e persistido deve permanecer provisório.
+        if (in_array($statusSolicitacao, [
+            MembershipStatusStateMachine::STATUS_PENDENTE,
+            MembershipStatusStateMachine::STATUS_COMPLEMENTACAO,
+        ], true)) {
+            if ($statusAtual !== MembershipAssociativeStatusStateMachine::PROVISORIO && !empty($solicitacao['id'])) {
+                $this->applications->atualizar((int) $solicitacao['id'], [
+                    'status_associativo' => MembershipAssociativeStatusStateMachine::PROVISORIO,
+                ]);
+            }
+            $solicitacao['status_associativo'] = MembershipAssociativeStatusStateMachine::PROVISORIO;
+            return $solicitacao;
+        }
+
+        $pessoalId = (int) ($solicitacao['pessoal_id'] ?? 0);
+        if ($pessoalId > 0) {
+            $pessoal = $this->pessoal->buscar($pessoalId);
+        } elseif (!empty($solicitacao['cpf'])) {
+            $pessoal = $this->pessoal->buscarPorCpf((string) $solicitacao['cpf']);
+        }
+
+        $statusPessoal = trim((string) ($pessoal['status_associativo'] ?? ''));
+        if ($statusPessoal === '') {
+            return $solicitacao;
+        }
+
+        // Solicitações já aprovadas devem refletir o status associativo oficial do cadastro pessoal.
+        if ($statusSolicitacao === MembershipStatusStateMachine::STATUS_APROVADA) {
+            if ($statusAtual !== $statusPessoal && !empty($solicitacao['id'])) {
+                $this->applications->atualizar((int) $solicitacao['id'], [
+                    'status_associativo' => $statusPessoal,
+                ]);
+            }
+            $solicitacao['status_associativo'] = $statusPessoal;
+        }
+
+        return $solicitacao;
     }
 
 }
