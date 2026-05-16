@@ -179,11 +179,6 @@
                     {% endif %}
                 {% endfor %}
                 {% if not session.user_id %}
-                    <li class="nav-item d-none d-lg-block">
-                        <a class="nav-link text-uppercase fw-semibold" href="{{ BASE_URL }}login/admin">
-                            <span class="navbar-site__nav-label"><i class="bi bi-box-arrow-in-right me-2"></i>Login</span>
-                        </a>
-                    </li>
                     {% set associeDropdownActive = currentRoute starts with 'register' or currentRoute starts with 'error/temporariamente-indisponivel' %}
                     <li class="nav-item dropdown d-none d-lg-block">
                         <a class="nav-link nav-link-dropdown {{ associeDropdownActive ? 'active' : '' }}" href="#" id="dropdown-associe-se" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -229,6 +224,11 @@
                             </ul>
                         </div>
                     </li>
+                    <li class="nav-item d-none d-lg-block">
+                        <a class="nav-link text-uppercase fw-semibold" href="{{ BASE_URL }}login/admin">
+                            <span class="navbar-site__nav-label"><i class="bi bi-box-arrow-in-right me-2"></i>Login</span>
+                        </a>
+                    </li>
                     <li class="nav-item nav-item-auth-mobile d-lg-none">
                         <a class="nav-link text-uppercase fw-semibold" href="{{ BASE_URL }}login/admin">
                             <span class="navbar-site__nav-label"><i class="bi bi-box-arrow-in-right me-2"></i>Login</span>
@@ -236,8 +236,9 @@
                     </li>
                 {% else %}
                     {% set isAdminSession = session.user_role in ['admin', 'gerente', 'operador'] %}
+                    {% set authAreaActive = isAdminSession ? (currentRoute starts with 'admin') : (currentRoute starts with 'associado') %}
                     <li class="nav-item d-none d-lg-block">
-                        <a class="nav-link text-uppercase fw-semibold" href="{{ isAdminSession ? BASE_URL ~ 'admin' : BASE_URL ~ 'associado' }}">
+                        <a class="nav-link text-uppercase fw-semibold {{ authAreaActive ? 'active' : '' }}" href="{{ isAdminSession ? BASE_URL ~ 'admin' : BASE_URL ~ 'associado' }}">
                             <span class="navbar-site__nav-label"><i class="bi {{ isAdminSession ? 'bi-speedometer2' : 'bi-person-badge' }} me-2"></i>{{ isAdminSession ? 'Painel' : 'Área do associado' }}</span>
                         </a>
                     </li>
@@ -247,7 +248,7 @@
                         </a>
                     </li>
                     <li class="nav-item nav-item-auth-mobile d-lg-none">
-                        <a class="btn btn-outline-light btn-sm text-uppercase fw-bold navbar-mobile-action" href="{{ isAdminSession ? BASE_URL ~ 'admin' : BASE_URL ~ 'associado' }}">
+                        <a class="btn btn-outline-light btn-sm text-uppercase fw-bold navbar-mobile-action {{ authAreaActive ? 'active' : '' }}" href="{{ isAdminSession ? BASE_URL ~ 'admin' : BASE_URL ~ 'associado' }}">
                             <i class="bi {{ isAdminSession ? 'bi-speedometer2' : 'bi-person-badge' }} me-1"></i>{{ isAdminSession ? 'Admin' : 'Associado' }}
                         </a>
                     </li>
