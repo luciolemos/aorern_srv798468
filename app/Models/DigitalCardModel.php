@@ -122,4 +122,3 @@ class DigitalCardModel
         return (bool) $stmt->fetchColumn();
     }
 }
-
