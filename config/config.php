@@ -7,6 +7,7 @@ $dotenv->safeLoad();
 $appEnv = strtolower((string) ($_ENV['APP_ENV'] ?? 'production'));
 $appDebug = in_array($appEnv, ['local', 'dev', 'development', 'test'], true);
 $configuredAppUrl = trim((string) ($_ENV['APP_URL'] ?? ''));
+$configuredAppBase = trim((string) ($_ENV['APP_BASE'] ?? ''));
 $appTimezone = (string) ($_ENV['APP_TIMEZONE'] ?? 'America/Sao_Paulo');
 
 date_default_timezone_set($appTimezone);
@@ -16,12 +17,14 @@ $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $forwarde
 $protocol = $https ? 'https://' : 'http://';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $requestPath = (string) (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/');
-$basePath = '/';
+$basePath = $configuredAppBase !== '' ? '/' . trim($configuredAppBase, '/') . '/' : '/';
 
-foreach (['/aorern'] as $prefix) {
-    if (str_starts_with($requestPath, $prefix)) {
-        $basePath = $prefix . '/';
-        break;
+if ($configuredAppBase === '') {
+    foreach (['/aorern'] as $prefix) {
+        if (str_starts_with($requestPath, $prefix)) {
+            $basePath = $prefix . '/';
+            break;
+        }
     }
 }
 

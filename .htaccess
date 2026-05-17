@@ -1,5 +1,17 @@
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.+)$ public/index.php?url=$1 [QSA,L]
-hp?url=$1 [QSA,L]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^public/(clear-cache\.php|debug-avatar\.php|test-avatar\.php|test-upload\.html)$ - [R=404,L]
+    RewriteRule ^public/uploads/.*\.(php|phtml|phar|php[0-9]*)$ - [F,L,NC]
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -d
+    RewriteRule ^(.+)$ public/$1 [L]
+
+    RewriteRule ^$ public/index.php [L]
+    RewriteRule ^(.+)$ public/index.php?url=$1 [QSA,L]
+</IfModule>
