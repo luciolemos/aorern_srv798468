@@ -4,6 +4,8 @@
 /.env.*
 /coverage/
 /coverage/**
+/playwright-report/
+/test-results/
 /backup_orfaos/
 /logs/*.log
 /logs/route-debug.log

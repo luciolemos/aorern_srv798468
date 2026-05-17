@@ -23,30 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
         trigger.classList.toggle('collapsed', !expanded);
     };
 
-    const keepTriggerVisibleInMobilePanel = (trigger) => {
-        if (!isMobile()) {
-            return;
-        }
-
-        const panelRect = collapseEl.getBoundingClientRect();
-        const triggerRect = trigger.getBoundingClientRect();
-        const panelTopPadding = 8;
-        const panelBottomPadding = 12;
-
-        const triggerAboveView = triggerRect.top < panelRect.top + panelTopPadding;
-        const triggerBelowView = triggerRect.bottom > panelRect.bottom - panelBottomPadding;
-
-        if (!triggerAboveView && !triggerBelowView) {
-            return;
-        }
-
-        const delta = triggerAboveView
-            ? triggerRect.top - (panelRect.top + panelTopPadding)
-            : triggerRect.bottom - (panelRect.bottom - panelBottomPadding);
-
-        collapseEl.scrollTop += delta;
-    };
-
     const closeMobileSubnavs = () => {
         collapseEl.querySelectorAll('[data-mobile-subnav].show').forEach((subnav) => {
             bootstrap.Collapse.getOrCreateInstance(subnav, { toggle: false }).hide();
@@ -90,13 +66,29 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('pointerdown', handleOutsideInteraction);
 
     collapseEl.querySelectorAll('a.nav-link, .mobile-subnav .dropdown-item, .navbar-mobile-action').forEach((link) => {
-        link.addEventListener('click', () => {
+        link.addEventListener('click', (event) => {
+            if (!isMobile()) {
+                closeMobileMenu();
+                return;
+            }
+
+            const href = link.getAttribute('href')?.trim() ?? '';
+            if (href === '' || href === '#') {
+                event.preventDefault();
+                return;
+            }
+
             closeMobileMenu();
         });
     });
 
     collapseEl.addEventListener('hide.bs.collapse', closeMobileSubnavs);
-    collapseEl.addEventListener('shown.bs.collapse', syncBodyState);
+    collapseEl.addEventListener('shown.bs.collapse', () => {
+        if (isMobile()) {
+            collapseEl.scrollTop = 0;
+        }
+        syncBodyState();
+    });
     collapseEl.addEventListener('hidden.bs.collapse', syncBodyState);
 
     mobileSubnavTriggers.forEach((trigger) => {
@@ -114,8 +106,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentSubnav.addEventListener('shown.bs.collapse', () => {
             syncMobileSubnavTrigger(trigger, true);
-            // Keep the trigger visible so users can always collapse it again.
-            keepTriggerVisibleInMobilePanel(trigger);
+            // Ensure the panel always starts from the first group (Essencial),
+            // regardless of browser scroll anchoring or active descendant focus.
+            if (isMobile()) {
+                requestAnimationFrame(() => {
+                    collapseEl.scrollTop = 0;
+                });
+            }
         });
 
         currentSubnav.addEventListener('hidden.bs.collapse', () => {
