@@ -1,0 +1,16 @@
+{
+  "name": "aorern",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Plataforma MVC em PHP/Twig para gestão pública do site e painel administrativo.",
+  "type": "commonjs",
+  "scripts": {
+    "test:ui:install": "playwright install chromium",
+    "test:ui": "playwright test",
+    "test:ui:headed": "playwright test --headed",
+    "test:ui:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}

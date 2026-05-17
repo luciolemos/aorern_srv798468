@@ -453,7 +453,7 @@
 
 .navbar-site .dropdown-mega__grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0.75rem;
     padding: 0.75rem;
 }
@@ -513,8 +513,11 @@
     }
 
     .navbar-site .dropdown-menu-institucional--mega {
-        left: 50% !important;
+        position: fixed !important;
+        top: calc(var(--public-navbar-desktop-height, 80px) + 6px) !important;
+        left: 50vw !important;
         transform: translate(-50%, 8px);
+        z-index: 1060;
     }
 
     .navbar-site .dropdown-menu.show.dropdown-menu-institucional--mega {
@@ -526,6 +529,18 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.4rem;
+    min-height: 2.25rem;
+    line-height: 1.2;
+}
+
+.navbar-site .navbar-mobile-action i,
+.navbar-site .nav-link i,
+.navbar-site .dropdown-item i,
+.navbar-site .mobile-subnav-trigger i {
+    display: inline-block;
+    line-height: 1;
+    vertical-align: middle;
 }
 
 .navbar-site .mobile-nav-parent,
@@ -573,8 +588,13 @@
         padding: 1rem 1rem 1.1rem !important;
         margin: 0 !important;
         backdrop-filter: blur(10px);
-        /* Prevent browser scroll anchoring from jumping the panel on expand/collapse. */
         overflow-anchor: none;
+    }
+
+    .navbar-site .navbar-collapse.show,
+    .navbar-site .navbar-collapse.collapsing {
+        display: block !important;
+        align-items: stretch !important;
     }
 
     .navbar-site .navbar-nav {
@@ -582,6 +602,7 @@
         padding: 0;
         margin-top: 0.25rem;
         gap: 0.45rem !important;
+        align-items: stretch !important;
     }
 
     .navbar-site .nav-item {
@@ -691,9 +712,6 @@
     }
 
     .navbar-site .mobile-subnav-trigger[aria-expanded="true"] {
-        position: sticky;
-        top: 0;
-        z-index: 3;
         background: rgba(63, 79, 34, 0.96) !important;
     }
 
@@ -713,6 +731,21 @@
         background: rgba(255,255,255,0.10);
         color: var(--color-white);
         transform: none;
+    }
+
+    .navbar-site .mobile-subnav-group-title {
+        list-style: none;
+        margin: 0.7rem 0 0.45rem;
+        padding: 0 0.2rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: rgba(214, 227, 182, 0.9);
+    }
+
+    .navbar-site .mobile-subnav-group-title:first-of-type {
+        margin-top: 0.2rem;
     }
 
     .navbar-site .nav-item-auth-mobile {
