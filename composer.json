@@ -22,6 +22,7 @@
     "App\\Tests\\": "tests/"
   },
   "require": {
+    "php": "^8.3 || ^8.4",
     "vlucas/phpdotenv": "^5.5",
     "phpmailer/phpmailer": "^6.8",
     "ext-pdo": "*",
@@ -29,14 +30,16 @@
     "twig/twig": "^3.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^10.0"
+    "phpunit/phpunit": "^10.5.62"
   },
   "scripts": {
     "test": "phpunit --coverage-html coverage"
   },
-  "post-install-cmd": [
-    "@test",
-    "echo 'Projeto instalado com sucesso!'"
-  ]
+  "config": {
+    "platform": {
+      "php": "8.3.0"
+    },
+    "sort-packages": true
+  }
 
 }
