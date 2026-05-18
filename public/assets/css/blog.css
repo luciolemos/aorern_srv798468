@@ -5,7 +5,30 @@
 }
 
 .blog-feature-section.site-hero {
-    background: var(--site-hero-background);
+    background: var(--inst-hero-gradient);
+    position: relative;
+}
+
+.blog-feature-section.site-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        var(--site-hero-pattern-a),
+        var(--site-hero-pattern-b),
+        var(--site-hero-pattern-c);
+    opacity: var(--site-hero-pattern-opacity);
+    pointer-events: none;
+}
+
+.blog-feature-section.site-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
 }
 
 .blog-feature-actions .btn {

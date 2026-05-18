@@ -53,3 +53,39 @@ test('mobile institutional submenu opens from the parent item and can collapse',
 
   expect(consoleIssues).toEqual([]);
 });
+
+test('mobile menu remains visible when opened after scrolling', async ({ page }) => {
+  await page.goto('./');
+
+  await page.evaluate(() => window.scrollTo(0, 520));
+  await page.waitForTimeout(100);
+
+  const navbar = page.locator('.navbar-site');
+  const menuPanel = page.locator('#navbarSite');
+
+  await page.locator('.navbar-toggler').click();
+  await expect(menuPanel).toHaveClass(/show/);
+  await expect(page.locator('.nav-link', { hasText: 'Início' })).toBeVisible();
+
+  const geometry = await page.evaluate(() => {
+    const navbarEl = document.querySelector('.navbar-site');
+    const panelEl = document.querySelector('#navbarSite');
+
+    return {
+      scrollY: window.scrollY,
+      navbarPosition: navbarEl ? getComputedStyle(navbarEl).position : null,
+      navbarTop: navbarEl?.getBoundingClientRect().top ?? null,
+      navbarBottom: navbarEl?.getBoundingClientRect().bottom ?? null,
+      panelTop: panelEl?.getBoundingClientRect().top ?? null,
+    };
+  });
+
+  expect(geometry.scrollY).toBeGreaterThan(0);
+  expect(geometry.navbarPosition).toBe('fixed');
+  expect(geometry.navbarTop).toBe(0);
+  expect(geometry.navbarBottom).toBeGreaterThan(0);
+  expect(geometry.panelTop).toBeGreaterThanOrEqual(geometry.navbarBottom);
+
+  await navbar.locator('.navbar-toggler').click();
+  await expect(menuPanel).not.toHaveClass(/show/);
+});

@@ -4,7 +4,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/home.css?v=20260516-bimtz-banner4">     
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/home.css?v=20260517-docs-subtitle-inline-1">     
 {% endblock %}
 
 {% block scripts %}
@@ -210,7 +210,7 @@
                 align: 'center',
                 kicker_class: 'text-muted',
                 title_class: 'text-primary',
-                subtitle_class: 'text-muted',
+                subtitle_class: 'text-muted home-subtitle-full-natural',
                 extra_class: 'mb-5'
             } %}
 
@@ -322,13 +322,13 @@
     <section class="home-sponsors home-section py-5">
         <div class="container">
             {% include 'site/components/section-header.twig' with {
-                kicker: 'Rede de apoio',
-                title: 'Colaboradores da AORE/RN',
-                subtitle: 'Empresas e instituições que contribuem para fortalecer as ações da associação.',
+                kicker: 'ANUNCIATES',
+                title: 'Encontre empresas e prestadores de serviços que anunciam na AORE/RN',
+                subtitle: 'Empresas e instituições que contribuem para fortalecer as ações da Associação.',
                 align: 'center',
                 kicker_class: 'text-muted',
                 title_class: 'text-primary',
-                subtitle_class: 'text-muted home-sponsors-subtitle-nowrap',
+                subtitle_class: 'text-muted home-subtitle-full-natural',
                 extra_class: 'mb-4'
             } %}
 
@@ -451,7 +451,7 @@
                 align: 'center',
                 kicker_class: 'text-muted',
                 title_class: 'text-primary',
-                subtitle_class: 'text-muted',
+                subtitle_class: 'text-muted home-subtitle-full-natural',
                 extra_class: 'mb-5'
             } %}
             <div class="row g-4">

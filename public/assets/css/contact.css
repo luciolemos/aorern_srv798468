@@ -4,16 +4,32 @@
 }
 
 .contact-hero {
-    background: var(--site-hero-background) !important;
+    background: var(--inst-hero-gradient) !important;
     min-height: calc(100vh - 120px);
     padding: clamp(3rem, 6vw, 6rem) 0;
+    position: relative;
 }
 
-.contact-hero .site-hero-pattern {
-    background: var(--site-hero-pattern-a),
-                var(--site-hero-pattern-b),
-                var(--site-hero-pattern-c);
+.contact-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        var(--site-hero-pattern-a),
+        var(--site-hero-pattern-b),
+        var(--site-hero-pattern-c);
     opacity: var(--site-hero-pattern-opacity);
+    pointer-events: none;
+}
+
+.contact-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
 }
 
 @media (min-width: 992px) {

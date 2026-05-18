@@ -39,14 +39,14 @@
                     {% endif %}
                     {% include 'site/components/button.twig' with {
                         href: page.slug == 'hino' ? page.download_pdf_url|default(BASE_URL ~ 'assets/docs/cancao_oficial_aore.pdf') : BASE_URL ~ 'institucional',
-                        label: page.slug == 'hino' ? 'Baixar Hino da AORE/RN (.pdf)' : 'Ver todas as seções',
+                        label: page.slug == 'hino' ? 'Baixar Canção da AORE/RN (.pdf)' : 'Ver todas as seções',
                         icon: page.slug == 'hino' ? 'bi-file-earmark-arrow-down' : 'bi-view-list',
                         variant: 'light-outline',
                         size: 'lg',
                         attrs: page.slug == 'hino'
                             ? {
                                 'download': page.download_pdf_name|default('hino-aorern.pdf'),
-                                'aria-label': 'Baixar PDF do Hino da AORE/RN'
+                                'aria-label': 'Baixar PDF da Canção da AORE/RN'
                             }
                             : {}
                     } %}
@@ -178,22 +178,25 @@
                     <div class="inst-lyrics">
                         <div class="d-flex align-items-center gap-2 mb-3">
                             <i class="bi bi-music-note-beamed fs-3 text-inst-primary"></i>
-                            <h3 class="h5 fw-bold mb-0">{{ page.slug == 'hino' ? 'Letra da canção da AORE/RN' : 'Letra do hino' }}</h3>
+                            <h3 class="h5 fw-bold mb-0">{{ page.lyrics_heading|default(page.slug == 'hino' ? 'Letra da Canção da AORE/RN' : 'Letra do hino') }}</h3>
                         </div>
                         {% if page.lyrics_note %}
                             <div class="alert alert-warning mb-4">{{ page.lyrics_note }}</div>
                         {% endif %}
-                        {% if page.slug == 'hino' %}
-                            <div class="inst-audio-player mb-3" aria-label="Canção oficial da AORE/RN">
+                        {% set audioUrl = page.audio_url|default(page.slug == 'hino' ? (BASE_URL ~ 'assets/docs/audio.mp4') : null) %}
+                        {% if audioUrl %}
+                            <div class="inst-audio-player mb-3" aria-label="{{ page.audio_aria_label|default('Canção oficial') }}">
                                 <p class="inst-audio-player__label mb-1">
                                     <i class="bi bi-play-circle me-1"></i>
-                                    Ouça a canção oficial
+                                    {{ page.audio_label|default('Ouça a canção oficial') }}
                                 </p>
                                 <audio controls preload="metadata" class="w-100">
-                                    <source src="{{ BASE_URL }}assets/docs/audio.mp4" type="audio/mp4">
+                                    <source src="{{ audioUrl }}" type="{{ page.audio_type|default('audio/mpeg') }}">
                                     Seu navegador não suporta reprodução de áudio.
                                 </audio>
                             </div>
+                        {% endif %}
+                        {% if page.slug == 'hino' %}
                             <div class="inst-lyrics-flow">
                                 {% for stanza in page.lyrics %}
                                     {% set isChorus = stanza.title|lower == 'refrão' %}
@@ -209,7 +212,7 @@
                                     {% set isChorus = stanza.title|lower == 'refrão' %}
                                     <div class="{{ isChorus ? 'col-12' : 'col-md-6' }}">
                                         <article class="inst-lyrics-card h-100 {{ isChorus ? 'inst-lyrics-card--chorus' : 'inst-lyrics-card--verse' }}">
-                                            <h4 class="h6 text-uppercase {{ isChorus ? 'text-white' : 'text-inst-primary' }}">{{ stanza.title }}</h4>
+                                            <h4 class="h6 text-uppercase {{ isChorus ? 'inst-lyrics-title--chorus' : 'text-inst-primary' }}">{{ stanza.title }}</h4>
                                             <p class="mb-0 {{ isChorus ? 'inst-lyrics-text--chorus' : 'inst-lyrics-text--verse' }}">{{ stanza.lines|join('<br>')|raw }}</p>
                                         </article>
                                     </div>
