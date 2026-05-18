@@ -217,7 +217,7 @@ class InstitucionalController extends Controller
             ],
             [
                 'slug' => 'hino',
-                'title' => 'Hino da AORE/RN',
+                'title' => 'Canção da AORE/RN',
                 'description' => 'Letra oficial e orientações de execução.',
                 'icon' => 'bi-music-note-beamed',
                 'url' => BASE_URL . 'institucional/hino',
@@ -228,6 +228,13 @@ class InstitucionalController extends Controller
                 'description' => 'Referência histórica da formação de oficiais da reserva.',
                 'icon' => 'bi-award',
                 'url' => BASE_URL . 'institucional/npor/patrono',
+            ],
+            [
+                'slug' => 'npor-cancao',
+                'title' => 'NPOR - Canção',
+                'description' => 'Letra oficial da Canção do NPOR.',
+                'icon' => 'bi-music-note-list',
+                'url' => BASE_URL . 'institucional/npor/cancao',
             ],
             [
                 'slug' => 'links',
@@ -595,7 +602,7 @@ class InstitucionalController extends Controller
     public function hino(): void
     {
         $this->renderPage('hino', [
-            'title' => 'Hino da AORE/RN',
+            'title' => 'Canção da AORE/RN',
             'badge' => 'Memória e Cultura',
             'tagline' => 'Associação dos Oficiais da Reserva do Exército do Rio Grande do Norte',
             'lead' => 'Composição institucional concebida para execução em contexto marcial, solene e progressivo, adequada a solenidades, formaturas, encontros associativos e atos cívicos da AORE/RN.',
@@ -801,7 +808,175 @@ class InstitucionalController extends Controller
             ],
             'resources' => [
                 ['label' => 'Selo Institucional', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/brasao', 'external' => false],
-                ['label' => 'Hino da AORE/RN', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/hino', 'external' => false],
+                ['label' => 'Canção da AORE/RN', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/hino', 'external' => false],
+            ],
+        ]);
+    }
+
+    public function cancaoNpor(): void
+    {
+        $this->renderPage('npor-cancao', [
+            'title' => 'Canção do NPOR',
+            'badge' => 'NPOR',
+            'tagline' => 'A “Canção do NPOR/16º BI Mtz” ressalta o papel essencial da reserva militar como uma força ativa e vigilante, indo além do simples apoio à tropa regular.',
+            'lead' => 'O verso “Reforçando os da ativa na batalha Com glória, com orgulho excelso e ledo” mostra que os oficiais da reserva compartilham o mesmo compromisso e honra dos militares da ativa, reforçando a ideia de unidade e prontidão entre todos que servem ao Exército Brasileiro.',
+            'audio_label' => 'Ouça a Canção do NPOR',
+            'audio_aria_label' => 'Canção do NPOR em áudio',
+            'audio_type' => 'audio/mpeg',
+            'audio_url' => BASE_URL . 'assets/audio/cancao-npor-16bi-mtz.mp3',
+            'lyrics_heading' => 'Letra da Canção do NPOR',
+            'lyrics' => [
+                [
+                    'title' => '1ª Parte',
+                    'lines' => [
+                        'Nós somos a reserva atenta e forte,',
+                        'Em guarda à egrégia Pátria Brasileira;',
+                        'Dispostos a lutar até morte,',
+                        'Unidos em defesa da bandeira.',
+                        'Reforçando os da ativa na batalha',
+                        'Com glória, com orgulho excelso e ledo,',
+                        'Iremos ao encontro da metralha,',
+                        'Com viva fé, sem mácula e sem medo.',
+                    ],
+                ],
+                [
+                    'title' => 'Refrão',
+                    'lines' => [
+                        'Eia, avante, com alma ungida e pura!',
+                        'Em defesa da nossa Pátria amada,',
+                        'Na honradez, no civismo e na bravura,',
+                        'Afiemos nossa espada!',
+                    ],
+                ],
+                [
+                    'title' => '2ª Parte',
+                    'lines' => [
+                        'Honremos a memória de alto nível',
+                        'Do nosso fundador, patrono e guia,',
+                        'Padrão de militar inconfundível',
+                        'Espírito de nobre hierarquia.',
+                        'Imitemos com religiosa estima,',
+                        'Com fibra, com heróica devoção,',
+                        'O bravo Coronel Correia Lima,',
+                        'Exemplo de soldado e cidadão!',
+                    ],
+                ],
+                [
+                    'title' => 'Refrão',
+                    'lines' => [
+                        'Eia, avante, com alma ungida e pura!',
+                        'Em defesa da nossa Pátria amada,',
+                        'Na honradez, no civismo e na bravura,',
+                        'Afiemos nossa espada!',
+                    ],
+                ],
+            ],
+            'resources' => [
+                ['label' => 'Abrir áudio (MP3)', 'type' => 'Arquivo local', 'url' => BASE_URL . 'assets/audio/cancao-npor-16bi-mtz.mp3', 'external' => true],
+                ['label' => 'NPOR - Patrono', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/npor/patrono', 'external' => false],
+                ['label' => 'Falar com a AORE/RN', 'type' => 'Contato', 'url' => BASE_URL . 'contact', 'external' => false],
+            ],
+        ]);
+    }
+
+    public function brasaoNpor(): void
+    {
+        $this->renderPage('npor-brasao', [
+            'title' => 'NPOR - Distintivo de Órgão de Formação',
+            'badge' => 'NPOR',
+            'tagline' => 'Distintivo e simbologia institucional vinculados à tradição de formação do Oficial da Reserva.',
+            'lead' => 'O distintivo de órgão de formação do NPOR sintetiza valores como honra, disciplina, liderança e compromisso com a Pátria. Seu uso em ambientes institucionais reforça a identidade dos ex-alunos e a continuidade do legado cívico-militar da formação R/2.',
+            'sections' => [
+                [
+                    'title' => 'Representação institucional',
+                    'description' => 'O distintivo cumpre papel de identificação e pertencimento no contexto dos núcleos de formação de oficiais da reserva.',
+                    'icon' => 'bi-shield-check',
+                    'items' => [
+                        'Marca visual associada à tradição dos NPOR no Exército Brasileiro.',
+                        'Elemento de reconhecimento entre ex-alunos, instrutores e instituições parceiras.',
+                        'Referência simbólica de unidade, disciplina e compromisso com o serviço à Nação.',
+                    ],
+                ],
+                [
+                    'title' => 'Uso em comunicações e memória',
+                    'description' => 'A aplicação do distintivo deve preservar contexto, dignidade e coerência institucional.',
+                    'icon' => 'bi-building-check',
+                    'items' => [
+                        'Emprego em materiais comemorativos, apresentações institucionais e registros históricos.',
+                        'Uso em publicações de caráter associativo e cívico, sempre com respeito ao protocolo.',
+                        'Valorização da memória dos oficiais da reserva formados no NPOR.',
+                    ],
+                ],
+            ],
+            'media' => [
+                'type' => 'image',
+                'src' => BASE_URL . 'assets/images/distintivo_npor1-820.webp',
+                'alt' => 'Distintivo de Órgão de Formação do NPOR',
+                'caption' => 'Distintivo do NPOR em destaque na página institucional.',
+            ],
+            'resources' => [
+                ['label' => 'NPOR - Patrono', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/npor/patrono', 'external' => false],
+                ['label' => 'Canção do NPOR', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/npor/cancao', 'external' => false],
+                ['label' => 'Canção da AORE/RN', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/hino', 'external' => false],
+            ],
+        ]);
+    }
+
+    public function historicoNpor(): void
+    {
+        $this->renderPage('npor-historico', [
+            'title' => 'NPOR - Histórico de Criação',
+            'badge' => 'NPOR',
+            'tagline' => 'Referências de criação, missão e organização do Núcleo de Preparação de Oficiais da Reserva.',
+            'lead' => 'Conteúdo institucional sobre o NPOR do 16º Batalhão de Infantaria Motorizado, incluindo histórico, missão, critérios de seleção e organização do curso.',
+            'sections' => [
+                [
+                    'title' => '9.5.1 - O QUE SÃO?',
+                    'description' => 'São estabelecimentos de ensino militar de formação de grau médio, da linha de ensino bélico.',
+                    'icon' => 'bi-book',
+                    'items' => [
+                        'Destinados a formar o Aspirante-a-Oficial da Reserva de 2ª classe.',
+                        'Habilitam o formando a ingressar no Corpo de Oficiais da Reserva do Exército (CORE).',
+                        'Contribuem para o desenvolvimento da Doutrina Militar na área de sua competência.',
+                    ],
+                ],
+                [
+                    'title' => '9.5.2 - HISTÓRICO',
+                    'description' => 'Idealizado pelo Capitão Correia Lima, foi criado, em 1926, o Centro de Preparação de Oficiais da Reserva (CPOR).',
+                    'icon' => 'bi-clock-history',
+                    'items' => [
+                        'Mais tarde, alguns dos vários Centros de Preparação de Oficiais da Reserva foram desmembrados, criando-se os Núcleos de Preparação de Oficiais da Reserva (NPOR).',
+                        'O Núcleo de Preparação de Oficiais da Reserva do 16º Batalhão de Infantaria Motorizado surgiu na década de 1940, por necessidade do Exército Brasileiro para completar seu quadro de oficiais, durante a II Guerra Mundial.',
+                        'No período do pós-guerra o Núcleo teve suas atividades de instrução paralisadas, só retomando-as em 1962, por solicitação da Universidade Federal do Rio Grande do Norte (UFRN), como forma dos universitários potiguares cumprirem o Serviço Militar obrigatório.',
+                    ],
+                ],
+                [
+                    'title' => '9.5.3 - MISSÃO E CRITÉRIO DE SELEÇÃO',
+                    'description' => 'O NPOR tem por missão a formação moral, física, técnica e profissional do Oficial Subalterno da Reserva do Exército Brasileiro.',
+                    'icon' => 'bi-bullseye',
+                    'items' => [
+                        'Preparação para o desempenho de funções elementares de tropa, na paz ou na guerra.',
+                        'A seleção dos alunos, dentre os jovens que se alistam anualmente, segue normas estabelecidas pela instituição.',
+                        'O candidato deve, obrigatoriamente, estar matriculado em um curso superior.',
+                        'Mérito intelectual e físico são fatores condicionantes para o ingresso desses jovens no Exército Brasileiro.',
+                    ],
+                ],
+                [
+                    'title' => '9.5.4 - ORGANIZAÇÃO DO CURSO',
+                    'description' => 'O curso do NPOR compreende dois períodos de instrução: Período Básico e Período de Formação e Aplicação.',
+                    'icon' => 'bi-diagram-3',
+                    'items' => [
+                        'O Período de Formação e Aplicação é complementado por um Estágio de Instrução Preparatório para Oficiais Temporários (EIPOT), de duração aproximada de três meses, realizado apenas pelos Aspirantes-a-oficial convocados para o serviço ativo do Exército.',
+                        'Concluído o EIPOT, o Aspirante-a-oficial estará em condições de ser promovido a 2º Tenente e a ingressar no Estágio de Instrução Complementar (EIC), com duração de três anos, quando estará apto à promoção a 1º Tenente.',
+                        'O período máximo de permanência na Força Terrestre é de oito anos, incluindo o período de formação.',
+                        'Desde a sua criação, o NPOR do 16º Batalhão de Infantaria Motorizado já formou 1.332 jovens da sociedade potiguar.',
+                    ],
+                ],
+            ],
+            'resources' => [
+                ['label' => 'NPOR - Patrono', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/npor/patrono', 'external' => false],
+                ['label' => 'Canção do NPOR', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/npor/cancao', 'external' => false],
+                ['label' => 'NPOR - Distintivo', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/npor/brasao', 'external' => false],
             ],
         ]);
     }

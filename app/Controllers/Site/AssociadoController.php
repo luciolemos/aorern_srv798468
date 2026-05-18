@@ -245,10 +245,8 @@ class AssociadoController extends Controller
                     $this->pessoal->atualizarFoto((int) $registroAssociado['id'], $avatarPath);
                 }
 
-                $solicitacaoVinculada = $this->applications->buscarPorUserId((int) $user['id']);
-                if ($solicitacaoVinculada) {
-                    $this->applications->atualizar((int) $solicitacaoVinculada['id'], ['avatar' => $avatarPath]);
-                }
+                // A foto da solicitação de filiação deve ser preservada como evidência
+                // do cadastro original e não pode ser sobrescrita por atualização de perfil.
             } else {
                 $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Não foi possível atualizar a foto. Envie um arquivo JPG, PNG ou WebP válido.'];
                 header('Location: ' . BASE_URL . 'associado');

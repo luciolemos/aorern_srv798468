@@ -30,8 +30,7 @@
 
 {% block styles %}
     {{ parent() }}
-        <link rel="stylesheet" href="{{ BASE_URL }}assets/css/contact.css?v=20260304-panel2">
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <link rel="stylesheet" href="{{ BASE_URL }}assets/css/contact.css?v=20260518-hero-local-1">
         <style>
             .contact-whatsapp-grid {
                 display: grid;
@@ -84,6 +83,8 @@
         (function () {
             var BASE_WIDTH = 304;
             var BASE_HEIGHT = 78;
+            var recaptchaScriptLoading = false;
+            var recaptchaLoaded = false;
 
             function applyRecaptchaWidth() {
                 var wrappers = document.querySelectorAll('.recaptcha-wrap .g-recaptcha');
@@ -109,6 +110,45 @@
                 });
             }
 
+            function renderRecaptchaIfNeeded() {
+                var captcha = document.querySelector('.recaptcha-wrap .g-recaptcha');
+                if (!captcha || captcha.dataset.rendered === '1') {
+                    return;
+                }
+
+                if (window.grecaptcha && typeof window.grecaptcha.render === 'function') {
+                    window.grecaptcha.render(captcha, {
+                        sitekey: captcha.dataset.sitekey,
+                        theme: captcha.dataset.theme || 'light',
+                        size: captcha.dataset.size || 'normal'
+                    });
+                    captcha.dataset.rendered = '1';
+                    waitAndApply(0);
+                }
+            }
+
+            function loadRecaptchaOnDemand() {
+                if (recaptchaLoaded || recaptchaScriptLoading) {
+                    renderRecaptchaIfNeeded();
+                    return;
+                }
+
+                recaptchaScriptLoading = true;
+                var script = document.createElement('script');
+                script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+                script.async = true;
+                script.defer = true;
+                script.onload = function () {
+                    recaptchaLoaded = true;
+                    recaptchaScriptLoading = false;
+                    renderRecaptchaIfNeeded();
+                };
+                script.onerror = function () {
+                    recaptchaScriptLoading = false;
+                };
+                document.head.appendChild(script);
+            }
+
             function waitAndApply(attempt) {
                 var rendered = document.querySelector('.recaptcha-wrap .g-recaptcha > div');
                 applyRecaptchaWidth();
@@ -120,16 +160,50 @@
             }
 
             document.addEventListener('DOMContentLoaded', function () {
-                waitAndApply(0);
                 window.addEventListener('resize', applyRecaptchaWidth);
+
+                var form = document.querySelector('form[action$=\"contact/send\"]');
+                if (!form) {
+                    return;
+                }
+
+                form.addEventListener('focusin', loadRecaptchaOnDemand, { once: true });
+                form.addEventListener('pointerdown', loadRecaptchaOnDemand, { once: true });
+                form.addEventListener('submit', loadRecaptchaOnDemand);
+            });
+        })();
+    </script>
+    <script>
+        (function () {
+            const trigger = document.querySelector('[data-load-osm-map]');
+            const frameHost = document.querySelector('[data-osm-frame-host]');
+            if (!trigger || !frameHost) return;
+
+            trigger.addEventListener('click', function () {
+                if (frameHost.dataset.loaded === '1') return;
+                const src = frameHost.getAttribute('data-src');
+                if (!src) return;
+
+                const iframe = document.createElement('iframe');
+                iframe.src = src;
+                iframe.width = '600';
+                iframe.height = '450';
+                iframe.style.border = '0';
+                iframe.loading = 'lazy';
+                iframe.referrerPolicy = 'no-referrer-when-downgrade';
+                iframe.setAttribute('aria-label', 'Mapa da localização da AORE/RN');
+
+                frameHost.innerHTML = '';
+                frameHost.appendChild(iframe);
+                frameHost.dataset.loaded = '1';
+                trigger.classList.add('d-none');
             });
         })();
     </script>
 {% endblock %}
 
 {% block content %}
-    <section class="contact-hero site-hero hero-form-layout">
-        <div class="site-hero-pattern d-none d-lg-block"></div>
+    <section class="contact-hero site-hero inst-hero hero-form-layout">
         <div class="container position-relative">
                 <div class="row align-items-center g-5">
                     <div class="col-lg-6 hero-content">
@@ -405,8 +479,18 @@
                 heading_level: 2,
                 extra_class: 'mb-3'
             } %}
-            <div class="ratio ratio-21x9 rounded overflow-hidden shadow-sm">
-                <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-35.20231941695056%2C-5.806007741833617%2C-35.19431941695056%2C-5.800007741833617&layer=mapnik&marker=-5.803007741833617%2C-35.19831941695056" width="600" height="450" style="border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div
+                class="ratio ratio-21x9 rounded overflow-hidden shadow-sm bg-light d-flex align-items-center justify-content-center"
+                data-osm-frame-host
+                data-loaded="0"
+                data-src="https://www.openstreetmap.org/export/embed.html?bbox=-35.20231941695056%2C-5.806007741833617%2C-35.19431941695056%2C-5.800007741833617&layer=mapnik&marker=-5.803007741833617%2C-35.19831941695056"
+            >
+                <div class="text-center px-3">
+                    <p class="mb-2 text-muted">Mapa sob demanda para melhorar o carregamento inicial.</p>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-load-osm-map>
+                        <i class="bi bi-map me-1"></i> Carregar mapa
+                    </button>
+                </div>
             </div>
             <div class="contact-map-actions mt-3">
                 {% include 'site/components/button.twig' with {

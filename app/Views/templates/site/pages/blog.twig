@@ -4,7 +4,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/blog.css?v=20260304-hero1">
+    <link rel="stylesheet" href="{{ BASE_URL }}assets/css/blog.css?v=20260518-hero-local-1">
 {% endblock %}
 
 {% block content %}
@@ -18,8 +18,7 @@
 
     {% if has_posts %}
         {% if show_featured %}
-        <section class="blog-feature-section site-hero">
-            <div class="site-hero-pattern"></div>
+        <section class="blog-feature-section site-hero inst-hero">
             <div class="container position-relative">
                 <div class="row justify-content-center g-5">
                     <div class="col-lg-7 hero-content">

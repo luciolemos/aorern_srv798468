@@ -474,6 +474,12 @@
     white-space: nowrap;
 }
 
+@media (max-width: 767.98px) {
+    .register-step-panel__description--single-line {
+        white-space: normal;
+    }
+}
+
 .register-step-actions {
     display: flex;
     justify-content: space-between;

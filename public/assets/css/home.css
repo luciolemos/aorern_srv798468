@@ -406,20 +406,17 @@
     background: linear-gradient(180deg, #f6f8f4 0%, #ffffff 100%);
 }
 
-.home-sponsors-subtitle-nowrap {
+.home-subtitle-left-natural {
+    text-align: left;
+}
+
+.home-subtitle-full-natural {
+    display: block;
+    width: 100%;
+    max-width: none;
     white-space: normal;
-}
-
-@media (min-width: 768px) {
-    .home-sponsors-subtitle-nowrap {
-        white-space: nowrap;
-    }
-}
-
-@media (max-width: 767.98px) {
-    .home-sponsors-subtitle-nowrap {
-        white-space: normal;
-    }
+    text-align: left;
+    text-wrap: pretty;
 }
 
 .home-sponsors-shell {
