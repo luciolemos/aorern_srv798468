@@ -1,0 +1,261 @@
+{
+    "created_at": "2026-05-18T07:54:31-03:00",
+    "gallery_categories": [
+        {
+            "id": 1,
+            "nome": "Operações aquáticas",
+            "slug": "operacoes-aquaticas",
+            "color": "#ff0000"
+        },
+        {
+            "id": 2,
+            "nome": "Adestramento",
+            "slug": "adestramento",
+            "color": "#df6301"
+        },
+        {
+            "id": 3,
+            "nome": "Busca e resgate",
+            "slug": "busca-e-resgate",
+            "color": "#ffffff"
+        },
+        {
+            "id": 4,
+            "nome": "Formaturas",
+            "slug": "formaturas",
+            "color": "#269717"
+        },
+        {
+            "id": 5,
+            "nome": "Cursos CBMRN",
+            "slug": "cursos-cbmrn",
+            "color": "#28d7ba"
+        },
+        {
+            "id": 6,
+            "nome": "Torneios",
+            "slug": "torneios",
+            "color": "#df01cd"
+        },
+        {
+            "id": 7,
+            "nome": "Estágios CBMRN",
+            "slug": "estagios-cbmrn",
+            "color": "#749400"
+        },
+        {
+            "id": 8,
+            "nome": "Combate a incêndios urbanos e florestais",
+            "slug": "combate-a-incendios",
+            "color": "#db1a1a"
+        },
+        {
+            "id": 9,
+            "nome": "Resgate veicular",
+            "slug": "resgate-veicular",
+            "color": "#86df01"
+        },
+        {
+            "id": 10,
+            "nome": "Salvamento aquático em áreas alagadas",
+            "slug": "salvamento-aquatico",
+            "color": "#01dcdf"
+        },
+        {
+            "id": 11,
+            "nome": "Cooperação com outras FS",
+            "slug": "cooperacao",
+            "color": "#df01af"
+        },
+        {
+            "id": 12,
+            "nome": "Cursos de formação e especialização",
+            "slug": "curso-formacao",
+            "color": "#201e1e"
+        },
+        {
+            "id": 13,
+            "nome": "Atividades administrativas técnicas",
+            "slug": "atividades-administrativas",
+            "color": "#0109df"
+        },
+        {
+            "id": 14,
+            "nome": "Campanhas de prevenção",
+            "slug": "campanhas-prevencao",
+            "color": "#df6301"
+        },
+        {
+            "id": 15,
+            "nome": "Entrega de medalhas e condecorações",
+            "slug": "medalhas-condecoracoes",
+            "color": "#cac1b9"
+        },
+        {
+            "id": 16,
+            "nome": "Datas comemorativas",
+            "slug": "datas",
+            "color": "#69635d"
+        },
+        {
+            "id": 17,
+            "nome": "Vistorias técnicas",
+            "slug": "vistorias",
+            "color": "#dd9e6e"
+        }
+    ],
+    "gallery_images": [
+        {
+            "id": 1,
+            "category_id": 2,
+            "titulo": "Circuito de obediência integrada",
+            "descricao": "Binômios treinam comandos de precisão com foco em controle de faro.",
+            "url": "https:\/\/plus.unsplash.com\/premium_photo-1669277336130-f5efae4b4d60?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-01-05 08:10:00"
+        },
+        {
+            "id": 2,
+            "category_id": 3,
+            "titulo": "Simulado urbano de busca",
+            "descricao": "Equipe K9 varre corredores estreitos para localizar vítimas sinalizadas.",
+            "url": "https:\/\/images.unsplash.com\/photo-1554956615-1ba6dc39921b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-01-07 09:20:00"
+        },
+        {
+            "id": 3,
+            "category_id": 10,
+            "titulo": "Reconhecimento em píer alagado",
+            "descricao": "Cão operacional se adapta à plataforma molhada antes de embarcar.",
+            "url": "https:\/\/images.unsplash.com\/photo-1558788353-f76d92427f16?q=80&w=738&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-01-09 07:45:00"
+        },
+        {
+            "id": 4,
+            "category_id": 8,
+            "titulo": "Briefing com guarnição de incêndio",
+            "descricao": "Mascote tático acompanha dupla que testará equipamentos térmicos.",
+            "url": "https:\/\/images.unsplash.com\/photo-1554235386-82e08c80c3ef?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-01-11 18:30:00"
+        },
+        {
+            "id": 5,
+            "category_id": 9,
+            "titulo": "Inspeção em cenário veicular",
+            "descricao": "Faro direcionado para detecção de fluidos e ocupantes presos.",
+            "url": "https:\/\/images.unsplash.com\/photo-1477973770766-6228305816df?auto=format&fit=crop&w=1600&h=1067&q=80",
+            "data_upload": "2025-01-13 10:15:00"
+        },
+        {
+            "id": 6,
+            "category_id": 7,
+            "titulo": "Estágio integrado com novos condutores",
+            "descricao": "Instrutores apresentam protocolos de segurança para o turno de estágio.",
+            "url": "https:\/\/images.unsplash.com\/photo-1537151608828-ea2b11777ee8?q=80&w=694&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-01-15 16:20:00"
+        },
+        {
+            "id": 7,
+            "category_id": 5,
+            "titulo": "Oficina de atendimento pré-hospitalar",
+            "descricao": "Alunos praticam contenção de vítimas com o apoio dos cães certificados.",
+            "url": "https:\/\/images.unsplash.com\/photo-1444212477490-ca407925329e?auto=format&fit=crop&w=1600&h=1067&q=80",
+            "data_upload": "2025-01-17 08:50:00"
+        },
+        {
+            "id": 8,
+            "category_id": 11,
+            "titulo": "Operação conjunta com Polícia Rodoviária",
+            "descricao": "Briefing alinhou sinais de comunicação entre forças estaduais.",
+            "url": "https:\/\/images.unsplash.com\/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=1600&h=1067&q=80",
+            "data_upload": "2025-01-19 06:40:00"
+        },
+        {
+            "id": 9,
+            "category_id": 1,
+            "titulo": "Patrulha costeira com bote inflável",
+            "descricao": "Equipe testa equilíbrio antes do embarque para varredura litorânea.",
+            "url": "https:\/\/images.unsplash.com\/photo-1543606818-2e9bf5e642f3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-01-21 07:05:00"
+        },
+        {
+            "id": 10,
+            "category_id": 14,
+            "titulo": "Campanha “Adote atitudes seguras”",
+            "descricao": "K9 auxilia em ação educativa para comunidades ribeirinhas.",
+            "url": "https:\/\/plus.unsplash.com\/premium_photo-1663127271882-e1be1f18f153?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-01-23 09:55:00"
+        },
+        {
+            "id": 11,
+            "category_id": 12,
+            "titulo": "Módulo de planejamento de missões",
+            "descricao": "Instrutores avaliam checklists digitais ao lado dos binômios.",
+            "url": "https:\/\/images.unsplash.com\/photo-1518020382113-a7e8fc38eac9?auto=format&fit=crop&w=1600&h=1067&q=80",
+            "data_upload": "2025-01-25 11:25:00"
+        },
+        {
+            "id": 12,
+            "category_id": 4,
+            "titulo": "Formatura da turma K9\/2025",
+            "descricao": "Cerimônia reconhece condutores e cães certificados no trimestre.",
+            "url": "https:\/\/images.unsplash.com\/photo-1525253086316-d0c936c814f8?auto=format&fit=crop&w=1600&h=1067&q=80",
+            "data_upload": "2025-01-27 19:10:00"
+        },
+        {
+            "id": 13,
+            "category_id": 16,
+            "titulo": "Celebração do Dia Nacional do Bombeiro",
+            "descricao": "Demonstração pública reuniu famílias e equipes operacionais.",
+            "url": "https:\/\/images.unsplash.com\/photo-1656191166912-297d52280911?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-07-02 10:00:00"
+        },
+        {
+            "id": 14,
+            "category_id": 15,
+            "titulo": "Entrega de medalha Mérito K9",
+            "descricao": "Cão Hera recebe honraria por apoio em missão de longa duração.",
+            "url": "https:\/\/images.unsplash.com\/photo-1523626797181-8c5ae80d40c2?auto=format&fit=crop&w=1600&h=1067&q=80",
+            "data_upload": "2025-02-01 17:45:00"
+        },
+        {
+            "id": 15,
+            "category_id": 13,
+            "titulo": "Planejamento administrativo do canil",
+            "descricao": "Time revisa matrizes de risco e cronogramas de manutenção.",
+            "url": "https:\/\/images.unsplash.com\/photo-1530281700549-e82e7bf110d6?auto=format&fit=crop&w=1600&h=1067&q=80",
+            "data_upload": "2025-02-03 15:00:00"
+        },
+        {
+            "id": 16,
+            "category_id": 6,
+            "titulo": "Torneio interno de agilidade",
+            "descricao": "Prova cronometrada avalia confiança em obstáculos elevados.",
+            "url": "https:\/\/images.unsplash.com\/photo-1575785662490-1e3ce6806ed5?q=80&w=1956&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-02-05 08:30:00"
+        },
+        {
+            "id": 17,
+            "category_id": 3,
+            "titulo": "Simulado em estruturas colapsadas",
+            "descricao": "Dupla percorre área demarcada com sensores acústicos.",
+            "url": "https:\/\/images.unsplash.com\/photo-1564585531329-8c74d6cc02b5?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-02-07 09:40:00"
+        },
+        {
+            "id": 18,
+            "category_id": 2,
+            "titulo": "Treino de obediência com clicker",
+            "descricao": "Instrutores reforçam comandos básicos para novos filhotes.",
+            "url": "https:\/\/plus.unsplash.com\/premium_photo-1718055459856-37136a5f7203?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-02-09 07:25:00"
+        },
+        {
+            "id": 19,
+            "category_id": 10,
+            "titulo": "Embarque para resgate em área alagada",
+            "descricao": "Binômio assegura ancoragem antes de seguir para comunidade isolada.",
+            "url": "https:\/\/images.unsplash.com\/photo-1453487977089-77350a275ec5?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "data_upload": "2025-02-11 06:55:00"
+        }
+    ]
+}

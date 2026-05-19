@@ -973,6 +973,12 @@ class InstitucionalController extends Controller
                     ],
                 ],
             ],
+            'media' => [
+                'type' => 'image',
+                'src' => BASE_URL . 'assets/images/npor_2010_1.png',
+                'alt' => 'Registro histórico do NPOR em 2010',
+                'caption' => 'Registro histórico do NPOR/16º BI Mtz (2010).',
+            ],
             'resources' => [
                 ['label' => 'NPOR - Patrono', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/npor/patrono', 'external' => false],
                 ['label' => 'Canção do NPOR', 'type' => 'Página institucional', 'url' => BASE_URL . 'institucional/npor/cancao', 'external' => false],

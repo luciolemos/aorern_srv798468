@@ -36,9 +36,10 @@
                     <small class="text-muted">Caso atualize a mídia, certifique-se de que a URL esteja acessível publicamente.</small>
                 </div>
                 <div class="col-lg-4">
+                    {% set previewUrl = imagem.url matches '{^https?://|^/}' ? imagem.url : BASE_URL ~ imagem.url %}
                     <label class="form-label fw-semibold text-uppercase small text-muted">Pré-visualização</label>
                     <div class="ratio ratio-4x3 border rounded position-relative shadow-sm overflow-hidden">
-                        <img src="{{ imagem.url|e('html_attr') }}" alt="Pré-visualização" id="imagePreview" class="object-fit-cover">
+                        <img src="{{ previewUrl|e('html_attr') }}" alt="Pré-visualização" id="imagePreview" class="object-fit-cover">
                         <div class="position-absolute bottom-0 start-0 end-0 p-2 bg-dark bg-opacity-50 text-white small">
                             Atualiza conforme a URL
                         </div>
@@ -68,14 +69,24 @@
 {{ parent() }}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const fallbackUrl = {{ imagem.url|json_encode|raw }};
+        const baseUrl = {{ BASE_URL|json_encode|raw }};
+        const fallbackUrl = {{ previewUrl|json_encode|raw }};
         const input = document.getElementById('imageUrlInput');
         const preview = document.getElementById('imagePreview');
+        const invalidPlaceholder = "data:image/svg+xml;utf8," + encodeURIComponent(
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 480'><rect width='640' height='480' fill='#eef2f7'/><text x='320' y='248' text-anchor='middle' font-family='Arial, sans-serif' font-size='24' fill='#6b7280'>Imagem invalida</text></svg>"
+        );
         if (!input || !preview) return;
+
+        const resolveUrl = (value) => {
+            if (!value) return fallbackUrl;
+            if (/^https?:\/\//i.test(value) || value.startsWith('/')) return value;
+            return baseUrl + value.replace(/^\/+/, '');
+        };
 
         const updatePreview = () => {
             const value = input.value.trim();
-            preview.src = value || fallbackUrl;
+            preview.src = resolveUrl(value);
         };
 
         input.addEventListener('change', updatePreview);
@@ -85,7 +96,7 @@
         });
 
         preview.addEventListener('error', () => {
-            preview.src = 'https://via.placeholder.com/640x480?text=Imagem+Inválida';
+            preview.src = invalidPlaceholder;
         });
     });
 </script>

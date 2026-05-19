@@ -146,8 +146,23 @@ Router::group('/admin', function (): void {
     Router::get('/publicacoes/ocultar/{id}', fn($request, $id) => (new PostsController())->hide((int) $id), ['auth']);
     Router::get('/publicacoes/exibir/{id}', fn($request, $id) => (new PostsController())->show((int) $id), ['auth']);
     Router::get('/publicacoes/despublicar/{id}', fn($request, $id) => (new PostsController())->unpublish((int) $id), ['auth']);
+    Router::post('/publicacoes/publicacao/{id}', fn($request, $id) => (new PostsController())->togglePublish((int) $id), ['auth']);
     Router::post('/publicacoes/rejeitar/{id}', fn($request, $id) => (new PostsController())->reject((int) $id), ['auth']);
     Router::get('/publicacoes/deletar/{id}', fn($request, $id) => (new PostsController())->delete((int) $id), ['auth']);
+
+    // Aliases de compatibilidade para URLs em ingles sob /publicacoes
+    Router::get('/publicacoes/create', fn() => (new PostsController())->create(), ['auth']);
+    Router::post('/publicacoes/store', fn() => (new PostsController())->store(), ['auth']);
+    Router::get('/publicacoes/edit/{id}', fn($request, $id) => (new PostsController())->edit((int) $id), ['auth']);
+    Router::post('/publicacoes/update/{id}', fn($request, $id) => (new PostsController())->update((int) $id), ['auth']);
+    Router::get('/publicacoes/submit/{id}', fn($request, $id) => (new PostsController())->submit((int) $id), ['auth']);
+    Router::get('/publicacoes/approve/{id}', fn($request, $id) => (new PostsController())->approve((int) $id), ['auth']);
+    Router::get('/publicacoes/hide/{id}', fn($request, $id) => (new PostsController())->hide((int) $id), ['auth']);
+    Router::get('/publicacoes/show/{id}', fn($request, $id) => (new PostsController())->show((int) $id), ['auth']);
+    Router::get('/publicacoes/unpublish/{id}', fn($request, $id) => (new PostsController())->unpublish((int) $id), ['auth']);
+    Router::post('/publicacoes/publish-toggle/{id}', fn($request, $id) => (new PostsController())->togglePublish((int) $id), ['auth']);
+    Router::post('/publicacoes/reject/{id}', fn($request, $id) => (new PostsController())->reject((int) $id), ['auth']);
+    Router::get('/publicacoes/delete/{id}', fn($request, $id) => (new PostsController())->delete((int) $id), ['auth']);
 
     // Alias legado
     Router::get('/posts', fn() => (new PostsController())->index(), ['auth']);
@@ -233,6 +248,7 @@ Router::group('/admin', function (): void {
     Router::post('/galeria/salvar', fn() => (new GaleriaController())->salvar(), ['auth']);
     Router::get('/galeria/editar/{id}', fn($request, $id) => (new GaleriaController())->editar((int) $id), ['auth']);
     Router::post('/galeria/atualizar/{id}', fn($request, $id) => (new GaleriaController())->atualizar((int) $id), ['auth']);
+    Router::post('/galeria/publicacao/{id}', fn($request, $id) => (new GaleriaController())->atualizarPublicacao((int) $id), ['auth']);
     Router::get('/galeria/deletar/{id}', fn($request, $id) => (new GaleriaController())->deletar((int) $id), ['auth']);
 
     Router::get('/galeria-categorias', fn() => (new GaleriaCategoriasController())->index(), ['auth']);

@@ -140,13 +140,14 @@
             {% else %}
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4" data-aos="fade-up">
                     {% for imagem in imagens %}
+                        {% set imageUrl = imagem.url matches '{^https?://|^/}' ? imagem.url : BASE_URL ~ imagem.url %}
                         {% set descricaoReducida = imagem.descricao|default('') %}
                         {% if descricaoReducida|length > 100 %}
                             {% set descricaoReducida = descricaoReducida|slice(0, 100) ~ '…' %}
                         {% endif %}
                         <article class="col">
                             <div class="gallery-card" role="button" tabindex="0" aria-label="Visualizar {{ imagem.titulo|e('html_attr') }}" data-gallery-id="{{ imagem.id }}">
-                                <div class="gallery-card-media" style="background-image: url('{{ imagem.url|e('html_attr') }}');"></div>
+                                <div class="gallery-card-media" style="background-image: url('{{ imageUrl|e('html_attr') }}');"></div>
                                 <div class="gallery-card-info">
                                     <div class="gallery-card-category" style="color: {{ imagem.categoria_color|default('#f1c40f')|e('html_attr') }};">
                                         <i class="bi bi-record-circle"></i>
@@ -268,15 +269,16 @@
     {{ parent() }}
     {% set galleryPayload = [] %}
     {% for imagem in imagens %}
+        {% set imageUrl = imagem.url matches '{^https?://|^/}' ? imagem.url : BASE_URL ~ imagem.url %}
         {% set galleryPayload = galleryPayload|merge([{
             'id': imagem.id,
             'title': imagem.titulo,
             'description': imagem.descricao|default(''),
-            'url': imagem.url,
+            'url': imageUrl,
             'category': imagem.categoria_nome|default('Sem categoria'),
             'category_color': imagem.categoria_color|default('#556b2f'),
             'uploaded_at': imagem.data_upload|date('c'),
-            'uploaded_label': imagem.data_upload|date('d/m/Y \à\s H\hi')
+            'uploaded_label': imagem.data_upload|date('d/m/Y H:i')
         }]) %}
     {% endfor %}
     <script type="application/json" id="gallery-data">{{ galleryPayload|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}</script>

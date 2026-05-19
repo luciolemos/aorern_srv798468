@@ -28,7 +28,7 @@ class GaleriaController extends Controller
         [$categoriaId, $categoriaSelecionada] = $this->resolveCategoria($categoriaParam);
 
         $filtroBusca = $busca !== '' ? $busca : null;
-        $result = $this->imagemModel->paginar($page, $perPage, $filtroBusca, $categoriaId);
+        $result = $this->imagemModel->paginar($page, $perPage, $filtroBusca, $categoriaId, true);
         $query = array_filter([
             'q' => $busca,
             'categoria' => $categoriaParam !== '' ? $categoriaParam : null,

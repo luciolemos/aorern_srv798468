@@ -121,7 +121,7 @@
                 <thead class="table-light">
                     <tr>
                         <th>TÍTULO</th>
-                        <th class="d-none d-sm-table-cell" style="width: 120px;">STATUS</th>
+                        <th class="d-none d-sm-table-cell" style="width: 200px;">STATUS</th>
                         <th class="d-none d-md-table-cell" style="width: 100px;">CATEGORIA</th>
                         <th class="d-none d-lg-table-cell" style="width: 100px;">AUTOR</th>
                         <th class="d-none d-lg-table-cell" style="width: 120px;">DATA</th>
@@ -144,19 +144,39 @@
                                 'rejected': 'bg-danger'
                             } %}
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge {{ statusBadgeClass[post.status]|default('bg-secondary') }} text-uppercase" style="font-size: 0.75rem;">
-                                    {{ statusLabels[post.status]|default(post.status) }}
-                                </span>
-                                {% if post.status == 'published' %}
-                                    {% if post.is_hidden|default(0) == 1 %}
-                                        <span title="Post oculto do blog" data-bs-toggle="tooltip">
-                                            <i class="bi bi-eye-slash text-warning" style="font-size: 0.9rem;"></i>
+                                {% if userRole != 'usuario' and (post.status == 'published' or post.status == 'draft') %}
+                                    {% set isPublished = post.status == 'published' %}
+                                    {% set rowQuery = [] %}
+                                    {% if q|default('') != '' %}{% set rowQuery = rowQuery|merge(['q=' ~ q|url_encode]) %}{% endif %}
+                                    {% if status|default('') != '' %}{% set rowQuery = rowQuery|merge(['status=' ~ status|url_encode]) %}{% endif %}
+                                    {% if category|default('') != '' %}{% set rowQuery = rowQuery|merge(['category=' ~ (category ~ '')|url_encode]) %}{% endif %}
+                                    {% if author|default('') != '' %}{% set rowQuery = rowQuery|merge(['author=' ~ (author ~ '')|url_encode]) %}{% endif %}
+                                    {% if visibility|default('') != '' %}{% set rowQuery = rowQuery|merge(['visibility=' ~ visibility|url_encode]) %}{% endif %}
+                                    {% if perPageSelection|default('') != '' %}{% set rowQuery = rowQuery|merge(['per_page=' ~ perPageSelection|url_encode]) %}{% endif %}
+                                    {% if pagination.current_page|default(1) > 1 %}{% set rowQuery = rowQuery|merge(['page=' ~ pagination.current_page]) %}{% endif %}
+                                    {% set returnTo = BASE_URL ~ 'admin/publicacoes' ~ (rowQuery ? '?' ~ rowQuery|join('&') : '') %}
+                                    <form method="POST" action="{{ BASE_URL }}admin/publicacoes/publicacao/{{ post.id }}" class="d-flex align-items-center gap-2">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token|default('') }}">
+                                        <input type="hidden" name="return_to" value="{{ returnTo|e('html_attr') }}">
+                                        <input type="hidden" name="is_published" value="0">
+                                        <div class="form-check form-switch mb-0">
+                                            <input
+                                                class="form-check-input js-post-publish-switch"
+                                                type="checkbox"
+                                                name="is_published"
+                                                value="1"
+                                                id="postPublishSwitch{{ post.id }}"
+                                                {% if isPublished %}checked{% endif %}
+                                            >
+                                        </div>
+                                        <span class="badge js-post-publish-badge {{ isPublished ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' }}">
+                                            {{ isPublished ? 'Publicado' : 'Rascunho' }}
                                         </span>
-                                    {% else %}
-                                        <span title="Post visível no blog" data-bs-toggle="tooltip">
-                                            <i class="bi bi-eye text-success" style="font-size: 0.9rem;"></i>
-                                        </span>
-                                    {% endif %}
+                                    </form>
+                                {% else %}
+                                    <span class="badge {{ statusBadgeClass[post.status]|default('bg-secondary') }} text-uppercase" style="font-size: 0.75rem;">
+                                        {{ statusLabels[post.status]|default(post.status) }}
+                                    </span>
                                 {% endif %}
                             </div>
                         </td>
@@ -411,4 +431,65 @@
         </nav>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const switches = document.querySelectorAll('.js-post-publish-switch');
+        switches.forEach((toggle) => {
+            toggle.addEventListener('change', () => {
+                const form = toggle.closest('form');
+                if (!form) return;
+                const previousChecked = !toggle.checked;
+                const badge = form.querySelector('.js-post-publish-badge');
+                const statusBadge = toggle.closest('tr')?.querySelector('td .badge.bg-success, td .badge.bg-secondary, td .badge.bg-warning, td .badge.bg-info, td .badge.bg-danger');
+                const formData = new FormData(form);
+                const targetState = toggle.checked;
+
+                toggle.disabled = true;
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                }).then(async (response) => {
+                    if (!response.ok) throw new Error('Erro ao atualizar');
+                    const payload = await response.json();
+                    if (!payload || payload.ok !== true) throw new Error('Resposta inválida');
+
+                    if (badge) {
+                        badge.classList.remove('bg-success-subtle', 'text-success', 'bg-secondary-subtle', 'text-secondary');
+                        if (targetState) {
+                            badge.classList.add('bg-success-subtle', 'text-success');
+                            badge.textContent = 'Publicado';
+                        } else {
+                            badge.classList.add('bg-secondary-subtle', 'text-secondary');
+                            badge.textContent = 'Rascunho';
+                        }
+                    }
+
+                    if (statusBadge) {
+                        statusBadge.classList.remove('bg-secondary', 'bg-warning', 'text-dark', 'bg-info', 'bg-success', 'bg-danger');
+                        if (targetState) {
+                            statusBadge.classList.add('bg-success');
+                            statusBadge.textContent = 'Publicado';
+                        } else {
+                            statusBadge.classList.add('bg-secondary');
+                            statusBadge.textContent = 'Rascunho';
+                        }
+                    }
+                }).catch(() => {
+                    toggle.checked = previousChecked;
+                    form.submit();
+                }).finally(() => {
+                    toggle.disabled = false;
+                });
+            });
+        });
+    });
+</script>
 {% endblock %}
