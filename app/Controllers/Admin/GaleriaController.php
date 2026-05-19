@@ -35,13 +35,21 @@ class GaleriaController extends Controller
         $busca = trim((string) $request->query('q', ''));
         $categoriaRaw = $request->query('categoria');
         $categoriaId = $this->extractCategoriaId($categoriaRaw);
+        $status = $this->extractStatusFilter((string) $request->query('status', ''));
 
-        $result = $this->imagemModel->paginar($page, $perPage, $busca !== '' ? $busca : null, $categoriaId);
+        $result = $this->imagemModel->paginar(
+            $page,
+            $perPage,
+            $busca !== '' ? $busca : null,
+            $categoriaId,
+            $status
+        );
         $pagination = array_merge($result['meta'], [
             'path' => BASE_URL . 'admin/galeria',
             'query' => array_filter([
                 'q' => $busca,
                 'categoria' => $categoriaId,
+                'status' => $status === null ? null : ($status ? 'published' : 'unpublished'),
                 'per_page' => ($perPageRaw !== null && $perPageRaw !== '') ? $perPageSelection : null,
             ], fn($value) => $value !== null && $value !== ''),
         ]);
@@ -54,6 +62,7 @@ class GaleriaController extends Controller
             'filters' => [
                 'q' => $busca,
                 'categoria' => $categoriaId,
+                'status' => $status === null ? '' : ($status ? 'published' : 'unpublished'),
             ],
             'pagination' => $pagination,
             'perPageOptions' => $perPageOptions,
@@ -135,6 +144,45 @@ class GaleriaController extends Controller
         $this->redirect('admin/galeria');
     }
 
+    public function atualizarPublicacao(int $id): void
+    {
+        PermissionMiddleware::authorize('gallery:edit');
+        $request = Request::capture();
+        $imagem = $this->imagemModel->buscar($id);
+
+        if (!$imagem) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Imagem não encontrada.'];
+            $this->redirect('admin/galeria');
+        }
+
+        $isPublished = (int) $request->post('is_published', 0) === 1;
+        $this->imagemModel->atualizarPublicacao($id, $isPublished);
+
+        if ($request->isAjax() || $request->wantsJson()) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode([
+                'ok' => true,
+                'id' => $id,
+                'is_published' => $isPublished,
+                'message' => $isPublished ? 'Imagem publicada.' : 'Imagem despublicada.',
+            ], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        $_SESSION['toast'] = [
+            'type' => 'success',
+            'message' => $isPublished ? 'Imagem publicada.' : 'Imagem despublicada.',
+        ];
+
+        $returnTo = trim((string) $request->post('return_to', ''));
+        if ($returnTo !== '' && str_starts_with($returnTo, BASE_URL . 'admin/galeria')) {
+            header('Location: ' . $returnTo);
+            exit;
+        }
+
+        $this->redirect('admin/galeria');
+    }
+
     private function validateImagemPayload(Request $request): ?array
     {
         $titulo = trim((string) $request->post('titulo', ''));
@@ -173,6 +221,20 @@ class GaleriaController extends Controller
 
         $categoria = $this->categoriaModel->buscarPorSlug((string) $raw);
         return $categoria ? (int) $categoria['id'] : null;
+    }
+
+    private function extractStatusFilter(string $raw): ?bool
+    {
+        $normalized = strtolower(trim($raw));
+        if ($normalized === 'published' || $normalized === 'publicado' || $normalized === '1') {
+            return true;
+        }
+
+        if ($normalized === 'unpublished' || $normalized === 'oculto' || $normalized === '0') {
+            return false;
+        }
+
+        return null;
     }
 
     private function redirect(string $path): void

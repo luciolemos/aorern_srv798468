@@ -20,7 +20,8 @@ class GaleriaImagemModel
         int $page = 1,
         ?int $perPage = 12,
         ?string $busca = null,
-        ?int $categoriaId = null
+        ?int $categoriaId = null,
+        ?bool $isPublished = null
     ): array {
         $select = 'gi.*, gc.nome AS categoria_nome, gc.slug AS categoria_slug, gc.color AS categoria_color';
         $from = "FROM {$this->table} gi INNER JOIN gallery_categories gc ON gc.id = gi.category_id";
@@ -35,6 +36,11 @@ class GaleriaImagemModel
         if ($categoriaId !== null) {
             $clauses[] = 'gi.category_id = :categoria_id';
             $params[':categoria_id'] = $categoriaId;
+        }
+
+        if ($isPublished !== null) {
+            $clauses[] = 'COALESCE(gi.is_published, 1) = :is_published';
+            $params[':is_published'] = $isPublished ? 1 : 0;
         }
 
         $where = implode(' AND ', $clauses);
@@ -111,11 +117,26 @@ class GaleriaImagemModel
             "SELECT gi.*, gc.nome AS categoria_nome, gc.slug AS categoria_slug, gc.color AS categoria_color
              FROM {$this->table} gi
              INNER JOIN gallery_categories gc ON gc.id = gi.category_id
+             WHERE COALESCE(gi.is_published, 1) = 1
              ORDER BY gi.data_upload DESC
              LIMIT :limit"
         );
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function atualizarPublicacao(int $id, bool $isPublished): bool
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE {$this->table}
+             SET is_published = :is_published
+             WHERE id = :id"
+        );
+
+        return $stmt->execute([
+            ':is_published' => $isPublished ? 1 : 0,
+            ':id' => $id,
+        ]);
     }
 }

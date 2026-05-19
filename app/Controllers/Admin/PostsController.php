@@ -88,7 +88,7 @@ class PostsController extends Controller {
         $categories = $this->categories->listar();
         $perPageOptions = PaginationHelper::options($defaultPerPage);
 
-        $this->renderTwig('admin/publicacoes/index', array_merge([
+        $this->renderTwig('admin/posts/index', array_merge([
             'posts' => $posts,
             'q' => $q,
             'status' => $status,
@@ -122,7 +122,7 @@ class PostsController extends Controller {
         $validationErrors = $_SESSION['validation_errors'] ?? [];
         unset($_SESSION['old_input'], $_SESSION['validation_errors']);
         
-        $this->renderTwig('admin/publicacoes/create', array_merge([
+        $this->renderTwig('admin/posts/create', array_merge([
             'categorias' => $categorias,
             'csrf_token' => $csrf,
             'old' => $old,
@@ -231,7 +231,7 @@ class PostsController extends Controller {
         $validationErrors = $_SESSION['validation_errors'] ?? [];
         unset($_SESSION['old_input'], $_SESSION['validation_errors']);
         
-        $this->renderTwig('admin/publicacoes/edit', array_merge([
+        $this->renderTwig('admin/posts/edit', array_merge([
             'post' => $post,
             'categorias' => $categorias,
             'csrf_token' => $csrf,
@@ -413,6 +413,68 @@ class PostsController extends Controller {
         ]);
 
         $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post despublicado e salvo como rascunho.'];
+        header('Location: ' . BASE_URL . 'admin/publicacoes');
+        exit;
+    }
+
+    public function togglePublish(int $id): void {
+        PermissionMiddleware::authorize('posts:approve');
+
+        $request = Request::capture();
+        if (!$request->isPost()) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Método inválido.'];
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
+            exit;
+        }
+
+        CsrfHelper::verifyOrDie();
+
+        $post = $this->post->encontrarPorId($id);
+        if (!$post) {
+            $_SESSION['toast'] = ['type' => 'danger', 'message' => 'Post não encontrado.'];
+            header('Location: ' . BASE_URL . 'admin/publicacoes');
+            exit;
+        }
+
+        $shouldPublish = (int) $request->post('is_published', 0) === 1;
+
+        if ($shouldPublish) {
+            $this->post->atualizar($id, [
+                'status' => 'published',
+                'published_at' => $post['published_at'] ?: date('Y-m-d H:i:s'),
+                'reject_reason' => null,
+                'is_hidden' => 0,
+            ]);
+            $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post publicado com sucesso.'];
+            $responseMessage = 'Post publicado com sucesso.';
+        } else {
+            $this->post->atualizar($id, [
+                'status' => 'draft',
+                'published_at' => null,
+                'reject_reason' => null,
+            ]);
+            $_SESSION['toast'] = ['type' => 'success', 'message' => 'Post despublicado e salvo como rascunho.'];
+            $responseMessage = 'Post despublicado e salvo como rascunho.';
+        }
+
+        if ($request->isAjax() || $request->wantsJson()) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode([
+                'ok' => true,
+                'id' => $id,
+                'is_published' => $shouldPublish,
+                'status' => $shouldPublish ? 'published' : 'draft',
+                'message' => $responseMessage,
+            ], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        $returnTo = trim((string) $request->post('return_to', ''));
+        if ($returnTo !== '' && str_starts_with($returnTo, BASE_URL . 'admin/publicacoes')) {
+            header('Location: ' . $returnTo);
+            exit;
+        }
+
         header('Location: ' . BASE_URL . 'admin/publicacoes');
         exit;
     }
